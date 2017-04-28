@@ -8,3 +8,6 @@ before_script: Rscript -e 'write(x = paste("machine dataspace-staging.cavd.org l
 
 after_success:
   - Rscript -e 'covr::codecov()'
+
+notifications:
+  email: false
