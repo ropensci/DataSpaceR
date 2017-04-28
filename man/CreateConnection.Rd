@@ -2,35 +2,46 @@
 % Please edit documentation in R/CreateConnection.R
 \name{CreateConnection}
 \alias{CreateConnection}
-\title{CreateConnection}
+\title{Create a connection to DataSpace}
 \usage{
 CreateConnection(study = NULL, login = NULL, password = NULL,
   verbose = FALSE)
 }
 \arguments{
-\item{study}{A \code{"character"} vector naming the study.}
+\item{study}{A character. Name of the study to connect.}
 
-\item{login}{A \code{"character"}. Optional argument. If there is no netrc
+\item{login}{A character. Optional argument. If there is no netrc
 file a temporary one can be written by passing login and password of an
 active DataSpace account.}
 
-\item{password}{A \code{"character"}. Optional. The password for the selected
+\item{password}{A character. Optional. The password for the selected
 login.}
 
-\item{verbose}{A \code{"logical"} whether to print the extra details for
+\item{verbose}{A logical. Whether to print the extra details for
 troubleshooting.}
 }
 \value{
-an instance of an \code{DataSpaceConnection}
+an instance of \code{DataSpaceConnection}
 }
 \description{
-CreateConnection
+Constructor for \code{\link{DataSpaceConnection-class}}
+}
+\details{
+Instantiates an \code{DataSpaceConnection} for \code{study}
+The constructor will try to take the values of the various `\code{labkey.*}`
+parameters from the global environment. If they don't exist, it will use
+default values. These are assigned to `options`, which are then used by the
+\code{DataSpaceConnection} class.
 }
 \examples{
 \dontrun{
 # Single study
 con <- CreateConnection("cvd408")
+
 # Cross study
 con <- CreateConnection("")
 }
+}
+\seealso{
+\code{\link{DataSpaceConnection-class}}
 }

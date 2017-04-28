@@ -4,27 +4,66 @@
 \name{DataSpaceConnection-class}
 \alias{DataSpaceConnection-class}
 \alias{.DSCon}
-\title{A Reference Class to represent a bank account.}
+\alias{DataSpaceConnection}
+\title{The DataSpaceConnection class}
 \description{
-A Reference Class to represent a bank account.
+The DataSpaceConnection class
+}
+\details{
+Uses global variables \code{labkey.url.base}, and \code{labkey.url.path}, to
+access a study. \code{labkey.url.base} should be
+\url{https://dataspace-staging.cavd.org/}. \code{labkey.url.path} should be
+\code{/CAVD/studyname}, where 'studyname' is the accession number of the
+study.
+The DataSpaceConnection will initialize itself, and look for a
+\code{.netrc} file in \code{"~/"} the user's home directory. The
+\code{.netrc} file should contain a \code{machine}, \code{login}, and
+\code{password} entry to allow access to DataSpace, where \code{machine} is
+the host name like "dataspace-staging.cavd.org".
 }
 \section{Fields}{
 
 \describe{
-\item{\code{study}}{A length-one numeric vector.}
+\item{\code{study}}{A \code{character}. The study name. Use an empty
+string ("") to create a connection at the project level.}
 
-\item{\code{config}}{A length-one numeric vector.}
+\item{\code{config}}{A \code{list}. Stores configuration of the connection object
+such as URL, path and username.}
 
-\item{\code{available_datasets}}{A length-one numeric vector.}
+\item{\code{available_datasets}}{A \code{data.frame}. The table of datasets available
+in the connection object.}
 }}
 
 \section{Methods}{
 
 \describe{
-\item{\code{getAvailableDatasets()}}{Get availabel datasets}
+\item{\code{getAvailableDatasets()}}{Get available datasets}
 
-\item{\code{getDataset(dataset_name, original_view = FALSE, colFilter = NULL, ...)}}{get dataset!}
+\item{\code{getDataset(dataset_name, original_view = FALSE, colFilter = NULL, ...)}}{Get a dataset from the connection.
 
-\item{\code{initialize(study = NULL, login = NULL, password = NULL, verbose = FALSE)}}{Initialize class}
+      \emph{dataset_name}: A character. Name of the dataset to retrieve.
+
+      \emph{original_view}: A logical. If set to TRUE, download the ImmPort view.
+        Else, download the default grid view.
+
+      \emph{colFilter}: A matrix. A filter as returned by Rlabkey's
+        \code{\link[Rlabkey]{makeFilter}}.
+
+      \emph{...}: Extra arguments to be passed to
+        \code{\link[Rlabkey]{labkey.selectRows}}}
+
+\item{\code{initialize(study = NULL, login = NULL, password = NULL, verbose = FALSE)}}{Initialize DataSpaceConnection class}
 }}
 
+\examples{
+\dontrun{
+# Create a connection (Initiate a DataSpaceConnection object)
+con <- CreateConnection("cvd408")
+
+# Retrieve Neutralizing antibody dataset (NAb) from DataSpace
+con$getDataset("NAb")
+}
+}
+\seealso{
+\code{\link{CreateConnection}} \code{\link{DataSpaceR-package}}
+}
