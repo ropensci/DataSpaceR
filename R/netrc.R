@@ -2,11 +2,10 @@
 #'
 #' @description Write a netrc file that is valid for accessing DataSpace
 #'
-#' @param login A \code{character}. The email address used for loging in on
-#' DataSpace.
-#' @param password A \code{character}. The password associated with the login.
-#' @param file A \code{character}. The credentials will be written into that
-#' file. If left NULL, the netrc will be written into a temporary file.
+#' @param login A character. The email address used for loging in on DataSpace.
+#' @param password A character. The password associated with the login.
+#' @param file A character. The credentials will be written into that file.
+#' If left NULL, the netrc will be written into a temporary file.
 #'
 #' @return A character vector containing the file paths for netrc
 #' @seealso \code{\link{CreateConnection}} \code{\link{check_netrc}}
@@ -31,9 +30,9 @@ write_netrc <- function(login, password, file = NULL) {
 #' @description Check that there is a netrc file with a valid entry for DataSpace.
 #'
 #' @details
-#' In order to connect to DataSpace, you will need a `.netrc` file in your
-#' contains a `machine` name (hostname of DataSpace), and `login` and
-#' `password`. See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc)
+#' In order to connect to DataSpace, you will need a \code{.netrc} file in your
+#' contains a \code{machine} name (hostname of DataSpace), and \code{login} and
+#' \code{password}. See \href{https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc}{here}
 #' for more information. By default \code{RCurl} will look for the file in your
 #' home directoty.
 #'

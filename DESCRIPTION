@@ -2,10 +2,10 @@ Package: DataSpaceR
 Type: Package
 Title: A Thin Wrapper Around the DataSpace Database
 Version: 0.1.0
-Author: Ju Yeong Kim
-Maintainer: Ju Yeong Kim <jkim2345@fredhutch.org>
+Authors@R: c(person("Ju Yeong", "Kim", email = "jkim2345@fredhutch.org", role = c("aut", "cre")), 
+             person("The Collaboration for AIDS Vaccine Discovery", role = "cph"))
 Description: Provides a convenient API for accessing data sets within
-    CAVD DataSpace (dataspace.cavd.org).
+    the CAVD DataSpace (dataspace.cavd.org).
 URL: https://github.com/FredHutch/DataSpaceR
 BugReports: https://github.com/FredHutch/DataSpaceR/issues
 License: GPL-2

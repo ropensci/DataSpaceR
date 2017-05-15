@@ -13,7 +13,7 @@ The DataSpaceConnection class
 Uses global variables \code{labkey.url.base}, and \code{labkey.url.path}, to
 access a study. \code{labkey.url.base} should be
 \url{https://dataspace-staging.cavd.org/}. \code{labkey.url.path} should be
-\code{/CAVD/studyname}, where 'studyname' is the accession number of the
+\code{/CAVD/studyname}, where \code{studyname} is the accession number of the
 study.
 The DataSpaceConnection will initialize itself, and look for a
 \code{.netrc} file in \code{"~/"} the user's home directory. The
@@ -24,14 +24,14 @@ the host name like "dataspace-staging.cavd.org".
 \section{Fields}{
 
 \describe{
-\item{\code{study}}{A \code{character}. The study name. Use an empty
-string ("") to create a connection at the project level.}
+\item{\code{study}}{A character. The study name. Use an empty string ("") to create
+a connection at the project level.}
 
-\item{\code{config}}{A \code{list}. Stores configuration of the connection object
-such as URL, path and username.}
+\item{\code{config}}{A list. Stores configuration of the connection object such as
+URL, path and username.}
 
-\item{\code{available_datasets}}{A \code{data.frame}. The table of datasets available
-in the connection object.}
+\item{\code{available_datasets}}{A data.frame. The table of datasets available in
+the connection object.}
 }}
 
 \section{Methods}{
@@ -41,15 +41,15 @@ in the connection object.}
 
 \item{\code{getDataset(dataset_name, original_view = FALSE, colFilter = NULL, ...)}}{Get a dataset from the connection.
 
-      \emph{dataset_name}: A character. Name of the dataset to retrieve.
+      \code{dataset_name}: A character. Name of the dataset to retrieve.
 
-      \emph{original_view}: A logical. If set to TRUE, download the ImmPort view.
+      \code{original_view}: A logical. If set to TRUE, download the ImmPort view.
         Else, download the default grid view.
 
-      \emph{colFilter}: A matrix. A filter as returned by Rlabkey's
+      \code{colFilter}: A matrix. A filter as returned by Rlabkey's
         \code{\link[Rlabkey]{makeFilter}}.
 
-      \emph{...}: Extra arguments to be passed to
+      \code{...}: Extra arguments to be passed to
         \code{\link[Rlabkey]{labkey.selectRows}}}
 
 \item{\code{initialize(study = NULL, login = NULL, password = NULL, verbose = FALSE)}}{Initialize DataSpaceConnection class}

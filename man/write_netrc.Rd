@@ -7,13 +7,12 @@
 write_netrc(login, password, file = NULL)
 }
 \arguments{
-\item{login}{A \code{character}. The email address used for loging in on
-DataSpace.}
+\item{login}{A character. The email address used for loging in on DataSpace.}
 
-\item{password}{A \code{character}. The password associated with the login.}
+\item{password}{A character. The password associated with the login.}
 
-\item{file}{A \code{character}. The credentials will be written into that
-file. If left NULL, the netrc will be written into a temporary file.}
+\item{file}{A character. The credentials will be written into that file.
+If left NULL, the netrc will be written into a temporary file.}
 }
 \value{
 A character vector containing the file paths for netrc

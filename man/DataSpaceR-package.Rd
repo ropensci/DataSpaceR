@@ -5,12 +5,15 @@
 \alias{DataSpaceR}
 \title{A Thin Wrapper Around DataSpace}
 \description{
-DataSpaceR provides a convenient API for accessing data sets
+DataSpaceR provides a convenient API for accessing datasets
 within the DataSpace database.
 }
 \details{
 Uses the Rlabkey package to connect to DataSpace. Implements
-caching, and convenient methods for accessing data sets.
+convenient methods for accessing datasets.
+}
+\seealso{
+\code{\link{CreateConnection}}
 }
 \author{
 Ju Yeong Kim

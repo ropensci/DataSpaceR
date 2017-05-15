@@ -4,7 +4,7 @@
 #' Uses global variables \code{labkey.url.base}, and \code{labkey.url.path}, to
 #' access a study. \code{labkey.url.base} should be
 #' \url{https://dataspace-staging.cavd.org/}. \code{labkey.url.path} should be
-#' \code{/CAVD/studyname}, where 'studyname' is the accession number of the
+#' \code{/CAVD/studyname}, where \code{studyname} is the accession number of the
 #' study.
 #' The DataSpaceConnection will initialize itself, and look for a
 #' \code{.netrc} file in \code{"~/"} the user's home directory. The
@@ -12,12 +12,12 @@
 #' \code{password} entry to allow access to DataSpace, where \code{machine} is
 #' the host name like "dataspace-staging.cavd.org".
 #'
-#' @field study A \code{character}. The study name. Use an empty
-#' string ("") to create a connection at the project level.
-#' @field config A \code{list}. Stores configuration of the connection object
-#' such as URL, path and username.
-#' @field available_datasets A \code{data.frame}. The table of datasets available
-#' in the connection object.
+#' @field study A character. The study name. Use an empty string ("") to create
+#' a connection at the project level.
+#' @field config A list. Stores configuration of the connection object such as
+#' URL, path and username.
+#' @field available_datasets A data.frame. The table of datasets available in
+#' the connection object.
 #'
 #' @aliases DataSpaceConnection .DSCon
 #' @seealso \code{\link{CreateConnection}} \code{\link{DataSpaceR-package}}
@@ -149,12 +149,12 @@
                           colFilter = NULL,
                           ...) {
       "Get a dataset from the connection.\n
-      \\emph{dataset_name}: A character. Name of the dataset to retrieve.\n
-      \\emph{original_view}: A logical. If set to TRUE, download the ImmPort view.
+      \\code{dataset_name}: A character. Name of the dataset to retrieve.\n
+      \\code{original_view}: A logical. If set to TRUE, download the ImmPort view.
         Else, download the default grid view.\n
-      \\emph{colFilter}: A matrix. A filter as returned by Rlabkey's
+      \\code{colFilter}: A matrix. A filter as returned by Rlabkey's
         \\code{\\link[Rlabkey]{makeFilter}}.\n
-      \\emph{...}: Extra arguments to be passed to
+      \\code{...}: Extra arguments to be passed to
         \\code{\\link[Rlabkey]{labkey.selectRows}}"
       assert_that(is.character(dataset_name))
       assert_that(length(dataset_name) == 1)

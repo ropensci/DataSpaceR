@@ -1,0 +1,107 @@
+---
+title: "A Simple Introduction to the DataSpaceR Package"
+author: "Ju Yeong Kim"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This package provides a thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) and connects to the the [CAVD DataSpace](https://dataspace-staging.cavd.org) database, making it easier to fetch datasets from specific studies.
+
+
+## Configuration
+
+In order to connect to DataSpace, you will need a `.netrc` file in your home directory that will contain a `machine` name (hostname of DataSpace), and `login` and `password`. See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc) for more information.
+
+A netrc file may look like this:
+
+```
+machine dataspace-staging.cavd.org
+login myuser@domain.com
+password supersecretpassword
+```
+
+### Set up your netrc file now
+
+Put it in your home directory. If you type:
+
+``` 
+ls ~/.netrc
+```
+
+at the command prompt, you should see it there. If it's not there, create one now. Make sure you have a valid login and password. If you don't have one, go to [DataSpace](https://dataspace-staging.cavd.org) now and set yourself up with an account.
+
+
+## Initiate a connection
+
+We'll be looking at study `cvd408`. If you want to use a different study, change that string. The connections have state, so you can instantiate multiple connections to different studies simultaneously.
+
+```{r CreateConnection}
+library(DataSpaceR)
+cvd256 <- CreateConnection(study = "cvd256")
+cvd256
+cvd256$available_datasets
+```
+
+The call to `CreateConnection` instantiates the connection Printing the object shows where it's connected, to what study, and the available datasets.
+
+
+## Fetching datasets
+
+We can grab any of the datasets listed in the connection.
+
+```{r getDataset}
+NAb <- cvd256$getDataset("NAb")
+dim(NAb)
+colnames(NAb)
+```
+
+The *cvd256* object is an **R5** class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
+
+To get only a subset of the data and speed up the download, filters can be passed to `getDataset`. The filters are created using the `makeFilter` function of the `Rlabkey` package.
+
+```{r getDataset-filter}
+library(Rlabkey)
+cvd256Filter <- makeFilter(c("visit_day", "EQUAL", "0"))
+NAb_day0 <- cvd256$getDataset("NAb", colFilter = cvd256Filter)
+dim(NAb_day0)
+```
+
+See `?makeFilter` for more information on the syntax.
+
+
+## Cross-study connection
+
+To fetch data from multiple studies, simply create a connection at the project level.
+
+```{r cross-connection}
+con <- CreateConnection("")
+```
+
+This will instantiate a connection at the `Studies` level. Most functions work cross study connections just like they do on single studies.
+
+You can get a list of datasets available accross all studies.
+
+```{r cross-connection-print}
+con
+con$available_datasets
+```
+
+In cross-study connections, `getDataset` will combine the requested datasets. Note that in most cases the datasets will have too many subjects, making the filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
+
+```{r cross-connection-dem}
+conFilter <- makeFilter(c("species", "EQUAL", "Human"))
+human <- con$getDataset("Demographics", colFilter = conFilter)
+dim(human)
+colnames(human)
+```
+
+
+## Session information
+
+```{r session-info}
+sessionInfo()
+```

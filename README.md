@@ -2,7 +2,9 @@ DataSpaceR
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-A thin wrapper around Rlabkey to access the [CAVD DataSpace](https://dataspace-staging.cavd.org) database from R. This package simplifies access to the database for R programmers.
+[![Build Status](https://travis-ci.org/FredHutcgh/DataSpaceR.svg?branch=master)](https://travis-ci.org/FredHutch/DataSpaceR) [![codecov](https://codecov.io/gh/FredHutcgh/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/FFredHutch/DataSpaceR/branch/master)
+
+A thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) to access the [CAVD DataSpace](https://dataspace-staging.cavd.org) database from R. This package simplifies access to the database for R programmers.
 
 It takes advantage of the standardization of the database to hide all the [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) specific code away from the user. Study-specific datasets can be accessed via an object-oriented paradigm.
 

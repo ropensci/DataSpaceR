@@ -13,7 +13,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-A thin wrapper around Rlabkey to access the [CAVD DataSpace](https://dataspace-staging.cavd.org)
+[![Build Status](https://travis-ci.org/FredHutcgh/DataSpaceR.svg?branch=master)](https://travis-ci.org/FredHutch/DataSpaceR)
+[![codecov](https://codecov.io/gh/FredHutcgh/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/FFredHutch/DataSpaceR/branch/master)
+
+A thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) to access the [CAVD DataSpace](https://dataspace-staging.cavd.org)
 database from R. This package simplifies access to the database for R programmers.
 
 It takes advantage of the standardization of the  database to hide all 

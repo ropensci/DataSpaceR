@@ -13,9 +13,9 @@ The name of the netrc file
 Check that there is a netrc file with a valid entry for DataSpace.
 }
 \details{
-In order to connect to DataSpace, you will need a `.netrc` file in your
-contains a `machine` name (hostname of DataSpace), and `login` and
-`password`. See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc)
+In order to connect to DataSpace, you will need a \code{.netrc} file in your
+contains a \code{machine} name (hostname of DataSpace), and \code{login} and
+\code{password}. See \href{https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc}{here}
 for more information. By default \code{RCurl} will look for the file in your
 home directoty.
 
