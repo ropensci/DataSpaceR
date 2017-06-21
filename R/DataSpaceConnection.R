@@ -110,15 +110,16 @@ DataSpaceConnection <- R6Class(
       } else {
         nf <- try(get("labkey.netrc.file", .GlobalEnv), silent = TRUE)
       }
+      useragent <- paste("DataSpaceR", packageVersion("DataSpaceR"))
       if(!inherits(nf, "try-error") && !is.null(nf)) {
         curlOptions <- labkey.setCurlOptions(ssl.verifyhost = 2,
                                              sslversion = 1,
                                              netrc.file = nf,
-                                             useragent = paste("DataSpaceR", packageVersion("DataSpaceR")))
+                                             useragent = useragent)
       } else {
         curlOptions <- labkey.setCurlOptions(ssl.verifyhost = 2,
                                              sslversion = 1,
-                                             useragent = paste("DataSpaceR", packageVersion("DataSpaceR")))
+                                             useragent = useragent)
       }
 
       private$.study <- tolower(study)
@@ -132,7 +133,8 @@ DataSpaceConnection <- R6Class(
         labkey.url.path <- file.path(dirname(labkey.url.path), study)
       }
 
-      validStudies <- grep("\\w+\\d+", basename(lsFolders(getSession(labkey.url.base, "CAVD"))), value = TRUE)
+      folders <- lsFolders(getSession(labkey.url.base, folderPath = "CAVD"))
+      validStudies <- grep("\\w+\\d+", basename(folders), value = TRUE)
       reqStudy <- basename(study)
       if(!reqStudy %in% c("", validStudies)) {
         if(!verbose) {
