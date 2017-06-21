@@ -1,9 +1,9 @@
 #' @title Create a connection to DataSpace
 #'
-#' @description Constructor for \code{\link{DataSpaceConnection-class}}
+#' @description Constructor for \code{\link{DataSpaceConnection}}
 #'
 #' @details Instantiates an \code{DataSpaceConnection} for \code{study}
-#' The constructor will try to take the values of the various `\code{labkey.*}`
+#' The constructor will try to take the values of the various \code{labkey.*}
 #' parameters from the global environment. If they don't exist, it will use
 #' default values. These are assigned to `options`, which are then used by the
 #' \code{DataSpaceConnection} class.
@@ -18,20 +18,19 @@
 #' troubleshooting.
 #'
 #' @return an instance of \code{DataSpaceConnection}
-#' @seealso \code{\link{DataSpaceConnection-class}}
+#' @seealso \code{\link{DataSpaceConnection}}
 #' @examples
 #' \dontrun{
 #' # Single study
-#' con <- CreateConnection("cvd408")
+#' con <- connectDS("cvd408")
 #'
 #' # Cross study
-#' con <- CreateConnection("")
+#' con <- connectDS("")
 #' }
 #' @export
-#' @importFrom utils packageVersion
-CreateConnection <- function(study = NULL,
-                             login = NULL,
-                             password = NULL,
-                             verbose = FALSE) {
-  .DSCon$new(study, login, password, verbose)
+connectDS <- function(study = NULL,
+                      login = NULL,
+                      password = NULL,
+                      verbose = FALSE) {
+  DataSpaceConnection$new(study, login, password, verbose)
 }

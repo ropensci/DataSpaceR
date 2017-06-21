@@ -18,12 +18,12 @@ library(devtools)
 install_github("FredHutch/DataSpaceR")
 ```
 
-The database is accessed with the user's credentials. A `.netrc` file storing login and password information is required.
+The database is accessed with the user's credentials. A `netrc` file storing login and password information is required.
 
 Create netrc file in the computer running R.
 
--   On a UNIX system this file should be named `.netrc` (**dot** `netrc`)
--   On windows it sould be named `_netrc` (**underscore** `netrc`).
+-   On a UNIX system this file should be named `.netrc` (**dot**`netrc`)
+-   On windows it sould be named `_netrc` (**underscore**`netrc`).
 -   The file should be located in the users home directory and the permissions on the file should be unreadable for everybody except the owner. To determine home directory, run `Sys.getenv("HOME")` in R.
 
 The following three lines must be included in the `.netrc` or `_netrc` file either separated by white space (spaces, tabs, or newlines) or commas.
@@ -34,7 +34,7 @@ The following three lines must be included in the `.netrc` or `_netrc` file eith
 
 Multiple such blocks can exist in one file.
 
-See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc) for more information.
+See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc) for more information about `netrc`.
 
 Usage
 -----
@@ -45,7 +45,7 @@ The general idea is that the user creates an instance of an `DataSpaceConnection
 
 ``` r
 library(DataSpaceR)
-study <- CreateConnection("cvd408")
+study <- connectDS("cvd408")
 study
 #> DataSpace Connection to cvd408
 #> URL: https://dataspace-staging.cavd.org/project/CAVD/cvd408
@@ -54,17 +54,15 @@ study
 #>  Demographics
 #>  NAb
 class(study)
-#> [1] "DataSpaceConnection"
-#> attr(,"package")
-#> [1] "DataSpaceR"
+#> [1] "DataSpaceConnection" "R6"
 ```
 
-will create an instance of `cvd408`. The user needs credentials stored in a `.netrc` file to access the database.
+`connectDS("cvd408")` will create an instance of `cvd408`. The user needs credentials stored in a `netrc` file to access the database.
 
 ### Datasets can be listed by:
 
 ``` r
-study$available_datasets
+study$availableDatasets
 #>           Name                 Label Category   Id   n
 #> 1 Demographics          Demographics       NA 5001  20
 #> 2          NAb Neutralizing antibody       NA 5004 839
@@ -92,4 +90,4 @@ colnames(NAb)
 #> [21] "lab_code"               "exp_assayid"
 ```
 
-The package uses a simple R5 reference class to represent the connection to a study and get around some of R's copy-on-change behaviour.
+The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.

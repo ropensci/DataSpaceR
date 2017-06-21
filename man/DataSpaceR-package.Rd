@@ -3,7 +3,7 @@
 \name{DataSpaceR-package}
 \alias{DataSpaceR-package}
 \alias{DataSpaceR}
-\title{A Thin Wrapper Around DataSpace}
+\title{DataSpaceR}
 \description{
 DataSpaceR provides a convenient API for accessing datasets
 within the DataSpace database.
@@ -13,7 +13,7 @@ Uses the Rlabkey package to connect to DataSpace. Implements
 convenient methods for accessing datasets.
 }
 \seealso{
-\code{\link{CreateConnection}}
+\code{\link{connectDS}}
 }
 \author{
 Ju Yeong Kim

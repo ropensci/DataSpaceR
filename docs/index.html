@@ -71,11 +71,11 @@
 <p>The package can be downloaded here and installed like any other R packages or installed directly from github using devtools.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
 <span class="kw">install_github</span>(<span class="st">"FredHutch/DataSpaceR"</span>)</code></pre></div>
-<p>The database is accessed with the user’s credentials. A <code>.netrc</code> file storing login and password information is required.</p>
+<p>The database is accessed with the user’s credentials. A <code>netrc</code> file storing login and password information is required.</p>
 <p>Create netrc file in the computer running R.</p>
 <ul>
-<li>On a UNIX system this file should be named <code>.netrc</code> (<strong>dot</strong> <code>netrc</code>)</li>
-<li>On windows it sould be named <code>_netrc</code> (<strong>underscore</strong> <code>netrc</code>).</li>
+<li>On a UNIX system this file should be named <code>.netrc</code> (<strong>dot</strong><code>netrc</code>)</li>
+<li>On windows it sould be named <code>_netrc</code> (<strong>underscore</strong><code>netrc</code>).</li>
 <li>The file should be located in the users home directory and the permissions on the file should be unreadable for everybody except the owner. To determine home directory, run <code>Sys.getenv("HOME")</code> in R.</li>
 </ul>
 <p>The following three lines must be included in the <code>.netrc</code> or <code>_netrc</code> file either separated by white space (spaces, tabs, or newlines) or commas.</p>
@@ -83,7 +83,7 @@
 login myuser@domain.com
 password supersecretpassword</code></pre>
 <p>Multiple such blocks can exist in one file.</p>
-<p>See <a href="https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc">here</a> for more information.</p>
+<p>See <a href="https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc">here</a> for more information about <code>netrc</code>.</p>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -93,7 +93,7 @@ password supersecretpassword</code></pre>
 <h3 class="hasAnchor">
 <a href="#for-example" class="anchor"></a>For example:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DataSpaceR)
-study &lt;-<span class="st"> </span><span class="kw"><a href="reference/CreateConnection.html">CreateConnection</a></span>(<span class="st">"cvd408"</span>)
+study &lt;-<span class="st"> </span><span class="kw"><a href="reference/connectDS.html">connectDS</a></span>(<span class="st">"cvd408"</span>)
 study
 <span class="co">#&gt; DataSpace Connection to cvd408</span>
 <span class="co">#&gt; URL: https://dataspace-staging.cavd.org/project/CAVD/cvd408</span>
@@ -102,15 +102,13 @@ study
 <span class="co">#&gt;  Demographics</span>
 <span class="co">#&gt;  NAb</span>
 <span class="kw">class</span>(study)
-<span class="co">#&gt; [1] "DataSpaceConnection"</span>
-<span class="co">#&gt; attr(,"package")</span>
-<span class="co">#&gt; [1] "DataSpaceR"</span></code></pre></div>
-<p>will create an instance of <code>cvd408</code>. The user needs credentials stored in a <code>.netrc</code> file to access the database.</p>
+<span class="co">#&gt; [1] "DataSpaceConnection" "R6"</span></code></pre></div>
+<p><code><a href="reference/connectDS.html">connectDS("cvd408")</a></code> will create an instance of <code>cvd408</code>. The user needs credentials stored in a <code>netrc</code> file to access the database.</p>
 </div>
 <div id="datasets-can-be-listed-by" class="section level3">
 <h3 class="hasAnchor">
 <a href="#datasets-can-be-listed-by" class="anchor"></a>Datasets can be listed by:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">study$available_datasets
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">study$availableDatasets
 <span class="co">#&gt;           Name                 Label Category   Id   n</span>
 <span class="co">#&gt; 1 Demographics          Demographics       NA 5001  20</span>
 <span class="co">#&gt; 2          NAb Neutralizing antibody       NA 5004 839</span></code></pre></div>
@@ -134,7 +132,7 @@ study
 <span class="co">#&gt; [17] "titer_ic50"             "titer_ic80"            </span>
 <span class="co">#&gt; [19] "response_call"          "nab_lab_source_key"    </span>
 <span class="co">#&gt; [21] "lab_code"               "exp_assayid"</span></code></pre></div>
-<p>The package uses a simple R5 reference class to represent the connection to a study and get around some of R’s copy-on-change behaviour.</p>
+<p>The package uses a <a href="https://cran.r-project.org/web/packages/R6/index.html">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behaviour.</p>
 </div>
 </div>
 </div>

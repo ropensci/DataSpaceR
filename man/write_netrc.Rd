@@ -4,21 +4,24 @@
 \alias{write_netrc}
 \title{Write a netrc file}
 \usage{
-write_netrc(login, password, file = NULL)
+write_netrc(login, password, machine = "dataspace-staging.cavd.org",
+  netrcFile = NULL)
 }
 \arguments{
-\item{login}{A character. The email address used for loging in on DataSpace.}
+\item{login}{A character. Email address used for logging in on DataSpace.}
 
-\item{password}{A character. The password associated with the login.}
+\item{password}{A character. Password associated with the login.}
 
-\item{file}{A character. The credentials will be written into that file.
-If left NULL, the netrc will be written into a temporary file.}
+\item{machine}{A character. Host of DataSpace.}
+
+\item{netrcFile}{A character. Credentials will be written into that file.
+If left NULL, netrc will be written into a temporary file.}
 }
 \value{
 A character vector containing the file paths for netrc
 }
 \description{
-Write a netrc file that is valid for accessing DataSpace
+Write a netrc file that is valid for accessing DataSpace.
 }
 \examples{
 \dontrun{
@@ -26,5 +29,5 @@ write_netrc("dataspaceuser@email.com", "mypassword")
 }
 }
 \seealso{
-\code{\link{CreateConnection}} \code{\link{check_netrc}}
+\code{\link{connectDS}} \code{\link{check_netrc}}
 }

@@ -60,7 +60,7 @@
       <h1>A Simple Introduction to the DataSpaceR Package</h1>
                         <h4 class="author">Ju Yeong Kim</h4>
             
-            <h4 class="date">2017-05-15</h4>
+            <h4 class="date">2017-06-21</h4>
           </div>
 
     
@@ -88,7 +88,7 @@ password supersecretpassword</code></pre>
 <a href="#initiate-a-connection" class="anchor"></a>Initiate a connection</h2>
 <p>We’ll be looking at study <code>cvd408</code>. If you want to use a different study, change that string. The connections have state, so you can instantiate multiple connections to different studies simultaneously.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DataSpaceR)
-cvd256 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CreateConnection.html">CreateConnection</a></span>(<span class="dt">study =</span> <span class="st">"cvd256"</span>)
+cvd256 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/connectDS.html">connectDS</a></span>(<span class="dt">study =</span> <span class="st">"cvd256"</span>)
 cvd256</code></pre></div>
 <pre><code>## DataSpace Connection to cvd256
 ## URL: https://dataspace-staging.cavd.org/project/CAVD/cvd256
@@ -98,10 +98,7 @@ cvd256</code></pre></div>
 ##  Demographics
 ##  NAb</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256$available_datasets</code></pre></div>
-<pre><code>##           Name                      Label Category   Id     n
-## 1         BAMA Binding Ab multiplex assay       NA 5006 26960
-## 2 Demographics               Demographics       NA 5001   121
-## 3          NAb      Neutralizing antibody       NA 5004  1419</code></pre>
+<pre><code>## NULL</code></pre>
 <p>The call to <code>CreateConnection</code> instantiates the connection Printing the object shows where it’s connected, to what study, and the available datasets.</p>
 </div>
 <div id="fetching-datasets" class="section level2">
@@ -139,7 +136,7 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256$<span class="kw">getDataset</span>
 <h2 class="hasAnchor">
 <a href="#cross-study-connection" class="anchor"></a>Cross-study connection</h2>
 <p>To fetch data from multiple studies, simply create a connection at the project level.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CreateConnection.html">CreateConnection</a></span>(<span class="st">""</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/connectDS.html">connectDS</a></span>(<span class="st">""</span>)</code></pre></div>
 <p>This will instantiate a connection at the <code>Studies</code> level. Most functions work cross study connections just like they do on single studies.</p>
 <p>You can get a list of datasets available accross all studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">con</code></pre></div>
@@ -152,18 +149,18 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256$<span class="kw">getDataset</span>
 ##  ELISPOT
 ##  ICS
 ##  NAb</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">con$available_datasets</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">con$availableDatasets</code></pre></div>
 <pre><code>##           Name                           Label Category   Id     n
-## 1         BAMA      Binding Ab multiplex assay       NA 5006 32224
-## 2 Demographics                    Demographics       NA 5001  1395
+## 1         BAMA      Binding Ab multiplex assay       NA 5006 37384
+## 2 Demographics                    Demographics       NA 5001  1375
 ## 3      ELISPOT        Enzyme-Linked ImmunoSpot       NA 5003  5610
 ## 4          ICS Intracellular Cytokine Staining       NA 5002  5816
-## 5          NAb           Neutralizing antibody       NA 5004 33789</code></pre>
+## 5          NAb           Neutralizing antibody       NA 5004 35037</code></pre>
 <p>In cross-study connections, <code>getDataset</code> will combine the requested datasets. Note that in most cases the datasets will have too many subjects, making the filtering of the data a necessity. The <code>colFilter</code> argument can be used here, as described in the <code>getDataset</code> section.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conFilter &lt;-<span class="st"> </span><span class="kw">makeFilter</span>(<span class="kw">c</span>(<span class="st">"species"</span>, <span class="st">"EQUAL"</span>, <span class="st">"Human"</span>))
 human &lt;-<span class="st"> </span>con$<span class="kw">getDataset</span>(<span class="st">"Demographics"</span>, <span class="dt">colFilter =</span> conFilter)
 <span class="kw">dim</span>(human)</code></pre></div>
-<pre><code>## [1] 241  31</code></pre>
+<pre><code>## [1] 191  31</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(human)</code></pre></div>
 <pre><code>##  [1] "SubjectId"                       "SubjectVisit/Visit"             
 ##  [3] "species"                         "subspecies"                     
@@ -181,6 +178,63 @@ human &lt;-<span class="st"> </span>con$<span class="kw">getDataset</span>(<span
 ## [27] "study_product_class_combination" "study_product_combination"      
 ## [29] "study_short_name"                "study_grant_pi_name"            
 ## [31] "study_strategy"</code></pre>
+</div>
+<div id="caching" class="section level2">
+<h2 class="hasAnchor">
+<a href="#caching" class="anchor"></a>Caching</h2>
+<div id="connect-to-cvd408-study" class="section level3">
+<h3 class="hasAnchor">
+<a href="#connect-to-cvd408-study" class="anchor"></a>Connect to <code>cvd408</code> study</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pryr)
+cvd408 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/connectDS.html">connectDS</a></span>(<span class="st">"cvd408"</span>)
+
+<span class="kw">str</span>(cvd408$cache)</code></pre></div>
+<pre><code>##  list()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
+<pre><code>## 166 kB</code></pre>
+</div>
+<div id="retrieve-nab-dataset" class="section level3">
+<h3 class="hasAnchor">
+<a href="#retrieve-nab-dataset" class="anchor"></a>Retrieve NAb dataset</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ptm &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+<span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
+<span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
+<pre><code>##    user  system elapsed 
+##   0.238   0.022   0.696</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
+<pre><code>## List of 1
+##  $ 18357346d405de4764a3db44c22a80fd:List of 2
+##   ..$ args:List of 3
+##   ..$ data:'data.frame': 839 obs. of  22 variables:</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
+<pre><code>## 305 kB</code></pre>
+</div>
+<div id="retrieve-nab-dataset-again" class="section level3">
+<h3 class="hasAnchor">
+<a href="#retrieve-nab-dataset-again" class="anchor"></a>Retrieve NAb dataset again</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ptm &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+<span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
+<span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
+<pre><code>##    user  system elapsed 
+##   0.002   0.000   0.002</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
+<pre><code>## List of 1
+##  $ 18357346d405de4764a3db44c22a80fd:List of 2
+##   ..$ args:List of 3
+##   ..$ data:'data.frame': 839 obs. of  22 variables:</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
+<pre><code>## 321 kB</code></pre>
+</div>
+<div id="clear-cache" class="section level3">
+<h3 class="hasAnchor">
+<a href="#clear-cache" class="anchor"></a>Clear cache</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408$<span class="kw">clearCache</span>()
+
+<span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
+<pre><code>##  list()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
+<pre><code>## 183 kB</code></pre>
+</div>
 </div>
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
@@ -201,14 +255,15 @@ human &lt;-<span class="st"> </span>con$<span class="kw">getDataset</span>(<span
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] Rlabkey_2.1.134  rjson_0.2.15     RCurl_1.95-4.8   bitops_1.0-6    
-## [5] DataSpaceR_0.1.0
+## [1] pryr_0.1.2       Rlabkey_2.1.135  rjson_0.2.15     RCurl_1.95-4.8  
+## [5] bitops_1.0-6     DataSpaceR_0.1.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.10.4   assertthat_0.2.0 digest_0.6.12    rprojroot_1.2   
-##  [5] backports_1.0.5  magrittr_1.5     evaluate_0.10    stringi_1.1.5   
-##  [9] rmarkdown_1.5    tools_3.4.0      stringr_1.2.0    yaml_2.1.14     
-## [13] compiler_3.4.0   htmltools_0.3.6  knitr_1.15.1</code></pre>
+##  [1] Rcpp_0.12.11     codetools_0.2-15 assertthat_0.2.0 digest_0.6.12   
+##  [5] rprojroot_1.2    R6_2.2.2         backports_1.1.0  magrittr_1.5    
+##  [9] evaluate_0.10    stringi_1.1.5    rmarkdown_1.6    tools_3.4.0     
+## [13] stringr_1.2.0    yaml_2.1.14      compiler_3.4.0   htmltools_0.3.6 
+## [17] knitr_1.16</code></pre>
 </div>
 </div>
   </div>
@@ -221,6 +276,7 @@ human &lt;-<span class="st"> </span>con$<span class="kw">getDataset</span>(<span
       <li><a href="#initiate-a-connection">Initiate a connection</a></li>
       <li><a href="#fetching-datasets">Fetching datasets</a></li>
       <li><a href="#cross-study-connection">Cross-study connection</a></li>
+      <li><a href="#caching">Caching</a></li>
       <li><a href="#session-information">Session information</a></li>
       </ul>
 </div>

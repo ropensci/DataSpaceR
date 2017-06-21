@@ -1,4 +1,5 @@
-#' @title A Thin Wrapper Around DataSpace
+#' @title DataSpaceR
+#'
 #' @description DataSpaceR provides a convenient API for accessing datasets
 #' within the DataSpace database.
 #'
@@ -7,7 +8,7 @@
 #'
 #' @name DataSpaceR-package
 #' @aliases DataSpaceR
-#' @seealso \code{\link{CreateConnection}}
+#' @seealso \code{\link{connectDS}}
 #' @author Ju Yeong Kim
-#' @import Rlabkey methods assertthat
+#' @import Rlabkey assertthat
 NULL

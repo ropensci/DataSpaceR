@@ -15,13 +15,15 @@ Check that there is a netrc file with a valid entry for DataSpace.
 \details{
 In order to connect to DataSpace, you will need a \code{.netrc} file in your
 contains a \code{machine} name (hostname of DataSpace), and \code{login} and
-\code{password}. See \href{https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc}{here}
+\code{password}.
+See \href{https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc}{here}
 for more information. By default \code{RCurl} will look for the file in your
 home directoty.
 
-If no netrc is available or it is not formatted properly, \code{\link{write_netrc}}
-can be used to write one. Otherwise, when specifying login and password in
-\code{CreateConnection}, a temporary file will be created for that connection.
+If no netrc is available or it is not formatted properly,
+\code{\link{write_netrc}}  can be used to write one.
+Otherwise, when specifying login and password in \code{connectDS},
+a temporary file will be created for that connection.
 }
 \examples{
 \dontrun{
@@ -29,5 +31,5 @@ check_netrc()
 }
 }
 \seealso{
-\code{\link{CreateConnection}} \code{\link{write_netrc}}
+\code{\link{connectDS}} \code{\link{write_netrc}}
 }

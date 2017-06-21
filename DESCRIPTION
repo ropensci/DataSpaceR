@@ -2,8 +2,11 @@ Package: DataSpaceR
 Type: Package
 Title: A Thin Wrapper Around the DataSpace Database
 Version: 0.1.0
-Authors@R: c(person("Ju Yeong", "Kim", email = "jkim2345@fredhutch.org", role = c("aut", "cre")), 
-             person("The Collaboration for AIDS Vaccine Discovery", role = "cph"))
+Authors@R: c(person("Ju Yeong", "Kim",
+                    email = "jkim2345@fredhutch.org",
+                    role = c("aut", "cre")),
+             person("The Collaboration for AIDS Vaccine Discovery",
+                    role = "cph"))
 Description: Provides a convenient API for accessing data sets within
     the CAVD DataSpace (dataspace.cavd.org).
 URL: https://github.com/FredHutch/DataSpaceR
@@ -12,11 +15,14 @@ License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports:
-    methods,
-    utils,
+    R6,
     Rlabkey (>= 2.1.134),
-    assertthat
+    assertthat,
+    digest
 Suggests: 
     testthat,
-    covr
+    covr,
+    knitr,
+    pryr
+VignetteBuilder: knitr
 RoxygenNote: 6.0.1
