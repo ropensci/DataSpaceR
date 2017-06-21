@@ -1,6 +1,6 @@
 # DataSpaceR 0.1.0
 
-* Initialized the package with `CreateConnection()` and other basic functions.
+* Initialized the package with `connectDS()` and other basic functions.
 * Added a test framework on `tests` to test the package.
 * Added a `.travis.yml` to build and check the package automatically. (not used yet)
 * Added a `codecov.yml` to track code coverage. (not used yet)
