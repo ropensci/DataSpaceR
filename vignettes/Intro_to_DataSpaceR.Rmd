@@ -37,7 +37,7 @@ at the command prompt, you should see it there. If it's not there, create one no
 
 ## Initiate a connection
 
-We'll be looking at study `cvd408`. If you want to use a different study, change that string. The connections have state, so you can instantiate multiple connections to different studies simultaneously.
+We'll be looking at study `cvd256`. If you want to use a different study, change that string. The connections have state, so you can instantiate multiple connections to different studies simultaneously.
 
 ```{r CreateConnection}
 library(DataSpaceR)

@@ -28,11 +28,10 @@ human <- con$getDataset("Demographics", colFilter = conFilter)
 dim(human)
 colnames(human)
 
-## ----caching-------------------------------------------------------------
+## ------------------------------------------------------------------------
 library(pryr)
 cvd408 <- connectDS("cvd408")
 
-## ------------------------------------------------------------------------
 str(cvd408$cache)
 object_size(cvd408)
 

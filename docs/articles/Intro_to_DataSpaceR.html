@@ -86,7 +86,7 @@ password supersecretpassword</code></pre>
 <div id="initiate-a-connection" class="section level2">
 <h2 class="hasAnchor">
 <a href="#initiate-a-connection" class="anchor"></a>Initiate a connection</h2>
-<p>We’ll be looking at study <code>cvd408</code>. If you want to use a different study, change that string. The connections have state, so you can instantiate multiple connections to different studies simultaneously.</p>
+<p>We’ll be looking at study <code>cvd256</code>. If you want to use a different study, change that string. The connections have state, so you can instantiate multiple connections to different studies simultaneously.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DataSpaceR)
 cvd256 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/connectDS.html">connectDS</a></span>(<span class="dt">study =</span> <span class="st">"cvd256"</span>)
 cvd256</code></pre></div>
@@ -200,7 +200,7 @@ cvd408 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/conn
 <span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.250   0.029   0.708</code></pre>
+##   0.263   0.021   0.732</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 18357346d405de4764a3db44c22a80fd:List of 2
@@ -216,7 +216,7 @@ cvd408 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/conn
 <span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.002   0.000   0.002</code></pre>
+##   0.002   0.000   0.003</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 18357346d405de4764a3db44c22a80fd:List of 2
