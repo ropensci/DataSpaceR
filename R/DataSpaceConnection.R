@@ -94,24 +94,26 @@ DataSpaceConnection <- R6Class(
                   msg = "For multiple studies, use an empty string and filter the connection.")
       assert_that(is.logical(verbose))
 
-      labkey.url.base <- try(get("labkey.url.base", .GlobalEnv), silent = TRUE)
-      if(inherits(labkey.url.base, "try-error"))
+      labkey.url.base <- try(get("labkey.url.base", .GlobalEnv),
+                             silent = TRUE)
+      if (inherits(labkey.url.base, "try-error"))
         labkey.url.base <- "https://dataspace-staging.cavd.org"
       labkey.url.base <- gsub("http:", "https:", labkey.url.base)
-      if(length(grep("^https://", labkey.url.base)) == 0)
+      if (length(grep("^https://", labkey.url.base)) == 0)
         labkey.url.base <- paste0("https://", labkey.url.base)
 
-      labkey.user.email <- try(get("labkey.user.email", .GlobalEnv), silent = TRUE)
-      if(inherits(labkey.user.email, "try-error"))
+      labkey.user.email <- try(get("labkey.user.email", .GlobalEnv),
+                               silent = TRUE)
+      if (inherits(labkey.user.email, "try-error"))
         labkey.user.email <- "unknown_user at not_a_domain.com"
 
-      if(!is.null(login) & !is.null(password)) {
+      if (!is.null(login) & !is.null(password)) {
         nf <- write_netrc(login, password)
       } else {
         nf <- try(get("labkey.netrc.file", .GlobalEnv), silent = TRUE)
       }
       useragent <- paste("DataSpaceR", packageVersion("DataSpaceR"))
-      if(!inherits(nf, "try-error") && !is.null(nf)) {
+      if (!inherits(nf, "try-error") && !is.null(nf)) {
         curlOptions <- labkey.setCurlOptions(ssl.verifyhost = 2,
                                              sslversion = 1,
                                              netrc.file = nf,
@@ -124,8 +126,8 @@ DataSpaceConnection <- R6Class(
 
       private$.study <- tolower(study)
       labkey.url.path <- try(get("labkey.url.path", .GlobalEnv), silent = TRUE)
-      if(inherits(labkey.url.path, "try-error")) {
-        if(is.null(study)) {
+      if (inherits(labkey.url.path, "try-error")) {
+        if (is.null(study)) {
           stop("study cannot be NULL")
         }
         labkey.url.path <- paste0("/CAVD/", study)
@@ -136,8 +138,8 @@ DataSpaceConnection <- R6Class(
       folders <- lsFolders(getSession(labkey.url.base, folderPath = "CAVD"))
       validStudies <- grep("\\w+\\d+", basename(folders), value = TRUE)
       reqStudy <- basename(study)
-      if(!reqStudy %in% c("", validStudies)) {
-        if(!verbose) {
+      if (!reqStudy %in% c("", validStudies)) {
+        if (!verbose) {
           stop(paste0(reqStudy, " is not a valid study"))
         } else {
           stop(paste0(reqStudy, " is not a valid study\nValid studies: ",
@@ -163,7 +165,7 @@ DataSpaceConnection <- R6Class(
       cat(paste0("\nURL: ", url))
       cat(paste0("\nUser: ", private$.config$labkey.user.email))
       cat("\nAvailable datasets")
-      for(name in private$.availableDatasets$Name) {
+      for (name in private$.availableDatasets$Name) {
         cat(paste0("\n\t", name))
       }
     },
@@ -232,7 +234,7 @@ DataSpaceConnection <- R6Class(
       }
 
       viewName <- NULL
-      if(originalView) viewName <- "full"
+      if (originalView) viewName <- "full"
 
       dataset <- labkey.selectRows(
         baseUrl = private$.config$labkey.url.base,

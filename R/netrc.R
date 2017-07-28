@@ -15,15 +15,16 @@
 #' write_netrc("dataspaceuser@email.com", "mypassword")
 #' }
 #' @export
-write_netrc <- function(login, password,
+write_netrc <- function(login,
+                        password,
                         machine = "dataspace-staging.cavd.org",
                         netrcFile = NULL) {
   string <- paste("machine", machine,
                   "login", login,
                   "password", password)
-  if(is.null(netrcFile)) {
+  if (is.null(netrcFile)) {
     netrcFile <- tempfile()
-  } else if(file.exists(netrcFile)) {
+  } else if (file.exists(netrcFile)) {
     stop("The file you are trying to write to already exists.\n
          Remove manually if you wish to overwrite.")
   }
@@ -57,19 +58,19 @@ write_netrc <- function(login, password,
 #' }
 #' @export
 check_netrc <- function() {
-  if(exists("labkey.netrc.file", .GlobalEnv)) {
+  if (exists("labkey.netrc.file", .GlobalEnv)) {
     netrcFile <- get("labkey.netrc.file", .GlobalEnv)
   } else {
     netrcFile <- "~/.netrc"
   }
-  if(!file.exists(netrcFile)) {
+  if (!file.exists(netrcFile)) {
     stop("There is no netrc file. Use `write_netrc()`")
   } else {
     cat("netrc file found at", netrcFile)
   }
   lines <- readLines(netrcFile)
   lines <- gsub("http.*//", "", lines)
-  if(length(grep("machine\\sdataspace-staging.cavd.org", lines)) == 0) {
+  if (length(grep("machine\\sdataspace-staging.cavd.org", lines)) == 0) {
     stop("No entry found for dataspace-staging.cavd.org in the netrc file.")
   }
   cat(", and it looks valid.\n")
