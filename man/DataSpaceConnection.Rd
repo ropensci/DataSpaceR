@@ -64,14 +64,11 @@ the connection object.
   \item{\code{getAvailableDatasets()}}{
     Get available datasets.
   }
-  \item{\code{getDataset(datasetName, originalView = FALSE,
+  \item{\code{getDataset(datasetName,
   colFilter = NULL, reload = FALSE, ...)}}{
     Get a dataset from the connection.
 
     \code{datasetName}: A character. Name of the dataset to retrieve.
-
-    \code{originalView}: A logical. If set to TRUE, download the ImmPort
-    view. Else, download the default grid view.
 
     \code{colFilter}: A matrix. A filter as returned by Rlabkey's
     \code{\link[Rlabkey]{makeFilter}}.

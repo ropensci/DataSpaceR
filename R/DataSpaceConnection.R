@@ -48,14 +48,11 @@
 #'   \item{\code{getAvailableDatasets()}}{
 #'     Get available datasets.
 #'   }
-#'   \item{\code{getDataset(datasetName, originalView = FALSE,
+#'   \item{\code{getDataset(datasetName,
 #'   colFilter = NULL, reload = FALSE, ...)}}{
 #'     Get a dataset from the connection.
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
-#'
-#'     \code{originalView}: A logical. If set to TRUE, download the ImmPort
-#'     view. Else, download the default grid view.
 #'
 #'     \code{colFilter}: A matrix. A filter as returned by Rlabkey's
 #'     \code{\link[Rlabkey]{makeFilter}}.
@@ -210,7 +207,6 @@ DataSpaceConnection <- R6Class(
         )
     },
     getDataset = function(datasetName,
-                          originalView = FALSE,
                           colFilter = NULL,
                           reload = FALSE,
                           ...) {
@@ -218,12 +214,10 @@ DataSpaceConnection <- R6Class(
       assert_that(length(datasetName) == 1)
       assert_that(datasetName %in% private$.availableDatasets$name,
                   msg = paste0(datasetName, " is invalid dataset"))
-      assert_that(is.logical(originalView))
       assert_that(is.null(colFilter) | is.matrix(colFilter),
                   msg = "colFilter is not a matrix")
 
       args <- list(datasetName = datasetName,
-                   originalView = originalView,
                    colFilter = colFilter,
                    ...)
       digestedArgs <- digest(args)
@@ -234,7 +228,6 @@ DataSpaceConnection <- R6Class(
       }
 
       viewName <- NULL
-      if (originalView) viewName <- "full"
 
       dataset <- labkey.selectRows(
         baseUrl = private$.config$labkey.url.base,
