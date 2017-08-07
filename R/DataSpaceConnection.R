@@ -165,7 +165,7 @@ DataSpaceConnection <- R6Class(
       cat(paste0("\nURL: ", url))
       cat(paste0("\nUser: ", private$.config$labkey.user.email))
       cat("\nAvailable datasets")
-      for (name in private$.availableDatasets$Name) {
+      for (name in private$.availableDatasets$name) {
         cat(paste0("\n\t", name))
       }
     },
@@ -173,10 +173,10 @@ DataSpaceConnection <- R6Class(
       datasetQuery <-
         "
           SELECT
-            DataSets.Name,
-            DataSets.Label,
-            DataSets.CategoryId AS Category,
-            DataSets.DataSetId AS Id,
+            DataSets.Name as name,
+            DataSets.Label as label,
+            -- DataSets.CategoryId AS category,
+            -- DataSets.DataSetId AS id,
             dataset_n.n
           FROM
           (
@@ -216,7 +216,7 @@ DataSpaceConnection <- R6Class(
                           ...) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
-      assert_that(datasetName %in% private$.availableDatasets$Name,
+      assert_that(datasetName %in% private$.availableDatasets$name,
                   msg = paste0(datasetName, " is invalid dataset"))
       assert_that(is.logical(originalView))
       assert_that(is.null(colFilter) | is.matrix(colFilter),
