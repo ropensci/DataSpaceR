@@ -26,9 +26,9 @@ if ("DataSpaceConnection" %in% class(con)) {
 
   if (identical(names(con), con_names)) {
     test_that("`print`", {
-      con_output <- c("DataSpace Connection to ",
+      con_output <- c("DataSpace Connection to CAVD",
                       "URL: https://dataspace-staging.cavd.org/project/CAVD/",
-                      "User: unknown_user at not_a_domain.com",
+                      # "User: unknown_user at not_a_domain.com",
                       "Available datasets",
                       "\tBAMA",
                       "\tDemographics",
@@ -40,8 +40,11 @@ if ("DataSpaceConnection" %in% class(con)) {
     })
 
     test_that("`config`", {
-      expect_is(con$config, "list")
+      configs <- c("labkey.url.base", "labkey.url.path", "labkey.user.email",
+                   "curlOptions", "verbose")
 
+      expect_is(con$config, "list")
+      expect_equal(names(con$config), configs)
     })
 
     test_that("`availableDatasets`", {

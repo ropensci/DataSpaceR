@@ -160,16 +160,16 @@ DataSpaceConnection <- R6Class(
       self$getAvailableDatasets()
     },
     print = function() {
+      study <- ifelse(private$.study == "", "CAVD", private$.study)
       url <- file.path(gsub("/$", "", private$.config$labkey.url.base),
                        "project",
                        gsub("^/", "", private$.config$labkey.url.path))
-      cat(paste0("DataSpace Connection to ", private$.study))
+
+      cat(paste0("DataSpace Connection to ", study))
       cat(paste0("\nURL: ", url))
-      cat(paste0("\nUser: ", private$.config$labkey.user.email))
+      # cat(paste0("\nUser: ", private$.config$labkey.user.email))
       cat("\nAvailable datasets")
-      for (name in private$.availableDatasets$name) {
-        cat(paste0("\n\t", name))
-      }
+      cat(paste0("\n\t", private$.availableDatasets$name), sep = "")
     },
     getAvailableDatasets = function() {
       datasetQuery <-
@@ -271,7 +271,11 @@ DataSpaceConnection <- R6Class(
         varInfo$isSelectable == "TRUE" &
         !varInfo$fieldName %in% extraVars
 
-      varInfo[varFilter, c("fieldName", "caption", "type", "description")]
+      varInfo <- varInfo[varFilter,
+                         c("fieldName", "caption", "type", "description")]
+      rownames(varInfo) <- NULL
+
+      varInfo
     }
   ),
   active = list(

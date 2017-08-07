@@ -15,8 +15,13 @@ The package can be downloaded here and installed like any other R packages or in
 
 ``` r
 library(devtools)
-install_github("FredHutch/DataSpaceR")
+install_github("FredHutch/DataSpaceR", auth_token = GITHUB_PAT)
 ```
+
+Since `FredHutch/DataSpaceR` is a private repository, a personal access token from Github (`GITHUB_PAT`) is required. A new token can be generated [here](https://github.com/settings/tokens), and select `repo` scope for the token.
+
+netrc
+-----
 
 The database is accessed with the user's credentials. A `netrc` file storing login and password information is required.
 
@@ -49,7 +54,6 @@ study <- connectDS("cvd408")
 study
 #> DataSpace Connection to cvd408
 #> URL: https://dataspace-staging.cavd.org/project/CAVD/cvd408
-#> User: unknown_user at not_a_domain.com
 #> Available datasets
 #>  Demographics
 #>  NAb

@@ -43,7 +43,7 @@ We'll be looking at study `cvd256`. If you want to use a different study, change
 library(DataSpaceR)
 cvd256 <- connectDS(study = "cvd256")
 cvd256
-cvd256$available_datasets
+cvd256$availableDatasets
 ```
 
 The call to `CreateConnection` instantiates the connection Printing the object shows where it's connected, to what study, and the available datasets.
@@ -51,7 +51,7 @@ The call to `CreateConnection` instantiates the connection Printing the object s
 
 ## Fetching datasets
 
-We can grab any of the datasets listed in the connection.
+We can grab any of the datasets listed in the connection (`availableDatasets`).
 
 ```{r getDataset}
 NAb <- cvd256$getDataset("NAb")
@@ -59,7 +59,13 @@ dim(NAb)
 colnames(NAb)
 ```
 
-The *cvd256* object is an **R5** class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
+The *cvd256* object is an [`R6`](https://cran.r-project.org/web/packages/R6/) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
+
+We can get detailed variable information using `getVariableInfo`.
+
+```{r getVariableInfo}
+str(cvd256$getVariableInfo("NAb"))
+```
 
 To get only a subset of the data and speed up the download, filters can be passed to `getDataset`. The filters are created using the `makeFilter` function of the `Rlabkey` package.
 

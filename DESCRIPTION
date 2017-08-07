@@ -1,13 +1,13 @@
 Package: DataSpaceR
 Type: Package
-Title: A Thin Wrapper Around the DataSpace Database
+Title: An R package for CAVD DataSpace
 Version: 0.2.0
 Authors@R: c(person("Ju Yeong", "Kim",
                     email = "jkim2345@fredhutch.org",
                     role = c("aut", "cre")),
              person("The Collaboration for AIDS Vaccine Discovery",
                     role = "cph"))
-Description: Provides a convenient API for accessing data sets within
+Description: Provides a convenient API for accessing datasets within
     the CAVD DataSpace (dataspace.cavd.org).
 URL: https://github.com/FredHutch/DataSpaceR
 BugReports: https://github.com/FredHutch/DataSpaceR/issues
