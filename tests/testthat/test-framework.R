@@ -14,6 +14,7 @@ if ("DataSpaceConnection" %in% class(con)) {
                  "config",
                  "study",
                  "clone",
+                 "getVariableInfo",
                  "clearCache",
                  "getDataset",
                  "getAvailableDatasets",
@@ -25,8 +26,17 @@ if ("DataSpaceConnection" %in% class(con)) {
 
   if (identical(names(con), con_names)) {
     test_that("`print`", {
-      con_output <- "DataSpace Connection to \nURL: https://dataspace-staging.cavd.org/project/CAVD/\nUser: unknown_user at not_a_domain.com\nAvailable datasets\n\tBAMA\n\tDemographics\n\tELISPOT\n\tICS\n\tNAb"
-      expect_equal(capture_output(con$print()), con_output)
+      con_output <- c("DataSpace Connection to ",
+                      "URL: https://dataspace-staging.cavd.org/project/CAVD/",
+                      "User: unknown_user at not_a_domain.com",
+                      "Available datasets",
+                      "\tBAMA",
+                      "\tDemographics",
+                      "\tELISPOT",
+                      "\tICS",
+                      "\tNAb")
+      cap_output <- capture.output(con$print())
+      expect_equal(cap_output, con_output)
     })
 
     test_that("`config`", {
@@ -37,8 +47,8 @@ if ("DataSpaceConnection" %in% class(con)) {
     test_that("`availableDatasets`", {
       expect_is(con$availableDatasets, "data.frame")
       expect_equal(names(con$availableDatasets),
-                   c("Name", "Label", "Category", "Id", "n"))
-      expect_equal(con$availableDatasets$Name,
+                   c("name", "label", "n"))
+      expect_equal(con$availableDatasets$name,
                    c("BAMA", "Demographics", "ELISPOT", "ICS", "NAb"))
     })
 
@@ -68,6 +78,15 @@ if ("DataSpaceConnection" %in% class(con)) {
       clearCache <- try(con$clearCache(), silent = TRUE)
       expect_is(clearCache, "list")
       expect_length(clearCache, 0)
+    })
+
+    test_that("`getVariableInfo`", {
+      for (datasetName in con$availableDatasets$Name) {
+        dataset <- try(con$getVariableInfo(datasetName = datasetName), silent = TRUE)
+        expect_is(dataset, "data.frame", info = datasetName)
+        expect_gt(nrow(dataset), 0)
+        expect_equal(names(dataset), c("fieldName", "caption", "type", "description"))
+      }
     })
   }
 }
