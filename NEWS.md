@@ -1,3 +1,9 @@
+# DataSpaceR 0.2.0
+
+* Added a `getVariableInfo` method to `DataSpaceConnection` class.
+* Changed variable names in `getAvailableDatasets` to lowercase.
+
+
 # DataSpaceR 0.1.0
 
 * Initialized the package with `connectDS()` and other basic functions.
