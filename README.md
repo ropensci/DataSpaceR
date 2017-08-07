@@ -63,9 +63,9 @@ class(study)
 
 ``` r
 study$availableDatasets
-#>           Name                 Label Category   Id   n
-#> 1 Demographics          Demographics       NA 5001  20
-#> 2          NAb Neutralizing antibody       NA 5004 839
+#>           name                 label   n
+#> 1 Demographics          Demographics  20
+#> 2          NAb Neutralizing antibody 839
 ```
 
 which will print names of available datasets.
@@ -75,7 +75,7 @@ which will print names of available datasets.
 ``` r
 NAb <- study$getDataset("NAb")
 dim(NAb)
-#> [1] 839  22
+#> [1] 839  27
 colnames(NAb)
 #>  [1] "ParticipantId"          "ParticipantVisit/Visit"
 #>  [3] "visit_day"              "assay_identifier"      
@@ -87,7 +87,10 @@ colnames(NAb)
 #> [15] "target_cell"            "initial_dilution"      
 #> [17] "titer_ic50"             "titer_ic80"            
 #> [19] "response_call"          "nab_lab_source_key"    
-#> [21] "lab_code"               "exp_assayid"
+#> [21] "lab_code"               "exp_assayid"           
+#> [23] "titer_ID50"             "titer_ID80"            
+#> [25] "nab_response_ID50"      "nab_response_ID80"     
+#> [27] "slope"
 ```
 
 The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.

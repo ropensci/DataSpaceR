@@ -29,10 +29,25 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/Intro_to_DataSpaceR.html">A Simple Introduction to the DataSpaceR Package</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -60,7 +75,7 @@
       <h1>A Simple Introduction to the DataSpaceR Package</h1>
                         <h4 class="author">Ju Yeong Kim</h4>
             
-            <h4 class="date">2017-06-21</h4>
+            <h4 class="date">2017-08-07</h4>
           </div>
 
     
@@ -107,7 +122,7 @@ cvd256</code></pre></div>
 <p>We can grab any of the datasets listed in the connection.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>cvd256$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
 <span class="kw">dim</span>(NAb)</code></pre></div>
-<pre><code>## [1] 1419   22</code></pre>
+<pre><code>## [1] 1419   27</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(NAb)</code></pre></div>
 <pre><code>##  [1] "ParticipantId"          "ParticipantVisit/Visit"
 ##  [3] "visit_day"              "assay_identifier"      
@@ -119,18 +134,21 @@ cvd256</code></pre></div>
 ## [15] "target_cell"            "initial_dilution"      
 ## [17] "titer_ic50"             "titer_ic80"            
 ## [19] "response_call"          "nab_lab_source_key"    
-## [21] "lab_code"               "exp_assayid"</code></pre>
+## [21] "lab_code"               "exp_assayid"           
+## [23] "titer_ID50"             "titer_ID80"            
+## [25] "nab_response_ID50"      "nab_response_ID80"     
+## [27] "slope"</code></pre>
 <p>The <em>cvd256</em> object is an <strong>R5</strong> class, so it behaves like a true object. Functions (like <code>getDataset</code>) are members of the object, thus the <code>$</code> semantics to access member functions.</p>
 <p>To get only a subset of the data and speed up the download, filters can be passed to <code>getDataset</code>. The filters are created using the <code>makeFilter</code> function of the <code>Rlabkey</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Rlabkey)</code></pre></div>
 <pre><code>## Loading required package: RCurl</code></pre>
 <pre><code>## Loading required package: bitops</code></pre>
 <pre><code>## Loading required package: rjson</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256Filter &lt;-<span class="st"> </span><span class="kw">makeFilter</span>(<span class="kw">c</span>(<span class="st">"visit_day"</span>, <span class="st">"EQUAL"</span>, <span class="st">"0"</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256Filter &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/Rlabkey/topics/makeFilter">makeFilter</a></span>(<span class="kw">c</span>(<span class="st">"visit_day"</span>, <span class="st">"EQUAL"</span>, <span class="st">"0"</span>))
 NAb_day0 &lt;-<span class="st"> </span>cvd256$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>, <span class="dt">colFilter =</span> cvd256Filter)
 <span class="kw">dim</span>(NAb_day0)</code></pre></div>
-<pre><code>## [1] 709  22</code></pre>
-<p>See <code>?makeFilter</code> for more information on the syntax.</p>
+<pre><code>## [1] 709  27</code></pre>
+<p>See <code><a href="http://www.rdocumentation.org/packages/Rlabkey/topics/makeFilter">?makeFilter</a></code> for more information on the syntax.</p>
 </div>
 <div id="cross-study-connection" class="section level2">
 <h2 class="hasAnchor">
@@ -150,14 +168,14 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256$<span class="kw">getDataset</span>
 ##  ICS
 ##  NAb</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">con$availableDatasets</code></pre></div>
-<pre><code>##           Name                           Label Category   Id     n
-## 1         BAMA      Binding Ab multiplex assay       NA 5006 37384
-## 2 Demographics                    Demographics       NA 5001  1375
-## 3      ELISPOT        Enzyme-Linked ImmunoSpot       NA 5003  5610
-## 4          ICS Intracellular Cytokine Staining       NA 5002  5816
-## 5          NAb           Neutralizing antibody       NA 5004 35037</code></pre>
+<pre><code>##           name                           label     n
+## 1         BAMA      Binding Ab multiplex assay 49169
+## 2 Demographics                    Demographics  1461
+## 3      ELISPOT        Enzyme-Linked ImmunoSpot  5610
+## 4          ICS Intracellular Cytokine Staining 83706
+## 5          NAb           Neutralizing antibody 39642</code></pre>
 <p>In cross-study connections, <code>getDataset</code> will combine the requested datasets. Note that in most cases the datasets will have too many subjects, making the filtering of the data a necessity. The <code>colFilter</code> argument can be used here, as described in the <code>getDataset</code> section.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conFilter &lt;-<span class="st"> </span><span class="kw">makeFilter</span>(<span class="kw">c</span>(<span class="st">"species"</span>, <span class="st">"EQUAL"</span>, <span class="st">"Human"</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conFilter &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/Rlabkey/topics/makeFilter">makeFilter</a></span>(<span class="kw">c</span>(<span class="st">"species"</span>, <span class="st">"EQUAL"</span>, <span class="st">"Human"</span>))
 human &lt;-<span class="st"> </span>con$<span class="kw">getDataset</span>(<span class="st">"Demographics"</span>, <span class="dt">colFilter =</span> conFilter)
 <span class="kw">dim</span>(human)</code></pre></div>
 <pre><code>## [1] 191  31</code></pre>
@@ -190,8 +208,8 @@ cvd408 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/conn
 
 <span class="kw">str</span>(cvd408$cache)</code></pre></div>
 <pre><code>##  list()</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 167 kB</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
+<pre><code>## 177 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset" class="section level3">
 <h3 class="hasAnchor">
@@ -200,14 +218,14 @@ cvd408 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/conn
 <span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.263   0.021   0.732</code></pre>
+##   0.321   0.018   0.786</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
-##  $ 18357346d405de4764a3db44c22a80fd:List of 2
-##   ..$ args:List of 3
-##   ..$ data:'data.frame': 839 obs. of  22 variables:</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 306 kB</code></pre>
+##  $ 6987c5424e72e611c95edcb38f143005:List of 2
+##   ..$ args:List of 2
+##   ..$ data:'data.frame': 839 obs. of  27 variables:</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
+<pre><code>## 343 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset-again" class="section level3">
 <h3 class="hasAnchor">
@@ -216,14 +234,14 @@ cvd408 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/conn
 <span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.002   0.000   0.003</code></pre>
+##   0.003   0.000   0.004</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
-##  $ 18357346d405de4764a3db44c22a80fd:List of 2
-##   ..$ args:List of 3
-##   ..$ data:'data.frame': 839 obs. of  22 variables:</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 322 kB</code></pre>
+##  $ 6987c5424e72e611c95edcb38f143005:List of 2
+##   ..$ args:List of 2
+##   ..$ data:'data.frame': 839 obs. of  27 variables:</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
+<pre><code>## 358 kB</code></pre>
 </div>
 <div id="clear-cache" class="section level3">
 <h3 class="hasAnchor">
@@ -232,16 +250,16 @@ cvd408 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/conn
 
 <span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>##  list()</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 184 kB</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
+<pre><code>## 192 kB</code></pre>
 </div>
 </div>
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session information</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
-<pre><code>## R version 3.4.0 (2017-04-21)
-## Platform: x86_64-apple-darwin16.5.0 (64-bit)
+<pre><code>## R version 3.4.1 (2017-06-30)
+## Platform: x86_64-apple-darwin16.6.0 (64-bit)
 ## Running under: macOS Sierra 10.12.3
 ## 
 ## Matrix products: default
@@ -256,13 +274,13 @@ cvd408 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/conn
 ## 
 ## other attached packages:
 ## [1] pryr_0.1.2       Rlabkey_2.1.135  rjson_0.2.15     RCurl_1.95-4.8  
-## [5] bitops_1.0-6     DataSpaceR_0.1.0
+## [5] bitops_1.0-6     DataSpaceR_0.2.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.11     codetools_0.2-15 assertthat_0.2.0 digest_0.6.12   
+##  [1] Rcpp_0.12.12     codetools_0.2-15 assertthat_0.2.0 digest_0.6.12   
 ##  [5] rprojroot_1.2    R6_2.2.2         backports_1.1.0  magrittr_1.5    
-##  [9] evaluate_0.10    stringi_1.1.5    rmarkdown_1.6    tools_3.4.0     
-## [13] stringr_1.2.0    yaml_2.1.14      compiler_3.4.0   htmltools_0.3.6 
+##  [9] evaluate_0.10.1  stringi_1.1.5    rmarkdown_1.6    tools_3.4.1     
+## [13] stringr_1.2.0    yaml_2.1.14      compiler_3.4.1   htmltools_0.3.6 
 ## [17] knitr_1.16</code></pre>
 </div>
 </div>
@@ -270,7 +288,8 @@ cvd408 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/conn
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#configuration">Configuration</a></li>
       <li><a href="#initiate-a-connection">Initiate a connection</a></li>

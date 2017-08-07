@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,25 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/Intro_to_DataSpaceR.html">A Simple Introduction to the DataSpaceR Package</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -96,7 +112,7 @@
 
     <p>Uses global variables <code>labkey.url.base</code>, and <code>labkey.url.path</code>, to
 access a study. <code>labkey.url.base</code> should be
-<a href = 'https://dataspace-staging.cavd.org/'>https://dataspace-staging.cavd.org/</a>. <code>labkey.url.path</code> should be
+<a href='https://dataspace-staging.cavd.org/'>https://dataspace-staging.cavd.org/</a>. <code>labkey.url.path</code> should be
 <code>/CAVD/studyname</code>, where <code>studyname</code> is the accession number of the
 study.
     <code>DataSpaceConnection</code> will initialize itself, and look for a
@@ -131,11 +147,9 @@ the connection object.</p></dd>
   verbose = FALSE)</code></dt><dd><p>Initialize <code>DataSpaceConnection</code> class. See <code><a href='connectDS.html'>connectDS</a></code>.</p></dd>
   <dt><code>print()</code></dt><dd><p>Print <code>DataSpaceConnection</code> class.</p></dd>
   <dt><code>getAvailableDatasets()</code></dt><dd><p>Get available datasets.</p></dd>
-  <dt><code>getDataset(datasetName, originalView = FALSE,
+  <dt><code>getDataset(datasetName,
   colFilter = NULL, reload = FALSE, ...)</code></dt><dd><p>Get a dataset from the connection.
     <code>datasetName</code>: A character. Name of the dataset to retrieve.
-    <code>originalView</code>: A logical. If set to TRUE, download the ImmPort
-    view. Else, download the default grid view.
     <code>colFilter</code>: A matrix. A filter as returned by Rlabkey's
     <code><a href='http://www.rdocumentation.org/packages/Rlabkey/topics/makeFilter'>makeFilter</a></code>.
     <code>reload</code>: A logical. If set to TRUE, download the dataset, whether
@@ -143,6 +157,8 @@ the connection object.</p></dd>
     <code>...</code>: Extra arguments to be passed to
     <code><a href='http://www.rdocumentation.org/packages/Rlabkey/topics/labkey.selectRows'>labkey.selectRows</a></code></p></dd>
   <dt><code>clearCache()</code></dt><dd><p>Clear <code>cache</code>. Remove downloaded datasets.</p></dd>
+  <dt><code>getVariableInfo()</code></dt><dd><p>Get variable information.
+    <code>datasetName</code>: A character. Name of the dataset to retrieve.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -151,13 +167,13 @@ the connection object.</p></dd>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
-  <span class='co'># Create a connection (Initiate a DataSpaceConnection object)</span>
-  <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='connectDS.html'>connectDS</a></span>(<span class='st'>"cvd408"</span>)
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># Create a connection (Initiate a DataSpaceConnection object)</span>
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='connectDS.html'>connectDS</a></span>(<span class='st'>"cvd408"</span>)
 
-  <span class='co'># Retrieve Neutralizing antibody dataset (NAb) from DataSpace</span>
-  <span class='no'>con</span>$<span class='fu'>getDataset</span>(<span class='st'>"NAb"</span>)
-})</div></pre>
+<span class='co'># Retrieve Neutralizing antibody dataset (NAb) from DataSpace</span>
+<span class='no'>con</span>$<span class='fu'>getDataset</span>(<span class='st'>"NAb"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

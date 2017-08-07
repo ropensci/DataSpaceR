@@ -29,10 +29,25 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="/index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="articles/index.html">Articles</a>
+  <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/Intro_to_DataSpaceR.html">A Simple Introduction to the DataSpaceR Package</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="news/index.html">News</a>
@@ -70,7 +85,7 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>The package can be downloaded here and installed like any other R packages or installed directly from github using devtools.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
-<span class="kw">install_github</span>(<span class="st">"FredHutch/DataSpaceR"</span>)</code></pre></div>
+<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"FredHutch/DataSpaceR"</span>)</code></pre></div>
 <p>The database is accessed with the user’s credentials. A <code>netrc</code> file storing login and password information is required.</p>
 <p>Create netrc file in the computer running R.</p>
 <ul>
@@ -109,9 +124,9 @@ study
 <h3 class="hasAnchor">
 <a href="#datasets-can-be-listed-by" class="anchor"></a>Datasets can be listed by:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">study$availableDatasets
-<span class="co">#&gt;           Name                 Label Category   Id   n</span>
-<span class="co">#&gt; 1 Demographics          Demographics       NA 5001  20</span>
-<span class="co">#&gt; 2          NAb Neutralizing antibody       NA 5004 839</span></code></pre></div>
+<span class="co">#&gt;           name                 label   n</span>
+<span class="co">#&gt; 1 Demographics          Demographics  20</span>
+<span class="co">#&gt; 2          NAb Neutralizing antibody 839</span></code></pre></div>
 <p>which will print names of available datasets.</p>
 </div>
 <div id="neutralizing-antibody-dataset-nab-can-be-retreived-by" class="section level3">
@@ -119,7 +134,7 @@ study
 <a href="#neutralizing-antibody-dataset-nab-can-be-retreived-by" class="anchor"></a>Neutralizing antibody dataset (<code>NAb</code>) can be retreived by:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>study$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
 <span class="kw">dim</span>(NAb)
-<span class="co">#&gt; [1] 839  22</span>
+<span class="co">#&gt; [1] 839  27</span>
 <span class="kw">colnames</span>(NAb)
 <span class="co">#&gt;  [1] "ParticipantId"          "ParticipantVisit/Visit"</span>
 <span class="co">#&gt;  [3] "visit_day"              "assay_identifier"      </span>
@@ -131,7 +146,10 @@ study
 <span class="co">#&gt; [15] "target_cell"            "initial_dilution"      </span>
 <span class="co">#&gt; [17] "titer_ic50"             "titer_ic80"            </span>
 <span class="co">#&gt; [19] "response_call"          "nab_lab_source_key"    </span>
-<span class="co">#&gt; [21] "lab_code"               "exp_assayid"</span></code></pre></div>
+<span class="co">#&gt; [21] "lab_code"               "exp_assayid"           </span>
+<span class="co">#&gt; [23] "titer_ID50"             "titer_ID80"            </span>
+<span class="co">#&gt; [25] "nab_response_ID50"      "nab_response_ID80"     </span>
+<span class="co">#&gt; [27] "slope"</span></code></pre></div>
 <p>The package uses a <a href="https://cran.r-project.org/web/packages/R6/index.html">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behaviour.</p>
 </div>
 </div>
@@ -139,7 +157,8 @@ study
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Links</h2>
+    <h2 class="hasAnchor">
+<a href="#sidebar" class="anchor"></a>Links</h2>
 <ul class="list-unstyled">
 <li>Browse source code at <br><a href="https://github.com/FredHutch/DataSpaceR">https://​github.com/​FredHutch/​DataSpaceR</a>
 </li>
