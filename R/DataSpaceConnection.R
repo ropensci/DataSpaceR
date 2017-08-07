@@ -66,6 +66,11 @@
 #'   \item{\code{clearCache()}}{
 #'     Clear \code{cache}. Remove downloaded datasets.
 #'   }
+#'   \item{\code{getVariableInfo()}}{
+#'     Get variable information.
+#'
+#'     \code{datasetName}: A character. Name of the dataset to retrieve.
+#'   }
 #' }
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceR-package}}
 #' @examples
@@ -246,6 +251,27 @@ DataSpaceConnection <- R6Class(
     },
     clearCache = function() {
       private$.cache <- list()
+    },
+    getVariableInfo = function(datasetName) {
+      assert_that(is.character(datasetName))
+      assert_that(length(datasetName) == 1)
+      assert_that(datasetName %in% private$.availableDatasets$name,
+                  msg = paste0(datasetName, " is invalid dataset"))
+
+      varInfo <- labkey.getQueryDetails(
+        baseUrl = private$.config$labkey.url.base,
+        folderPath = private$.config$labkey.url.path,
+        schemaName = "study",
+        queryName = datasetName)
+
+      extraVars <- c("Created", "CreatedBy", "Modified", "ModifiedBy",
+                     "SequenceNum", "date")
+
+      varFilter <- varInfo$isHidden == "FALSE" &
+        varInfo$isSelectable == "TRUE" &
+        !varInfo$fieldName %in% extraVars
+
+      varInfo[varFilter, c("fieldName", "caption", "type", "description")]
     }
   ),
   active = list(
