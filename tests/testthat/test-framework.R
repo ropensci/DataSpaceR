@@ -67,7 +67,7 @@ if ("DataSpaceConnection" %in% class(con)) {
     })
 
     test_that("`getDataset`", {
-      for (datasetName in con$availableDatasets$Name) {
+      for (datasetName in con$availableDatasets$name) {
         dataset <- try(con$getDataset(datasetName = datasetName), silent = TRUE)
         expect_is(dataset, "data.frame", info = datasetName)
         expect_gt(nrow(dataset), 0)
