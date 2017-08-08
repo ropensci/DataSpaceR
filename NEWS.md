@@ -2,7 +2,8 @@
 
 * Added a `getVariableInfo` method to `DataSpaceConnection` class.
 * Changed variable names in `getAvailableDatasets` to lowercase.
-
+* Added a `treatmentArm` field to `DataSpaceConnection` class.
+* Removed a `getAvailableDatasets` method (now a private method).
 
 # DataSpaceR 0.1.0
 
