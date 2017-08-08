@@ -9,6 +9,7 @@ test_that("can connect to DataSpace", {
 
 if ("DataSpaceConnection" %in% class(con)) {
   con_names <- c(".__enclos_env__",
+                 "treatmentArm",
                  "cache",
                  "availableDatasets",
                  "config",
@@ -17,7 +18,6 @@ if ("DataSpaceConnection" %in% class(con)) {
                  "getVariableInfo",
                  "clearCache",
                  "getDataset",
-                 "getAvailableDatasets",
                  "print",
                  "initialize")
   test_that("`DataSpaceConnection`` contains correct fields and methods", {
@@ -64,9 +64,12 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_length(con$cache, 0)
     })
 
-    test_that("`getAvailableDatasets`", {
-      availableDatasets <- try(con$getAvailableDatasets(), silent = TRUE)
-      expect_is(availableDatasets, "data.frame")
+    test_that("`treatmentArm`", {
+      expect_is(con$treatmentArm, "data.frame")
+      expect_equal(names(con$treatmentArm),
+                   c("arm_part", "arm_group", "arm_name", "randomization",
+                     "coded_label", "last_day"))
+      expect_equal(nrow(con$treatmentArm), 0)
     })
 
     test_that("`getDataset`", {
