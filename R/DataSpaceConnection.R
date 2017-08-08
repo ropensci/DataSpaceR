@@ -49,9 +49,6 @@
 #'   \item{\code{print()}}{
 #'     Print \code{DataSpaceConnection} class.
 #'   }
-#'   \item{\code{getAvailableDatasets()}}{
-#'     Get available datasets.
-#'   }
 #'   \item{\code{getDataset(datasetName,
 #'   colFilter = NULL, reload = FALSE, ...)}}{
 #'     Get a dataset from the connection.
