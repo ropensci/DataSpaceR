@@ -39,14 +39,20 @@ at the command prompt, you should see it there. If it's not there, create one no
 
 We'll be looking at study `cvd256`. If you want to use a different study, change that string. The connections have state, so you can instantiate multiple connections to different studies simultaneously.
 
-```{r CreateConnection}
+```{r connectDS}
 library(DataSpaceR)
 cvd256 <- connectDS(study = "cvd256")
 cvd256
-cvd256$availableDatasets
 ```
 
-The call to `CreateConnection` instantiates the connection Printing the object shows where it's connected, to what study, and the available datasets.
+The call to `connectDS` instantiates the connection. Printing the object shows where it's connected, to what study, and the available datasets.
+
+```{r other-fields}
+cvd256$availableDatasets
+cvd256$treatmentArm
+```
+
+Available datasets and treatment arm information for the connection can be access by `availableDatasets` and `treatmentArm`.
 
 
 ## Fetching datasets

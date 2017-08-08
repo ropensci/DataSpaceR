@@ -111,12 +111,17 @@ cvd256</code></pre></div>
 ##  BAMA
 ##  Demographics
 ##  NAb</code></pre>
+<p>The call to <code>connectDS</code> instantiates the connection. Printing the object shows where it’s connected, to what study, and the available datasets.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256$availableDatasets</code></pre></div>
 <pre><code>##           name                      label     n
 ## 1         BAMA Binding Ab multiplex assay 26960
 ## 2 Demographics               Demographics   121
 ## 3          NAb      Neutralizing antibody  1419</code></pre>
-<p>The call to <code>CreateConnection</code> instantiates the connection Printing the object shows where it’s connected, to what study, and the available datasets.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256$treatmentArm</code></pre></div>
+<pre><code>##   arm_part arm_group arm_name randomization     coded_label last_day
+## 1       NA         A        A       Vaccine Group A Vaccine      168
+## 2       NA         B        B       Vaccine Group B Vaccine      168</code></pre>
+<p>Available datasets and treatment arm information for the connection can be access by <code>availableDatasets</code> and <code>treatmentArm</code>.</p>
 </div>
 <div id="fetching-datasets" class="section level2">
 <h2 class="hasAnchor">
@@ -223,7 +228,7 @@ cvd408 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/conn
 <span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.257   0.019   0.873</code></pre>
+##   0.261   0.023   0.988</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
