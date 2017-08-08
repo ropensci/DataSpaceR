@@ -162,7 +162,7 @@ DataSpaceConnection <- R6Class(
           verbose = verbose
         )
 
-      self$getAvailableDatasets()
+      private$.getAvailableDatasets()
       private$.getTreatmentArm()
 
       NULL
@@ -178,46 +178,6 @@ DataSpaceConnection <- R6Class(
       # cat(paste0("\nUser: ", private$.config$labkey.user.email))
       cat("\nAvailable datasets")
       cat(paste0("\n\t", private$.availableDatasets$name), sep = "")
-    },
-    getAvailableDatasets = function() {
-      datasetQuery <-
-        "
-          SELECT
-            DataSets.Name as name,
-            DataSets.Label as label,
-            -- DataSets.CategoryId AS category,
-            -- DataSets.DataSetId AS id,
-            dataset_n.n
-          FROM
-          (
-            SELECT COUNT(participantid) AS n, 'ICS' AS Name
-            FROM ICS
-            UNION
-            SELECT COUNT(participantid) AS n, 'BAMA' AS Name
-            FROM BAMA
-            UNION
-            SELECT COUNT(participantid) AS n, 'ELISPOT' AS Name
-            FROM ELISPOT
-            UNION
-            SELECT COUNT(participantid) AS n, 'NAb' AS Name
-            FROM NAb
-            UNION
-            SELECT COUNT(participantid) AS n, 'Demographics' AS Name
-            FROM Demographics
-          ) AS dataset_n,
-          DataSets
-          WHERE Datasets.Name = dataset_n.Name AND dataset_n.n > 0
-        "
-      private$.availableDatasets <-
-        suppressWarnings(
-          labkey.executeSql(
-            baseUrl = private$.config$labkey.url.base,
-            folderPath = private$.config$labkey.url.path,
-            schemaName = "study",
-            sql = datasetQuery,
-            colNameOpt = "fieldname"
-          )
-        )
     },
     getDataset = function(datasetName,
                           colFilter = NULL,
@@ -310,6 +270,46 @@ DataSpaceConnection <- R6Class(
     .cache = list(),
     .treatmentArm = data.frame(),
 
+    .getAvailableDatasets = function() {
+      datasetQuery <-
+        "
+          SELECT
+            DataSets.Name as name,
+            DataSets.Label as label,
+            -- DataSets.CategoryId AS category,
+            -- DataSets.DataSetId AS id,
+            dataset_n.n
+          FROM
+          (
+            SELECT COUNT(participantid) AS n, 'ICS' AS Name
+            FROM ICS
+            UNION
+            SELECT COUNT(participantid) AS n, 'BAMA' AS Name
+            FROM BAMA
+            UNION
+            SELECT COUNT(participantid) AS n, 'ELISPOT' AS Name
+            FROM ELISPOT
+            UNION
+            SELECT COUNT(participantid) AS n, 'NAb' AS Name
+            FROM NAb
+            UNION
+            SELECT COUNT(participantid) AS n, 'Demographics' AS Name
+            FROM Demographics
+          ) AS dataset_n,
+          DataSets
+          WHERE Datasets.Name = dataset_n.Name AND dataset_n.n > 0
+        "
+      private$.availableDatasets <-
+        suppressWarnings(
+          labkey.executeSql(
+            baseUrl = private$.config$labkey.url.base,
+            folderPath = private$.config$labkey.url.path,
+            schemaName = "study",
+            sql = datasetQuery,
+            colNameOpt = "fieldname"
+          )
+        )
+    },
     .getTreatmentArm = function() {
       colSelect <- c("arm_part", "arm_group", "arm_name", "randomization",
                      "coded_label", "last_day")
