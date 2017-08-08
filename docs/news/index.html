@@ -104,8 +104,11 @@
 <h1 class="hasAnchor">
 <a href="#dataspacer-0-2-0" class="anchor"></a>DataSpaceR 0.2.0</h1>
 <ul>
-<li>Added a <code>getVariableInfo</code> method to <code>DataSpaceConnection</code> class.</li>
+<li>Added <code>getVariableInfo</code> method to <code>DataSpaceConnection</code> class.</li>
 <li>Changed variable names in <code>getAvailableDatasets</code> to lowercase.</li>
+<li>Added <code>treatmentArm</code> field to <code>DataSpaceConnection</code> class.</li>
+<li>Removed <code>getAvailableDatasets</code> method (now a private method).</li>
+<li>Changed the default connection from staging (<code>dataspace-staging.cavd.org</code>) to production (<code>dataspace.cavd.org</code>).</li>
 </ul>
 </div>
     <div id="dataspacer-0-1-0" class="section level1">
@@ -114,12 +117,12 @@
 <ul>
 <li>Initialized the package with <code><a href="../reference/connectDS.html">connectDS()</a></code> and other basic functions.</li>
 <li>Added a test framework on <code>tests</code> to test the package.</li>
-<li>Added a <code>.travis.yml</code> to build and check the package automatically. (not used yet)</li>
-<li>Added a <code>codecov.yml</code> to track code coverage. (not used yet)</li>
-<li>Added a <code>README.Rmd</code> to introduce the package.</li>
-<li>Added a <code>NEWS.md</code> to track changes to the package.</li>
-<li>Added a <code>_pkgdown.yml</code> and <code>/docs</code> to build a package website.</li>
-<li>Added a <code>Intro_to_DataSpaceR.Rmd</code>.</li>
+<li>Added <code>.travis.yml</code> to build and check the package automatically. (not used yet)</li>
+<li>Added <code>codecov.yml</code> to track code coverage. (not used yet)</li>
+<li>Added <code>README.Rmd</code> to introduce the package.</li>
+<li>Added <code>NEWS.md</code> to track changes to the package.</li>
+<li>Added <code>_pkgdown.yml</code> and <code>/docs</code> to build a package website.</li>
+<li>Added a introductory vignette called <code>Intro_to_DataSpaceR.Rmd</code>.</li>
 </ul>
 </div>
     </div>

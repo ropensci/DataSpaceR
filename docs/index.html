@@ -78,7 +78,7 @@
 <div class="contents">
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<p>A thin wrapper around <a href="https://cran.r-project.org/web/packages/Rlabkey/index.html">Rlabkey</a> to access the <a href="https://dataspace-staging.cavd.org">CAVD DataSpace</a> database from R. This package simplifies access to the database for R programmers.</p>
+<p>A thin wrapper around <a href="https://cran.r-project.org/web/packages/Rlabkey/index.html">Rlabkey</a> to access the <a href="https://dataspace.cavd.org">CAVD DataSpace</a> database from R. This package simplifies access to the database for R programmers.</p>
 <p>It takes advantage of the standardization of the database to hide all the <a href="https://cran.r-project.org/web/packages/Rlabkey/index.html">Rlabkey</a> specific code away from the user. Study-specific datasets can be accessed via an object-oriented paradigm.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -99,7 +99,7 @@
 <li>The file should be located in the users home directory and the permissions on the file should be unreadable for everybody except the owner. To determine home directory, run <code>Sys.getenv("HOME")</code> in R.</li>
 </ul>
 <p>The following three lines must be included in the <code>.netrc</code> or <code>_netrc</code> file either separated by white space (spaces, tabs, or newlines) or commas.</p>
-<pre><code>machine dataspace-staging.cavd.org
+<pre><code>machine dataspace.cavd.org
 login myuser@domain.com
 password supersecretpassword</code></pre>
 <p>Multiple such blocks can exist in one file.</p>
@@ -116,7 +116,7 @@ password supersecretpassword</code></pre>
 study &lt;-<span class="st"> </span><span class="kw"><a href="reference/connectDS.html">connectDS</a></span>(<span class="st">"cvd408"</span>)
 study
 <span class="co">#&gt; DataSpace Connection to cvd408</span>
-<span class="co">#&gt; URL: https://dataspace-staging.cavd.org/project/CAVD/cvd408</span>
+<span class="co">#&gt; URL: https://dataspace.cavd.org/project/CAVD/cvd408</span>
 <span class="co">#&gt; Available datasets</span>
 <span class="co">#&gt;  Demographics</span>
 <span class="co">#&gt;  NAb</span>
@@ -138,7 +138,7 @@ study
 <a href="#neutralizing-antibody-dataset-nab-can-be-retreived-by" class="anchor"></a>Neutralizing antibody dataset (<code>NAb</code>) can be retreived by:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>study$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
 <span class="kw">dim</span>(NAb)
-<span class="co">#&gt; [1] 839  27</span>
+<span class="co">#&gt; [1] 839  22</span>
 <span class="kw">colnames</span>(NAb)
 <span class="co">#&gt;  [1] "ParticipantId"          "ParticipantVisit/Visit"</span>
 <span class="co">#&gt;  [3] "visit_day"              "assay_identifier"      </span>
@@ -150,10 +150,7 @@ study
 <span class="co">#&gt; [15] "target_cell"            "initial_dilution"      </span>
 <span class="co">#&gt; [17] "titer_ic50"             "titer_ic80"            </span>
 <span class="co">#&gt; [19] "response_call"          "nab_lab_source_key"    </span>
-<span class="co">#&gt; [21] "lab_code"               "exp_assayid"           </span>
-<span class="co">#&gt; [23] "titer_ID50"             "titer_ID80"            </span>
-<span class="co">#&gt; [25] "nab_response_ID50"      "nab_response_ID80"     </span>
-<span class="co">#&gt; [27] "slope"</span></code></pre></div>
+<span class="co">#&gt; [21] "lab_code"               "exp_assayid"</span></code></pre></div>
 <p>The package uses a <a href="https://cran.r-project.org/web/packages/R6/index.html">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behaviour.</p>
 </div>
 </div>

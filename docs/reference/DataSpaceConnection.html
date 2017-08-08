@@ -112,14 +112,14 @@
 
     <p>Uses global variables <code>labkey.url.base</code>, and <code>labkey.url.path</code>, to
 access a study. <code>labkey.url.base</code> should be
-<a href='https://dataspace-staging.cavd.org/'>https://dataspace-staging.cavd.org/</a>. <code>labkey.url.path</code> should be
+<a href='https://dataspace.cavd.org/'>https://dataspace.cavd.org/</a>. <code>labkey.url.path</code> should be
 <code>/CAVD/studyname</code>, where <code>studyname</code> is the accession number of the
 study.
     <code>DataSpaceConnection</code> will initialize itself, and look for a
 <code>.netrc</code> file in <code>"~/"</code> the user's home directory. The
 <code>.netrc</code> file should contain a <code>machine</code>, <code>login</code>, and
 <code>password</code> entry to allow access to DataSpace, where <code>machine</code> is
-the host name like "dataspace-staging.cavd.org".</p>
+the host name like "dataspace.cavd.org".</p>
     
     <h2 class="hasAnchor" id="constructor"><a class="anchor" href="#constructor"></a>Constructor</h2>
 
@@ -134,9 +134,11 @@ the host name like "dataspace-staging.cavd.org".</p>
   <dt><code>config</code></dt><dd><p>A list. Stores configuration of the connection object such as
     URL, path and username.</p></dd>
   <dt><code>availableDatasets</code></dt><dd><p>A data.frame. The table of datasets available in
-the connection object.</p></dd>
+    the connection object.</p></dd>
   <dt><code>cache</code></dt><dd><p>A list. Stores the data to avoid downloading the same tables multiple
     times.</p></dd>
+  <dt><code>treatmentArm</code></dt><dd><p>A data.frame. The table of treatment arm information for the connected
+    study. Not available for cross study connection.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -146,7 +148,6 @@ the connection object.</p></dd>
   <dt><code>initialize(study = NULL, login = NULL, password = NULL,
   verbose = FALSE)</code></dt><dd><p>Initialize <code>DataSpaceConnection</code> class. See <code><a href='connectDS.html'>connectDS</a></code>.</p></dd>
   <dt><code>print()</code></dt><dd><p>Print <code>DataSpaceConnection</code> class.</p></dd>
-  <dt><code>getAvailableDatasets()</code></dt><dd><p>Get available datasets.</p></dd>
   <dt><code>getDataset(datasetName,
   colFilter = NULL, reload = FALSE, ...)</code></dt><dd><p>Get a dataset from the connection.
     <code>datasetName</code>: A character. Name of the dataset to retrieve.

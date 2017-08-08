@@ -4,7 +4,7 @@ DataSpaceR
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/FredHutcgh/DataSpaceR.svg?branch=master)](https://travis-ci.org/FredHutch/DataSpaceR) [![codecov](https://codecov.io/gh/FredHutcgh/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/FFredHutch/DataSpaceR/branch/master)
 
-A thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) to access the [CAVD DataSpace](https://dataspace-staging.cavd.org) database from R. This package simplifies access to the database for R programmers.
+A thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) to access the [CAVD DataSpace](https://dataspace.cavd.org) database from R. This package simplifies access to the database for R programmers.
 
 It takes advantage of the standardization of the database to hide all the [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) specific code away from the user. Study-specific datasets can be accessed via an object-oriented paradigm.
 
@@ -33,7 +33,7 @@ Create netrc file in the computer running R.
 
 The following three lines must be included in the `.netrc` or `_netrc` file either separated by white space (spaces, tabs, or newlines) or commas.
 
-    machine dataspace-staging.cavd.org
+    machine dataspace.cavd.org
     login myuser@domain.com
     password supersecretpassword
 
@@ -53,7 +53,7 @@ library(DataSpaceR)
 study <- connectDS("cvd408")
 study
 #> DataSpace Connection to cvd408
-#> URL: https://dataspace-staging.cavd.org/project/CAVD/cvd408
+#> URL: https://dataspace.cavd.org/project/CAVD/cvd408
 #> Available datasets
 #>  Demographics
 #>  NAb
@@ -79,7 +79,7 @@ which will print names of available datasets.
 ``` r
 NAb <- study$getDataset("NAb")
 dim(NAb)
-#> [1] 839  27
+#> [1] 839  22
 colnames(NAb)
 #>  [1] "ParticipantId"          "ParticipantVisit/Visit"
 #>  [3] "visit_day"              "assay_identifier"      
@@ -91,10 +91,7 @@ colnames(NAb)
 #> [15] "target_cell"            "initial_dilution"      
 #> [17] "titer_ic50"             "titer_ic80"            
 #> [19] "response_call"          "nab_lab_source_key"    
-#> [21] "lab_code"               "exp_assayid"           
-#> [23] "titer_ID50"             "titer_ID80"            
-#> [25] "nab_response_ID50"      "nab_response_ID80"     
-#> [27] "slope"
+#> [21] "lab_code"               "exp_assayid"
 ```
 
 The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.
