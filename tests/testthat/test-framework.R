@@ -27,7 +27,7 @@ if ("DataSpaceConnection" %in% class(con)) {
   if (identical(names(con), con_names)) {
     test_that("`print`", {
       con_output <- c("DataSpace Connection to CAVD",
-                      "URL: https://dataspace-staging.cavd.org/project/CAVD/",
+                      "URL: https://dataspace.cavd.org/project/CAVD/",
                       # "User: unknown_user at not_a_domain.com",
                       "Available datasets",
                       "\tBAMA",

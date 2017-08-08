@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 [![codecov](https://codecov.io/gh/FredHutcgh/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/FFredHutch/DataSpaceR/branch/master)
 
 
-A thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) to access the [CAVD DataSpace](https://dataspace-staging.cavd.org)
+A thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) to access the [CAVD DataSpace](https://dataspace.cavd.org)
 database from R. This package simplifies access to the database for R programmers.
 
 It takes advantage of the standardization of the database to hide all 
@@ -57,7 +57,7 @@ The following three lines must be included in the `.netrc` or `_netrc` file
 either separated by white space (spaces, tabs, or newlines) or commas.
 
 ```
-machine dataspace-staging.cavd.org
+machine dataspace.cavd.org
 login myuser@domain.com
 password supersecretpassword
 ```

@@ -3,7 +3,7 @@
 #' @details
 #' Uses global variables \code{labkey.url.base}, and \code{labkey.url.path}, to
 #' access a study. \code{labkey.url.base} should be
-#' \url{https://dataspace-staging.cavd.org/}. \code{labkey.url.path} should be
+#' \url{https://dataspace.cavd.org/}. \code{labkey.url.path} should be
 #' \code{/CAVD/studyname}, where \code{studyname} is the accession number of the
 #' study.
 #'
@@ -11,7 +11,7 @@
 #' \code{.netrc} file in \code{"~/"} the user's home directory. The
 #' \code{.netrc} file should contain a \code{machine}, \code{login}, and
 #' \code{password} entry to allow access to DataSpace, where \code{machine} is
-#' the host name like "dataspace-staging.cavd.org".
+#' the host name like "dataspace.cavd.org".
 #'
 #' @section Constructor:
 #' \code{\link{connectDS}}
@@ -103,7 +103,7 @@ DataSpaceConnection <- R6Class(
       labkey.url.base <- try(get("labkey.url.base", .GlobalEnv),
                              silent = TRUE)
       if (inherits(labkey.url.base, "try-error"))
-        labkey.url.base <- "https://dataspace-staging.cavd.org"
+        labkey.url.base <- "https://dataspace.cavd.org"
       labkey.url.base <- gsub("http:", "https:", labkey.url.base)
       if (length(grep("^https://", labkey.url.base)) == 0)
         labkey.url.base <- paste0("https://", labkey.url.base)

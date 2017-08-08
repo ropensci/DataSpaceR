@@ -14,7 +14,7 @@ The DataSpaceConnection class
 \details{
 Uses global variables \code{labkey.url.base}, and \code{labkey.url.path}, to
 access a study. \code{labkey.url.base} should be
-\url{https://dataspace-staging.cavd.org/}. \code{labkey.url.path} should be
+\url{https://dataspace.cavd.org/}. \code{labkey.url.path} should be
 \code{/CAVD/studyname}, where \code{studyname} is the accession number of the
 study.
 
@@ -22,7 +22,7 @@ study.
 \code{.netrc} file in \code{"~/"} the user's home directory. The
 \code{.netrc} file should contain a \code{machine}, \code{login}, and
 \code{password} entry to allow access to DataSpace, where \code{machine} is
-the host name like "dataspace-staging.cavd.org".
+the host name like "dataspace.cavd.org".
 }
 \section{Constructor}{
 
@@ -64,6 +64,9 @@ the host name like "dataspace-staging.cavd.org".
   }
   \item{\code{print()}}{
     Print \code{DataSpaceConnection} class.
+  }
+  \item{\code{getAvailableDatasets()}}{
+    Get available datasets.
   }
   \item{\code{getDataset(datasetName,
   colFilter = NULL, reload = FALSE, ...)}}{

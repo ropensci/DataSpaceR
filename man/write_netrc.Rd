@@ -4,7 +4,7 @@
 \alias{write_netrc}
 \title{Write a netrc file}
 \usage{
-write_netrc(login, password, machine = "dataspace-staging.cavd.org",
+write_netrc(login, password, machine = "dataspace.cavd.org",
   netrcFile = NULL)
 }
 \arguments{

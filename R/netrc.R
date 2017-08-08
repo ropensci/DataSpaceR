@@ -17,7 +17,7 @@
 #' @export
 write_netrc <- function(login,
                         password,
-                        machine = "dataspace-staging.cavd.org",
+                        machine = "dataspace.cavd.org",
                         netrcFile = NULL) {
   string <- paste("machine", machine,
                   "login", login,
@@ -70,8 +70,8 @@ check_netrc <- function() {
   }
   lines <- readLines(netrcFile)
   lines <- gsub("http.*//", "", lines)
-  if (length(grep("machine\\sdataspace-staging.cavd.org", lines)) == 0) {
-    stop("No entry found for dataspace-staging.cavd.org in the netrc file.")
+  if (length(grep("machine\\sdataspace.cavd.org", lines)) == 0) {
+    stop("No entry found for dataspace.cavd.org in the netrc file.")
   }
   cat(", and it looks valid.\n")
 

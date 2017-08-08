@@ -1,17 +1,18 @@
 # DataSpaceR 0.2.0
 
-* Added a `getVariableInfo` method to `DataSpaceConnection` class.
+* Added `getVariableInfo` method to `DataSpaceConnection` class.
 * Changed variable names in `getAvailableDatasets` to lowercase.
-* Added a `treatmentArm` field to `DataSpaceConnection` class.
-* Removed a `getAvailableDatasets` method (now a private method).
+* Added `treatmentArm` field to `DataSpaceConnection` class.
+* Removed `getAvailableDatasets` method (now a private method).
+* Changed the default connection from staging (`dataspace-staging.cavd.org`) to production (`dataspace.cavd.org`).
 
 # DataSpaceR 0.1.0
 
 * Initialized the package with `connectDS()` and other basic functions.
 * Added a test framework on `tests` to test the package.
-* Added a `.travis.yml` to build and check the package automatically. (not used yet)
-* Added a `codecov.yml` to track code coverage. (not used yet)
-* Added a `README.Rmd` to introduce the package.
-* Added a `NEWS.md` to track changes to the package.
-* Added a `_pkgdown.yml` and `/docs` to build a package website.
-* Added a `Intro_to_DataSpaceR.Rmd`.
+* Added `.travis.yml` to build and check the package automatically. (not used yet)
+* Added `codecov.yml` to track code coverage. (not used yet)
+* Added `README.Rmd` to introduce the package.
+* Added `NEWS.md` to track changes to the package.
+* Added `_pkgdown.yml` and `/docs` to build a package website.
+* Added a introductory vignette called `Intro_to_DataSpaceR.Rmd`.
