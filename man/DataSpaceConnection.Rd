@@ -42,11 +42,15 @@ the host name like "dataspace-staging.cavd.org".
   }
   \item{\code{availableDatasets}}{
     A data.frame. The table of datasets available in
-the connection object.
+    the connection object.
   }
   \item{\code{cache}}{
     A list. Stores the data to avoid downloading the same tables multiple
     times.
+  }
+  \item{\code{treatmentArm}}{
+    A data.frame. The table of treatment arm information for the connected
+    study. Not available for cross study connection.
   }
 }
 }

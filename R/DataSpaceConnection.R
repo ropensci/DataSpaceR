@@ -28,11 +28,15 @@
 #'   }
 #'   \item{\code{availableDatasets}}{
 #'     A data.frame. The table of datasets available in
-#' the connection object.
+#'     the connection object.
 #'   }
 #'   \item{\code{cache}}{
 #'     A list. Stores the data to avoid downloading the same tables multiple
 #'     times.
+#'   }
+#'   \item{\code{treatmentArm}}{
+#'     A data.frame. The table of treatment arm information for the connected
+#'     study. Not available for cross study connection.
 #'   }
 #' }
 #'
@@ -157,7 +161,11 @@ DataSpaceConnection <- R6Class(
           curlOptions = curlOptions,
           verbose = verbose
         )
+
       self$getAvailableDatasets()
+      private$.getTreatmentArm()
+
+      NULL
     },
     print = function() {
       study <- ifelse(private$.study == "", "CAVD", private$.study)
@@ -290,12 +298,33 @@ DataSpaceConnection <- R6Class(
     },
     cache = function() {
       private$.cache
+    },
+    treatmentArm = function() {
+      private$.treatmentArm
     }
   ),
   private = list(
     .study = character(),
     .config = list(),
     .availableDatasets = data.frame(),
-    .cache = list()
+    .cache = list(),
+    .treatmentArm = data.frame(),
+
+    .getTreatmentArm = function() {
+      colSelect <- c("arm_part", "arm_group", "arm_name", "randomization",
+                     "coded_label", "last_day")
+
+      private$.treatmentArm <-
+        suppressWarnings(
+          labkey.selectRows(
+            baseUrl = private$.config$labkey.url.base,
+            folderPath = private$.config$labkey.url.path,
+            schemaName = "CDS",
+            queryName = "ds_treatmentarm",
+            colSelect = colSelect,
+            colNameOpt = "fieldname"
+          )
+        )
+    }
   )
 )
