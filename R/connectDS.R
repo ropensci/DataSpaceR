@@ -16,6 +16,8 @@
 #' login.
 #' @param verbose A logical. Whether to print the extra details for
 #' troubleshooting.
+#' @param onStaging A logical. Whether to connect to the staging server instead
+#' of the production server.
 #'
 #' @return an instance of \code{DataSpaceConnection}
 #' @seealso \code{\link{DataSpaceConnection}}
@@ -31,6 +33,7 @@
 connectDS <- function(study = NULL,
                       login = NULL,
                       password = NULL,
-                      verbose = FALSE) {
-  DataSpaceConnection$new(study, login, password, verbose)
+                      verbose = FALSE,
+                      onStaging = FALSE) {
+  DataSpaceConnection$new(study, login, password, verbose, onStaging)
 }

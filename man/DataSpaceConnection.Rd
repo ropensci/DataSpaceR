@@ -59,7 +59,7 @@ the host name like "dataspace.cavd.org".
 
 \describe{
   \item{\code{initialize(study = NULL, login = NULL, password = NULL,
-  verbose = FALSE)}}{
+  verbose = FALSE, onStaging = FALSE)}}{
     Initialize \code{DataSpaceConnection} class. See \code{\link{connectDS}}.
   }
   \item{\code{print()}}{

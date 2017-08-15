@@ -43,7 +43,7 @@
 #' @section Methods:
 #' \describe{
 #'   \item{\code{initialize(study = NULL, login = NULL, password = NULL,
-#'   verbose = FALSE)}}{
+#'   verbose = FALSE, onStaging = FALSE)}}{
 #'     Initialize \code{DataSpaceConnection} class. See \code{\link{connectDS}}.
 #'   }
 #'   \item{\code{print()}}{
@@ -92,15 +92,21 @@ DataSpaceConnection <- R6Class(
     initialize = function(study = NULL,
                           login = NULL,
                           password = NULL,
-                          verbose = FALSE) {
+                          verbose = FALSE,
+                          onStaging = FALSE) {
       assert_that(length(study) <= 1,
                   msg = "For multiple studies, use an empty string and filter the connection.")
       assert_that(is.logical(verbose))
+      assert_that(is.logical(onStaging))
 
       labkey.url.base <- try(get("labkey.url.base", .GlobalEnv),
                              silent = TRUE)
       if (inherits(labkey.url.base, "try-error"))
-        labkey.url.base <- "https://dataspace.cavd.org"
+        if (onStaging) {
+          labkey.url.base <- "https://dataspace-staging.cavd.org"
+        } else {
+          labkey.url.base <- "https://dataspace.cavd.org"
+        }
       labkey.url.base <- gsub("http:", "https:", labkey.url.base)
       if (length(grep("^https://", labkey.url.base)) == 0)
         labkey.url.base <- paste0("https://", labkey.url.base)
@@ -159,8 +165,8 @@ DataSpaceConnection <- R6Class(
           verbose = verbose
         )
 
-      private$.getAvailableDatasets()
-      private$.getTreatmentArm()
+      try(private$.getAvailableDatasets(), silent = TRUE)
+      try(private$.getTreatmentArm(), silent = TRUE)
 
       NULL
     },

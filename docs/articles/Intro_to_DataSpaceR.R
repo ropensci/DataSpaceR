@@ -1,13 +1,19 @@
-## ----CreateConnection----------------------------------------------------
+## ----connectDS-----------------------------------------------------------
 library(DataSpaceR)
 cvd256 <- connectDS(study = "cvd256")
 cvd256
-cvd256$available_datasets
+
+## ----other-fields--------------------------------------------------------
+cvd256$availableDatasets
+cvd256$treatmentArm
 
 ## ----getDataset----------------------------------------------------------
 NAb <- cvd256$getDataset("NAb")
 dim(NAb)
 colnames(NAb)
+
+## ----getVariableInfo-----------------------------------------------------
+str(cvd256$getVariableInfo("NAb"))
 
 ## ----getDataset-filter---------------------------------------------------
 library(Rlabkey)

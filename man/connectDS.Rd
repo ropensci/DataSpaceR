@@ -4,7 +4,8 @@
 \alias{connectDS}
 \title{Create a connection to DataSpace}
 \usage{
-connectDS(study = NULL, login = NULL, password = NULL, verbose = FALSE)
+connectDS(study = NULL, login = NULL, password = NULL, verbose = FALSE,
+  onStaging = FALSE)
 }
 \arguments{
 \item{study}{A character. Name of the study to connect.}
@@ -18,6 +19,9 @@ login.}
 
 \item{verbose}{A logical. Whether to print the extra details for
 troubleshooting.}
+
+\item{onStaging}{A logical. Whether to connect to the staging server instead
+of the production server.}
 }
 \value{
 an instance of \code{DataSpaceConnection}

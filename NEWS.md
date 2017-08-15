@@ -5,6 +5,7 @@
 * Added `treatmentArm` field to `DataSpaceConnection` class.
 * Removed `getAvailableDatasets` method (now a private method).
 * Changed the default connection from staging (`dataspace-staging.cavd.org`) to production (`dataspace.cavd.org`).
+* Added an option to connect to the staging server.
 
 # DataSpaceR 0.1.0
 
