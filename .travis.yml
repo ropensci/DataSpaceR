@@ -4,7 +4,8 @@ language: R
 sudo: false
 cache: packages
 
-before_script: Rscript -e 'write(x = paste("machine dataspace.cavd.org login", Sys.getenv("DSR_login"), "password", Sys.getenv("DSR_pwd")), file = "~/.netrc")'
+before_script:
+  - Rscript ci.R
 
 after_success:
   - Rscript -e 'covr::codecov()'
