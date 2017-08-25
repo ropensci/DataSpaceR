@@ -53,7 +53,7 @@ library(DataSpaceR)
 study <- connectDS("cvd408")
 study
 #> DataSpace Connection to cvd408
-#> URL: https://dataspace.cavd.org/project/CAVD/cvd408
+#> URL: https://dataspace.cavd.org/CAVD/cvd408
 #> Available datasets
 #>  Demographics
 #>  NAb
