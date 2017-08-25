@@ -6,3 +6,4 @@
 ^README-.*\.png$
 ^docs$
 ^_pkgdown\.yml$
+^appveyor\.yml$
