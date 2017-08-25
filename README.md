@@ -15,10 +15,8 @@ The package can be downloaded here and installed like any other R packages or in
 
 ``` r
 library(devtools)
-install_github("FredHutch/DataSpaceR", auth_token = GITHUB_PAT)
+install_github("FredHutch/DataSpaceR")
 ```
-
-Since `FredHutch/DataSpaceR` is a private repository, a personal access token from Github (`GITHUB_PAT`) is required. A new token can be generated [here](https://github.com/settings/tokens), and select `repo` scope for the token.
 
 netrc
 -----
