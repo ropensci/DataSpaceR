@@ -84,7 +84,6 @@
 #' }
 #' @docType class
 #' @import R6
-#' @importFrom utils packageVersion
 #' @importFrom digest digest
 DataSpaceConnection <- R6Class(
   classname = "DataSpaceConnection",
@@ -99,63 +98,20 @@ DataSpaceConnection <- R6Class(
       assert_that(is.logical(verbose))
       assert_that(is.logical(onStaging))
 
-      labkey.url.base <- try(get("labkey.url.base", .GlobalEnv),
-                             silent = TRUE)
-      if (inherits(labkey.url.base, "try-error"))
-        if (onStaging) {
-          labkey.url.base <- "https://dataspace-staging.cavd.org"
-        } else {
-          labkey.url.base <- "https://dataspace.cavd.org"
-        }
-      labkey.url.base <- gsub("http:", "https:", labkey.url.base)
-      if (length(grep("^https://", labkey.url.base)) == 0)
-        labkey.url.base <- paste0("https://", labkey.url.base)
+      # get primary fields
+      labkey.url.base <- getUrlBase(onStaging)
+      labkey.user.email <- getUserEmail()
+      labkey.url.path <- getUrlPath(study, labkey.url.path)
 
-      labkey.user.email <- try(get("labkey.user.email", .GlobalEnv),
-                               silent = TRUE)
-      if (inherits(labkey.user.email, "try-error"))
-        labkey.user.email <- "unknown_user at not_a_domain.com"
+      # set Curl options
+      netrcFile <- getNetrc(login, password, onStaging)
+      curlOptions <- setCurlOptions(netrcFile)
 
-      if (!is.null(login) & !is.null(password)) {
-        nf <- write_netrc(login, password)
-      } else {
-        nf <- try(get("labkey.netrc.file", .GlobalEnv), silent = TRUE)
-      }
-      useragent <- paste("DataSpaceR", packageVersion("DataSpaceR"))
-      if (!inherits(nf, "try-error") && !is.null(nf)) {
-        curlOptions <- labkey.setCurlOptions(ssl.verifyhost = 2,
-                                             sslversion = 1,
-                                             netrc.file = nf,
-                                             useragent = useragent)
-      } else {
-        curlOptions <- labkey.setCurlOptions(ssl.verifyhost = 2,
-                                             sslversion = 1,
-                                             useragent = useragent)
-      }
+      # fix study
+      study <- fixStudy(study, labkey.url.base, labkey.url.path)
 
+      # set primary fields
       private$.study <- tolower(study)
-      labkey.url.path <- try(get("labkey.url.path", .GlobalEnv), silent = TRUE)
-      if (inherits(labkey.url.path, "try-error")) {
-        if (is.null(study)) {
-          stop("study cannot be NULL")
-        }
-        labkey.url.path <- paste0("/CAVD/", study)
-      } else if(!is.null(study)) {
-        labkey.url.path <- file.path(dirname(labkey.url.path), study)
-      }
-
-      folders <- lsFolders(getSession(labkey.url.base, folderPath = "CAVD"))
-      validStudies <- grep("\\w+\\d+", basename(folders), value = TRUE)
-      reqStudy <- basename(study)
-      if (!reqStudy %in% c("", validStudies)) {
-        if (!verbose) {
-          stop(paste0(reqStudy, " is not a valid study"))
-        } else {
-          stop(paste0(reqStudy, " is not a valid study\nValid studies: ",
-                      paste(validStudies, collapse=", ")))
-        }
-      }
-
       private$.config <-
         list(
           labkey.url.base = labkey.url.base,
@@ -165,6 +121,7 @@ DataSpaceConnection <- R6Class(
           verbose = verbose
         )
 
+      # get extra fields if available
       try(private$.getAvailableDatasets(), silent = TRUE)
       try(private$.getTreatmentArm(), silent = TRUE)
 
@@ -173,7 +130,6 @@ DataSpaceConnection <- R6Class(
     print = function() {
       study <- ifelse(private$.study == "", "CAVD", private$.study)
       url <- file.path(gsub("/$", "", private$.config$labkey.url.base),
-                       "project",
                        gsub("^/", "", private$.config$labkey.url.path))
 
       cat(paste0("DataSpace Connection to ", study))

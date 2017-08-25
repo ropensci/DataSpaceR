@@ -1,0 +1,116 @@
+getUrlBase <- function(onStaging) {
+  if (exists("labkey.url.base", .GlobalEnv)) {
+    labkey.url.base <- get("labkey.url.base", .GlobalEnv)
+  } else {
+    if (onStaging) {
+      labkey.url.base <- "https://dataspace-staging.cavd.org"
+    } else {
+      labkey.url.base <- "https://dataspace.cavd.org"
+    }
+  }
+
+  labkey.url.base <- gsub("http:", "https:", labkey.url.base)
+  if (length(grep("^https://", labkey.url.base)) == 0) {
+    labkey.url.base <- paste0("https://", labkey.url.base)
+  }
+
+  labkey.url.base
+}
+
+getUserEmail <- function() {
+  if (exists("labkey.user.email", .GlobalEnv)) {
+    labkey.user.email <- get("labkey.user.email", .GlobalEnv)
+  } else {
+    labkey.user.email <- "unknown_user at not_a_domain.com"
+  }
+
+  labkey.user.email
+}
+
+getUrlPath <- function(study, labkey.url.base) {
+  if (exists("labkey.url.path", .GlobalEnv)) {
+    if (is.null(study)) {
+      labkey.url.path <- get("labkey.url.path", .GlobalEnv)
+    } else {
+      labkey.url.path <- file.path("", "CAVD", tolower(study))
+    }
+  } else {
+    if (is.null(study)) {
+      stop("study cannot be NULL")
+    } else if (study == "") {
+      labkey.url.path <- file.path("", "CAVD")
+    } else {
+      labkey.url.path <- file.path("", "CAVD", tolower(study))
+    }
+  }
+
+  labkey.url.path
+}
+
+getValidStudies <- function(labkey.url.base) {
+  folders <- lsFolders(getSession(labkey.url.base, folderPath = "CAVD"))
+  validStudies <- grep("\\w+\\d+", basename(folders), value = TRUE)
+
+  validStudies
+}
+
+checkStudy <- function(study, labkey.url.base, verbose = FALSE) {
+  validStudies <- getValidStudies(labkey.url.base)
+  reqStudy <- tolower(study)
+
+  if (!reqStudy %in% c("", validStudies)) {
+    if (!verbose) {
+      stop(paste0(reqStudy, " is not a valid study"))
+    } else {
+      stop(paste0(reqStudy, " is not a valid study\nValid studies: ",
+                  paste(validStudies, collapse=", ")))
+    }
+  }
+
+  invisible(NULL)
+}
+
+fixStudy <- function(study, labkey.url.base, labkey.url.path) {
+  if (is.null(study)) {
+    study <- basename(labkey.url.path)
+  }
+
+  # check if `study` is an actual study
+  checkStudy(study, labkey.url.base)
+
+  study
+}
+
+getNetrc <- function(login, password, onStaging = FALSE) {
+  if (onStaging) {
+    machine <- "dataspace-staging.cavd.org"
+  } else {
+    machine <- "dataspace.cavd.org"
+  }
+
+  if (!is.null(login) & !is.null(password)) {
+    netrc <- write_netrc(login, password, machine)
+  } else {
+    netrc <- try(get("labkey.netrc.file", .GlobalEnv), silent = TRUE)
+  }
+
+  netrc
+}
+
+#' @importFrom utils packageVersion
+setCurlOptions <- function(netrcFile) {
+  useragent <- paste("DataSpaceR", packageVersion("DataSpaceR"))
+
+  if (!inherits(netrcFile, "try-error") && !is.null(netrcFile)) {
+    curlOptions <- labkey.setCurlOptions(ssl.verifyhost = 2,
+                                         sslversion = 1,
+                                         netrc.file = netrcFile,
+                                         useragent = useragent)
+  } else {
+    curlOptions <- labkey.setCurlOptions(ssl.verifyhost = 2,
+                                         sslversion = 1,
+                                         useragent = useragent)
+  }
+
+  curlOptions
+}
