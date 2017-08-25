@@ -17,7 +17,7 @@ cache:
 
 build_script:
   - travis-tool.sh install_deps
-  - Rscript -e 'write(x = paste("machine dataspace.cavd.org login", Sys.getenv("DSR_login"), "password", Sys.getenv("DSR_pwd")), file = "~/.netrc")'
+  - Rscript -e 'write(x = paste("machine dataspace.cavd.org login", Sys.getenv("DSR_login"), "password", Sys.getenv("DSR_pwd")), file = "~/_netrc")'
 
 test_script:
   - travis-tool.sh run_tests

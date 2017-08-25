@@ -2,7 +2,7 @@ DataSpaceR
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/FredHutch/DataSpaceR.svg?branch=master)](https://travis-ci.org/FredHutch/DataSpaceR) [![codecov](https://codecov.io/gh/FredHutch/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/FredHutch/DataSpaceR/branch/master) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/juyeongkim/DataSpaceR?branch=master&svg=true)](https://ci.appveyor.com/project/juyeongkim/DataSpaceR)
+[![Build Status](https://travis-ci.org/FredHutch/DataSpaceR.svg?branch=master)](https://travis-ci.org/FredHutch/DataSpaceR) [![Build status](https://ci.appveyor.com/api/projects/status/bmwyv5i32xr07bdr/branch/master?svg=true)](https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master) [![codecov](https://codecov.io/gh/FredHutch/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/FredHutch/DataSpaceR/branch/master)
 
 A thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) to access the [CAVD DataSpace](https://dataspace.cavd.org) database from R. This package simplifies access to the database for R programmers.
 
