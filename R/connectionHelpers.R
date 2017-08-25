@@ -89,7 +89,7 @@ getNetrc <- function(login, password, onStaging = FALSE) {
   }
 
   if (!is.null(login) & !is.null(password)) {
-    netrc <- write_netrc(login, password, machine)
+    netrc <- writeNetrc(login, password, machine)
   } else {
     netrc <- try(get("labkey.netrc.file", .GlobalEnv), silent = TRUE)
   }

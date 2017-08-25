@@ -6,6 +6,7 @@
 * Removed `getAvailableDatasets` method (now a private method).
 * Changed the default connection from staging (`dataspace-staging.cavd.org`) to production (`dataspace.cavd.org`).
 * Added an option to connect to the staging server.
+* Renamed `write_netrc` and `check_netrc` to `writeNetrc` and `checkNetrc`.
 
 # DataSpaceR 0.1.0
 

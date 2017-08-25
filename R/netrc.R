@@ -9,13 +9,13 @@
 #' If left NULL, netrc will be written into a temporary file.
 #'
 #' @return A character vector containing the file paths for netrc
-#' @seealso \code{\link{connectDS}} \code{\link{check_netrc}}
+#' @seealso \code{\link{connectDS}} \code{\link{checkNetrc}}
 #' @examples
 #' \dontrun{
-#' write_netrc("dataspaceuser@email.com", "mypassword")
+#' writeNetrc("dataspaceuser@email.com", "mypassword")
 #' }
 #' @export
-write_netrc <- function(login,
+writeNetrc <- function(login,
                         password,
                         machine = "dataspace.cavd.org",
                         netrcFile = NULL) {
@@ -46,25 +46,25 @@ write_netrc <- function(login,
 #' home directoty.
 #'
 #' If no netrc is available or it is not formatted properly,
-#' \code{\link{write_netrc}}  can be used to write one.
+#' \code{\link{writeNetrc}}  can be used to write one.
 #' Otherwise, when specifying login and password in \code{connectDS},
 #' a temporary file will be created for that connection.
 #'
 #' @return The name of the netrc file
-#' @seealso \code{\link{connectDS}} \code{\link{write_netrc}}
+#' @seealso \code{\link{connectDS}} \code{\link{writeNetrc}}
 #' @examples
 #' \dontrun{
-#' check_netrc()
+#' checkNetrc()
 #' }
 #' @export
-check_netrc <- function() {
+checkNetrc <- function() {
   if (exists("labkey.netrc.file", .GlobalEnv)) {
     netrcFile <- get("labkey.netrc.file", .GlobalEnv)
   } else {
     netrcFile <- "~/.netrc"
   }
   if (!file.exists(netrcFile)) {
-    stop("There is no netrc file. Use `write_netrc()`")
+    stop("There is no netrc file. Use `writeNetrc()`")
   } else {
     cat("netrc file found at", netrcFile)
   }
