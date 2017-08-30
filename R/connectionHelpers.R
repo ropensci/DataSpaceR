@@ -17,11 +17,24 @@ getUrlBase <- function(onStaging) {
   labkey.url.base
 }
 
-getUserEmail <- function() {
+getUserEmail <- function(labkey.url.base, login) {
   if (exists("labkey.user.email", .GlobalEnv)) {
     labkey.user.email <- get("labkey.user.email", .GlobalEnv)
+  } else if (!is.null(login)) {
+    labkey.user.email <- login
+  } else if (file.exists("~/.netrc") || file.exists("~/_netrc")) {
+    netrcFile <- ifelse(.Platform$OS.type == "windows", "~/_netrc", "~/.netrc")
+    netrc <- readChar(netrcFile, file.info(netrcFile)$size)
+    netrc <- strsplit(netrc, split = "\\s+")[[1]]
+
+    if (length(netrc) %% 6 == 0) {
+      url.base <- gsub("https://", "", labkey.url.base)
+      labkey.user.email <- netrc[which(url.base == netrc) + 2]
+    } else {
+      labkey.user.email <- ""
+    }
   } else {
-    labkey.user.email <- "unknown_user at not_a_domain.com"
+    labkey.user.email <- ""
   }
 
   labkey.user.email

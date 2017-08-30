@@ -1,3 +1,7 @@
+# DataSpaceR 0.2.1
+
+* Modified `getUserEmail()` to get email from netrc file.
+
 # DataSpaceR 0.2.0
 
 * Added `getVariableInfo` method to `DataSpaceConnection` class.

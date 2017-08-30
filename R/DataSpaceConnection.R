@@ -95,12 +95,14 @@ DataSpaceConnection <- R6Class(
                           onStaging = FALSE) {
       assert_that(length(study) <= 1,
                   msg = "For multiple studies, use an empty string and filter the connection.")
+      assert_that((is.null(login) && is.null(password)) || (!is.null(login) && !is.null(password)),
+                  msg = "Enter both `login` and `password` or use netrc file.")
       assert_that(is.logical(verbose))
       assert_that(is.logical(onStaging))
 
       # get primary fields
       labkey.url.base <- getUrlBase(onStaging)
-      labkey.user.email <- getUserEmail()
+      labkey.user.email <- getUserEmail(labkey.url.base, login)
       labkey.url.path <- getUrlPath(study, labkey.url.path)
 
       # set Curl options
@@ -132,10 +134,10 @@ DataSpaceConnection <- R6Class(
       url <- file.path(gsub("/$", "", private$.config$labkey.url.base),
                        gsub("^/", "", private$.config$labkey.url.path))
 
-      cat(paste0("DataSpace Connection to ", study))
+      cat(paste0("DataSpaceR Connection to ", study))
       cat(paste0("\nURL: ", url))
-      # cat(paste0("\nUser: ", private$.config$labkey.user.email))
-      cat("\nAvailable datasets")
+      cat(paste0("\nUser: ", private$.config$labkey.user.email))
+      cat("\nAvailable datasets:")
       cat(paste0("\n\t", private$.availableDatasets$name), sep = "")
     },
     getDataset = function(datasetName,
