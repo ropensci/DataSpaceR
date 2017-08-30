@@ -28,7 +28,7 @@ if ("DataSpaceConnection" %in% class(con)) {
     test_that("`print`", {
       con_output <- c("DataSpaceR Connection to CAVD",
                       "URL: https://dataspace.cavd.org/CAVD",
-                      "User: jkim2345@scharp.org",
+                      "User: jkim2345@fredhutch.org",
                       "Available datasets:",
                       "\tBAMA",
                       "\tDemographics",

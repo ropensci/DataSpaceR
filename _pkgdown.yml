@@ -1,3 +1,11 @@
 template:
   params:
     bootswatch: simplex
+navbar:
+  right:
+    - icon: fa-globe
+      href: https://dataspace.cavd.org
+    - icon: fa-twitter
+      href: https://twitter.com/VaxDataSpace
+    - icon: fa-github
+      href: https://github.com/FredHutch/DataSpaceR

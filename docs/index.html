@@ -55,8 +55,20 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
+  <a href="https://dataspace.cavd.org">
+    <span class="fa fa-globe"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/VaxDataSpace">
+    <span class="fa fa-twitter"></span>
+     
+  </a>
+</li>
+<li>
   <a href="https://github.com/FredHutch/DataSpaceR">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -83,13 +95,26 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The package can be downloaded here and installed like any other R packages or installed directly from github using devtools.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"FredHutch/DataSpaceR"</span>)</code></pre></div>
+<p>The package can be downloaded here and installed like any other R packages or installed directly from github using <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a> or <a href="https://cran.r-project.org/web/packages/drat/index.html">drat</a>.</p>
+<div id="using-devtools-development" class="section level3">
+<h3 class="hasAnchor">
+<a href="#using-devtools-development" class="anchor"></a>using <code>devtools</code> (development):</h3>
+<p><a href="https://github.com/FredHutch/DataSpaceR" class="uri">https://github.com/FredHutch/DataSpaceR</a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
+devtools::<span class="kw">install_github</span>(<span class="st">"FredHutch/DataSpaceR"</span>)</code></pre></div>
 </div>
-<div id="netrc" class="section level2">
+<div id="using-drat-stable" class="section level3">
+<h3 class="hasAnchor">
+<a href="#using-drat-stable" class="anchor"></a>using <code>drat</code> (stable):</h3>
+<p><a href="https://github.com/FredHutch/drat" class="uri">https://github.com/FredHutch/drat</a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("drat")</span>
+drat::<span class="kw">addRepo</span>(<span class="st">"fredhutch"</span>)
+<span class="kw">install.packages</span>(<span class="st">"DataSpaceR"</span>)</code></pre></div>
+</div>
+</div>
+<div id="set-netrc-file" class="section level2">
 <h2 class="hasAnchor">
-<a href="#netrc" class="anchor"></a>netrc</h2>
+<a href="#set-netrc-file" class="anchor"></a>Set netrc file</h2>
 <p>The database is accessed with the user’s credentials. A <code>netrc</code> file storing login and password information is required.</p>
 <p>Create netrc file in the computer running R.</p>
 <ul>
@@ -110,13 +135,13 @@ password supersecretpassword</code></pre>
 <p>The general idea is that the user creates an instance of an <code>DataSpaceConnection</code> class. The instance configures itself to connect to a specific study, and datasets can be retrieved by name.</p>
 <div id="for-example" class="section level3">
 <h3 class="hasAnchor">
-<a href="#for-example" class="anchor"></a>For example:</h3>
+<a href="#for-example" class="anchor"></a>for example:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DataSpaceR)
 study &lt;-<span class="st"> </span><span class="kw"><a href="reference/connectDS.html">connectDS</a></span>(<span class="st">"cvd408"</span>)
 study
 <span class="co">#&gt; DataSpaceR Connection to cvd408</span>
 <span class="co">#&gt; URL: https://dataspace.cavd.org/CAVD/cvd408</span>
-<span class="co">#&gt; User: jkim2345@scharp.org</span>
+<span class="co">#&gt; User: jkim2345@fredhutch.org</span>
 <span class="co">#&gt; Available datasets:</span>
 <span class="co">#&gt;  Demographics</span>
 <span class="co">#&gt;  NAb</span>
@@ -126,7 +151,7 @@ study
 </div>
 <div id="datasets-can-be-listed-by" class="section level3">
 <h3 class="hasAnchor">
-<a href="#datasets-can-be-listed-by" class="anchor"></a>Datasets can be listed by:</h3>
+<a href="#datasets-can-be-listed-by" class="anchor"></a>datasets can be listed by:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">study$availableDatasets
 <span class="co">#&gt;           name                 label   n</span>
 <span class="co">#&gt; 1 Demographics          Demographics  20</span>
@@ -135,10 +160,10 @@ study
 </div>
 <div id="neutralizing-antibody-dataset-nab-can-be-retreived-by" class="section level3">
 <h3 class="hasAnchor">
-<a href="#neutralizing-antibody-dataset-nab-can-be-retreived-by" class="anchor"></a>Neutralizing antibody dataset (<code>NAb</code>) can be retreived by:</h3>
+<a href="#neutralizing-antibody-dataset-nab-can-be-retreived-by" class="anchor"></a>neutralizing antibody dataset (<code>NAb</code>) can be retreived by:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>study$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
 <span class="kw">dim</span>(NAb)
-<span class="co">#&gt; [1] 839  22</span>
+<span class="co">#&gt; [1] 839  28</span>
 <span class="kw">colnames</span>(NAb)
 <span class="co">#&gt;  [1] "ParticipantId"          "ParticipantVisit/Visit"</span>
 <span class="co">#&gt;  [3] "visit_day"              "assay_identifier"      </span>
@@ -150,7 +175,10 @@ study
 <span class="co">#&gt; [15] "target_cell"            "initial_dilution"      </span>
 <span class="co">#&gt; [17] "titer_ic50"             "titer_ic80"            </span>
 <span class="co">#&gt; [19] "response_call"          "nab_lab_source_key"    </span>
-<span class="co">#&gt; [21] "lab_code"               "exp_assayid"</span></code></pre></div>
+<span class="co">#&gt; [21] "lab_code"               "exp_assayid"           </span>
+<span class="co">#&gt; [23] "titer_ID50"             "titer_ID80"            </span>
+<span class="co">#&gt; [25] "nab_response_ID50"      "nab_response_ID80"     </span>
+<span class="co">#&gt; [27] "slope"                  "vaccine_matched"</span></code></pre></div>
 <p>The package uses a <a href="https://cran.r-project.org/web/packages/R6/index.html">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behaviour.</p>
 </div>
 </div>
@@ -167,7 +195,7 @@ study
 </li>
 </ul>
 <h2>License</h2>
-<p><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></p>
+<p><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a> + file <a href="LICENSE.html">LICENSE</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Ju Yeong Kim <br><small class="roles"> Author, maintainer </small> </li>

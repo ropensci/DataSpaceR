@@ -30,15 +30,31 @@ an object-oriented paradigm.
 ## Installation
 
 The package can be downloaded here and installed like any other R packages or 
-installed directly from github using devtools.
+installed directly from github using [devtools](https://cran.r-project.org/web/packages/devtools/index.html) or [drat](https://cran.r-project.org/web/packages/drat/index.html).
+
+
+### using `devtools` (development):
+
+https://github.com/FredHutch/DataSpaceR
 
 ```{r, eval=FALSE}
-library(devtools)
-install_github("FredHutch/DataSpaceR")
+# install.packages("devtools")
+devtools::install_github("FredHutch/DataSpaceR")
 ```
 
 
-## netrc
+### using `drat` (stable):
+
+https://github.com/FredHutch/drat
+
+```{r, eval=FALSE}
+# install.packages("drat")
+drat::addRepo("fredhutch")
+install.packages("DataSpaceR")
+```
+
+
+## Set netrc file
 
 The database is accessed with the user's credentials. A `netrc` file storing 
 login and password information is required.
@@ -73,7 +89,7 @@ The general idea is that the user creates an instance of an
 a specific study, and datasets can be retrieved by name.
 
 
-### For example:
+### for example:
 
 ```{r}
 library(DataSpaceR)
@@ -86,7 +102,7 @@ class(study)
 credentials stored in a `netrc` file to access the database. 
 
 
-### Datasets can be listed by:
+### datasets can be listed by:
 
 ```{r}
 study$availableDatasets
@@ -95,7 +111,7 @@ study$availableDatasets
 which will print names of available datasets.
 
 
-### Neutralizing antibody dataset (`NAb`) can be retreived by:
+### neutralizing antibody dataset (`NAb`) can be retreived by:
 
 ```{r}
 NAb <- study$getDataset("NAb")

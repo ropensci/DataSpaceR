@@ -11,15 +11,29 @@ It takes advantage of the standardization of the database to hide all the [Rlabk
 Installation
 ------------
 
-The package can be downloaded here and installed like any other R packages or installed directly from github using devtools.
+The package can be downloaded here and installed like any other R packages or installed directly from github using [devtools](https://cran.r-project.org/web/packages/devtools/index.html) or [drat](https://cran.r-project.org/web/packages/drat/index.html).
+
+### using `devtools` (development):
+
+<https://github.com/FredHutch/DataSpaceR>
 
 ``` r
-library(devtools)
-install_github("FredHutch/DataSpaceR")
+# install.packages("devtools")
+devtools::install_github("FredHutch/DataSpaceR")
 ```
 
-netrc
------
+### using `drat` (stable):
+
+<https://github.com/FredHutch/drat>
+
+``` r
+# install.packages("drat")
+drat::addRepo("fredhutch")
+install.packages("DataSpaceR")
+```
+
+Set netrc file
+--------------
 
 The database is accessed with the user's credentials. A `netrc` file storing login and password information is required.
 
@@ -44,7 +58,7 @@ Usage
 
 The general idea is that the user creates an instance of an `DataSpaceConnection` class. The instance configures itself to connect to a specific study, and datasets can be retrieved by name.
 
-### For example:
+### for example:
 
 ``` r
 library(DataSpaceR)
@@ -52,7 +66,7 @@ study <- connectDS("cvd408")
 study
 #> DataSpaceR Connection to cvd408
 #> URL: https://dataspace.cavd.org/CAVD/cvd408
-#> User: jkim2345@scharp.org
+#> User: jkim2345@fredhutch.org
 #> Available datasets:
 #>  Demographics
 #>  NAb
@@ -62,7 +76,7 @@ class(study)
 
 `connectDS("cvd408")` will create an instance of `cvd408`. The user needs credentials stored in a `netrc` file to access the database.
 
-### Datasets can be listed by:
+### datasets can be listed by:
 
 ``` r
 study$availableDatasets
@@ -73,12 +87,12 @@ study$availableDatasets
 
 which will print names of available datasets.
 
-### Neutralizing antibody dataset (`NAb`) can be retreived by:
+### neutralizing antibody dataset (`NAb`) can be retreived by:
 
 ``` r
 NAb <- study$getDataset("NAb")
 dim(NAb)
-#> [1] 839  22
+#> [1] 839  28
 colnames(NAb)
 #>  [1] "ParticipantId"          "ParticipantVisit/Visit"
 #>  [3] "visit_day"              "assay_identifier"      
@@ -90,7 +104,10 @@ colnames(NAb)
 #> [15] "target_cell"            "initial_dilution"      
 #> [17] "titer_ic50"             "titer_ic80"            
 #> [19] "response_call"          "nab_lab_source_key"    
-#> [21] "lab_code"               "exp_assayid"
+#> [21] "lab_code"               "exp_assayid"           
+#> [23] "titer_ID50"             "titer_ID80"            
+#> [25] "nab_response_ID50"      "nab_response_ID80"     
+#> [27] "slope"                  "vaccine_matched"
 ```
 
 The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.

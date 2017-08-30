@@ -1,6 +1,7 @@
 # DataSpaceR 0.2.1
 
 * Modified `getUserEmail()` to get email from netrc file.
+* Updated license to GPL-3.
 
 # DataSpaceR 0.2.0
 
