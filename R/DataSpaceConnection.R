@@ -67,7 +67,7 @@
 #'   \item{\code{clearCache()}}{
 #'     Clear \code{cache}. Remove downloaded datasets.
 #'   }
-#'   \item{\code{getVariableInfo()}}{
+#'   \item{\code{getVariableInfo(datasetName)}}{
 #'     Get variable information.
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.

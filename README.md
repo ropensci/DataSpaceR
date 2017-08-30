@@ -50,9 +50,10 @@ The general idea is that the user creates an instance of an `DataSpaceConnection
 library(DataSpaceR)
 study <- connectDS("cvd408")
 study
-#> DataSpace Connection to cvd408
+#> DataSpaceR Connection to cvd408
 #> URL: https://dataspace.cavd.org/CAVD/cvd408
-#> Available datasets
+#> User: jkim2345@scharp.org
+#> Available datasets:
 #>  Demographics
 #>  NAb
 class(study)

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ju Yeong Kim" />
 
-<meta name="date" content="2017-08-08" />
+<meta name="date" content="2017-08-29" />
 
 <title>A Simple Introduction to the DataSpaceR Package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">A Simple Introduction to the DataSpaceR Package</h1>
 <h4 class="author"><em>Ju Yeong Kim</em></h4>
-<h4 class="date"><em>2017-08-08</em></h4>
+<h4 class="date"><em>2017-08-29</em></h4>
 
 
 
@@ -95,9 +95,10 @@ password supersecretpassword</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DataSpaceR)
 cvd256 &lt;-<span class="st"> </span><span class="kw">connectDS</span>(<span class="dt">study =</span> <span class="st">&quot;cvd256&quot;</span>)
 cvd256</code></pre></div>
-<pre><code>## DataSpace Connection to cvd256
-## URL: https://dataspace.cavd.org/project/CAVD/cvd256
-## Available datasets
+<pre><code>## DataSpaceR Connection to cvd256
+## URL: https://dataspace.cavd.org/CAVD/cvd256
+## User: jkim2345@scharp.org
+## Available datasets:
 ##  BAMA
 ##  Demographics
 ##  NAb</code></pre>
@@ -157,9 +158,10 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256$<span class="kw">getDataset</span>
 <p>This will instantiate a connection at the <code>Studies</code> level. Most functions work cross study connections just like they do on single studies.</p>
 <p>You can get a list of datasets available accross all studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">con</code></pre></div>
-<pre><code>## DataSpace Connection to CAVD
-## URL: https://dataspace.cavd.org/project/CAVD/
-## Available datasets
+<pre><code>## DataSpaceR Connection to CAVD
+## URL: https://dataspace.cavd.org/CAVD
+## User: jkim2345@scharp.org
+## Available datasets:
 ##  BAMA
 ##  Demographics
 ##  ELISPOT
@@ -205,7 +207,7 @@ cvd408 &lt;-<span class="st"> </span><span class="kw">connectDS</span>(<span cla
 <span class="kw">str</span>(cvd408$cache)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 272 kB</code></pre>
+<pre><code>## 227 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset" class="section level3">
 <h3>Retrieve NAb dataset</h3>
@@ -213,14 +215,14 @@ cvd408 &lt;-<span class="st"> </span><span class="kw">connectDS</span>(<span cla
 <span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
 <span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.198   0.018   0.816</code></pre>
+##   0.433   0.025   0.880</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
 ##   ..$ args:List of 2
 ##   ..$ data:'data.frame': 839 obs. of  22 variables:</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 410 kB</code></pre>
+<pre><code>## 365 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset-again" class="section level3">
 <h3>Retrieve NAb dataset again</h3>
@@ -228,14 +230,14 @@ cvd408 &lt;-<span class="st"> </span><span class="kw">connectDS</span>(<span cla
 <span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
 <span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.002   0.000   0.002</code></pre>
+##   0.004   0.000   0.004</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
 ##   ..$ args:List of 2
 ##   ..$ data:'data.frame': 839 obs. of  22 variables:</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 425 kB</code></pre>
+<pre><code>## 380 kB</code></pre>
 </div>
 <div id="clear-cache" class="section level3">
 <h3>Clear cache</h3>
@@ -244,15 +246,15 @@ cvd408 &lt;-<span class="st"> </span><span class="kw">connectDS</span>(<span cla
 <span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 287 kB</code></pre>
+<pre><code>## 241 kB</code></pre>
 </div>
 </div>
 <div id="session-information" class="section level2">
 <h2>Session information</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
 <pre><code>## R version 3.4.1 (2017-06-30)
-## Platform: x86_64-apple-darwin16.6.0 (64-bit)
-## Running under: macOS Sierra 10.12.3
+## Platform: x86_64-apple-darwin16.7.0 (64-bit)
+## Running under: macOS Sierra 10.12.6
 ## 
 ## Matrix products: default
 ## BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
@@ -266,10 +268,10 @@ cvd408 &lt;-<span class="st"> </span><span class="kw">connectDS</span>(<span cla
 ## 
 ## other attached packages:
 ## [1] pryr_0.1.2       Rlabkey_2.1.135  rjson_0.2.15     RCurl_1.95-4.8  
-## [5] bitops_1.0-6     DataSpaceR_0.2.0
+## [5] bitops_1.0-6     DataSpaceR_0.2.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.12     knitr_1.16       xml2_1.1.1       magrittr_1.5    
+##  [1] Rcpp_0.12.12     knitr_1.17       xml2_1.1.1       magrittr_1.5    
 ##  [5] roxygen2_6.0.1   devtools_1.13.3  R6_2.2.2         stringr_1.2.0   
 ##  [9] tools_3.4.1      withr_2.0.0      htmltools_0.3.6  commonmark_1.2  
 ## [13] yaml_2.1.14      digest_0.6.12    assertthat_0.2.0 rprojroot_1.2   
