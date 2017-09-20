@@ -272,8 +272,8 @@ DataSpaceConnection <- R6Class(
         )
     },
     .getTreatmentArm = function() {
-      colSelect <- c("arm_part", "arm_group", "arm_name", "randomization",
-                     "coded_label", "last_day")
+      colSelect <- c("arm_id", "arm_part", "arm_group", "arm_name",
+                     "randomization", "coded_label", "last_day", "description")
 
       private$.treatmentArm <-
         suppressWarnings(
@@ -281,9 +281,10 @@ DataSpaceConnection <- R6Class(
             baseUrl = private$.config$labkey.url.base,
             folderPath = private$.config$labkey.url.path,
             schemaName = "CDS",
-            queryName = "ds_treatmentarm",
+            queryName = "treatmentarm",
             colSelect = colSelect,
-            colNameOpt = "fieldname"
+            colNameOpt = "fieldname",
+            colFilter = makeFilter(c("arm_id", "CONTAINS", private$.study))
           )
         )
     }

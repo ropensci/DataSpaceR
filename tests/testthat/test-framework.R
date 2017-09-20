@@ -67,9 +67,9 @@ if ("DataSpaceConnection" %in% class(con)) {
     test_that("`treatmentArm`", {
       expect_is(con$treatmentArm, "data.frame")
       expect_equal(names(con$treatmentArm),
-                   c("arm_part", "arm_group", "arm_name", "randomization",
-                     "coded_label", "last_day"))
-      expect_equal(nrow(con$treatmentArm), 0)
+                   c("arm_id", "arm_part", "arm_group", "arm_name",
+                     "randomization", "coded_label", "last_day", "description"))
+      expect_gt(nrow(con$treatmentArm), 0)
     })
 
     test_that("`getDataset`", {
