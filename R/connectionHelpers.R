@@ -76,7 +76,7 @@ checkStudy <- function(study, labkey.url.base, verbose = FALSE) {
       stop(paste0(reqStudy, " is not a valid study"))
     } else {
       stop(paste0(reqStudy, " is not a valid study\nValid studies: ",
-                  paste(validStudies, collapse=", ")))
+                  paste(validStudies, collapse = ", ")))
     }
   }
 
