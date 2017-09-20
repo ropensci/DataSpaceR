@@ -9,7 +9,7 @@
 .onLoad <- function(libname, pkgname) {
   # set ca bundle file path for windows
   if (.Platform$OS.type == "windows") {
-    options(RCurlOptions = list(cainfo = system.file("ssl_certs/ca-bundle.crt",
+    options(RCurlOptions = list(cainfo = system.file("ssl_certs/cacert.pem",
                                                      package = pkgname)))
   }
 }
