@@ -101,10 +101,16 @@ getNetrc <- function(login, password, onStaging = FALSE) {
     machine <- "dataspace.cavd.org"
   }
 
-  if (!is.null(login) & !is.null(password)) {
+  if (!is.null(login) && !is.null(password)) {
     netrc <- writeNetrc(login, password, machine)
+  } else if (exists("labkey.netrc.file", .GlobalEnv)) {
+    netrc <- get("labkey.netrc.file", .GlobalEnv)
   } else {
-    netrc <- try(get("labkey.netrc.file", .GlobalEnv), silent = TRUE)
+    if (.Platform$OS.type == "windows") {
+      netrc <- paste0(Sys.getenv("HOME"), "\\_netrc")
+    } else {
+      netrc <- paste0(Sys.getenv("HOME"), "/.netrc")
+    }
   }
 
   netrc
@@ -114,16 +120,8 @@ getNetrc <- function(login, password, onStaging = FALSE) {
 setCurlOptions <- function(netrcFile) {
   useragent <- paste("DataSpaceR", packageVersion("DataSpaceR"))
 
-  if (!inherits(netrcFile, "try-error") && !is.null(netrcFile)) {
-    curlOptions <- labkey.setCurlOptions(ssl.verifyhost = 2,
-                                         sslversion = 1,
-                                         netrc.file = netrcFile,
-                                         useragent = useragent)
-  } else {
-    curlOptions <- labkey.setCurlOptions(ssl.verifyhost = 2,
-                                         sslversion = 1,
-                                         useragent = useragent)
-  }
+  curlOptions <- labkey.setCurlOptions(netrc.file = netrcFile,
+                                       useragent = useragent)
 
   curlOptions
 }
