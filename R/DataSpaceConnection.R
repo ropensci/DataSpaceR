@@ -103,7 +103,7 @@ DataSpaceConnection <- R6Class(
       # get primary fields
       labkey.url.base <- getUrlBase(onStaging)
       labkey.user.email <- getUserEmail(labkey.url.base, login)
-      labkey.url.path <- getUrlPath(study, labkey.url.path)
+      labkey.url.path <- getUrlPath(study)
 
       # set Curl options
       netrcFile <- getNetrc(login, password, onStaging)
