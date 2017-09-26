@@ -84,7 +84,7 @@ DataSpaceStudy <- R6Class(
       assert_that(!is.null(config))
 
       # get primary fields
-      config$labkey.url.path <- getUrlPath(study, config$labkey.url.base)
+      config$labkey.url.path <- getUrlPath(study)
 
       # fix study
       study <- fixStudy(study, config$labkey.url.base, config$labkey.url.path)
