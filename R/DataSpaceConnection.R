@@ -80,8 +80,8 @@ DataSpaceConnection <- R6Class(
       cat("\n  Available studies:", private$.stats$studies)
       cat("\n    -", private$.stats$subjectlevelstudies, "studies with data")
       cat("\n    -", private$.stats$subjects, "subjects")
-      cat("\n    -", private$.stats$assays, "Assays")
-      cat("\n    -", private$.stats$datacount, "Data points")
+      cat("\n    -", private$.stats$assays, "assays")
+      cat("\n    -", private$.stats$datacount, "data points")
     },
     getStudy = function(study) {
       DataSpaceStudy$new(study, private$.config)

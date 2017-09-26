@@ -16,18 +16,20 @@
 #' }
 #' @export
 writeNetrc <- function(login,
-                        password,
-                        machine = "dataspace.cavd.org",
-                        netrcFile = NULL) {
+                       password,
+                       machine = "dataspace.cavd.org",
+                       netrcFile = NULL) {
   string <- paste("machine", machine,
                   "login", login,
                   "password", password)
+
   if (is.null(netrcFile)) {
     netrcFile <- tempfile()
   } else if (file.exists(netrcFile)) {
     stop("The file you are trying to write to already exists.\n
          Remove manually if you wish to overwrite.")
   }
+
   write(string, netrcFile)
 
   invisible(netrcFile)
