@@ -1,3 +1,7 @@
+# DataSpaceR 0.3.0
+
+* Updated `DataSpaceConnection` class and `connectDS` constructor to be not study-specific.
+
 # DataSpaceR 0.2.1
 
 * Modified `getUserEmail()` to get email from netrc file.

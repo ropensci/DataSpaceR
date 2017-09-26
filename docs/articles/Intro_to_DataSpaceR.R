@@ -1,6 +1,10 @@
 ## ----connectDS-----------------------------------------------------------
 library(DataSpaceR)
-cvd256 <- connectDS(study = "cvd256")
+con <- connectDS()
+con
+
+## ----getStudy------------------------------------------------------------
+cvd256 <- con$getStudy("cvd256")
 cvd256
 
 ## ----other-fields--------------------------------------------------------
@@ -22,21 +26,21 @@ NAb_day0 <- cvd256$getDataset("NAb", colFilter = cvd256Filter)
 dim(NAb_day0)
 
 ## ----cross-connection----------------------------------------------------
-con <- connectDS("")
+cavd <- con$getStudy("")
 
 ## ----cross-connection-print----------------------------------------------
-con
-con$availableDatasets
+cavd
+cavd$availableDatasets
 
 ## ----cross-connection-dem------------------------------------------------
 conFilter <- makeFilter(c("species", "EQUAL", "Human"))
-human <- con$getDataset("Demographics", colFilter = conFilter)
+human <- cavd$getDataset("Demographics", colFilter = conFilter)
 dim(human)
 colnames(human)
 
 ## ------------------------------------------------------------------------
 library(pryr)
-cvd408 <- connectDS("cvd408")
+cvd408 <- con$getStudy("cvd408")
 
 str(cvd408$cache)
 object_size(cvd408)

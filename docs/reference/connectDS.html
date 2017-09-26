@@ -114,16 +114,12 @@
     <p>Constructor for <code><a href='DataSpaceConnection.html'>DataSpaceConnection</a></code></p>
     
 
-    <pre class="usage"><span class='fu'>connectDS</span>(<span class='kw'>study</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>login</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>password</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <pre class="usage"><span class='fu'>connectDS</span>(<span class='kw'>login</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>password</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>onStaging</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>study</th>
-      <td><p>A character. Name of the study to connect.</p></td>
-    </tr>
     <tr>
       <th>login</th>
       <td><p>A character. Optional argument. If there is no netrc
@@ -153,7 +149,7 @@ of the production server.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Instantiates an <code>DataSpaceConnection</code> for <code>study</code>
+    <p>Instantiates an <code>DataSpaceConnection</code>.
 The constructor will try to take the values of the various <code>labkey.*</code>
 parameters from the global environment. If they don't exist, it will use
 default values. These are assigned to `options`, which are then used by the
@@ -166,11 +162,7 @@ default values. These are assigned to `options`, which are then used by the
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Single study</span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'>connectDS</span>(<span class='st'>"cvd408"</span>)
-
-<span class='co'># Cross study</span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'>connectDS</span>(<span class='st'>""</span>)
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'>connectDS</span>()
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

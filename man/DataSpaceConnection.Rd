@@ -12,17 +12,7 @@ DataSpaceConnection
 The DataSpaceConnection class
 }
 \details{
-Uses global variables \code{labkey.url.base}, and \code{labkey.url.path}, to
-access a study. \code{labkey.url.base} should be
-\url{https://dataspace.cavd.org/}. \code{labkey.url.path} should be
-\code{/CAVD/studyname}, where \code{studyname} is the accession number of the
-study.
 
-\code{DataSpaceConnection} will initialize itself, and look for a
-\code{.netrc} file in \code{"~/"} the user's home directory. The
-\code{.netrc} file should contain a \code{machine}, \code{login}, and
-\code{password} entry to allow access to DataSpace, where \code{machine} is
-the host name like "dataspace.cavd.org".
 }
 \section{Constructor}{
 
@@ -32,25 +22,12 @@ the host name like "dataspace.cavd.org".
 \section{Fields}{
 
 \describe{
-  \item{\code{study}}{
-    A character. The study name. Use an empty string ("") to create
-    a connection at the project level.
-  }
   \item{\code{config}}{
     A list. Stores configuration of the connection object such as
     URL, path and username.
   }
-  \item{\code{availableDatasets}}{
-    A data.frame. The table of datasets available in
-    the connection object.
-  }
-  \item{\code{cache}}{
-    A list. Stores the data to avoid downloading the same tables multiple
-    times.
-  }
-  \item{\code{treatmentArm}}{
-    A data.frame. The table of treatment arm information for the connected
-    study. Not available for cross study connection.
+  \item{\code{availableStudies}}{
+    A data frame. The table of studies available in the connection object.
   }
 }
 }
@@ -58,35 +35,17 @@ the host name like "dataspace.cavd.org".
 \section{Methods}{
 
 \describe{
-  \item{\code{initialize(study = NULL, login = NULL, password = NULL,
-  verbose = FALSE, onStaging = FALSE)}}{
+  \item{\code{initialize(login = NULL, password = NULL, verbose = FALSE,
+  onStaging = FALSE)}}{
     Initialize \code{DataSpaceConnection} class. See \code{\link{connectDS}}.
   }
   \item{\code{print()}}{
     Print \code{DataSpaceConnection} class.
   }
-  \item{\code{getDataset(datasetName,
-  colFilter = NULL, reload = FALSE, ...)}}{
-    Get a dataset from the connection.
+  \item{\code{getStudy(study)}}{
+    Create a \code{DataSpaceStudy} class.
 
-    \code{datasetName}: A character. Name of the dataset to retrieve.
-
-    \code{colFilter}: A matrix. A filter as returned by Rlabkey's
-    \code{\link[Rlabkey]{makeFilter}}.
-
-    \code{reload}: A logical. If set to TRUE, download the dataset, whether
-    a cached version exist or not.
-
-    \code{...}: Extra arguments to be passed to
-    \code{\link[Rlabkey]{labkey.selectRows}}
-  }
-  \item{\code{clearCache()}}{
-    Clear \code{cache}. Remove downloaded datasets.
-  }
-  \item{\code{getVariableInfo(datasetName)}}{
-    Get variable information.
-
-    \code{datasetName}: A character. Name of the dataset to retrieve.
+    \code{study}: A character. Name of the study to retrieve.
   }
 }
 }
@@ -94,10 +53,7 @@ the host name like "dataspace.cavd.org".
 \examples{
 \dontrun{
 # Create a connection (Initiate a DataSpaceConnection object)
-con <- connectDS("cvd408")
-
-# Retrieve Neutralizing antibody dataset (NAb) from DataSpace
-con$getDataset("NAb")
+con <- connectDS()
 }
 }
 \seealso{

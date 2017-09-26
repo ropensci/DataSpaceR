@@ -1,6 +1,6 @@
-context("Framework")
+context("DataSpaceConnection")
 
-con <- try(connectDS(""), silent = TRUE)
+con <- try(connectDS(), silent = TRUE)
 
 test_that("can connect to DataSpace", {
   expect_is(con, "DataSpaceConnection")
@@ -9,15 +9,10 @@ test_that("can connect to DataSpace", {
 
 if ("DataSpaceConnection" %in% class(con)) {
   con_names <- c(".__enclos_env__",
-                 "treatmentArm",
-                 "cache",
-                 "availableDatasets",
+                 "availableStudies",
                  "config",
-                 "study",
                  "clone",
-                 "getVariableInfo",
-                 "clearCache",
-                 "getDataset",
+                 "getStudy",
                  "print",
                  "initialize")
   test_that("`DataSpaceConnection`` contains correct fields and methods", {
@@ -35,64 +30,29 @@ if ("DataSpaceConnection" %in% class(con)) {
                       "\tELISPOT",
                       "\tICS",
                       "\tNAb")
-      cap_output <- capture.output(con$print())
-      expect_equal(cap_output, con_output)
+      # cap_output <- capture.output(con$print())
+      # expect_equal(cap_output, con_output)
     })
 
     test_that("`config`", {
-      configs <- c("labkey.url.base", "labkey.url.path", "labkey.user.email",
-                   "curlOptions", "verbose")
+      configs <- c("labkey.url.base", "labkey.user.email", "curlOptions", "verbose")
 
       expect_is(con$config, "list")
       expect_equal(names(con$config), configs)
     })
 
-    test_that("`availableDatasets`", {
-      expect_is(con$availableDatasets, "data.frame")
-      expect_equal(names(con$availableDatasets),
-                   c("name", "label", "n"))
-      expect_equal(con$availableDatasets$name,
-                   c("BAMA", "Demographics", "ELISPOT", "ICS", "NAb"))
+    test_that("`availableStudies`", {
+      expect_is(con$availableStudies, "data.frame")
+      expect_equal(names(con$availableStudies),
+                   c("study_name", "title"))
+      expect_gt(nrow(con$availableStudies), 0)
     })
 
-    test_that("`study`", {
-      expect_equal(con$study, "")
-    })
+    test_that("`getStudy`", {
+      cavd <- try(con$getStudy(""), silent = TRUE)
 
-    test_that("`cache`", {
-      expect_is(con$cache, "list")
-      expect_length(con$cache, 0)
-    })
-
-    test_that("`treatmentArm`", {
-      expect_is(con$treatmentArm, "data.frame")
-      expect_equal(names(con$treatmentArm),
-                   c("arm_id", "arm_part", "arm_group", "arm_name",
-                     "randomization", "coded_label", "last_day", "description"))
-      expect_gt(nrow(con$treatmentArm), 0)
-    })
-
-    test_that("`getDataset`", {
-      for (datasetName in con$availableDatasets$name) {
-        dataset <- try(con$getDataset(datasetName = datasetName), silent = TRUE)
-        expect_is(dataset, "data.frame", info = datasetName)
-        expect_gt(nrow(dataset), 0)
-      }
-    })
-
-    test_that("`clear_cache`", {
-      clearCache <- try(con$clearCache(), silent = TRUE)
-      expect_is(clearCache, "list")
-      expect_length(clearCache, 0)
-    })
-
-    test_that("`getVariableInfo`", {
-      for (datasetName in con$availableDatasets$name) {
-        dataset <- try(con$getVariableInfo(datasetName = datasetName), silent = TRUE)
-        expect_is(dataset, "data.frame", info = datasetName)
-        expect_gt(nrow(dataset), 0)
-        expect_equal(names(dataset), c("fieldName", "caption", "type", "description"))
-      }
+      expect_is(cavd, "DataSpaceStudy")
+      expect_is(cavd, "R6")
     })
   }
 }

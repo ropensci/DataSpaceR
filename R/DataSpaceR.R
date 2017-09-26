@@ -10,5 +10,5 @@
 #' @aliases DataSpaceR
 #' @seealso \code{\link{connectDS}}
 #' @author Ju Yeong Kim
-#' @import Rlabkey assertthat
+#' @import R6 Rlabkey assertthat
 NULL

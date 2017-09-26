@@ -93,19 +93,27 @@ a specific study, and datasets can be retrieved by name.
 
 ```{r}
 library(DataSpaceR)
-study <- connectDS("cvd408")
-study
-class(study)
+
+con <- connectDS()
+con
 ```
 
-`connectDS("cvd408")` will create an instance of `cvd408`. The user needs 
+`connectDS()` will create a connection to DataSpace. The user needs 
 credentials stored in a `netrc` file to access the database. 
+
+```{r}
+cvd408 <- con$getStudy("cvd408")
+cvd408
+class(cvd408)
+```
+
+`con$getStudy("cvd408")` will create an instance of `cvd408`.
 
 
 ### datasets can be listed by:
 
 ```{r}
-study$availableDatasets
+cvd408$availableDatasets
 ```
 
 which will print names of available datasets.
@@ -114,7 +122,7 @@ which will print names of available datasets.
 ### neutralizing antibody dataset (`NAb`) can be retreived by:
 
 ```{r}
-NAb <- study$getDataset("NAb")
+NAb <- cvd408$getDataset("NAb")
 dim(NAb)
 colnames(NAb)
 ```

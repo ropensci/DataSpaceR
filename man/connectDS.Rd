@@ -4,12 +4,10 @@
 \alias{connectDS}
 \title{Create a connection to DataSpace}
 \usage{
-connectDS(study = NULL, login = NULL, password = NULL, verbose = FALSE,
+connectDS(login = NULL, password = NULL, verbose = FALSE,
   onStaging = FALSE)
 }
 \arguments{
-\item{study}{A character. Name of the study to connect.}
-
 \item{login}{A character. Optional argument. If there is no netrc
 file a temporary one can be written by passing login and password of an
 active DataSpace account.}
@@ -30,7 +28,7 @@ an instance of \code{DataSpaceConnection}
 Constructor for \code{\link{DataSpaceConnection}}
 }
 \details{
-Instantiates an \code{DataSpaceConnection} for \code{study}
+Instantiates an \code{DataSpaceConnection}.
 The constructor will try to take the values of the various \code{labkey.*}
 parameters from the global environment. If they don't exist, it will use
 default values. These are assigned to `options`, which are then used by the
@@ -38,11 +36,7 @@ default values. These are assigned to `options`, which are then used by the
 }
 \examples{
 \dontrun{
-# Single study
-con <- connectDS("cvd408")
-
-# Cross study
-con <- connectDS("")
+con <- connectDS()
 }
 }
 \seealso{

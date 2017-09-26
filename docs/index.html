@@ -137,22 +137,34 @@ password supersecretpassword</code></pre>
 <h3 class="hasAnchor">
 <a href="#for-example" class="anchor"></a>for example:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DataSpaceR)
-study &lt;-<span class="st"> </span><span class="kw"><a href="reference/connectDS.html">connectDS</a></span>(<span class="st">"cvd408"</span>)
-study
-<span class="co">#&gt; DataSpaceR Connection to cvd408</span>
-<span class="co">#&gt; URL: https://dataspace.cavd.org/CAVD/cvd408</span>
-<span class="co">#&gt; User: jkim2345@fredhutch.org</span>
-<span class="co">#&gt; Available datasets:</span>
-<span class="co">#&gt;  Demographics</span>
-<span class="co">#&gt;  NAb</span>
-<span class="kw">class</span>(study)
-<span class="co">#&gt; [1] "DataSpaceConnection" "R6"</span></code></pre></div>
-<p><code><a href="reference/connectDS.html">connectDS("cvd408")</a></code> will create an instance of <code>cvd408</code>. The user needs credentials stored in a <code>netrc</code> file to access the database.</p>
+
+con &lt;-<span class="st"> </span><span class="kw"><a href="reference/connectDS.html">connectDS</a></span>()
+con
+<span class="co">#&gt; &lt;DataSpaceConnection&gt;</span>
+<span class="co">#&gt;   URL: https://dataspace.cavd.org</span>
+<span class="co">#&gt;   User: jkim2345@scharp.org</span>
+<span class="co">#&gt;   Available studies: 276</span>
+<span class="co">#&gt;     - 49 studies with data</span>
+<span class="co">#&gt;     - 1506 subjects</span>
+<span class="co">#&gt;     - 4 Assays</span>
+<span class="co">#&gt;     - 227607 Data points</span></code></pre></div>
+<p><code><a href="reference/connectDS.html">connectDS()</a></code> will create a connection to DataSpace. The user needs credentials stored in a <code>netrc</code> file to access the database.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408 &lt;-<span class="st"> </span>con$<span class="kw">getStudy</span>(<span class="st">"cvd408"</span>)
+cvd408
+<span class="co">#&gt; &lt;DataSpaceStudy&gt;</span>
+<span class="co">#&gt;   Study: cvd408</span>
+<span class="co">#&gt;   URL: https://dataspace.cavd.org/CAVD/cvd408</span>
+<span class="co">#&gt;   Available datasets:</span>
+<span class="co">#&gt;     - Demographics</span>
+<span class="co">#&gt;     - NAb</span>
+<span class="kw">class</span>(cvd408)
+<span class="co">#&gt; [1] "DataSpaceStudy" "R6"</span></code></pre></div>
+<p><code>con$getStudy("cvd408")</code> will create an instance of <code>cvd408</code>.</p>
 </div>
 <div id="datasets-can-be-listed-by" class="section level3">
 <h3 class="hasAnchor">
 <a href="#datasets-can-be-listed-by" class="anchor"></a>datasets can be listed by:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">study$availableDatasets
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408$availableDatasets
 <span class="co">#&gt;           name                 label   n</span>
 <span class="co">#&gt; 1 Demographics          Demographics  20</span>
 <span class="co">#&gt; 2          NAb Neutralizing antibody 839</span></code></pre></div>
@@ -161,7 +173,7 @@ study
 <div id="neutralizing-antibody-dataset-nab-can-be-retreived-by" class="section level3">
 <h3 class="hasAnchor">
 <a href="#neutralizing-antibody-dataset-nab-can-be-retreived-by" class="anchor"></a>neutralizing antibody dataset (<code>NAb</code>) can be retreived by:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>study$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>cvd408$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
 <span class="kw">dim</span>(NAb)
 <span class="co">#&gt; [1] 839  28</span>
 <span class="kw">colnames</span>(NAb)

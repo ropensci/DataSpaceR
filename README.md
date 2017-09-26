@@ -62,24 +62,40 @@ The general idea is that the user creates an instance of an `DataSpaceConnection
 
 ``` r
 library(DataSpaceR)
-study <- connectDS("cvd408")
-study
-#> DataSpaceR Connection to cvd408
-#> URL: https://dataspace.cavd.org/CAVD/cvd408
-#> User: jkim2345@fredhutch.org
-#> Available datasets:
-#>  Demographics
-#>  NAb
-class(study)
-#> [1] "DataSpaceConnection" "R6"
+
+con <- connectDS()
+con
+#> <DataSpaceConnection>
+#>   URL: https://dataspace.cavd.org
+#>   User: jkim2345@scharp.org
+#>   Available studies: 276
+#>     - 49 studies with data
+#>     - 1506 subjects
+#>     - 4 Assays
+#>     - 227607 Data points
 ```
 
-`connectDS("cvd408")` will create an instance of `cvd408`. The user needs credentials stored in a `netrc` file to access the database.
+`connectDS()` will create a connection to DataSpace. The user needs credentials stored in a `netrc` file to access the database.
+
+``` r
+cvd408 <- con$getStudy("cvd408")
+cvd408
+#> <DataSpaceStudy>
+#>   Study: cvd408
+#>   URL: https://dataspace.cavd.org/CAVD/cvd408
+#>   Available datasets:
+#>     - Demographics
+#>     - NAb
+class(cvd408)
+#> [1] "DataSpaceStudy" "R6"
+```
+
+`con$getStudy("cvd408")` will create an instance of `cvd408`.
 
 ### datasets can be listed by:
 
 ``` r
-study$availableDatasets
+cvd408$availableDatasets
 #>           name                 label   n
 #> 1 Demographics          Demographics  20
 #> 2          NAb Neutralizing antibody 839
@@ -90,7 +106,7 @@ which will print names of available datasets.
 ### neutralizing antibody dataset (`NAb`) can be retreived by:
 
 ``` r
-NAb <- study$getDataset("NAb")
+NAb <- cvd408$getDataset("NAb")
 dim(NAb)
 #> [1] 839  28
 colnames(NAb)

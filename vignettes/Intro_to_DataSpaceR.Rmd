@@ -41,11 +41,18 @@ We'll be looking at study `cvd256`. If you want to use a different study, change
 
 ```{r connectDS}
 library(DataSpaceR)
-cvd256 <- connectDS(study = "cvd256")
+con <- connectDS()
+con
+```
+
+The call to `connectDS` instantiates the connection. Printing the object shows where it's connected and the available studies.
+
+```{r getStudy}
+cvd256 <- con$getStudy("cvd256")
 cvd256
 ```
 
-The call to `connectDS` instantiates the connection. Printing the object shows where it's connected, to what study, and the available datasets.
+`con$getStudy` creates a connection to the study `cvd256`. Printing the object  shows where it's connected, to what study, and the available datasets.
 
 ```{r other-fields}
 cvd256$availableDatasets
@@ -90,23 +97,23 @@ See `?makeFilter` for more information on the syntax.
 To fetch data from multiple studies, simply create a connection at the project level.
 
 ```{r cross-connection}
-con <- connectDS("")
+cavd <- con$getStudy("")
 ```
 
-This will instantiate a connection at the `Studies` level. Most functions work cross study connections just like they do on single studies.
+This will instantiate a connection at the `CAVD` level. Most functions work cross study connections just like they do on single studies.
 
 You can get a list of datasets available accross all studies.
 
 ```{r cross-connection-print}
-con
-con$availableDatasets
+cavd
+cavd$availableDatasets
 ```
 
 In cross-study connections, `getDataset` will combine the requested datasets. Note that in most cases the datasets will have too many subjects, making the filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
 
 ```{r cross-connection-dem}
 conFilter <- makeFilter(c("species", "EQUAL", "Human"))
-human <- con$getDataset("Demographics", colFilter = conFilter)
+human <- cavd$getDataset("Demographics", colFilter = conFilter)
 dim(human)
 colnames(human)
 ```
@@ -118,7 +125,7 @@ colnames(human)
 
 ```{r}
 library(pryr)
-cvd408 <- connectDS("cvd408")
+cvd408 <- con$getStudy("cvd408")
 
 str(cvd408$cache)
 object_size(cvd408)
