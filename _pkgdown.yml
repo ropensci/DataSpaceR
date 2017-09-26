@@ -1,6 +1,10 @@
 template:
   params:
     bootswatch: simplex
+
+home:
+  strip_header: true
+
 navbar:
   right:
     - icon: fa-globe
