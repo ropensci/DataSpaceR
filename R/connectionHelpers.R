@@ -40,7 +40,7 @@ getUserEmail <- function(labkey.url.base, login) {
   labkey.user.email
 }
 
-getUrlPath <- function(study, labkey.url.base) {
+getUrlPath <- function(study) {
   if (exists("labkey.url.path", .GlobalEnv)) {
     if (is.null(study)) {
       labkey.url.path <- get("labkey.url.path", .GlobalEnv)
