@@ -71,8 +71,8 @@ con
 #>   Available studies: 276
 #>     - 49 studies with data
 #>     - 1506 subjects
-#>     - 4 Assays
-#>     - 227607 Data points
+#>     - 4 assays
+#>     - 227607 data points
 ```
 
 `connectDS()` will create a connection to DataSpace. The user needs credentials stored in a `netrc` file to access the database.
