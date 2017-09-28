@@ -1,17 +1,18 @@
 context("netrc")
 
 test_that("`writeNetrc`", {
-  netrcFile <- try(writeNetrc(Sys.getenv("DS_login"), Sys.getenv("DS_pwd")), silent = TRUE)
+  netrcFile <- try(writeNetrc("fake@email.org", "fakePwd"), silent = TRUE)
 
   expect_is(netrcFile, "character")
   expect_true(file.exists(netrcFile))
   expect_match(readLines(netrcFile),
-               "machine\\s+dataspace.cavd.org\\s+login\\s+\\S+\\s+password\\s+\\S+")
+               "machine dataspace.cavd.org login fake@email.org password fakePwd")
 })
 
 test_that("`checkNetrc`", {
-  netrcFile <- try(checkNetrc(), silent = TRUE)
+  msg <- capture.output(netrcFile <- try(checkNetrc(), silent = TRUE))
 
   expect_is(netrcFile, "character")
   expect_true(file.exists(netrcFile))
+  expect_match(msg, "it looks valid")
 })
