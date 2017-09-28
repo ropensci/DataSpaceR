@@ -63,7 +63,7 @@ checkNetrc <- function() {
   if (exists("labkey.netrc.file", .GlobalEnv)) {
     netrcFile <- get("labkey.netrc.file", .GlobalEnv)
   } else {
-    netrcFile <- "~/.netrc"
+    netrcFile <- ifelse(.Platform$OS.type == "windows", "~/_netrc", "~/.netrc")
   }
   if (!file.exists(netrcFile)) {
     stop("There is no netrc file. Use `writeNetrc()`")
