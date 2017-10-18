@@ -12,7 +12,10 @@
 #'     URL, path and username.
 #'   }
 #'   \item{\code{availableStudies}}{
-#'     A data frame. The table of studies available in the connection object.
+#'     A data.frame. The table of available studies.
+#'   }
+#'   \item{\code{availableGroups}}{
+#'     A data.frame. The table of available groups.
 #'   }
 #' }
 #'
@@ -25,10 +28,12 @@
 #'   \item{\code{print()}}{
 #'     Print \code{DataSpaceConnection} class.
 #'   }
-#'   \item{\code{getStudy(study)}}{
+#'   \item{\code{getStudy(study, groupId = NULL)}}{
 #'     Create a \code{DataSpaceStudy} class.
 #'
 #'     \code{study}: A character. Name of the study to retrieve.
+#'
+#'     \code{groupId}: An integer. ID of the group to retrieve.
 #'   }
 #' }
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceR-package}}
@@ -38,6 +43,7 @@
 #' con <- connectDS()
 #' }
 #' @docType class
+#' @importFrom rjson fromJSON
 DataSpaceConnection <- R6Class(
   classname = "DataSpaceConnection",
   public = list(
@@ -70,6 +76,7 @@ DataSpaceConnection <- R6Class(
       # get extra fields if available
       try(private$.getAvailableStudies(), silent = TRUE)
       try(private$.getStats(), silent = TRUE)
+      try(private$.getAvailableGroups(), silent = FALSE)
 
       NULL
     },
@@ -82,9 +89,21 @@ DataSpaceConnection <- R6Class(
       cat("\n    -", private$.stats$subjects, "subjects")
       cat("\n    -", private$.stats$assays, "assays")
       cat("\n    -", private$.stats$datacount, "data points")
+      cat("\n  Available groups:", nrow(private$.availableGroups))
     },
-    getStudy = function(study) {
-      DataSpaceStudy$new(study, private$.config)
+    getStudy = function(study, groupId = NULL) {
+      assert_that(is.number(groupId) || is.null(groupId),
+                  msg = "groupId should be an integer or null.")
+      assert_that((study == "" && is.null(groupId)) || (study == "" && is.number(groupId)) || (study != "" && is.null(groupId)),
+                  msg = "Use empty string if you are using a group filter")
+      if (is.number(groupId)) {
+        assert_that(groupId %in% private$.availableGroups$id,
+                    msg = paste(groupId, "is not a valid group ID"))
+      }
+
+      group <- private$.availableGroups[private$.availableGroups$id == groupId, "label"][1]
+
+      DataSpaceStudy$new(study, private$.config, group)
     }
   ),
   active = list(
@@ -93,12 +112,16 @@ DataSpaceConnection <- R6Class(
     },
     availableStudies = function() {
       private$.availableStudies
+    },
+    availableGroups = function() {
+      private$.availableGroups
     }
   ),
   private = list(
     .config = list(),
     .availableStudies = data.frame(),
     .stats = data.frame(),
+    .availableGroups = data.frame(),
 
     .getAvailableStudies = function() {
       private$.availableStudies <-
@@ -120,6 +143,39 @@ DataSpaceConnection <- R6Class(
           queryName = "ds_properties",
           colNameOpt = "fieldname"
         )
+    },
+    .getAvailableGroups = function() {
+      participantGroupApi <- paste0(private$.config$labkey.url.base,
+                                    "/participant-group",
+                                    "/CAVD",
+                                    "/browseParticipantGroups.api?",
+                                    "distinctCatgories=false&",
+                                    "type=participantGroup&",
+                                    "includeUnassigned=false&",
+                                    "includeParticipantIds=false")
+
+      # execute via Rlabkey's standard GET function
+      response <- Rlabkey:::labkey.get(participantGroupApi)
+
+      # parse JSON response via rjson's fromJSON parsing function
+      parsed <- fromJSON(response)
+
+      # construct a data frame for each group
+      groupsList <- parsed$groups
+      groupsList <- lapply(groupsList, function(group) {
+        data.frame(id = group$id,
+                   label = group$label,
+                   description = ifelse(is.null(group$description), NA, group$description),
+                   createdBy = group$createdBy$displayValue,
+                   shared = group$category$shared,
+                   n = length(group$category$participantIds),
+                   stringsAsFactors = FALSE)
+        })
+
+      # merge the list to data frame
+      groupsDF <- do.call(rbind.data.frame, groupsList)
+
+      private$.availableGroups <- groupsDF
     }
   )
 )

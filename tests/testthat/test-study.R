@@ -1,9 +1,9 @@
 
-test_study <- function(study, datasets) {
-  context(paste0("DataSpaceStudy (", ifelse(study == "", "CAVD", study), ")"))
+test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
+  target <- ifelse(study != "", study, ifelse(is.null(groupLabel), "CAVD", groupLabel))
+  context(paste0("DataSpaceStudy (", target, ")"))
 
-  con <- connectDS()
-  cavd <- try(con$getStudy(study), silent = TRUE)
+  cavd <- try(con$getStudy(study, groupId), silent = TRUE)
 
   test_that("can connect to studies", {
     expect_is(cavd, "DataSpaceStudy")
@@ -12,6 +12,7 @@ test_study <- function(study, datasets) {
 
   if ("DataSpaceStudy" %in% class(cavd)) {
     con_names <- c(".__enclos_env__",
+                   "group",
                    "treatmentArm",
                    "cache",
                    "availableDatasets",
@@ -31,7 +32,9 @@ test_study <- function(study, datasets) {
       test_that("`print`", {
         path <- ifelse(study == "", study,  paste0("/", study))
         con_output <- c("<DataSpaceStudy>",
-                        paste0("  Study: ", ifelse(study == "", "CAVD", study)),
+                        ifelse(is.null(groupLabel),
+                               paste0("  Study: ", ifelse(study == "", "CAVD", study)),
+                               paste0("  Group: ", groupLabel)),
                         paste0("  URL: https://dataspace.cavd.org/CAVD", path),
                         "  Available datasets:",
                         strwrap(datasets, prefix = "    - "))
@@ -112,5 +115,8 @@ test_study <- function(study, datasets) {
   }
 }
 
+con <- connectDS()
+
 test_study("", c("BAMA", "Demographics", "ELISPOT", "ICS", "NAb"))
 test_study("cvd408", c("Demographics", "NAb"))
+test_study("", c("Demographics", "NAb"), groupId = 208, groupLabel = "mice")

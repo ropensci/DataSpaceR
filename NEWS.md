@@ -1,3 +1,8 @@
+# DataSpaceR 0.4.0
+
+* Added `availableGroups` field to `DataSpaceConnection` class.
+* Modified `getStudy` method in `DataSpaceConnection` to take `groupId` as an argument in order to create a `DataSpaceStudy` object for a particular group.
+
 # DataSpaceR 0.3.0
 
 * Updated `DataSpaceConnection` class and `connectDS` constructor to be not study-specific.

@@ -27,7 +27,10 @@ The DataSpaceConnection class
     URL, path and username.
   }
   \item{\code{availableStudies}}{
-    A data frame. The table of studies available in the connection object.
+    A data.frame. The table of available studies.
+  }
+  \item{\code{availableGroups}}{
+    A data.frame. The table of available groups.
   }
 }
 }
@@ -42,10 +45,12 @@ The DataSpaceConnection class
   \item{\code{print()}}{
     Print \code{DataSpaceConnection} class.
   }
-  \item{\code{getStudy(study)}}{
+  \item{\code{getStudy(study, groupId = NULL)}}{
     Create a \code{DataSpaceStudy} class.
 
     \code{study}: A character. Name of the study to retrieve.
+
+    \code{groupId}: An integer. ID of the group to retrieve.
   }
 }
 }

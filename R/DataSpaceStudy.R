@@ -8,8 +8,7 @@
 #' @section Fields:
 #' \describe{
 #'   \item{\code{study}}{
-#'     A character. The study name. Use an empty string ("") to create
-#'     a connection at the project level (CAVD).
+#'     A character. The study name.
 #'   }
 #'   \item{\code{config}}{
 #'     A list. Stores configuration of the connection object such as
@@ -26,11 +25,14 @@
 #'     A data.frame. The table of treatment arm information for the connected
 #'     study. Not available for cross study connection.
 #'   }
+#'   \item{\code{group}}{
+#'     A character. The group name.
+#'   }
 #' }
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{\code{initialize(study = NULL, config = NULL)}}{
+#'   \item{\code{initialize(study = NULL, config = NULL, group = NULL)}}{
 #'     Initialize \code{DataSpaceStudy} class.
 #'     See \code{\link{DataSpaceConnection}}.
 #'   }
@@ -78,7 +80,7 @@
 DataSpaceStudy <- R6Class(
   classname = "DataSpaceStudy",
   public = list(
-    initialize = function(study = NULL, config = NULL) {
+    initialize = function(study = NULL, config = NULL, group = NULL) {
       assert_that(length(study) <= 1,
                   msg = "For multiple studies, use an empty string and filter the connection.")
       assert_that(!is.null(config))
@@ -92,6 +94,7 @@ DataSpaceStudy <- R6Class(
       # set primary fields
       private$.study <- tolower(study)
       private$.config <- config
+      private$.group <- group
 
       # get extra fields if available
       try(private$.getAvailableDatasets(), silent = TRUE)
@@ -105,10 +108,16 @@ DataSpaceStudy <- R6Class(
                        gsub("^/", "", private$.config$labkey.url.path))
 
       cat("<DataSpaceStudy>")
-      cat("\n  Study:", study)
+      if (is.na(private$.group)) {
+        cat("\n  Study:", study)
+      } else {
+        cat("\n  Group:", private$.group)
+      }
       cat("\n  URL:", url)
       cat("\n  Available datasets:")
-      cat(paste0("\n    - ", private$.availableDatasets$name), sep = "")
+      if (nrow(private$.availableDatasets) > 0) {
+        cat(paste0("\n    - ", private$.availableDatasets$name), sep = "")
+      }
     },
     getDataset = function(datasetName,
                           colFilter = NULL,
@@ -132,6 +141,9 @@ DataSpaceStudy <- R6Class(
       }
 
       viewName <- NULL
+      if (!is.na(private$.group)) {
+        colFilter <- rbind(colFilter, makeFilter(c(paste0("SubjectId/", private$.group), "EQUAL", private$.group)))
+      }
 
       dataset <- labkey.selectRows(
         baseUrl = private$.config$labkey.url.base,
@@ -155,7 +167,7 @@ DataSpaceStudy <- R6Class(
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
       assert_that(datasetName %in% private$.availableDatasets$name,
-                  msg = paste0(datasetName, " is invalid dataset"))
+                  msg = paste0(datasetName, " is not a available dataset"))
 
       varInfo <- labkey.getQueryDetails(
         baseUrl = private$.config$labkey.url.base,
@@ -192,6 +204,9 @@ DataSpaceStudy <- R6Class(
     },
     treatmentArm = function() {
       private$.treatmentArm
+    },
+    group = function() {
+      private$.group
     }
   ),
   private = list(
@@ -200,36 +215,30 @@ DataSpaceStudy <- R6Class(
     .availableDatasets = data.frame(),
     .cache = list(),
     .treatmentArm = data.frame(),
+    .group = character(),
 
     .getAvailableDatasets = function() {
       datasetQuery <-
-        "
-          SELECT
-            DataSets.Name as name,
-            DataSets.Label as label,
-            -- DataSets.CategoryId AS category,
-            -- DataSets.DataSetId AS id,
-            dataset_n.n
-          FROM
-          (
-            SELECT COUNT(participantid) AS n, 'ICS' AS Name
-            FROM ICS
-            UNION
-            SELECT COUNT(participantid) AS n, 'BAMA' AS Name
-            FROM BAMA
-            UNION
-            SELECT COUNT(participantid) AS n, 'ELISPOT' AS Name
-            FROM ELISPOT
-            UNION
-            SELECT COUNT(participantid) AS n, 'NAb' AS Name
-            FROM NAb
-            UNION
-            SELECT COUNT(participantid) AS n, 'Demographics' AS Name
-            FROM Demographics
-          ) AS dataset_n,
-          DataSets
-          WHERE Datasets.Name = dataset_n.Name AND dataset_n.n > 0
-        "
+        paste("SELECT",
+                "DataSets.Name as name,",
+                "DataSets.Label as label,",
+                "dataset_n.n",
+              "FROM",
+                "(",
+                  makeCountQuery("ICS", private$.group),
+                  "UNION",
+                  makeCountQuery("BAMA", private$.group),
+                  "UNION",
+                  makeCountQuery("ELISPOT", private$.group),
+                  "UNION",
+                  makeCountQuery("NAb", private$.group),
+                  "UNION",
+                  makeCountQuery("Demographics", private$.group),
+                ") AS dataset_n,",
+                "DataSets",
+              "WHERE",
+                "Datasets.Name = dataset_n.Name AND dataset_n.n > 0")
+
       private$.availableDatasets <-
         suppressWarnings(
           labkey.executeSql(

@@ -125,3 +125,22 @@ setCurlOptions <- function(netrcFile) {
 
   curlOptions
 }
+
+makeCountQuery <- function(dataset, group) {
+  query <-
+    paste("SELECT",
+            "COUNT(participantid) AS n,",
+            paste0("'", dataset, "' AS Name"),
+          "FROM",
+            dataset)
+
+  if (!is.na(group)) {
+    query <- paste(
+      query,
+      "WHERE",
+        paste0("participantid.\"", group, "\" = '", group, "'")
+    )
+  }
+
+  query
+}

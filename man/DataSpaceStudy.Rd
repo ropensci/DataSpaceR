@@ -23,8 +23,7 @@ The DataSpaceStudy class
 
 \describe{
   \item{\code{study}}{
-    A character. The study name. Use an empty string ("") to create
-    a connection at the project level (CAVD).
+    A character. The study name.
   }
   \item{\code{config}}{
     A list. Stores configuration of the connection object such as
@@ -41,13 +40,16 @@ The DataSpaceStudy class
     A data.frame. The table of treatment arm information for the connected
     study. Not available for cross study connection.
   }
+  \item{\code{group}}{
+    A character. The group name.
+  }
 }
 }
 
 \section{Methods}{
 
 \describe{
-  \item{\code{initialize(study = NULL, config = NULL)}}{
+  \item{\code{initialize(study = NULL, config = NULL, group = NULL)}}{
     Initialize \code{DataSpaceStudy} class.
     See \code{\link{DataSpaceConnection}}.
   }
