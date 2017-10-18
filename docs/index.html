@@ -107,14 +107,14 @@
 <a href="#using-devtools-development" class="anchor"></a>using <code>devtools</code> (development):</h3>
 <p><a href="https://github.com/FredHutch/DataSpaceR" class="uri">https://github.com/FredHutch/DataSpaceR</a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools::<span class="kw">install_github</span>(<span class="st">"FredHutch/DataSpaceR"</span>)</code></pre></div>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"FredHutch/DataSpaceR"</span>)</code></pre></div>
 </div>
 <div id="using-drat-stable" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-drat-stable" class="anchor"></a>using <code>drat</code> (stable):</h3>
 <p><a href="https://github.com/FredHutch/drat" class="uri">https://github.com/FredHutch/drat</a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("drat")</span>
-drat::<span class="kw">addRepo</span>(<span class="st">"fredhutch"</span>)
+drat<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/drat/topics/addRepo">addRepo</a></span>(<span class="st">"fredhutch"</span>)
 <span class="kw">install.packages</span>(<span class="st">"DataSpaceR"</span>)</code></pre></div>
 </div>
 </div>
@@ -138,7 +138,17 @@ password supersecretpassword</code></pre>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p>The general idea is that the user creates an instance of an <code>DataSpaceConnection</code> class. The instance configures itself to connect to a specific study, and datasets can be retrieved by name.</p>
+<p>The general idea is that the user:</p>
+<ol style="list-style-type: decimal">
+<li>creates an instance of <code>DataSpaceConnection</code> class via <code>connectDS</code>
+</li>
+<li>browses available studies and groups in the instance via <code>availableStudies</code> and <code>availableGroups</code>
+</li>
+<li>creates a connection to a specific study or a group via <code>getStudy</code>
+</li>
+<li>retrieves datasets by name via <code>getDataset</code>
+</li>
+</ol>
 <div id="for-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#for-example" class="anchor"></a>for example:</h3>
@@ -153,9 +163,84 @@ con
 <span class="co">#&gt;     - 49 studies with data</span>
 <span class="co">#&gt;     - 1506 subjects</span>
 <span class="co">#&gt;     - 4 assays</span>
-<span class="co">#&gt;     - 227607 data points</span></code></pre></div>
+<span class="co">#&gt;     - 227607 data points</span>
+<span class="co">#&gt;   Available groups: 2</span></code></pre></div>
 <p><code><a href="reference/connectDS.html">connectDS()</a></code> will create a connection to DataSpace. The user needs credentials stored in a <code>netrc</code> file to access the database.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408 &lt;-<span class="st"> </span>con$<span class="kw">getStudy</span>(<span class="st">"cvd408"</span>)
+</div>
+<div id="available-studies-can-be-listed-by" class="section level3">
+<h3 class="hasAnchor">
+<a href="#available-studies-can-be-listed-by" class="anchor"></a>available studies can be listed by:</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(con<span class="op">$</span>availableStudies))</code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">study_name</th>
+<th align="left">title</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">cvd232</td>
+<td align="left">Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.</td>
+</tr>
+<tr class="even">
+<td align="left">cvd234</td>
+<td align="left">Zolla-Pazner_Mab_Test1</td>
+</tr>
+<tr class="odd">
+<td align="left">cvd235</td>
+<td align="left">Weiss mAbs potency</td>
+</tr>
+<tr class="even">
+<td align="left">cvd236</td>
+<td align="left">neutralization assays</td>
+</tr>
+<tr class="odd">
+<td align="left">cvd238</td>
+<td align="left">HIV-1 neutralization responses in chronically infected individuals</td>
+</tr>
+<tr class="even">
+<td align="left">cvd239</td>
+<td align="left">Lehner_Thorstensson_Allovac</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="available-groups-can-be-listed-by" class="section level3">
+<h3 class="hasAnchor">
+<a href="#available-groups-can-be-listed-by" class="anchor"></a>available groups can be listed by:</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(con<span class="op">$</span>availableGroups)</code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">id</th>
+<th align="left">label</th>
+<th align="left">description</th>
+<th align="left">createdBy</th>
+<th align="left">shared</th>
+<th align="right">n</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">210</td>
+<td align="left">cavd 242</td>
+<td align="left">Shattock_Cole_ZM96_2</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">30</td>
+</tr>
+<tr class="even">
+<td align="right">208</td>
+<td align="left">mice</td>
+<td align="left">only mice</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">51</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="congetstudycvd408-will-create-an-instance-of-cvd408-" class="section level3">
+<h3 class="hasAnchor">
+<a href="#congetstudycvd408-will-create-an-instance-of-cvd408-" class="anchor"></a><code>con$getStudy("cvd408")</code> will create an instance of <code>cvd408</code>.</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">"cvd408"</span>)
 cvd408
 <span class="co">#&gt; &lt;DataSpaceStudy&gt;</span>
 <span class="co">#&gt;   Study: cvd408</span>
@@ -165,12 +250,11 @@ cvd408
 <span class="co">#&gt;     - NAb</span>
 <span class="kw">class</span>(cvd408)
 <span class="co">#&gt; [1] "DataSpaceStudy" "R6"</span></code></pre></div>
-<p><code>con$getStudy("cvd408")</code> will create an instance of <code>cvd408</code>.</p>
 </div>
-<div id="datasets-can-be-listed-by" class="section level3">
+<div id="available-datasets-can-be-listed-by" class="section level3">
 <h3 class="hasAnchor">
-<a href="#datasets-can-be-listed-by" class="anchor"></a>datasets can be listed by:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408$availableDatasets
+<a href="#available-datasets-can-be-listed-by" class="anchor"></a>available datasets can be listed by:</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408<span class="op">$</span>availableDatasets
 <span class="co">#&gt;           name                 label   n</span>
 <span class="co">#&gt; 1 Demographics          Demographics  20</span>
 <span class="co">#&gt; 2          NAb Neutralizing antibody 839</span></code></pre></div>
@@ -179,7 +263,7 @@ cvd408
 <div id="neutralizing-antibody-dataset-nab-can-be-retreived-by" class="section level3">
 <h3 class="hasAnchor">
 <a href="#neutralizing-antibody-dataset-nab-can-be-retreived-by" class="anchor"></a>neutralizing antibody dataset (<code>NAb</code>) can be retreived by:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>cvd408$<span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
 <span class="kw">dim</span>(NAb)
 <span class="co">#&gt; [1] 839  28</span>
 <span class="kw">colnames</span>(NAb)

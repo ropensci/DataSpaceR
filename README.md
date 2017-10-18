@@ -60,7 +60,12 @@ See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc) 
 Usage
 -----
 
-The general idea is that the user creates an instance of an `DataSpaceConnection` class. The instance configures itself to connect to a specific study, and datasets can be retrieved by name.
+The general idea is that the user:
+
+1.  creates an instance of `DataSpaceConnection` class via `connectDS`
+2.  browses available studies and groups in the instance via `availableStudies` and `availableGroups`
+3.  creates a connection to a specific study or a group via `getStudy`
+4.  retrieves datasets by name via `getDataset`
 
 ### for example:
 
@@ -77,9 +82,38 @@ con
 #>     - 1506 subjects
 #>     - 4 assays
 #>     - 227607 data points
+#>   Available groups: 2
 ```
 
 `connectDS()` will create a connection to DataSpace. The user needs credentials stored in a `netrc` file to access the database.
+
+### available studies can be listed by:
+
+``` r
+knitr::kable(head(con$availableStudies))
+```
+
+| study\_name | title                                                                                     |
+|:------------|:------------------------------------------------------------------------------------------|
+| cvd232      | Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques. |
+| cvd234      | Zolla-Pazner\_Mab\_Test1                                                                  |
+| cvd235      | Weiss mAbs potency                                                                        |
+| cvd236      | neutralization assays                                                                     |
+| cvd238      | HIV-1 neutralization responses in chronically infected individuals                        |
+| cvd239      | Lehner\_Thorstensson\_Allovac                                                             |
+
+### available groups can be listed by:
+
+``` r
+knitr::kable(con$availableGroups)
+```
+
+|   id| label    | description             | createdBy | shared |    n|
+|----:|:---------|:------------------------|:----------|:-------|----:|
+|  210| cavd 242 | Shattock\_Cole\_ZM96\_2 | readjk    | FALSE  |   30|
+|  208| mice     | only mice               | readjk    | FALSE  |   51|
+
+### `con$getStudy("cvd408")` will create an instance of `cvd408`.
 
 ``` r
 cvd408 <- con$getStudy("cvd408")
@@ -94,9 +128,7 @@ class(cvd408)
 #> [1] "DataSpaceStudy" "R6"
 ```
 
-`con$getStudy("cvd408")` will create an instance of `cvd408`.
-
-### datasets can be listed by:
+### available datasets can be listed by:
 
 ``` r
 cvd408$availableDatasets

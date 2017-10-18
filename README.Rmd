@@ -86,9 +86,12 @@ for more information about `netrc`.
 
 ## Usage
 
-The general idea is that the user creates an instance of an 
-`DataSpaceConnection` class. The instance configures itself to connect to 
-a specific study, and datasets can be retrieved by name.
+The general idea is that the user:
+
+1. creates an instance of `DataSpaceConnection` class via `connectDS`
+2. browses available studies and groups in the instance via `availableStudies` and `availableGroups`
+3. creates a connection to  a specific study or a group via `getStudy`
+4. retrieves datasets by name via `getDataset`
 
 
 ### for example:
@@ -103,16 +106,31 @@ con
 `connectDS()` will create a connection to DataSpace. The user needs 
 credentials stored in a `netrc` file to access the database. 
 
+
+### available studies can be listed by:
+
+```{r}
+knitr::kable(head(con$availableStudies))
+```
+
+
+### available groups can be listed by:
+
+```{r}
+knitr::kable(con$availableGroups)
+```
+
+
+### `con$getStudy("cvd408")` will create an instance of `cvd408`.
+
 ```{r}
 cvd408 <- con$getStudy("cvd408")
 cvd408
 class(cvd408)
 ```
 
-`con$getStudy("cvd408")` will create an instance of `cvd408`.
 
-
-### datasets can be listed by:
+### available datasets can be listed by:
 
 ```{r}
 cvd408$availableDatasets
