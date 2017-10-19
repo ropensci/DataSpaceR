@@ -108,7 +108,7 @@ DataSpaceStudy <- R6Class(
                        gsub("^/", "", private$.config$labkey.url.path))
 
       cat("<DataSpaceStudy>")
-      if (is.na(private$.group)) {
+      if (is.null(private$.group)) {
         cat("\n  Study:", study)
       } else {
         cat("\n  Group:", private$.group)
@@ -141,8 +141,11 @@ DataSpaceStudy <- R6Class(
       }
 
       viewName <- NULL
-      if (!is.na(private$.group)) {
-        colFilter <- rbind(colFilter, makeFilter(c(paste0("SubjectId/", private$.group), "EQUAL", private$.group)))
+      if (!is.null(private$.group)) {
+        colFilter <- rbind(colFilter,
+                           makeFilter(c(paste0("SubjectId/", private$.group),
+                                        "EQUAL",
+                                        private$.group)))
       }
 
       dataset <- labkey.selectRows(

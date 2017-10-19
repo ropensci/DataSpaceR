@@ -134,7 +134,7 @@ makeCountQuery <- function(dataset, group) {
           "FROM",
             dataset)
 
-  if (!is.na(group)) {
+  if (!is.null(group)) {
     query <- paste(
       query,
       "WHERE",

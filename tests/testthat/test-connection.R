@@ -72,6 +72,13 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_gt(nrow(con$availableStudies), 0)
     })
 
+    test_that("`availableGroups`", {
+      expect_is(con$availableGroups, "data.frame")
+      expect_equal(names(con$availableGroups),
+                   c("id", "label", "description", "createdBy", "shared", "n"))
+      expect_gt(nrow(con$availableGroups), 0)
+    })
+
     test_that("`getStudy`", {
       cavd <- try(con$getStudy(""), silent = TRUE)
 

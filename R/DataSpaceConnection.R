@@ -99,9 +99,10 @@ DataSpaceConnection <- R6Class(
       if (is.number(groupId)) {
         assert_that(groupId %in% private$.availableGroups$id,
                     msg = paste(groupId, "is not a valid group ID"))
+        group <- private$.availableGroups[private$.availableGroups$id == groupId, "label"][1]
+      } else {
+        group <- NULL
       }
-
-      group <- private$.availableGroups[private$.availableGroups$id == groupId, "label"][1]
 
       DataSpaceStudy$new(study, private$.config, group)
     }

@@ -75,6 +75,10 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
         expect_gt(nrow(cavd$treatmentArm), 0)
       })
 
+      test_that("`group`", {
+        expect_equal(cavd$group, groupLabel)
+      })
+
       test_that("`getDataset`", {
         for (datasetName in cavd$availableDatasets$name) {
           dataset <- try(cavd$getDataset(datasetName = datasetName), silent = TRUE)
