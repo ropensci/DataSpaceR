@@ -55,8 +55,8 @@ cvd256
 `con$getStudy` creates a connection to the study `cvd256`. Printing the object  shows where it's connected, to what study, and the available datasets.
 
 ```{r other-fields}
-cvd256$availableDatasets
-cvd256$treatmentArm
+knitr::kable(cvd256$availableDatasets)
+knitr::kable(cvd256$treatmentArm)
 ```
 
 Available datasets and treatment arm information for the connection can be access by `availableDatasets` and `treatmentArm`.
@@ -77,7 +77,7 @@ The *cvd256* object is an [`R6`](https://cran.r-project.org/web/packages/R6/) cl
 We can get detailed variable information using `getVariableInfo`.
 
 ```{r getVariableInfo}
-str(cvd256$getVariableInfo("NAb"))
+knitr::kable(cvd256$getVariableInfo("NAb"))
 ```
 
 To get only a subset of the data and speed up the download, filters can be passed to `getDataset`. The filters are created using the `makeFilter` function of the `Rlabkey` package.
@@ -106,7 +106,7 @@ You can get a list of datasets available accross all studies.
 
 ```{r cross-connection-print}
 cavd
-cavd$availableDatasets
+knitr::kable(cavd$availableDatasets)
 ```
 
 In cross-study connections, `getDataset` will combine the requested datasets. Note that in most cases the datasets will have too many subjects, making the filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
@@ -116,6 +116,29 @@ conFilter <- makeFilter(c("species", "EQUAL", "Human"))
 human <- cavd$getDataset("Demographics", colFilter = conFilter)
 dim(human)
 colnames(human)
+```
+
+
+## Connect to a saved group
+
+We can browse available saved groups via `availableGroups`.
+
+```{r availableGroups}
+con$availableGroups
+```
+
+To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to `mice` group which has group ID 208 by `getStudy`.
+
+```{r group-connection}
+mice <- con$getStudy("", groupId = 208)
+mice
+```
+
+Retrieving a dataset is the same as before.
+
+```{r group-connection-nab}
+NAb_mice <- mice$getDataset("NAb")
+dim(NAb_mice)
 ```
 
 

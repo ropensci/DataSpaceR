@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ju Yeong Kim" />
 
-<meta name="date" content="2017-09-25" />
+<meta name="date" content="2017-10-23" />
 
 <title>A Simple Introduction to the DataSpaceR Package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">A Simple Introduction to the DataSpaceR Package</h1>
 <h4 class="author"><em>Ju Yeong Kim</em></h4>
-<h4 class="date"><em>2017-09-25</em></h4>
+<h4 class="date"><em>2017-10-23</em></h4>
 
 
 
@@ -101,10 +101,11 @@ con</code></pre></div>
 ##   Available studies: 276
 ##     - 49 studies with data
 ##     - 1506 subjects
-##     - 4 Assays
-##     - 227607 Data points</code></pre>
+##     - 4 assays
+##     - 227607 data points
+##   Available groups: 2</code></pre>
 <p>The call to <code>connectDS</code> instantiates the connection. Printing the object shows where it’s connected and the available studies.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256 &lt;-<span class="st"> </span>con$<span class="kw">getStudy</span>(<span class="st">&quot;cvd256&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;cvd256&quot;</span>)
 cvd256</code></pre></div>
 <pre><code>## &lt;DataSpaceStudy&gt;
 ##   Study: cvd256
@@ -114,27 +115,76 @@ cvd256</code></pre></div>
 ##     - Demographics
 ##     - NAb</code></pre>
 <p><code>con$getStudy</code> creates a connection to the study <code>cvd256</code>. Printing the object shows where it’s connected, to what study, and the available datasets.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256$availableDatasets</code></pre></div>
-<pre><code>##           name                      label     n
-## 1         BAMA Binding Ab multiplex assay 26960
-## 2 Demographics               Demographics   121
-## 3          NAb      Neutralizing antibody  1419</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256$treatmentArm</code></pre></div>
-<pre><code>##          arm_id arm_part arm_group arm_name randomization     coded_label
-## 1 cvd256-NA-A-A       NA         A        A       Vaccine Group A Vaccine
-## 2 cvd256-NA-B-B       NA         B        B       Vaccine Group B Vaccine
-##   last_day
-## 1      168
-## 2      168
-##                                                                                             description
-## 1     DNA-C 4 mg administered IM at weeks 0, 4, and 8 AND NYVAC-C 10^7pfu/mL administered IM at week 24
-## 2 DNA-C 4 mg administered IM at weeks 0 and 4 AND NYVAC-C 10^7pfu/mL administered IM at weeks 20 and 24</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(cvd256<span class="op">$</span>availableDatasets)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">BAMA</td>
+<td align="left">Binding Ab multiplex assay</td>
+<td align="right">26960</td>
+</tr>
+<tr class="even">
+<td align="left">Demographics</td>
+<td align="left">Demographics</td>
+<td align="right">121</td>
+</tr>
+<tr class="odd">
+<td align="left">NAb</td>
+<td align="left">Neutralizing antibody</td>
+<td align="right">1419</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(cvd256<span class="op">$</span>treatmentArm)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">arm_id</th>
+<th align="left">arm_part</th>
+<th align="left">arm_group</th>
+<th align="left">arm_name</th>
+<th align="left">randomization</th>
+<th align="left">coded_label</th>
+<th align="right">last_day</th>
+<th align="left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">cvd256-NA-A-A</td>
+<td align="left">NA</td>
+<td align="left">A</td>
+<td align="left">A</td>
+<td align="left">Vaccine</td>
+<td align="left">Group A Vaccine</td>
+<td align="right">168</td>
+<td align="left">DNA-C 4 mg administered IM at weeks 0, 4, and 8 AND NYVAC-C 10^7pfu/mL administered IM at week 24</td>
+</tr>
+<tr class="even">
+<td align="left">cvd256-NA-B-B</td>
+<td align="left">NA</td>
+<td align="left">B</td>
+<td align="left">B</td>
+<td align="left">Vaccine</td>
+<td align="left">Group B Vaccine</td>
+<td align="right">168</td>
+<td align="left">DNA-C 4 mg administered IM at weeks 0 and 4 AND NYVAC-C 10^7pfu/mL administered IM at weeks 20 and 24</td>
+</tr>
+</tbody>
+</table>
 <p>Available datasets and treatment arm information for the connection can be access by <code>availableDatasets</code> and <code>treatmentArm</code>.</p>
 </div>
 <div id="fetching-datasets" class="section level2">
 <h2>Fetching datasets</h2>
 <p>We can grab any of the datasets listed in the connection (<code>availableDatasets</code>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>cvd256$<span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>)
 <span class="kw">dim</span>(NAb)</code></pre></div>
 <pre><code>## [1] 1419   28</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(NAb)</code></pre></div>
@@ -154,19 +204,194 @@ cvd256</code></pre></div>
 ## [27] &quot;slope&quot;                  &quot;vaccine_matched&quot;</code></pre>
 <p>The <em>cvd256</em> object is an <a href="https://cran.r-project.org/web/packages/R6/"><code>R6</code></a> class, so it behaves like a true object. Functions (like <code>getDataset</code>) are members of the object, thus the <code>$</code> semantics to access member functions.</p>
 <p>We can get detailed variable information using <code>getVariableInfo</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd256$<span class="kw">getVariableInfo</span>(<span class="st">&quot;NAb&quot;</span>))</code></pre></div>
-<pre><code>## 'data.frame':    28 obs. of  4 variables:
-##  $ fieldName  : chr  &quot;ParticipantId&quot; &quot;visit_day&quot; &quot;assay_identifier&quot; &quot;summary_level&quot; ...
-##  $ caption    : chr  &quot;Participant ID&quot; &quot;Visit Day&quot; &quot;Assay identifier&quot; &quot;Data summary level&quot; ...
-##  $ type       : chr  &quot;Text (String)&quot; &quot;Integer&quot; &quot;Text (String)&quot; &quot;Text (String)&quot; ...
-##  $ description: chr  &quot;Subject identifier&quot; &quot;Target study day defined for a study visit. Study days are relative to Day 0, where Day 0 is typically defined &quot;| __truncated__ &quot;Name identifying assay&quot; &quot;Defines the level at which the magnitude or response has been summarized (e.g. summarized at the isolate level).&quot; ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(cvd256<span class="op">$</span><span class="kw">getVariableInfo</span>(<span class="st">&quot;NAb&quot;</span>))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">fieldName</th>
+<th align="left">caption</th>
+<th align="left">type</th>
+<th align="left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ParticipantId</td>
+<td align="left">Participant ID</td>
+<td align="left">Text (String)</td>
+<td align="left">Subject identifier</td>
+</tr>
+<tr class="even">
+<td align="left">visit_day</td>
+<td align="left">Visit Day</td>
+<td align="left">Integer</td>
+<td align="left">Target study day defined for a study visit. Study days are relative to Day 0, where Day 0 is typically defined as enrollment and/or first injection.</td>
+</tr>
+<tr class="odd">
+<td align="left">assay_identifier</td>
+<td align="left">Assay identifier</td>
+<td align="left">Text (String)</td>
+<td align="left">Name identifying assay</td>
+</tr>
+<tr class="even">
+<td align="left">summary_level</td>
+<td align="left">Data summary level</td>
+<td align="left">Text (String)</td>
+<td align="left">Defines the level at which the magnitude or response has been summarized (e.g. summarized at the isolate level).</td>
+</tr>
+<tr class="odd">
+<td align="left">specimen_type</td>
+<td align="left">Specimen type</td>
+<td align="left">Text (String)</td>
+<td align="left">The type of specimen used in the assay. For nAb assays, this is generally serum or plasma.</td>
+</tr>
+<tr class="even">
+<td align="left">antigen</td>
+<td align="left">Antigen name</td>
+<td align="left">Text (String)</td>
+<td align="left">The name of the antigen (virus) being tested.</td>
+</tr>
+<tr class="odd">
+<td align="left">antigen_type</td>
+<td align="left">Antigen type</td>
+<td align="left">Text (String)</td>
+<td align="left">The standardized term for the type of virus used in the construction of the nAb antigen.</td>
+</tr>
+<tr class="even">
+<td align="left">virus</td>
+<td align="left">Virus name</td>
+<td align="left">Text (String)</td>
+<td align="left">The term for the virus (antigen) being tested.</td>
+</tr>
+<tr class="odd">
+<td align="left">virus_type</td>
+<td align="left">Virus type</td>
+<td align="left">Text (String)</td>
+<td align="left">The type of virus used in the construction of the nAb antigen.</td>
+</tr>
+<tr class="even">
+<td align="left">virus_insert_name</td>
+<td align="left">Virus insert name</td>
+<td align="left">Text (String)</td>
+<td align="left">The amino acid sequence inserted in the virus construct.</td>
+</tr>
+<tr class="odd">
+<td align="left">clade</td>
+<td align="left">Virus clade</td>
+<td align="left">Text (String)</td>
+<td align="left">The clade (gene subtype) of the virus (antigen) being tested.</td>
+</tr>
+<tr class="even">
+<td align="left">neutralization_tier</td>
+<td align="left">Neutralization tier</td>
+<td align="left">Text (String)</td>
+<td align="left">A classification specific to HIV NAb assay design, in which an antigen is assessed for its ease of neutralization (1=most easily neutralized, 3=least easily neutralized)</td>
+</tr>
+<tr class="odd">
+<td align="left">tier_clade_virus</td>
+<td align="left">Neutralization tier + Antigen clade + Virus</td>
+<td align="left">Text (String)</td>
+<td align="left">A combination of neutralization tier, antigen clade, and virus used for filtering.</td>
+</tr>
+<tr class="even">
+<td align="left">target_cell</td>
+<td align="left">Target cell</td>
+<td align="left">Text (String)</td>
+<td align="left">The cell line used in the assay to determine infection (lack of neutralization). Generally TZM-bl or A3R5, but can also be other cell lines or non-engineered cells.</td>
+</tr>
+<tr class="odd">
+<td align="left">initial_dilution</td>
+<td align="left">Initial dilution</td>
+<td align="left">Number (Double)</td>
+<td align="left">Indicates the initial specimen dilution.</td>
+</tr>
+<tr class="even">
+<td align="left">titer_ic50</td>
+<td align="left">Titer IC50</td>
+<td align="left">Number (Double)</td>
+<td align="left">The half maximal inhibitory concentration (IC50).</td>
+</tr>
+<tr class="odd">
+<td align="left">titer_ic80</td>
+<td align="left">Titer IC80</td>
+<td align="left">Number (Double)</td>
+<td align="left">The 80% maximal inhibitory concentration (IC80).</td>
+</tr>
+<tr class="even">
+<td align="left">response_call</td>
+<td align="left">Response call</td>
+<td align="left">True/False (Boolean)</td>
+<td align="left">Indicates if neutralization is detected.</td>
+</tr>
+<tr class="odd">
+<td align="left">nab_lab_source_key</td>
+<td align="left">Data provenance</td>
+<td align="left">Integer</td>
+<td align="left">Details regarding the provenance of the assay results.</td>
+</tr>
+<tr class="even">
+<td align="left">lab_code</td>
+<td align="left">Lab ID</td>
+<td align="left">Text (String)</td>
+<td align="left">A code indicating the lab performing the assay.</td>
+</tr>
+<tr class="odd">
+<td align="left">exp_assayid</td>
+<td align="left">Experimental Assay Design Code</td>
+<td align="left">Integer</td>
+<td align="left">Unique ID assigned to the experiment design of the assay for tracking purposes.</td>
+</tr>
+<tr class="even">
+<td align="left">titer_ID50</td>
+<td align="left">Titer ID50</td>
+<td align="left">Number (Double)</td>
+<td align="left">The adjusted value of 50% maximal inhibitory dilution (ID50).</td>
+</tr>
+<tr class="odd">
+<td align="left">titer_ID80</td>
+<td align="left">Titer ID80</td>
+<td align="left">Number (Double)</td>
+<td align="left">The adjusted value of 80% maximal inhibitory dilution (ID80).</td>
+</tr>
+<tr class="even">
+<td align="left">nab_response_ID50</td>
+<td align="left">Response call ID50</td>
+<td align="left">True/False (Boolean)</td>
+<td align="left">Indicates if neutralization is detected based on ID50 titer.</td>
+</tr>
+<tr class="odd">
+<td align="left">nab_response_ID80</td>
+<td align="left">Response call ID80</td>
+<td align="left">True/False (Boolean)</td>
+<td align="left">Indicates if neutralization is detected based on ID80 titer.</td>
+</tr>
+<tr class="even">
+<td align="left">slope</td>
+<td align="left">Slope</td>
+<td align="left">Number (Double)</td>
+<td align="left">The slope calculated using the difference between 50% and 80% neutralization.</td>
+</tr>
+<tr class="odd">
+<td align="left">vaccine_matched</td>
+<td align="left">Antigen vaccine match indicator</td>
+<td align="left">True/False (Boolean)</td>
+<td align="left">Indicates if the interactive part of the antigen was designed to match the immunogen in the vaccine.</td>
+</tr>
+<tr class="even">
+<td align="left">ParticipantVisit/Visit</td>
+<td align="left">Visit</td>
+<td align="left">int</td>
+<td align="left">The ID of the visit.</td>
+</tr>
+</tbody>
+</table>
 <p>To get only a subset of the data and speed up the download, filters can be passed to <code>getDataset</code>. The filters are created using the <code>makeFilter</code> function of the <code>Rlabkey</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Rlabkey)</code></pre></div>
 <pre><code>## Loading required package: RCurl</code></pre>
 <pre><code>## Loading required package: bitops</code></pre>
 <pre><code>## Loading required package: rjson</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256Filter &lt;-<span class="st"> </span><span class="kw">makeFilter</span>(<span class="kw">c</span>(<span class="st">&quot;visit_day&quot;</span>, <span class="st">&quot;EQUAL&quot;</span>, <span class="st">&quot;0&quot;</span>))
-NAb_day0 &lt;-<span class="st"> </span>cvd256$<span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>, <span class="dt">colFilter =</span> cvd256Filter)
+NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>, <span class="dt">colFilter =</span> cvd256Filter)
 <span class="kw">dim</span>(NAb_day0)</code></pre></div>
 <pre><code>## [1] 709  28</code></pre>
 <p>See <code>?makeFilter</code> for more information on the syntax.</p>
@@ -174,7 +399,7 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256$<span class="kw">getDataset</span>
 <div id="cross-study-connection" class="section level2">
 <h2>Cross-study connection</h2>
 <p>To fetch data from multiple studies, simply create a connection at the project level.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cavd &lt;-<span class="st"> </span>con$<span class="kw">getStudy</span>(<span class="st">&quot;&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cavd &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;&quot;</span>)</code></pre></div>
 <p>This will instantiate a connection at the <code>CAVD</code> level. Most functions work cross study connections just like they do on single studies.</p>
 <p>You can get a list of datasets available accross all studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cavd</code></pre></div>
@@ -187,16 +412,46 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256$<span class="kw">getDataset</span>
 ##     - ELISPOT
 ##     - ICS
 ##     - NAb</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cavd$availableDatasets</code></pre></div>
-<pre><code>##           name                           label      n
-## 1         BAMA      Binding Ab multiplex assay  66063
-## 2 Demographics                    Demographics   1506
-## 3      ELISPOT        Enzyme-Linked ImmunoSpot   5610
-## 4          ICS Intracellular Cytokine Staining 114474
-## 5          NAb           Neutralizing antibody  41460</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(cavd<span class="op">$</span>availableDatasets)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">BAMA</td>
+<td align="left">Binding Ab multiplex assay</td>
+<td align="right">66063</td>
+</tr>
+<tr class="even">
+<td align="left">Demographics</td>
+<td align="left">Demographics</td>
+<td align="right">1506</td>
+</tr>
+<tr class="odd">
+<td align="left">ELISPOT</td>
+<td align="left">Enzyme-Linked ImmunoSpot</td>
+<td align="right">5610</td>
+</tr>
+<tr class="even">
+<td align="left">ICS</td>
+<td align="left">Intracellular Cytokine Staining</td>
+<td align="right">114474</td>
+</tr>
+<tr class="odd">
+<td align="left">NAb</td>
+<td align="left">Neutralizing antibody</td>
+<td align="right">41460</td>
+</tr>
+</tbody>
+</table>
 <p>In cross-study connections, <code>getDataset</code> will combine the requested datasets. Note that in most cases the datasets will have too many subjects, making the filtering of the data a necessity. The <code>colFilter</code> argument can be used here, as described in the <code>getDataset</code> section.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conFilter &lt;-<span class="st"> </span><span class="kw">makeFilter</span>(<span class="kw">c</span>(<span class="st">&quot;species&quot;</span>, <span class="st">&quot;EQUAL&quot;</span>, <span class="st">&quot;Human&quot;</span>))
-human &lt;-<span class="st"> </span>cavd$<span class="kw">getDataset</span>(<span class="st">&quot;Demographics&quot;</span>, <span class="dt">colFilter =</span> conFilter)
+human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;Demographics&quot;</span>, <span class="dt">colFilter =</span> conFilter)
 <span class="kw">dim</span>(human)</code></pre></div>
 <pre><code>## [1] 191  31</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(human)</code></pre></div>
@@ -217,62 +472,83 @@ human &lt;-<span class="st"> </span>cavd$<span class="kw">getDataset</span>(<spa
 ## [29] &quot;study_short_name&quot;                &quot;study_grant_pi_name&quot;            
 ## [31] &quot;study_strategy&quot;</code></pre>
 </div>
+<div id="connect-to-a-saved-group" class="section level2">
+<h2>Connect to a saved group</h2>
+<p>We can browse available saved groups via <code>availableGroups</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">con<span class="op">$</span>availableGroups</code></pre></div>
+<pre><code>##    id    label          description createdBy shared  n
+## 1 210 cavd 242 Shattock_Cole_ZM96_2    readjk  FALSE 30
+## 2 208     mice            only mice    readjk  FALSE 51</code></pre>
+<p>To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to <code>mice</code> group which has group ID 208 by <code>getStudy</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mice &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;&quot;</span>, <span class="dt">groupId =</span> <span class="dv">208</span>)
+mice</code></pre></div>
+<pre><code>## &lt;DataSpaceStudy&gt;
+##   Group: mice
+##   URL: https://dataspace.cavd.org/CAVD
+##   Available datasets:
+##     - Demographics
+##     - NAb</code></pre>
+<p>Retrieving a dataset is the same as before.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb_mice &lt;-<span class="st"> </span>mice<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>)
+<span class="kw">dim</span>(NAb_mice)</code></pre></div>
+<pre><code>## [1] 508  28</code></pre>
+</div>
 <div id="caching" class="section level2">
 <h2>Caching</h2>
 <div id="connect-to-cvd408-study" class="section level3">
 <h3>Connect to <code>cvd408</code> study</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pryr)
-cvd408 &lt;-<span class="st"> </span>con$<span class="kw">getStudy</span>(<span class="st">&quot;cvd408&quot;</span>)
+cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;cvd408&quot;</span>)
 
-<span class="kw">str</span>(cvd408$cache)</code></pre></div>
+<span class="kw">str</span>(cvd408<span class="op">$</span>cache)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 212 kB</code></pre>
+<pre><code>## 240 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset" class="section level3">
 <h3>Retrieve NAb dataset</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ptm &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
-<span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
-<span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
+<span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
+<span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.309   0.021   0.897</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
+##   0.556   0.033   1.170</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
 ##   ..$ args:List of 2
 ##   ..$ data:'data.frame': 839 obs. of  28 variables:</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 381 kB</code></pre>
+<pre><code>## 409 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset-again" class="section level3">
 <h3>Retrieve NAb dataset again</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ptm &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
-<span class="kw">invisible</span>(cvd408$<span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
-<span class="kw">proc.time</span>() -<span class="st"> </span>ptm</code></pre></div>
+<span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
+<span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.002   0.000   0.002</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
+##   0.004   0.000   0.005</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
 ##   ..$ args:List of 2
 ##   ..$ data:'data.frame': 839 obs. of  28 variables:</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 396 kB</code></pre>
+<pre><code>## 427 kB</code></pre>
 </div>
 <div id="clear-cache" class="section level3">
 <h3>Clear cache</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408$<span class="kw">clearCache</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408<span class="op">$</span><span class="kw">clearCache</span>()
 
-<span class="kw">str</span>(cvd408$cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
+<span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 227 kB</code></pre>
+<pre><code>## 258 kB</code></pre>
 </div>
 </div>
 <div id="session-information" class="section level2">
 <h2>Session information</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
-<pre><code>## R version 3.4.1 (2017-06-30)
+<pre><code>## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-apple-darwin16.7.0 (64-bit)
 ## Running under: macOS Sierra 10.12.6
 ## 
@@ -287,17 +563,17 @@ cvd408 &lt;-<span class="st"> </span>con$<span class="kw">getStudy</span>(<span 
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] pryr_0.1.2       Rlabkey_2.1.135  rjson_0.2.15     RCurl_1.95-4.8  
-## [5] bitops_1.0-6     DataSpaceR_0.3.0
+## [1] pryr_0.1.2       Rlabkey_2.1.136  rjson_0.2.15     RCurl_1.95-4.8  
+## [5] bitops_1.0-6     DataSpaceR_0.4.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.12     rstudioapi_0.7   knitr_1.17       xml2_1.1.1      
+##  [1] Rcpp_0.12.13     rstudioapi_0.7   knitr_1.17       xml2_1.1.1      
 ##  [5] magrittr_1.5     roxygen2_6.0.1   devtools_1.13.3  R6_2.2.2        
-##  [9] stringr_1.2.0    tools_3.4.1      withr_2.0.0      htmltools_0.3.6 
-## [13] commonmark_1.4   yaml_2.1.14      digest_0.6.12    assertthat_0.2.0
-## [17] rprojroot_1.2    crayon_1.3.4     codetools_0.2-15 testthat_1.0.2  
-## [21] memoise_1.1.0    evaluate_0.10.1  rmarkdown_1.6    stringi_1.1.5   
-## [25] compiler_3.4.1   desc_1.1.1       backports_1.1.0</code></pre>
+##  [9] highr_0.6        stringr_1.2.0    tools_3.4.2      withr_2.0.0     
+## [13] htmltools_0.3.6  commonmark_1.4   yaml_2.1.14      digest_0.6.12   
+## [17] assertthat_0.2.0 rprojroot_1.2    crayon_1.3.4     codetools_0.2-15
+## [21] testthat_1.0.2   memoise_1.1.0    evaluate_0.10.1  rmarkdown_1.6   
+## [25] stringi_1.1.5    compiler_3.4.2   desc_1.1.1       backports_1.1.1</code></pre>
 </div>
 
 

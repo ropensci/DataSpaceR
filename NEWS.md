@@ -1,3 +1,8 @@
+# DataSpaceR 0.4.1
+
+* Included additional columns (`short_name`, `type`, `status`, `stage`, `species`, `start_date`, `strategy`) in `availableStudies`.
+* Updated the introductory vignette.
+
 # DataSpaceR 0.4.0
 
 * Added `availableGroups` field to `DataSpaceConnection` class.

@@ -93,14 +93,14 @@ con
 knitr::kable(head(con$availableStudies))
 ```
 
-| study\_name | title                                                                                     |
-|:------------|:------------------------------------------------------------------------------------------|
-| cvd232      | Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques. |
-| cvd234      | Zolla-Pazner\_Mab\_Test1                                                                  |
-| cvd235      | Weiss mAbs potency                                                                        |
-| cvd236      | neutralization assays                                                                     |
-| cvd238      | HIV-1 neutralization responses in chronically infected individuals                        |
-| cvd239      | Lehner\_Thorstensson\_Allovac                                                             |
+| study\_name | short\_name                    | title                                                                                     | type               | status   | stage            | species            | start\_date | strategy                             |
+|:------------|:-------------------------------|:------------------------------------------------------------------------------------------|:-------------------|:---------|:-----------------|:-------------------|:------------|:-------------------------------------|
+| cvd232      | Parks\_RV\_232                 | Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques. | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-11-24  | Vector vaccines (viral or bacterial) |
+| cvd234      | Zolla-Pazner\_Mab\_test1 Study | Zolla-Pazner\_Mab\_Test1                                                                  | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         |
+| cvd235      | mAbs potency                   | Weiss mAbs potency                                                                        | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2008-08-21  | Prophylactic neutralizing Ab         |
+| cvd236      | neutralization assays          | neutralization assays                                                                     | Antibody Screening | Active   | In Progress      | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         |
+| cvd238      | Gallo\_PA\_238                 | HIV-1 neutralization responses in chronically infected individuals                        | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-01-08  | Prophylactic neutralizing Ab         |
+| cvd239      | CAVIMC-015                     | Lehner\_Thorstensson\_Allovac                                                             | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-01-08  | Protein and peptide vaccines         |
 
 ### available groups can be listed by:
 

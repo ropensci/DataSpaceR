@@ -68,7 +68,8 @@ if ("DataSpaceConnection" %in% class(con)) {
     test_that("`availableStudies`", {
       expect_is(con$availableStudies, "data.frame")
       expect_equal(names(con$availableStudies),
-                   c("study_name", "title"))
+                   c("study_name", "short_name", "title", "type", "status",
+                     "stage", "species", "start_date", "strategy"))
       expect_gt(nrow(con$availableStudies), 0)
     })
 

@@ -125,13 +125,15 @@ DataSpaceConnection <- R6Class(
     .availableGroups = data.frame(),
 
     .getAvailableStudies = function() {
+      colSelect <- c("study_name", "short_name", "title", "type", "status",
+                     "stage", "species", "start_date", "strategy")
       private$.availableStudies <-
         labkey.selectRows(
           baseUrl = private$.config$labkey.url.base,
           folderPath = "/CAVD",
           schemaName = "CDS",
           queryName = "study",
-          colSelect = c("study_name", "title"),
+          colSelect = colSelect,
           colNameOpt = "fieldname"
         )
     },
