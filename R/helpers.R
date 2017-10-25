@@ -1,11 +1,17 @@
 getUrlBase <- function(onStaging) {
+  production <- "https://dataspace.cavd.org"
+  staging <- "https://dataspace-staging.cavd.org"
+
   if (exists("labkey.url.base", .GlobalEnv)) {
     labkey.url.base <- get("labkey.url.base", .GlobalEnv)
+    assert_that(labkey.url.base == production || labkey.url.base == staging,
+                msg = paste("labkey.url.base should be either",
+                            production, "or", staging))
   } else {
     if (onStaging) {
-      labkey.url.base <- "https://dataspace-staging.cavd.org"
+      labkey.url.base <- staging
     } else {
-      labkey.url.base <- "https://dataspace.cavd.org"
+      labkey.url.base <- production
     }
   }
 
