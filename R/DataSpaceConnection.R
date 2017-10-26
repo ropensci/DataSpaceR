@@ -35,6 +35,9 @@
 #'
 #'     \code{groupId}: An integer. ID of the group to retrieve.
 #'   }
+#'   \item{\code{refresh()}}{
+#'     Refresh \code{DataSpaceConnection} class.
+#'   }
 #' }
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceR-package}}
 #' @examples
@@ -74,9 +77,7 @@ DataSpaceConnection <- R6Class(
         )
 
       # get extra fields if available
-      try(private$.getAvailableStudies(), silent = TRUE)
-      try(private$.getStats(), silent = TRUE)
-      try(private$.getAvailableGroups(), silent = FALSE)
+      self$refresh()
 
       NULL
     },
@@ -105,6 +106,15 @@ DataSpaceConnection <- R6Class(
       }
 
       DataSpaceStudy$new(study, private$.config, group)
+    },
+    refresh = function() {
+      tries <- c(
+        class(try(private$.getAvailableStudies(), silent = !private$.config$verbose)),
+        class(try(private$.getStats(), silent = !private$.config$verbose)),
+        class(try(private$.getAvailableGroups(), silent = !private$.config$verbose))
+      )
+
+      invisible(!"try-error" %in% tries)
     }
   ),
   active = list(

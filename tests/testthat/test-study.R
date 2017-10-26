@@ -19,6 +19,7 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
                    "config",
                    "study",
                    "clone",
+                   "refresh",
                    "getVariableInfo",
                    "clearCache",
                    "getDataset",
@@ -114,6 +115,13 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
           expect_gt(nrow(dataset), 0)
           expect_equal(names(dataset), c("fieldName", "caption", "type", "description"))
         }
+      })
+
+      test_that("`refresh`", {
+        refresh <- try(cavd$refresh(), silent = TRUE)
+
+        expect_is(refresh, "logical")
+        expect_true(refresh)
       })
     }
   }

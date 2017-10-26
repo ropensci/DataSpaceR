@@ -13,6 +13,7 @@ if ("DataSpaceConnection" %in% class(con)) {
                  "availableStudies",
                  "config",
                  "clone",
+                 "refresh",
                  "getStudy",
                  "print",
                  "initialize")
@@ -89,6 +90,13 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_error(con$getStudy("cvd0"))
       expect_error(con$getStudy("", 0))
       expect_error(con$getStudy("cvd208", 208))
+    })
+
+    test_that("`refresh`", {
+      refresh <- try(con$refresh(), silent = TRUE)
+
+      expect_is(refresh, "logical")
+      expect_true(refresh)
     })
   }
 }

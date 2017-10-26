@@ -52,6 +52,9 @@ The DataSpaceConnection class
 
     \code{groupId}: An integer. ID of the group to retrieve.
   }
+  \item{\code{refresh()}}{
+    Refresh \code{DataSpaceConnection} class.
+  }
 }
 }
 

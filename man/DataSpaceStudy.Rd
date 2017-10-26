@@ -79,6 +79,9 @@ The DataSpaceStudy class
 
     \code{datasetName}: A character. Name of the dataset to retrieve.
   }
+  \item{\code{refresh()}}{
+    Refresh \code{DataSpaceStudy} class.
+  }
 }
 }
 

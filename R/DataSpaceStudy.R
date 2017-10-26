@@ -62,6 +62,9 @@
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
 #'   }
+#'   \item{\code{refresh()}}{
+#'     Refresh \code{DataSpaceStudy} class.
+#'   }
 #' }
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 #' @examples
@@ -97,8 +100,7 @@ DataSpaceStudy <- R6Class(
       private$.group <- group
 
       # get extra fields if available
-      try(private$.getAvailableDatasets(), silent = TRUE)
-      try(private$.getTreatmentArm(), silent = TRUE)
+      self$refresh()
 
       NULL
     },
@@ -190,6 +192,14 @@ DataSpaceStudy <- R6Class(
       rownames(varInfo) <- NULL
 
       varInfo
+    },
+    refresh = function() {
+      tries <- c(
+        class(try(private$.getAvailableDatasets(), silent = private$.config$verbose)),
+        class(try(private$.getTreatmentArm(), silent = private$.config$verbose))
+      )
+
+      invisible(!"try-error" %in% tries)
     }
   ),
   active = list(
