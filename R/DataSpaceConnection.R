@@ -97,6 +97,7 @@ DataSpaceConnection <- R6Class(
                   msg = "groupId should be an integer or null.")
       assert_that((study == "" && is.null(groupId)) || (study == "" && is.number(groupId)) || (study != "" && is.null(groupId)),
                   msg = "Use empty string if you are using a group filter")
+
       if (is.number(groupId)) {
         assert_that(groupId %in% private$.availableGroups$id,
                     msg = paste(groupId, "is not a valid group ID"))
@@ -105,7 +106,15 @@ DataSpaceConnection <- R6Class(
         group <- NULL
       }
 
-      DataSpaceStudy$new(study, private$.config, group)
+      if (study != "") {
+        studyInfo <- as.list(
+          private$.availableStudies[private$.availableStudies$study_name == study, ]
+        )
+      } else {
+        studyInfo <- NULL
+      }
+
+      DataSpaceStudy$new(study, private$.config, group, studyInfo)
     },
     refresh = function() {
       tries <- c(

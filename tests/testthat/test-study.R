@@ -12,6 +12,7 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
   if ("DataSpaceStudy" %in% class(cavd)) {
     con_names <- c(".__enclos_env__",
+                   "studyInfo",
                    "group",
                    "treatmentArm",
                    "cache",
@@ -78,6 +79,16 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
       test_that("`group`", {
         expect_equal(cavd$group, groupLabel)
+      })
+
+
+      test_that("`studyInfo`", {
+        if (study == "") {
+          expect_null(cavd$studyInfo)
+        } else {
+          expect_is(cavd$studyInfo, "list")
+          expect_gt(length(cavd$studyInfo), 0)
+        }
       })
 
       test_that("`getDataset`", {

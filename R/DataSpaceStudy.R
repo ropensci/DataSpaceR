@@ -28,11 +28,14 @@
 #'   \item{\code{group}}{
 #'     A character. The group name.
 #'   }
+#'   \item{\code{studyInfo}}{
+#'     A list. Stores the information about the study.
+#'   }
 #' }
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{\code{initialize(study = NULL, config = NULL, group = NULL)}}{
+#'   \item{\code{initialize(study = NULL, config = NULL, group = NULL, studyInfo = NULL)}}{
 #'     Initialize \code{DataSpaceStudy} class.
 #'     See \code{\link{DataSpaceConnection}}.
 #'   }
@@ -83,7 +86,7 @@
 DataSpaceStudy <- R6Class(
   classname = "DataSpaceStudy",
   public = list(
-    initialize = function(study = NULL, config = NULL, group = NULL) {
+    initialize = function(study = NULL, config = NULL, group = NULL, studyInfo = NULL) {
       assert_that(length(study) <= 1,
                   msg = "For multiple studies, use an empty string and filter the connection.")
       assert_that(!is.null(config))
@@ -98,6 +101,7 @@ DataSpaceStudy <- R6Class(
       private$.study <- tolower(study)
       private$.config <- config
       private$.group <- group
+      private$.studyInfo <- studyInfo
 
       # get extra fields if available
       self$refresh()
@@ -220,6 +224,9 @@ DataSpaceStudy <- R6Class(
     },
     group = function() {
       private$.group
+    },
+    studyInfo = function() {
+      private$.studyInfo
     }
   ),
   private = list(
@@ -229,6 +236,7 @@ DataSpaceStudy <- R6Class(
     .cache = list(),
     .treatmentArm = data.frame(),
     .group = character(),
+    .studyInfo = list(),
 
     .getAvailableDatasets = function() {
       datasetQuery <-

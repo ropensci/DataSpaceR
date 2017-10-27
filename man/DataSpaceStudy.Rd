@@ -43,13 +43,16 @@ The DataSpaceStudy class
   \item{\code{group}}{
     A character. The group name.
   }
+  \item{\code{studyInfo}}{
+    A list. Stores the information about the study.
+  }
 }
 }
 
 \section{Methods}{
 
 \describe{
-  \item{\code{initialize(study = NULL, config = NULL, group = NULL)}}{
+  \item{\code{initialize(study = NULL, config = NULL, group = NULL, studyInfo = NULL)}}{
     Initialize \code{DataSpaceStudy} class.
     See \code{\link{DataSpaceConnection}}.
   }
