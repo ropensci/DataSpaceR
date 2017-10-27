@@ -141,13 +141,14 @@
   <dt><code>treatmentArm</code></dt><dd><p>A data.frame. The table of treatment arm information for the connected
     study. Not available for cross study connection.</p></dd>
   <dt><code>group</code></dt><dd><p>A character. The group name.</p></dd>
+  <dt><code>studyInfo</code></dt><dd><p>A list. Stores the information about the study.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
     <dl class='dl-horizontal'>
-  <dt><code>initialize(study = NULL, config = NULL, group = NULL)</code></dt><dd><p>Initialize <code>DataSpaceStudy</code> class.
+  <dt><code>initialize(study = NULL, config = NULL, group = NULL, studyInfo = NULL)</code></dt><dd><p>Initialize <code>DataSpaceStudy</code> class.
     See <code><a href='DataSpaceConnection.html'>DataSpaceConnection</a></code>.</p></dd>
   <dt><code>print()</code></dt><dd><p>Print <code>DataSpaceStudy</code> class.</p></dd>
   <dt><code>getDataset(datasetName, colFilter = NULL,
@@ -162,6 +163,7 @@
   <dt><code>clearCache()</code></dt><dd><p>Clear <code>cache</code>. Remove downloaded datasets.</p></dd>
   <dt><code>getVariableInfo(datasetName)</code></dt><dd><p>Get variable information.
     <code>datasetName</code>: A character. Name of the dataset to retrieve.</p></dd>
+  <dt><code>refresh()</code></dt><dd><p>Refresh <code>DataSpaceStudy</code> class.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>

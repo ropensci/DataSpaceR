@@ -82,7 +82,7 @@ con
 #>     - 1506 subjects
 #>     - 4 assays
 #>     - 227607 data points
-#>   Available groups: 2
+#>   Available groups: 4
 ```
 
 `connectDS()` will create a connection to DataSpace. The user needs credentials stored in a `netrc` file to access the database.
@@ -111,7 +111,9 @@ knitr::kable(con$availableGroups)
 |   id| label    | description             | createdBy | shared |    n|
 |----:|:---------|:------------------------|:----------|:-------|----:|
 |  210| cavd 242 | Shattock\_Cole\_ZM96\_2 | readjk    | FALSE  |   30|
+|  211| 239\_240 | cvd239 and cvd240       | readjk    | FALSE  |   90|
 |  208| mice     | only mice               | readjk    | FALSE  |   51|
+|  212| CFA      | NA                      | readjk    | FALSE  |   17|
 
 ### `con$getStudy("cvd408")` will create an instance of `cvd408`.
 

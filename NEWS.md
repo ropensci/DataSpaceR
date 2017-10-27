@@ -1,3 +1,8 @@
+# DataSpaceR 0.4.2
+
+* Added `refresh` method for both connection and study classes.
+* Added `studyInfo` field in study class.
+
 # DataSpaceR 0.4.1
 
 * Included additional columns (`short_name`, `type`, `status`, `stage`, `species`, `start_date`, `strategy`) in `availableStudies`.

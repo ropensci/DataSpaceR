@@ -8,8 +8,8 @@ cvd256 <- con$getStudy("cvd256")
 cvd256
 
 ## ----other-fields--------------------------------------------------------
-cvd256$availableDatasets
-cvd256$treatmentArm
+knitr::kable(cvd256$availableDatasets)
+knitr::kable(cvd256$treatmentArm)
 
 ## ----getDataset----------------------------------------------------------
 NAb <- cvd256$getDataset("NAb")
@@ -17,7 +17,7 @@ dim(NAb)
 colnames(NAb)
 
 ## ----getVariableInfo-----------------------------------------------------
-str(cvd256$getVariableInfo("NAb"))
+knitr::kable(cvd256$getVariableInfo("NAb"))
 
 ## ----getDataset-filter---------------------------------------------------
 library(Rlabkey)
@@ -30,13 +30,24 @@ cavd <- con$getStudy("")
 
 ## ----cross-connection-print----------------------------------------------
 cavd
-cavd$availableDatasets
+knitr::kable(cavd$availableDatasets)
 
 ## ----cross-connection-dem------------------------------------------------
 conFilter <- makeFilter(c("species", "EQUAL", "Human"))
 human <- cavd$getDataset("Demographics", colFilter = conFilter)
 dim(human)
 colnames(human)
+
+## ----availableGroups-----------------------------------------------------
+con$availableGroups
+
+## ----group-connection----------------------------------------------------
+mice <- con$getStudy("", groupId = 208)
+mice
+
+## ----group-connection-nab------------------------------------------------
+NAb_mice <- mice$getDataset("NAb")
+dim(NAb_mice)
 
 ## ------------------------------------------------------------------------
 library(pryr)

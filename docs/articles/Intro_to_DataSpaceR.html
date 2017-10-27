@@ -87,7 +87,7 @@
       <h1>A Simple Introduction to the DataSpaceR Package</h1>
                         <h4 class="author">Ju Yeong Kim</h4>
             
-            <h4 class="date">2017-10-23</h4>
+            <h4 class="date">2017-10-26</h4>
           </div>
 
     
@@ -125,7 +125,7 @@ con</code></pre></div>
 ##     - 1506 subjects
 ##     - 4 assays
 ##     - 227607 data points
-##   Available groups: 2</code></pre>
+##   Available groups: 4</code></pre>
 <p>The call to <code>connectDS</code> instantiates the connection. Printing the object shows where it’s connected and the available studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">"cvd256"</span>)
 cvd256</code></pre></div>
@@ -495,7 +495,9 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">con<span class="op">$</span>availableGroups</code></pre></div>
 <pre><code>##    id    label          description createdBy shared  n
 ## 1 210 cavd 242 Shattock_Cole_ZM96_2    readjk  FALSE 30
-## 2 208     mice            only mice    readjk  FALSE 51</code></pre>
+## 2 211  239_240    cvd239 and cvd240    readjk  FALSE 90
+## 3 208     mice            only mice    readjk  FALSE 51
+## 4 212      CFA                 &lt;NA&gt;    readjk  FALSE 17</code></pre>
 <p>To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to <code>mice</code> group which has group ID 208 by <code>getStudy</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mice &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">""</span>, <span class="dt">groupId =</span> <span class="dv">208</span>)
 mice</code></pre></div>
@@ -522,7 +524,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">str</span>(cvd408<span class="op">$</span>cache)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 191 kB</code></pre>
+<pre><code>## 202 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset" class="section level3">
 <h3 class="hasAnchor">
@@ -531,14 +533,14 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.346   0.029   0.867</code></pre>
+##   0.476   0.041   1.121</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
 ##   ..$ args:List of 2
 ##   ..$ data:'data.frame': 839 obs. of  28 variables:</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 361 kB</code></pre>
+<pre><code>## 371 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset-again" class="section level3">
 <h3 class="hasAnchor">
@@ -547,14 +549,14 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.008   0.000   0.009</code></pre>
+##   0.005   0.000   0.007</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
 ##   ..$ args:List of 2
 ##   ..$ data:'data.frame': 839 obs. of  28 variables:</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 378 kB</code></pre>
+<pre><code>## 389 kB</code></pre>
 </div>
 <div id="clear-cache" class="section level3">
 <h3 class="hasAnchor">
@@ -564,7 +566,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 209 kB</code></pre>
+<pre><code>## 220 kB</code></pre>
 </div>
 </div>
 <div id="session-information" class="section level2">
@@ -587,7 +589,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 ## 
 ## other attached packages:
 ## [1] pryr_0.1.2       Rlabkey_2.1.136  rjson_0.2.15     RCurl_1.95-4.8  
-## [5] bitops_1.0-6     DataSpaceR_0.4.0
+## [5] bitops_1.0-6     DataSpaceR_0.4.1
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.13     codetools_0.2-15 assertthat_0.2.0 digest_0.6.12   
