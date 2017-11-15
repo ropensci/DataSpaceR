@@ -4,6 +4,7 @@ getUrlBase <- function(onStaging) {
 
   if (exists("labkey.url.base", .GlobalEnv)) {
     labkey.url.base <- get("labkey.url.base", .GlobalEnv)
+    labkey.url.base <- gsub("/$", "", labkey.url.base)
     assert_that(labkey.url.base == production || labkey.url.base == staging,
                 msg = paste("labkey.url.base should be either",
                             production, "or", staging))
