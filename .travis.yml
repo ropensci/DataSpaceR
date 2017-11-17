@@ -8,7 +8,7 @@ before_script:
   - Rscript ci.R
 
 after_success:
-  - ./trigger.sh
+  - ./.trigger.sh
   - Rscript -e 'covr::codecov()'
 
 notifications:
