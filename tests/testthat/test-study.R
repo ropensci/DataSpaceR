@@ -141,6 +141,6 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 con <- connectDS()
 
 test_study("", c("BAMA", "Demographics", "ELISPOT", "ICS", "NAb"))
-test_study("cvd408", c("Demographics", "NAb"))
+test_study("cvd408", c("BAMA", "Demographics", "ICS", "NAb"))
 test_study("", c("Demographics", "NAb"), groupId = 208, groupLabel = "mice")
 test_study("", c("Demographics", "NAb"), groupId = 210, groupLabel = "cavd 242")
