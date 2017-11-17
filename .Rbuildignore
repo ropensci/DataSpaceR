@@ -8,3 +8,4 @@
 ^_pkgdown\.yml$
 ^appveyor\.yml$
 ^ci\.R$
+^\.trigger\.sh$
