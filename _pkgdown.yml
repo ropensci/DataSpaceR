@@ -1,6 +1,7 @@
 template:
   params:
     bootswatch: simplex
+    ganalytics: UA-111116186-1
 
 home:
   strip_header: true

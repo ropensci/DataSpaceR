@@ -77,11 +77,11 @@ con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
 #>   User: jkim2345@scharp.org
-#>   Available studies: 276
-#>     - 49 studies with data
-#>     - 1506 subjects
+#>   Available studies: 278
+#>     - 58 studies with data
+#>     - 1754 subjects
 #>     - 4 assays
-#>     - 227607 data points
+#>     - 225839 data points
 #>   Available groups: 4
 ```
 
@@ -111,7 +111,7 @@ knitr::kable(con$availableGroups)
 |   id| label    | description             | createdBy | shared |    n|
 |----:|:---------|:------------------------|:----------|:-------|----:|
 |  210| cavd 242 | Shattock\_Cole\_ZM96\_2 | readjk    | FALSE  |   30|
-|  211| 239\_240 | cvd239 and cvd240       | readjk    | FALSE  |   90|
+|  211| 239\_240 | cvd239 and cvd240       | readjk    | FALSE  |   48|
 |  208| mice     | only mice               | readjk    | FALSE  |   51|
 |  212| CFA      | NA                      | readjk    | FALSE  |   17|
 
@@ -124,7 +124,9 @@ cvd408
 #>   Study: cvd408
 #>   URL: https://dataspace.cavd.org/CAVD/cvd408
 #>   Available datasets:
+#>     - BAMA
 #>     - Demographics
+#>     - ICS
 #>     - NAb
 class(cvd408)
 #> [1] "DataSpaceStudy" "R6"
@@ -134,9 +136,11 @@ class(cvd408)
 
 ``` r
 cvd408$availableDatasets
-#>           name                 label   n
-#> 1 Demographics          Demographics  20
-#> 2          NAb Neutralizing antibody 839
+#>           name                           label    n
+#> 1         BAMA      Binding Ab multiplex assay 1080
+#> 2 Demographics                    Demographics   20
+#> 3          ICS Intracellular Cytokine Staining 3720
+#> 4          NAb           Neutralizing antibody  540
 ```
 
 which will print names of available datasets.
@@ -146,7 +150,7 @@ which will print names of available datasets.
 ``` r
 NAb <- cvd408$getDataset("NAb")
 dim(NAb)
-#> [1] 839  28
+#> [1] 540  28
 colnames(NAb)
 #>  [1] "ParticipantId"          "ParticipantVisit/Visit"
 #>  [3] "visit_day"              "assay_identifier"      
