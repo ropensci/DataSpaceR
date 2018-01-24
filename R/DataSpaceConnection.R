@@ -113,7 +113,7 @@ DataSpaceConnection <- R6Class(
       } else {
         studyInfo <- NULL
       }
-print(group)
+
       DataSpaceStudy$new(study, private$.config, group, studyInfo)
     },
     refresh = function() {

@@ -117,7 +117,6 @@ knitr::kable(con$availableGroups)
 
 ``` r
 cvd408 <- con$getStudy("cvd408")
-#> NULL
 cvd408
 #> <DataSpaceStudy>
 #>   Study: cvd408
