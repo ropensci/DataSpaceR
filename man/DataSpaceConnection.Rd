@@ -27,10 +27,10 @@ The DataSpaceConnection class
     URL, path and username.
   }
   \item{\code{availableStudies}}{
-    A data.frame. The table of available studies.
+    A data.table. The table of available studies.
   }
   \item{\code{availableGroups}}{
-    A data.frame. The table of available groups.
+    A data.table. The table of available groups.
   }
 }
 }

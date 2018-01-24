@@ -12,10 +12,10 @@
 #'     URL, path and username.
 #'   }
 #'   \item{\code{availableStudies}}{
-#'     A data.frame. The table of available studies.
+#'     A data.table. The table of available studies.
 #'   }
 #'   \item{\code{availableGroups}}{
-#'     A data.frame. The table of available groups.
+#'     A data.table. The table of available groups.
 #'   }
 #' }
 #'
@@ -101,19 +101,19 @@ DataSpaceConnection <- R6Class(
       if (is.number(groupId)) {
         assert_that(groupId %in% private$.availableGroups$id,
                     msg = paste(groupId, "is not a valid group ID"))
-        group <- private$.availableGroups[private$.availableGroups$id == groupId, "label"][1]
+        group <- private$.availableGroups[.(groupId), label]
       } else {
         group <- NULL
       }
 
       if (study != "") {
         studyInfo <- as.list(
-          private$.availableStudies[private$.availableStudies$study_name == study, ]
+          private$.availableStudies[.(study)]
         )
       } else {
         studyInfo <- NULL
       }
-
+print(group)
       DataSpaceStudy$new(study, private$.config, group, studyInfo)
     },
     refresh = function() {
@@ -139,42 +139,52 @@ DataSpaceConnection <- R6Class(
   ),
   private = list(
     .config = list(),
-    .availableStudies = data.frame(),
-    .stats = data.frame(),
-    .availableGroups = data.frame(),
+    .availableStudies = data.table(),
+    .stats = data.table(),
+    .availableGroups = data.table(),
 
     .getAvailableStudies = function() {
       colSelect <- c("study_name", "short_name", "title", "type", "status",
                      "stage", "species", "start_date", "strategy")
-      private$.availableStudies <-
-        labkey.selectRows(
-          baseUrl = private$.config$labkey.url.base,
-          folderPath = "/CAVD",
-          schemaName = "CDS",
-          queryName = "study",
-          colSelect = colSelect,
-          colNameOpt = "fieldname"
-        )
+
+      availableStudies <- labkey.selectRows(
+        baseUrl = private$.config$labkey.url.base,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "study",
+        colSelect = colSelect,
+        colNameOpt = "fieldname"
+      )
+
+      setDT(availableStudies)
+      setkey(availableStudies, study_name)
+
+      private$.availableStudies <- availableStudies
     },
     .getStats = function() {
-      private$.stats <-
-        labkey.selectRows(
-          baseUrl = private$.config$labkey.url.base,
-          folderPath = "/CAVD",
-          schemaName = "CDS",
-          queryName = "ds_properties",
-          colNameOpt = "fieldname"
-        )
+      stats <- labkey.selectRows(
+        baseUrl = private$.config$labkey.url.base,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "ds_properties",
+        colNameOpt = "fieldname"
+      )
+
+      setDT(stats)
+
+      private$.stats <- stats
     },
     .getAvailableGroups = function() {
-      participantGroupApi <- paste0(private$.config$labkey.url.base,
-                                    "/participant-group",
-                                    "/CAVD",
-                                    "/browseParticipantGroups.api?",
-                                    "distinctCatgories=false&",
-                                    "type=participantGroup&",
-                                    "includeUnassigned=false&",
-                                    "includeParticipantIds=false")
+      participantGroupApi <- paste0(
+        private$.config$labkey.url.base,
+        "/participant-group",
+        "/CAVD",
+        "/browseParticipantGroups.api?",
+        "distinctCatgories=false&",
+        "type=participantGroup&",
+        "includeUnassigned=false&",
+        "includeParticipantIds=false"
+      )
 
       # execute via Rlabkey's standard GET function
       response <- Rlabkey:::labkey.get(participantGroupApi)
@@ -182,22 +192,26 @@ DataSpaceConnection <- R6Class(
       # parse JSON response via rjson's fromJSON parsing function
       parsed <- fromJSON(response)
 
-      # construct a data frame for each group
-      groupsList <- parsed$groups
-      groupsList <- lapply(groupsList, function(group) {
-        data.frame(id = group$id,
-                   label = group$label,
-                   description = ifelse(is.null(group$description), NA, group$description),
-                   createdBy = group$createdBy$displayValue,
-                   shared = group$category$shared,
-                   n = length(group$category$participantIds),
-                   stringsAsFactors = FALSE)
-        })
+      # construct a data.table for each group
+      groupsList <- lapply(parsed$groups, function(group) {
+        data.table(
+          id = group$id,
+          label = group$label,
+          description = ifelse(is.null(group$description), NA, group$description),
+          createdBy = group$createdBy$displayValue,
+          shared = group$category$shared,
+          n = length(group$category$participantIds)
+        )
+      })
 
-      # merge the list to data frame
-      groupsDF <- do.call(rbind.data.frame, groupsList)
+      # merge the list to data.table
+      availableGroups <- rbindlist(groupsList)
 
-      private$.availableGroups <- groupsDF
+      # set order by id
+      setorder(availableGroups, id)
+      setkey(availableGroups, id)
+
+      private$.availableGroups <- availableGroups
     }
   )
 )

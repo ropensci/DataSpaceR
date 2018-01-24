@@ -1,3 +1,7 @@
+# DataSpaceR 0.5.0
+
+* Modified `DataSpaceConnection` and `DataSpaceStudy` classes to convert data.frame objects to data.table.
+
 # DataSpaceR 0.4.2
 
 * Added `refresh` method for both connection and study classes.

@@ -168,12 +168,12 @@ con
 <span class="co">#&gt; &lt;DataSpaceConnection&gt;</span>
 <span class="co">#&gt;   URL: https://dataspace.cavd.org</span>
 <span class="co">#&gt;   User: jkim2345@scharp.org</span>
-<span class="co">#&gt;   Available studies: 278</span>
+<span class="co">#&gt;   Available studies: 293</span>
 <span class="co">#&gt;     - 58 studies with data</span>
 <span class="co">#&gt;     - 1754 subjects</span>
 <span class="co">#&gt;     - 4 assays</span>
 <span class="co">#&gt;     - 225839 data points</span>
-<span class="co">#&gt;   Available groups: 4</span></code></pre></div>
+<span class="co">#&gt;   Available groups: 2</span></code></pre></div>
 <p><code><a href="reference/connectDS.html">connectDS()</a></code> will create a connection to DataSpace. The user needs credentials stored in a <code>netrc</code> file to access the database.</p>
 </div>
 <div id="available-studies-can-be-listed-by" class="section level3">
@@ -277,36 +277,20 @@ con
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">210</td>
-<td align="left">cavd 242</td>
-<td align="left">Shattock_Cole_ZM96_2</td>
-<td align="left">readjk</td>
-<td align="left">FALSE</td>
-<td align="right">30</td>
-</tr>
-<tr class="even">
-<td align="right">211</td>
-<td align="left">239_240</td>
-<td align="left">cvd239 and cvd240</td>
-<td align="left">readjk</td>
-<td align="left">FALSE</td>
-<td align="right">48</td>
-</tr>
-<tr class="odd">
-<td align="right">208</td>
+<td align="right">216</td>
 <td align="left">mice</td>
-<td align="left">only mice</td>
-<td align="left">readjk</td>
-<td align="left">FALSE</td>
-<td align="right">51</td>
-</tr>
-<tr class="even">
-<td align="right">212</td>
-<td align="left">CFA</td>
 <td align="left">NA</td>
 <td align="left">readjk</td>
 <td align="left">FALSE</td>
-<td align="right">17</td>
+<td align="right">75</td>
+</tr>
+<tr class="even">
+<td align="right">217</td>
+<td align="left">CAVD 242</td>
+<td align="left">This is a fake group for CAVD 242</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">30</td>
 </tr>
 </tbody>
 </table>
@@ -315,6 +299,7 @@ con
 <h3 class="hasAnchor">
 <a href="#congetstudycvd408-will-create-an-instance-of-cvd408-" class="anchor"></a><code>con$getStudy("cvd408")</code> will create an instance of <code>cvd408</code>.</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">"cvd408"</span>)
+<span class="co">#&gt; NULL</span>
 cvd408
 <span class="co">#&gt; &lt;DataSpaceStudy&gt;</span>
 <span class="co">#&gt;   Study: cvd408</span>
@@ -331,11 +316,11 @@ cvd408
 <h3 class="hasAnchor">
 <a href="#available-datasets-can-be-listed-by" class="anchor"></a>available datasets can be listed by:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408<span class="op">$</span>availableDatasets
-<span class="co">#&gt;           name                           label    n</span>
-<span class="co">#&gt; 1         BAMA      Binding Ab multiplex assay 1080</span>
-<span class="co">#&gt; 2 Demographics                    Demographics   20</span>
-<span class="co">#&gt; 3          ICS Intracellular Cytokine Staining 3720</span>
-<span class="co">#&gt; 4          NAb           Neutralizing antibody  540</span></code></pre></div>
+<span class="co">#&gt;            name                           label    n</span>
+<span class="co">#&gt; 1:         BAMA      Binding Ab multiplex assay 1080</span>
+<span class="co">#&gt; 2: Demographics                    Demographics   20</span>
+<span class="co">#&gt; 3:          ICS Intracellular Cytokine Staining 3720</span>
+<span class="co">#&gt; 4:          NAb           Neutralizing antibody  540</span></code></pre></div>
 <p>which will print names of available datasets.</p>
 </div>
 <div id="neutralizing-antibody-dataset-nab-can-be-retreived-by" class="section level3">

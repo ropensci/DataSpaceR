@@ -77,12 +77,12 @@ con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
 #>   User: jkim2345@scharp.org
-#>   Available studies: 278
+#>   Available studies: 293
 #>     - 58 studies with data
 #>     - 1754 subjects
 #>     - 4 assays
 #>     - 225839 data points
-#>   Available groups: 4
+#>   Available groups: 2
 ```
 
 `connectDS()` will create a connection to DataSpace. The user needs credentials stored in a `netrc` file to access the database.
@@ -108,17 +108,16 @@ knitr::kable(head(con$availableStudies))
 knitr::kable(con$availableGroups)
 ```
 
-|   id| label    | description             | createdBy | shared |    n|
-|----:|:---------|:------------------------|:----------|:-------|----:|
-|  210| cavd 242 | Shattock\_Cole\_ZM96\_2 | readjk    | FALSE  |   30|
-|  211| 239\_240 | cvd239 and cvd240       | readjk    | FALSE  |   48|
-|  208| mice     | only mice               | readjk    | FALSE  |   51|
-|  212| CFA      | NA                      | readjk    | FALSE  |   17|
+|   id| label    | description                       | createdBy | shared |    n|
+|----:|:---------|:----------------------------------|:----------|:-------|----:|
+|  216| mice     | NA                                | readjk    | FALSE  |   75|
+|  217| CAVD 242 | This is a fake group for CAVD 242 | readjk    | FALSE  |   30|
 
 ### `con$getStudy("cvd408")` will create an instance of `cvd408`.
 
 ``` r
 cvd408 <- con$getStudy("cvd408")
+#> NULL
 cvd408
 #> <DataSpaceStudy>
 #>   Study: cvd408
@@ -136,11 +135,11 @@ class(cvd408)
 
 ``` r
 cvd408$availableDatasets
-#>           name                           label    n
-#> 1         BAMA      Binding Ab multiplex assay 1080
-#> 2 Demographics                    Demographics   20
-#> 3          ICS Intracellular Cytokine Staining 3720
-#> 4          NAb           Neutralizing antibody  540
+#>            name                           label    n
+#> 1:         BAMA      Binding Ab multiplex assay 1080
+#> 2: Demographics                    Demographics   20
+#> 3:          ICS Intracellular Cytokine Staining 3720
+#> 4:          NAb           Neutralizing antibody  540
 ```
 
 which will print names of available datasets.

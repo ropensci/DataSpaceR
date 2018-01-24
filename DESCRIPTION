@@ -1,7 +1,7 @@
 Package: DataSpaceR
 Type: Package
 Title: An R package for CAVD DataSpace
-Version: 0.4.2
+Version: 0.5.0
 Authors@R: c(person("Ju Yeong", "Kim",
                     email = "jkim2345@fredhutch.org",
                     role = c("aut", "cre")),
@@ -20,7 +20,8 @@ Imports:
     Rlabkey (>= 2.1.134),
     assertthat,
     digest,
-    rjson
+    rjson,
+    data.table
 Suggests:
     testthat,
     covr,

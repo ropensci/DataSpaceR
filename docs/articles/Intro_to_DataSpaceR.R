@@ -42,7 +42,7 @@ colnames(human)
 con$availableGroups
 
 ## ----group-connection----------------------------------------------------
-mice <- con$getStudy("", groupId = 208)
+mice <- con$getStudy("", groupId = 216)
 mice
 
 ## ----group-connection-nab------------------------------------------------

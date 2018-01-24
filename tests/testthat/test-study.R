@@ -53,7 +53,7 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       })
 
       test_that("`availableDatasets`", {
-        expect_is(cavd$availableDatasets, "data.frame")
+        expect_is(cavd$availableDatasets, "data.table")
         expect_equal(names(cavd$availableDatasets),
                      c("name", "label", "n"))
         expect_equal(cavd$availableDatasets$name,
@@ -70,7 +70,7 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       })
 
       test_that("`treatmentArm`", {
-        expect_is(cavd$treatmentArm, "data.frame")
+        expect_is(cavd$treatmentArm, "data.table")
         expect_equal(names(cavd$treatmentArm),
                      c("arm_id", "arm_part", "arm_group", "arm_name",
                        "randomization", "coded_label", "last_day", "description"))
@@ -94,7 +94,7 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       test_that("`getDataset`", {
         for (datasetName in cavd$availableDatasets$name) {
           dataset <- try(cavd$getDataset(datasetName = datasetName), silent = TRUE)
-          expect_is(dataset, "data.frame", info = datasetName)
+          expect_is(dataset, "data.table", info = datasetName)
           expect_gt(nrow(dataset), 0)
         }
       })
@@ -102,7 +102,7 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       test_that("`getDataset` (access cache)", {
         for (datasetName in cavd$availableDatasets$name) {
           dataset <- try(cavd$getDataset(datasetName = datasetName), silent = TRUE)
-          expect_is(dataset, "data.frame", info = datasetName)
+          expect_is(dataset, "data.table", info = datasetName)
           expect_gt(nrow(dataset), 0)
         }
       })
@@ -122,7 +122,7 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       test_that("`getVariableInfo`", {
         for (datasetName in cavd$availableDatasets$name) {
           dataset <- try(cavd$getVariableInfo(datasetName = datasetName), silent = TRUE)
-          expect_is(dataset, "data.frame", info = datasetName)
+          expect_is(dataset, "data.table", info = datasetName)
           expect_gt(nrow(dataset), 0)
           expect_equal(names(dataset), c("fieldName", "caption", "type", "description"))
         }
@@ -142,5 +142,5 @@ con <- connectDS()
 
 test_study("", c("BAMA", "Demographics", "ELISPOT", "ICS", "NAb"))
 test_study("cvd408", c("BAMA", "Demographics", "ICS", "NAb"))
-test_study("", c("Demographics", "NAb"), groupId = 208, groupLabel = "mice")
-test_study("", c("Demographics", "NAb"), groupId = 210, groupLabel = "cavd 242")
+test_study("", c("Demographics", "NAb"), groupId = 216, groupLabel = "mice")
+test_study("", c("Demographics", "NAb"), groupId = 217, groupLabel = "CAVD 242")

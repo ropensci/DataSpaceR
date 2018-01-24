@@ -30,14 +30,14 @@ The DataSpaceStudy class
     URL, path and username.
   }
   \item{\code{availableDatasets}}{
-    A data.frame. The table of datasets available in the study object.
+    A data.table. The table of datasets available in the study object.
   }
   \item{\code{cache}}{
     A list. Stores the data to avoid downloading the same tables multiple
     times.
   }
   \item{\code{treatmentArm}}{
-    A data.frame. The table of treatment arm information for the connected
+    A data.table. The table of treatment arm information for the connected
     study. Not available for cross study connection.
   }
   \item{\code{group}}{

@@ -15,14 +15,14 @@
 #'     URL, path and username.
 #'   }
 #'   \item{\code{availableDatasets}}{
-#'     A data.frame. The table of datasets available in the study object.
+#'     A data.table. The table of datasets available in the study object.
 #'   }
 #'   \item{\code{cache}}{
 #'     A list. Stores the data to avoid downloading the same tables multiple
 #'     times.
 #'   }
 #'   \item{\code{treatmentArm}}{
-#'     A data.frame. The table of treatment arm information for the connected
+#'     A data.table. The table of treatment arm information for the connected
 #'     study. Not available for cross study connection.
 #'   }
 #'   \item{\code{group}}{
@@ -88,7 +88,7 @@ DataSpaceStudy <- R6Class(
   public = list(
     initialize = function(study = NULL, config = NULL, group = NULL, studyInfo = NULL) {
       assert_that(length(study) <= 1,
-                  msg = "For multiple studies, use an empty string and filter the connection.")
+                  msg = "For multiple studies, create a group in the portal.")
       assert_that(!is.null(config))
 
       # get primary fields
@@ -162,7 +162,11 @@ DataSpaceStudy <- R6Class(
         viewName = viewName,
         colNameOpt = "fieldname",
         colFilter = colFilter,
-        ...)
+        ...
+      )
+
+      # convert to data.table
+      setDT(dataset)
 
       # caching
       private$.cache[[digestedArgs]] <- list(args = args, data = dataset)
@@ -182,18 +186,20 @@ DataSpaceStudy <- R6Class(
         baseUrl = private$.config$labkey.url.base,
         folderPath = private$.config$labkey.url.path,
         schemaName = "study",
-        queryName = datasetName)
+        queryName = datasetName
+      )
+
+      # convert to data.table and set key
+      setDT(varInfo)
+      setkey(varInfo, fieldName)
 
       extraVars <- c("Created", "CreatedBy", "Modified", "ModifiedBy",
                      "SequenceNum", "date")
 
-      varFilter <- varInfo$isHidden == "FALSE" &
-        varInfo$isSelectable == "TRUE" &
-        !varInfo$fieldName %in% extraVars
-
-      varInfo <- varInfo[varFilter,
-                         c("fieldName", "caption", "type", "description")]
-      rownames(varInfo) <- NULL
+      varInfo <- varInfo[isHidden == "FALSE" &
+                           isSelectable == "TRUE" &
+                           !fieldName %in% extraVars,
+                         .(fieldName, caption, type, description)]
 
       varInfo
     },
@@ -232,9 +238,9 @@ DataSpaceStudy <- R6Class(
   private = list(
     .study = character(),
     .config = list(),
-    .availableDatasets = data.frame(),
+    .availableDatasets = data.table(),
     .cache = list(),
-    .treatmentArm = data.frame(),
+    .treatmentArm = data.table(),
     .group = character(),
     .studyInfo = list(),
 
@@ -260,33 +266,41 @@ DataSpaceStudy <- R6Class(
               "WHERE",
                 "Datasets.Name = dataset_n.Name AND dataset_n.n > 0")
 
-      private$.availableDatasets <-
-        suppressWarnings(
-          labkey.executeSql(
-            baseUrl = private$.config$labkey.url.base,
-            folderPath = private$.config$labkey.url.path,
-            schemaName = "study",
-            sql = datasetQuery,
-            colNameOpt = "fieldname"
-          )
+      availableDatasets <- suppressWarnings(
+        labkey.executeSql(
+          baseUrl = private$.config$labkey.url.base,
+          folderPath = private$.config$labkey.url.path,
+          schemaName = "study",
+          sql = datasetQuery,
+          colNameOpt = "fieldname"
         )
+      )
+
+      # convert to data.table
+      setDT(availableDatasets)
+
+      private$.availableDatasets <- availableDatasets
     },
     .getTreatmentArm = function() {
       colSelect <- c("arm_id", "arm_part", "arm_group", "arm_name",
                      "randomization", "coded_label", "last_day", "description")
 
-      private$.treatmentArm <-
-        suppressWarnings(
-          labkey.selectRows(
-            baseUrl = private$.config$labkey.url.base,
-            folderPath = private$.config$labkey.url.path,
-            schemaName = "CDS",
-            queryName = "treatmentarm",
-            colSelect = colSelect,
-            colNameOpt = "fieldname",
-            colFilter = makeFilter(c("arm_id", "CONTAINS", private$.study))
-          )
+      treatmentArm <- suppressWarnings(
+        labkey.selectRows(
+          baseUrl = private$.config$labkey.url.base,
+          folderPath = private$.config$labkey.url.path,
+          schemaName = "CDS",
+          queryName = "treatmentarm",
+          colSelect = colSelect,
+          colNameOpt = "fieldname",
+          colFilter = makeFilter(c("arm_id", "CONTAINS", private$.study))
         )
+      )
+
+      # convert to data.table
+      setDT(treatmentArm)
+
+      private$.treatmentArm <- treatmentArm
     }
   )
 )

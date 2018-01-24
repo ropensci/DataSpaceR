@@ -130,7 +130,7 @@ con$availableGroups
 To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to `mice` group which has group ID 208 by `getStudy`.
 
 ```{r group-connection}
-mice <- con$getStudy("", groupId = 208)
+mice <- con$getStudy("", groupId = 216)
 mice
 ```
 
