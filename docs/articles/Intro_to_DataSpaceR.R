@@ -39,10 +39,10 @@ dim(human)
 colnames(human)
 
 ## ----availableGroups-----------------------------------------------------
-con$availableGroups
+knitr::kable(con$availableGroups)
 
 ## ----group-connection----------------------------------------------------
-mice <- con$getStudy("", groupId = 216)
+mice <- con$getGroup(216)
 mice
 
 ## ----group-connection-nab------------------------------------------------

@@ -153,7 +153,7 @@ password supersecretpassword</code></pre>
 </li>
 <li>browses available studies and groups in the instance via <code>availableStudies</code> and <code>availableGroups</code>
 </li>
-<li>creates a connection to a specific study or a group via <code>getStudy</code>
+<li>creates a connection to a specific study via <code>getStudy</code> or a group via <code>getGroup</code>
 </li>
 <li>retrieves datasets by name via <code>getDataset</code>
 </li>
@@ -162,6 +162,7 @@ password supersecretpassword</code></pre>
 <h3 class="hasAnchor">
 <a href="#for-example" class="anchor"></a>for example:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DataSpaceR)
+<span class="co">#&gt; By exporting data from the CAVD DataSpace, you agree to be bound by the Terms of Use available on the CAVD DataSpace sign-in page at https://dataspace.cavd.org/cds/CAVD/app.view?</span>
 
 con &lt;-<span class="st"> </span><span class="kw"><a href="reference/connectDS.html">connectDS</a></span>()
 con
@@ -274,6 +275,7 @@ con
 <th align="left">createdBy</th>
 <th align="left">shared</th>
 <th align="right">n</th>
+<th align="left">studies</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -283,6 +285,7 @@ con
 <td align="left">readjk</td>
 <td align="left">FALSE</td>
 <td align="right">75</td>
+<td align="left">cvd468, cvd483, cvd316, cvd331</td>
 </tr>
 <tr class="even">
 <td align="right">217</td>
@@ -291,6 +294,7 @@ con
 <td align="left">readjk</td>
 <td align="left">FALSE</td>
 <td align="right">30</td>
+<td align="left">cvd242</td>
 </tr>
 </tbody>
 </table>
@@ -314,12 +318,36 @@ cvd408
 <div id="available-datasets-can-be-listed-by" class="section level3">
 <h3 class="hasAnchor">
 <a href="#available-datasets-can-be-listed-by" class="anchor"></a>available datasets can be listed by:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408<span class="op">$</span>availableDatasets
-<span class="co">#&gt;            name                           label    n</span>
-<span class="co">#&gt; 1:         BAMA      Binding Ab multiplex assay 1080</span>
-<span class="co">#&gt; 2: Demographics                    Demographics   20</span>
-<span class="co">#&gt; 3:          ICS Intracellular Cytokine Staining 3720</span>
-<span class="co">#&gt; 4:          NAb           Neutralizing antibody  540</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(cvd408<span class="op">$</span>availableDatasets)</code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="right">n</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">BAMA</td>
+<td align="left">Binding Ab multiplex assay</td>
+<td align="right">1080</td>
+</tr>
+<tr class="even">
+<td align="left">Demographics</td>
+<td align="left">Demographics</td>
+<td align="right">20</td>
+</tr>
+<tr class="odd">
+<td align="left">ICS</td>
+<td align="left">Intracellular Cytokine Staining</td>
+<td align="right">3720</td>
+</tr>
+<tr class="even">
+<td align="left">NAb</td>
+<td align="left">Neutralizing antibody</td>
+<td align="right">540</td>
+</tr>
+</tbody>
+</table>
 <p>which will print names of available datasets.</p>
 </div>
 <div id="neutralizing-antibody-dataset-nab-can-be-retreived-by" class="section level3">

@@ -64,13 +64,14 @@ The general idea is that the user:
 
 1.  creates an instance of `DataSpaceConnection` class via `connectDS`
 2.  browses available studies and groups in the instance via `availableStudies` and `availableGroups`
-3.  creates a connection to a specific study or a group via `getStudy`
+3.  creates a connection to a specific study via `getStudy` or a group via `getGroup`
 4.  retrieves datasets by name via `getDataset`
 
 ### for example:
 
 ``` r
 library(DataSpaceR)
+#> By exporting data from the CAVD DataSpace, you agree to be bound by the Terms of Use available on the CAVD DataSpace sign-in page at https://dataspace.cavd.org/cds/CAVD/app.view?
 
 con <- connectDS()
 con
@@ -108,10 +109,10 @@ knitr::kable(head(con$availableStudies))
 knitr::kable(con$availableGroups)
 ```
 
-|   id| label    | description                       | createdBy | shared |    n|
-|----:|:---------|:----------------------------------|:----------|:-------|----:|
-|  216| mice     | NA                                | readjk    | FALSE  |   75|
-|  217| CAVD 242 | This is a fake group for CAVD 242 | readjk    | FALSE  |   30|
+|   id| label    | description                       | createdBy | shared |    n| studies                        |
+|----:|:---------|:----------------------------------|:----------|:-------|----:|:-------------------------------|
+|  216| mice     | NA                                | readjk    | FALSE  |   75| cvd468, cvd483, cvd316, cvd331 |
+|  217| CAVD 242 | This is a fake group for CAVD 242 | readjk    | FALSE  |   30| cvd242                         |
 
 ### `con$getStudy("cvd408")` will create an instance of `cvd408`.
 
@@ -133,13 +134,15 @@ class(cvd408)
 ### available datasets can be listed by:
 
 ``` r
-cvd408$availableDatasets
-#>            name                           label    n
-#> 1:         BAMA      Binding Ab multiplex assay 1080
-#> 2: Demographics                    Demographics   20
-#> 3:          ICS Intracellular Cytokine Staining 3720
-#> 4:          NAb           Neutralizing antibody  540
+knitr::kable(cvd408$availableDatasets)
 ```
+
+| name         | label                           |     n|
+|:-------------|:--------------------------------|-----:|
+| BAMA         | Binding Ab multiplex assay      |  1080|
+| Demographics | Demographics                    |    20|
+| ICS          | Intracellular Cytokine Staining |  3720|
+| NAb          | Neutralizing antibody           |   540|
 
 which will print names of available datasets.
 
