@@ -90,7 +90,7 @@ The general idea is that the user:
 
 1. creates an instance of `DataSpaceConnection` class via `connectDS`
 2. browses available studies and groups in the instance via `availableStudies` and `availableGroups`
-3. creates a connection to  a specific study or a group via `getStudy`
+3. creates a connection to a specific study via `getStudy` or a group via `getGroup`
 4. retrieves datasets by name via `getDataset`
 
 
@@ -133,7 +133,7 @@ class(cvd408)
 ### available datasets can be listed by:
 
 ```{r}
-cvd408$availableDatasets
+knitr::kable(cvd408$availableDatasets)
 ```
 
 which will print names of available datasets.

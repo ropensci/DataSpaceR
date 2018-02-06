@@ -50,6 +50,11 @@ The DataSpaceConnection class
 
     \code{study}: A character. Name of the study to retrieve.
 
+    \code{groupId}: DEPRECATED. Use \code{getGroup} method.
+  }
+  \item{\code{getGroup(groupId)}}{
+    Create a \code{DataSpaceStudy} class.
+
     \code{groupId}: An integer. ID of the group to retrieve.
   }
   \item{\code{refresh()}}{

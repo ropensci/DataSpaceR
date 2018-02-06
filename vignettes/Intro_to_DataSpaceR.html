@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ju Yeong Kim" />
 
-<meta name="date" content="2018-01-23" />
+<meta name="date" content="2018-02-06" />
 
 <title>A Simple Introduction to the DataSpaceR Package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">A Simple Introduction to the DataSpaceR Package</h1>
 <h4 class="author"><em>Ju Yeong Kim</em></h4>
-<h4 class="date"><em>2018-01-23</em></h4>
+<h4 class="date"><em>2018-02-06</em></h4>
 
 
 
@@ -105,9 +105,8 @@ con</code></pre></div>
 ##     - 225839 data points
 ##   Available groups: 2</code></pre>
 <p>The call to <code>connectDS</code> instantiates the connection. Printing the object shows where it’s connected and the available studies.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;cvd256&quot;</span>)</code></pre></div>
-<pre><code>## NULL</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;cvd256&quot;</span>)
+cvd256</code></pre></div>
 <pre><code>## &lt;DataSpaceStudy&gt;
 ##   Study: cvd256
 ##   URL: https://dataspace.cavd.org/CAVD/cvd256
@@ -401,7 +400,6 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 <h2>Cross-study connection</h2>
 <p>To fetch data from multiple studies, simply create a connection at the project level.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cavd &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;&quot;</span>)</code></pre></div>
-<pre><code>## NULL</code></pre>
 <p>This will instantiate a connection at the <code>CAVD</code> level. Most functions work cross study connections just like they do on single studies.</p>
 <p>You can get a list of datasets available accross all studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cavd</code></pre></div>
@@ -477,14 +475,43 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 <div id="connect-to-a-saved-group" class="section level2">
 <h2>Connect to a saved group</h2>
 <p>We can browse available saved groups via <code>availableGroups</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">con<span class="op">$</span>availableGroups</code></pre></div>
-<pre><code>##     id    label                       description createdBy shared  n
-## 1: 216     mice                                NA    readjk  FALSE 75
-## 2: 217 CAVD 242 This is a fake group for CAVD 242    readjk  FALSE 30</code></pre>
-<p>To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to <code>mice</code> group which has group ID 208 by <code>getStudy</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mice &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;&quot;</span>, <span class="dt">groupId =</span> <span class="dv">216</span>)</code></pre></div>
-<pre><code>## [1] &quot;mice&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mice</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(con<span class="op">$</span>availableGroups)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">id</th>
+<th align="left">label</th>
+<th align="left">description</th>
+<th align="left">createdBy</th>
+<th align="left">shared</th>
+<th align="right">n</th>
+<th align="left">studies</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">216</td>
+<td align="left">mice</td>
+<td align="left">NA</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">75</td>
+<td align="left">cvd468, cvd483, cvd316, cvd331</td>
+</tr>
+<tr class="even">
+<td align="right">217</td>
+<td align="left">CAVD 242</td>
+<td align="left">This is a fake group for CAVD 242</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">30</td>
+<td align="left">cvd242</td>
+</tr>
+</tbody>
+</table>
+<p>To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to <code>mice</code> group which has group ID 208 by <code>getGroup</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mice &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getGroup</span>(<span class="dv">216</span>)
+mice</code></pre></div>
 <pre><code>## &lt;DataSpaceStudy&gt;
 ##   Group: mice
 ##   URL: https://dataspace.cavd.org/CAVD
@@ -501,9 +528,9 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 <div id="connect-to-cvd408-study" class="section level3">
 <h3>Connect to <code>cvd408</code> study</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pryr)
-cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;cvd408&quot;</span>)</code></pre></div>
-<pre><code>## NULL</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache)</code></pre></div>
+cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;cvd408&quot;</span>)
+
+<span class="kw">str</span>(cvd408<span class="op">$</span>cache)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
 <pre><code>## 259 kB</code></pre>
@@ -514,7 +541,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.411   0.036   3.337</code></pre>
+##   0.340   0.021   0.694</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
@@ -530,7 +557,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.003   0.000   0.002</code></pre>
+##   0.002   0.000   0.002</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
@@ -569,15 +596,15 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 ## 
 ## other attached packages:
 ## [1] pryr_0.1.3       Rlabkey_2.1.136  rjson_0.2.15     RCurl_1.95-4.10 
-## [5] bitops_1.0-6     DataSpaceR_0.4.2
+## [5] bitops_1.0-6     DataSpaceR_0.5.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.14        rstudioapi_0.7      knitr_1.18         
-##  [4] xml2_1.1.1          magrittr_1.5        roxygen2_6.0.1     
+##  [1] Rcpp_0.12.15        rstudioapi_0.7      knitr_1.19         
+##  [4] xml2_1.2.0          magrittr_1.5        roxygen2_6.0.1     
 ##  [7] devtools_1.13.4     R6_2.2.2            rlang_0.1.6        
 ## [10] highr_0.6           stringr_1.2.0       tools_3.4.3        
 ## [13] data.table_1.10.4-3 withr_2.1.1         htmltools_0.3.6    
-## [16] commonmark_1.4      yaml_2.1.16         digest_0.6.14      
+## [16] commonmark_1.4      yaml_2.1.16         digest_0.6.15      
 ## [19] assertthat_0.2.0    rprojroot_1.3-2     crayon_1.3.4       
 ## [22] codetools_0.2-15    testthat_2.0.0      evaluate_0.10.1    
 ## [25] memoise_1.1.0       rmarkdown_1.8       stringi_1.1.6      

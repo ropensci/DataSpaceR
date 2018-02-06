@@ -124,13 +124,13 @@ colnames(human)
 We can browse available saved groups via `availableGroups`.
 
 ```{r availableGroups}
-con$availableGroups
+knitr::kable(con$availableGroups)
 ```
 
-To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to `mice` group which has group ID 208 by `getStudy`.
+To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to `mice` group which has group ID 208 by `getGroup`.
 
 ```{r group-connection}
-mice <- con$getStudy("", groupId = 216)
+mice <- con$getGroup(216)
 mice
 ```
 
