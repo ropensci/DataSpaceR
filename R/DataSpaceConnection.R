@@ -33,6 +33,11 @@
 #'
 #'     \code{study}: A character. Name of the study to retrieve.
 #'
+#'     \code{groupId}: DEPRECATED. Use \code{getGroup} method.
+#'   }
+#'   \item{\code{getGroup(groupId)}}{
+#'     Create a \code{DataSpaceStudy} class.
+#'
 #'     \code{groupId}: An integer. ID of the group to retrieve.
 #'   }
 #'   \item{\code{refresh()}}{
@@ -93,14 +98,30 @@ DataSpaceConnection <- R6Class(
       cat("\n  Available groups:", nrow(private$.availableGroups))
     },
     getStudy = function(study, groupId = NULL) {
-      assert_that(is.number(groupId) || is.null(groupId),
-                  msg = "groupId should be an integer or null.")
-      assert_that((study == "" && is.null(groupId)) || (study == "" && is.number(groupId)) || (study != "" && is.null(groupId)),
-                  msg = "Use empty string if you are using a group filter")
+      if (!is.null(groupId)) {
+        warning(
+          "`groupId` argument is deprecated. ",
+          "Use `getGroup()` method to retrieve a group.",
+          immediate. = TRUE
+        )
+      }
+
+      assert_that(
+        is.number(groupId) || is.null(groupId),
+        msg = "groupId should be an integer or null."
+      )
+      assert_that(
+        (study == "" && is.null(groupId)) ||
+          (study == "" && is.number(groupId)) ||
+          (study != "" && is.null(groupId)),
+        msg = "Use empty string if you are using a group filter"
+      )
 
       if (is.number(groupId)) {
-        assert_that(groupId %in% private$.availableGroups$id,
-                    msg = paste(groupId, "is not a valid group ID"))
+        assert_that(
+          groupId %in% private$.availableGroups$id,
+          msg = paste(groupId, "is not a valid group ID")
+        )
         group <- private$.availableGroups[.(groupId), label]
       } else {
         group <- NULL
@@ -115,6 +136,20 @@ DataSpaceConnection <- R6Class(
       }
 
       DataSpaceStudy$new(study, private$.config, group, studyInfo)
+    },
+    getGroup = function(groupId) {
+      assert_that(
+        is.number(groupId),
+        msg = "groupId should be an integer."
+      )
+      assert_that(
+        groupId %in% private$.availableGroups$id,
+        msg = paste(groupId, "is not a valid group ID")
+      )
+
+      group <- private$.availableGroups[.(groupId), label]
+
+      DataSpaceStudy$new("", private$.config, group, NULL)
     },
     refresh = function() {
       tries <- c(
@@ -200,7 +235,8 @@ DataSpaceConnection <- R6Class(
           description = ifelse(is.null(group$description), NA, group$description),
           createdBy = group$createdBy$displayValue,
           shared = group$category$shared,
-          n = length(group$category$participantIds)
+          n = length(group$category$participantIds),
+          studies = list(unique(gsub(" \\S+$", "", group$category$participantIds)))
         )
       })
 

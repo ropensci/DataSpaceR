@@ -3,7 +3,11 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
   target <- ifelse(study != "", study, ifelse(is.null(groupLabel), "CAVD", groupLabel))
   context(paste0("DataSpaceStudy (", target, ")"))
 
-  cavd <- try(con$getStudy(study, groupId), silent = TRUE)
+  if (is.null(groupId)) {
+    cavd <- try(con$getStudy(study), silent = TRUE)
+  } else {
+    cavd <- try(con$getGroup(groupId), silent = TRUE)
+  }
 
   test_that("can connect to studies", {
     expect_is(cavd, "DataSpaceStudy")

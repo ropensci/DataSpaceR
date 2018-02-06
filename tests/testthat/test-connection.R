@@ -14,6 +14,7 @@ if ("DataSpaceConnection" %in% class(con)) {
                  "config",
                  "clone",
                  "refresh",
+                 "getGroup",
                  "getStudy",
                  "print",
                  "initialize")
@@ -77,7 +78,8 @@ if ("DataSpaceConnection" %in% class(con)) {
     test_that("`availableGroups`", {
       expect_is(con$availableGroups, "data.table")
       expect_equal(names(con$availableGroups),
-                   c("id", "label", "description", "createdBy", "shared", "n"))
+                   c("id", "label", "description", "createdBy", "shared", "n",
+                     "studies"))
       expect_gt(nrow(con$availableGroups), 0)
     })
 
@@ -88,8 +90,8 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_is(cavd, "R6")
 
       expect_error(con$getStudy("cvd0"))
-      expect_error(con$getStudy("", 0))
-      expect_error(con$getStudy("cvd208", 208))
+      expect_error(suppressWarnings(con$getStudy("", 0)))
+      expect_error(suppressWarnings(con$getStudy("cvd208", 208)))
     })
 
     test_that("`refresh`", {
