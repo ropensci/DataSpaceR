@@ -1,6 +1,12 @@
+# DataSpaceR 0.5.1
+
+* Adjusted the package to use the latest version of Rlabkey (v2.2) and httr packages.
+
 # DataSpaceR 0.5.0
 
 * Modified `DataSpaceConnection` and `DataSpaceStudy` classes to convert data.frame objects to data.table.
+* Added a package startup message on the terms of use.
+* Created `getGroup` method in `DataSpaceConnection` class and deprecated `groupId` in `getStudy` method.
 
 # DataSpaceR 0.4.2
 
