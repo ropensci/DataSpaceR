@@ -8,16 +8,18 @@ test_that("can connect to DataSpace", {
 })
 
 if ("DataSpaceConnection" %in% class(con)) {
-  con_names <- c(".__enclos_env__",
-                 "availableGroups",
-                 "availableStudies",
-                 "config",
-                 "clone",
-                 "refresh",
-                 "getGroup",
-                 "getStudy",
-                 "print",
-                 "initialize")
+  con_names <- c(
+    ".__enclos_env__",
+    "availableGroups",
+    "availableStudies",
+    "config",
+    "clone",
+    "refresh",
+    "getGroup",
+    "getStudy",
+    "print",
+    "initialize"
+  )
   test_that("`DataSpaceConnection`` contains correct fields and methods", {
     expect_equal(names(con), con_names)
   })
@@ -41,9 +43,20 @@ if ("DataSpaceConnection" %in% class(con)) {
     })
 
     test_that("`config`", {
-      configs <- c("labkey.url.base", "labkey.user.email", "curlOptions", "verbose")
-      curlOptions <- c("ssl.verifyhost", "ssl.verifypeer", "followlocation",
-                       "sslversion", "useragent", "netrc.file")
+      configs <- c(
+        "labkey.url.base",
+        "labkey.user.email",
+        "curlOptions",
+        "verbose"
+      )
+      curlOptions <- c(
+        "ssl_verifyhost",
+        "ssl_verifypeer",
+        "followlocation",
+        "sslversion",
+        "netrc_file",
+        "useragent"
+      )
       useragent <- paste("DataSpaceR", packageVersion("DataSpaceR"))
 
       expect_is(con$config, "list")
@@ -53,16 +66,19 @@ if ("DataSpaceConnection" %in% class(con)) {
         expect_equal(con$config$labkey.url.base, "https://dataspace.cavd.org")
         expect_match(con$config$labkey.user.email, "\\S+@\\S+")
         expect_false(con$config$verbose)
-        expect_is(con$config$curlOptions, "CURLOptions")
-        expect_equal(names(con$config$curlOptions), curlOptions)
+        expect_is(con$config$curlOptions, "request")
 
-        if (all.equal(names(con$config$curlOptions), curlOptions)) {
-          expect_equal(con$config$curlOptions$ssl.verifyhost, 2)
-          expect_true(con$config$curlOptions$ssl.verifypeer)
-          expect_true(con$config$curlOptions$followlocation)
-          expect_equal(con$config$curlOptions$sslversion, 1)
-          expect_equal(con$config$curlOptions$useragent, useragent)
-          expect_match(con$config$curlOptions$netrc.file, "netrc")
+        if (class(con$config$curlOptions) == "request") {
+          expect_equal(names(con$config$curlOptions$options), curlOptions)
+
+          if (all.equal(names(con$config$curlOptions$options), curlOptions)) {
+            expect_equal(con$config$curlOptions$options$ssl_verifyhost, 2)
+            expect_true(con$config$curlOptions$options$ssl_verifypeer)
+            expect_true(con$config$curlOptions$options$followlocation)
+            expect_equal(con$config$curlOptions$options$sslversion, 1)
+            expect_equal(con$config$curlOptions$options$useragent, useragent)
+            expect_match(con$config$curlOptions$options$netrc_file, "netrc")
+          }
         }
       }
     })
