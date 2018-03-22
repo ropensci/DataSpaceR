@@ -125,10 +125,17 @@ getNetrc <- function(login, password, onStaging = FALSE) {
 
 #' @importFrom utils packageVersion
 setCurlOptions <- function(netrcFile) {
-  useragent <- paste("DataSpaceR", packageVersion("DataSpaceR"))
+  useragent <- paste0(
+    "R/", R.version$major, ".", R.version$minor,
+    " (", Sys.info()["sysname"], " ", Sys.info()["machine"], ")",
+    " Rlabkey/", packageVersion("Rlabkey"),
+    " DataSpaceR/", packageVersion("DataSpaceR")
+  )
 
-  curlOptions <- labkey.setCurlOptions(netrc_file = netrcFile,
-                                       useragent = useragent)
+  curlOptions <- labkey.setCurlOptions(
+    netrc_file = netrcFile,
+    useragent = useragent
+  )
 
   curlOptions
 }
