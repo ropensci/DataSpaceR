@@ -57,7 +57,12 @@ if ("DataSpaceConnection" %in% class(con)) {
         "netrc_file",
         "useragent"
       )
-      useragent <- paste("DataSpaceR", packageVersion("DataSpaceR"))
+      useragent <- paste0(
+        "R/", R.version$major, ".", R.version$minor,
+        " (", Sys.info()["sysname"], " ", Sys.info()["machine"], ")",
+        " Rlabkey/", packageVersion("Rlabkey"),
+        " DataSpaceR/", packageVersion("DataSpaceR")
+      )
 
       expect_is(con$config, "list")
       expect_equal(names(con$config), configs)
