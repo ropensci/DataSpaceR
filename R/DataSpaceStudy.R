@@ -124,6 +124,7 @@ DataSpaceStudy <- R6Class(
       if (nrow(private$.availableDatasets) > 0) {
         cat(paste0("\n    - ", private$.availableDatasets$name), sep = "")
       }
+      cat("\n")
     },
     getDataset = function(datasetName,
                           colFilter = NULL,

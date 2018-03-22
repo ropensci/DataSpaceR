@@ -96,6 +96,7 @@ DataSpaceConnection <- R6Class(
       cat("\n    -", private$.stats$assays, "assays")
       cat("\n    -", private$.stats$datacount, "data points")
       cat("\n  Available groups:", nrow(private$.availableGroups))
+      cat("\n")
     },
     getStudy = function(study, groupId = NULL) {
       if (!is.null(groupId)) {
