@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>All news • DataSpaceR</title>
+<title>Changelog • DataSpaceR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Changelog" />
+
+<meta property="og:image" content="/logo.png" />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -46,6 +52,8 @@
 
 </script>
 
+
+
   </head>
 
   <body>
@@ -59,12 +67,16 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">DataSpaceR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">DataSpaceR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.1</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -85,7 +97,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -109,6 +121,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -120,19 +133,20 @@
 
   <div class="col-md-9">
     <div class="page-header">
-      <h1>Change log <small>All releases</small></h1>
+      <h1>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/FredHutch/DataSpaceR/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
     <div class="contents">
     <div id="dataspacer-0-5-1" class="section level1">
-<h1 class="hasAnchor">
+<h1 class="page-header">
 <a href="#dataspacer-0-5-1" class="anchor"></a>DataSpaceR 0.5.1</h1>
 <ul>
 <li>Adjusted the package to use the latest version of Rlabkey (v2.2) and httr packages.</li>
 </ul>
 </div>
     <div id="dataspacer-0-5-0" class="section level1">
-<h1 class="hasAnchor">
+<h1 class="page-header">
 <a href="#dataspacer-0-5-0" class="anchor"></a>DataSpaceR 0.5.0</h1>
 <ul>
 <li>Modified <code>DataSpaceConnection</code> and <code>DataSpaceStudy</code> classes to convert data.frame objects to data.table.</li>
@@ -141,7 +155,7 @@
 </ul>
 </div>
     <div id="dataspacer-0-4-2" class="section level1">
-<h1 class="hasAnchor">
+<h1 class="page-header">
 <a href="#dataspacer-0-4-2" class="anchor"></a>DataSpaceR 0.4.2</h1>
 <ul>
 <li>Added <code>refresh</code> method for both connection and study classes.</li>
@@ -149,7 +163,7 @@
 </ul>
 </div>
     <div id="dataspacer-0-4-1" class="section level1">
-<h1 class="hasAnchor">
+<h1 class="page-header">
 <a href="#dataspacer-0-4-1" class="anchor"></a>DataSpaceR 0.4.1</h1>
 <ul>
 <li>Included additional columns (<code>short_name</code>, <code>type</code>, <code>status</code>, <code>stage</code>, <code>species</code>, <code>start_date</code>, <code>strategy</code>) in <code>availableStudies</code>.</li>
@@ -157,7 +171,7 @@
 </ul>
 </div>
     <div id="dataspacer-0-4-0" class="section level1">
-<h1 class="hasAnchor">
+<h1 class="page-header">
 <a href="#dataspacer-0-4-0" class="anchor"></a>DataSpaceR 0.4.0</h1>
 <ul>
 <li>Added <code>availableGroups</code> field to <code>DataSpaceConnection</code> class.</li>
@@ -165,14 +179,14 @@
 </ul>
 </div>
     <div id="dataspacer-0-3-0" class="section level1">
-<h1 class="hasAnchor">
+<h1 class="page-header">
 <a href="#dataspacer-0-3-0" class="anchor"></a>DataSpaceR 0.3.0</h1>
 <ul>
 <li>Updated <code>DataSpaceConnection</code> class and <code>connectDS</code> constructor to be not study-specific.</li>
 </ul>
 </div>
     <div id="dataspacer-0-2-1" class="section level1">
-<h1 class="hasAnchor">
+<h1 class="page-header">
 <a href="#dataspacer-0-2-1" class="anchor"></a>DataSpaceR 0.2.1</h1>
 <ul>
 <li>Modified <code>getUserEmail()</code> to get email from netrc file.</li>
@@ -180,7 +194,7 @@
 </ul>
 </div>
     <div id="dataspacer-0-2-0" class="section level1">
-<h1 class="hasAnchor">
+<h1 class="page-header">
 <a href="#dataspacer-0-2-0" class="anchor"></a>DataSpaceR 0.2.0</h1>
 <ul>
 <li>Added <code>getVariableInfo</code> method to <code>DataSpaceConnection</code> class.</li>
@@ -193,7 +207,7 @@
 </ul>
 </div>
     <div id="dataspacer-0-1-0" class="section level1">
-<h1 class="hasAnchor">
+<h1 class="page-header">
 <a href="#dataspacer-0-1-0" class="anchor"></a>DataSpaceR 0.1.0</h1>
 <ul>
 <li>Initialized the package with <code><a href="../reference/connectDS.html">connectDS()</a></code> and other basic functions.</li>
@@ -234,11 +248,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

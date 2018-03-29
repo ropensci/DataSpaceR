@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Function reference" />
+
+<meta property="og:image" content="/logo.png" />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -46,6 +52,8 @@
 
 </script>
 
+
+
   </head>
 
   <body>
@@ -59,12 +67,16 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">DataSpaceR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">DataSpaceR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.1</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -85,7 +97,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -109,6 +121,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -119,10 +132,7 @@
       <div class="row">
   <div class="col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.5.1</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
     <div class="contents">
@@ -143,18 +153,6 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="checkNetrc.html">checkNetrc</a></code> </p>
-          </td>
-          <td><p>Check netrc file</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="connectDS.html">connectDS</a></code> </p>
-          </td>
-          <td><p>Create a connection to DataSpace</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="DataSpaceConnection.html">DataSpaceConnection</a></code> </p>
           </td>
           <td><p>The DataSpaceConnection class</p></td>
@@ -173,7 +171,19 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="writeNetrc.html">writeNetrc</a></code> </p>
+            <p><code><a href="checkNetrc.html">checkNetrc()</a></code> </p>
+          </td>
+          <td><p>Check netrc file</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="connectDS.html">connectDS()</a></code> </p>
+          </td>
+          <td><p>Create a connection to DataSpace</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="writeNetrc.html">writeNetrc()</a></code> </p>
           </td>
           <td><p>Write a netrc file</p></td>
         </tr>
@@ -196,11 +206,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
