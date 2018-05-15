@@ -140,6 +140,43 @@ setCurlOptions <- function(netrcFile) {
   curlOptions
 }
 
+
+#' @importFrom httr GET content
+checkCredential <- function(onStaging, verbose) {
+  if (verbose) message("Checking credential...")
+
+  url <- paste0(
+    "https://",
+    ifelse(onStaging, STAGING, PRODUCTION),
+    "/login-whoami.view"
+  )
+
+  res <- GET(
+    url = url,
+    config = Rlabkey:::labkey.getRequestOptions()
+  )
+
+  if (res$status_code == 200) {
+    if (grepl("json", res$headers$`content-type`)) {
+      parsed <- content(res)
+
+      if (parsed$displayName == "guest") {
+        stop("Invalid credential or deactivated account. Check your account in the portal.", call. = FALSE)
+      } else {
+        return(TRUE)
+      }
+    } else {
+      stop("Something went wrong. Check the portal and try again.", call. = FALSE)
+    }
+  } else if (res$status_code == 401) {
+    stop("Invalid credential or deactivated account. Check your account in the portal.", call. = FALSE)
+  } else if (res$status_code == 403) {
+    stop("The portal is in admin-only mode. Please try again later.", call. = FALSE)
+  } else {
+    stop("Something went wrong. Check the portal and try again.", call. = FALSE)
+  }
+}
+
 makeCountQuery <- function(dataset, group) {
   query <-
     paste("SELECT",

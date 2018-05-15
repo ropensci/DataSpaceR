@@ -13,3 +13,6 @@
 #' @import R6 Rlabkey assertthat
 #' @importFrom data.table data.table setDT := rbindlist setorder setkey
 NULL
+
+PRODUCTION <- "dataspace.cavd.org"
+STAGING <- "dataspace-staging.cavd.org"

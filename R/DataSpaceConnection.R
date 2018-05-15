@@ -52,6 +52,7 @@
 #' }
 #' @docType class
 #' @importFrom rjson fromJSON
+#' @importFrom curl has_internet nslookup
 DataSpaceConnection <- R6Class(
   classname = "DataSpaceConnection",
   public = list(
@@ -63,6 +64,12 @@ DataSpaceConnection <- R6Class(
                   msg = "Enter both `login` and `password` or use netrc file.")
       assert_that(is.logical(verbose))
       assert_that(is.logical(onStaging))
+      assert_that(has_internet(),
+                  msg = "No internet connection. Please connect to internet and try again.")
+
+      # check if the portal is up
+      assert_that(!is.null(nslookup(ifelse(onStaging, STAGING, PRODUCTION), error = FALSE)),
+                  msg = "The portal is currently down. Try again later.")
 
       # get primary fields
       labkey.url.base <- getUrlBase(onStaging)
@@ -71,6 +78,9 @@ DataSpaceConnection <- R6Class(
       # set Curl options
       netrcFile <- getNetrc(login, password, onStaging)
       curlOptions <- setCurlOptions(netrcFile)
+
+      # check credential
+      checkCredential(onStaging, verbose)
 
       # set primary fields
       private$.config <-

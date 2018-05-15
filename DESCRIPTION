@@ -18,6 +18,8 @@ Imports:
     utils,
     R6,
     Rlabkey (>= 2.2.0),
+    curl,
+    httr,
     assertthat,
     digest,
     rjson,
