@@ -14,5 +14,6 @@
 #' @importFrom data.table data.table setDT := rbindlist setorder setkey
 NULL
 
+# Global Variables
 PRODUCTION <- "dataspace.cavd.org"
 STAGING <- "dataspace-staging.cavd.org"

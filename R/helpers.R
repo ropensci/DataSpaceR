@@ -1,6 +1,10 @@
+isWindows <- function() {
+  .Platform$OS.type == "windows"
+}
+
 getUrlBase <- function(onStaging) {
-  production <- "https://dataspace.cavd.org"
-  staging <- "https://dataspace-staging.cavd.org"
+  production <- paste0("https://", PRODUCTION)
+  staging <- paste0("https://", STAGING)
 
   if (exists("labkey.url.base", .GlobalEnv)) {
     labkey.url.base <- get("labkey.url.base", .GlobalEnv)
@@ -30,7 +34,7 @@ getUserEmail <- function(labkey.url.base, login) {
   } else if (!is.null(login)) {
     labkey.user.email <- login
   } else if (file.exists("~/.netrc") || file.exists("~/_netrc")) {
-    netrcFile <- ifelse(.Platform$OS.type == "windows", "~/_netrc", "~/.netrc")
+    netrcFile <- ifelse(isWindows(), "~/_netrc", "~/.netrc")
     netrc <- readChar(netrcFile, file.info(netrcFile)$size)
     netrc <- strsplit(netrc, split = "\\s+")[[1]]
 
@@ -56,7 +60,7 @@ getUrlPath <- function(study) {
     }
   } else {
     if (is.null(study)) {
-      stop("study cannot be NULL")
+      stop("'study' cannot be NULL.", call. = FALSE)
     } else if (study == "") {
       labkey.url.path <- file.path("", "CAVD")
     } else {
@@ -80,10 +84,10 @@ checkStudy <- function(study, labkey.url.base, verbose = FALSE) {
 
   if (!reqStudy %in% c("", validStudies)) {
     if (!verbose) {
-      stop(paste0(reqStudy, " is not a valid study"))
+      stop(paste0("'", reqStudy, "' is not a valid study."), call. = FALSE)
     } else {
-      stop(paste0(reqStudy, " is not a valid study\nValid studies: ",
-                  paste(validStudies, collapse = ", ")))
+      stop(paste0("'", reqStudy, " is not a valid study.\nValid studies: ",
+                  paste(validStudies, collapse = ", ")), call. = FALSE)
     }
   }
 
@@ -102,22 +106,15 @@ fixStudy <- function(study, labkey.url.base, labkey.url.path) {
 }
 
 getNetrc <- function(login, password, onStaging = FALSE) {
-  if (onStaging) {
-    machine <- "dataspace-staging.cavd.org"
-  } else {
-    machine <- "dataspace.cavd.org"
-  }
-
   if (!is.null(login) && !is.null(password)) {
-    netrc <- writeNetrc(login, password, machine)
+    netrc <- writeNetrc(login, password, onStaging = onStaging)
   } else if (exists("labkey.netrc.file", .GlobalEnv)) {
     netrc <- get("labkey.netrc.file", .GlobalEnv)
   } else {
-    if (.Platform$OS.type == "windows") {
-      netrc <- paste0(Sys.getenv("HOME"), "\\_netrc")
-    } else {
-      netrc <- paste0(Sys.getenv("HOME"), "/.netrc")
-    }
+    netrc <- paste0(
+      Sys.getenv("HOME"),
+      ifelse(isWindows(), "\\_netrc", "/.netrc")
+    )
   }
 
   netrc

@@ -10,9 +10,9 @@ test_that("`writeNetrc`", {
 })
 
 test_that("`checkNetrc`", {
-  msg <- capture.output(netrcFile <- try(checkNetrc(), silent = TRUE))
+  netrcFile <- try(checkNetrc(), silent = TRUE)
 
   expect_is(netrcFile, "character")
   expect_true(file.exists(netrcFile))
-  expect_match(msg, "it looks valid")
+  expect_message(checkNetrc(), "it looks valid")
 })
