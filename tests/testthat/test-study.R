@@ -144,7 +144,8 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
 con <- connectDS()
 
-test_study("", c("BAMA", "Demographics", "ELISPOT", "ICS", "NAb"))
-test_study("cvd408", c("BAMA", "Demographics", "ICS", "NAb"))
-test_study("", c("Demographics", "NAb"), groupId = 216, groupLabel = "mice")
-test_study("", c("Demographics", "NAb"), groupId = 217, groupLabel = "CAVD 242")
+test_study("", c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"))
+test_study("cvd408", c("BAMA", "ICS", "Demographics", "NAb"))
+test_study("", c("Demographics", "NAb"), groupId = 216, groupLabel = c("mice" = "mice"))
+test_study("", c("Demographics", "NAb"), groupId = 217, groupLabel = c("CAVD 242" = "CAVD 242"))
+test_study("", c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"), groupId = 220, groupLabel = c("NYVAC_durability" = "NYVAC durability comparison"))

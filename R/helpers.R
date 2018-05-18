@@ -186,7 +186,7 @@ makeCountQuery <- function(dataset, group) {
     query <- paste(
       query,
       "WHERE",
-        paste0("participantid.\"", group, "\" = '", group, "'")
+        paste0("participantid.\"", names(group), "\" = '", group, "'")
     )
   }
 
