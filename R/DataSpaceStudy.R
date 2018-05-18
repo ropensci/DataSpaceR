@@ -150,7 +150,7 @@ DataSpaceStudy <- R6Class(
       viewName <- NULL
       if (!is.null(private$.group)) {
         colFilter <- rbind(colFilter,
-                           makeFilter(c(paste0("SubjectId/", private$.group),
+                           makeFilter(c(paste0("SubjectId/", names(private$.group)),
                                         "EQUAL",
                                         private$.group)))
       }

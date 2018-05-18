@@ -104,10 +104,12 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       })
 
       test_that("`getDataset` (access cache)", {
-        for (datasetName in cavd$availableDatasets$name) {
+        for (i in seq_len(nrow(cavd$availableDatasets))) {
+          datasetName <- cavd$availableDatasets$name[i]
+          datasetN <- cavd$availableDatasets$n[i]
           dataset <- try(cavd$getDataset(datasetName = datasetName), silent = TRUE)
           expect_is(dataset, "data.table", info = datasetName)
-          expect_gt(nrow(dataset), 0)
+          expect_equal(nrow(dataset), datasetN)
         }
       })
 
