@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="DataSpaceR — DataSpaceR-package" />
 
 <meta property="og:description" content="DataSpaceR provides a convenient API for accessing datasets
@@ -43,19 +46,15 @@ within the DataSpace database." />
 <![endif]-->
 
 
-<!-- Google analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111116186-1"></script>
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  ga('create', 'UA-111116186-1', 'auto');
-  ga('send', 'pageview');
-
+  gtag('config', 'UA-111116186-1');
 </script>
-
-
 
   </head>
 
@@ -132,17 +131,20 @@ within the DataSpace database." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>DataSpaceR</h1>
-    <small>Source: <a href='https://github.com/FredHutch/DataSpaceR/blob/master/R/DataSpaceR.R'><code>R/DataSpaceR.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/FredHutch/DataSpaceR/blob/master/R/DataSpaceR.R'><code>R/DataSpaceR.R</code></a></small>
+    <div class="hidden name"><code>DataSpaceR-package.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>DataSpaceR provides a convenient API for accessing datasets
 within the DataSpace database.</p>
     
+    </div>
 
         
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -152,7 +154,7 @@ convenient methods for accessing datasets.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='connectDS.html'>connectDS</a></code></p>
+    <div class='dont-index'><p><code><a href='connectDS.html'>connectDS</a></code></p></div>
     
 
   </div>
