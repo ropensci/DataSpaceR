@@ -3,7 +3,7 @@
 DataSpaceR <img src="man/figures/logo.png" align="right" />
 ===========================================================
 
-[![Build Status](https://travis-ci.org/FredHutch/DataSpaceR.svg?branch=master)](https://travis-ci.org/FredHutch/DataSpaceR) [![Build status](https://ci.appveyor.com/api/projects/status/bmwyv5i32xr07bdr/branch/master?svg=true)](https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master) [![codecov](https://codecov.io/gh/FredHutch/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/FredHutch/DataSpaceR/branch/master)
+[![Build Status](https://travis-ci.org/CAVDDataSpace/DataSpaceR.svg?branch=master)](https://travis-ci.org/CAVDDataSpace/DataSpaceR) [![Build status](https://ci.appveyor.com/api/projects/status/bmwyv5i32xr07bdr/branch/master?svg=true)](https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master) [![codecov](https://codecov.io/gh/CAVDDataSpace/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/CAVDDataSpace/DataSpaceR/branch/master)
 
 Overview
 --------
@@ -19,20 +19,20 @@ The package can be downloaded here and installed like any other R packages or in
 
 ### using `devtools` (development):
 
-<https://github.com/FredHutch/DataSpaceR>
+<https://github.com/CAVDDataSpace/DataSpaceR>
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("FredHutch/DataSpaceR")
+devtools::install_github("CAVDDataSpace/DataSpaceR")
 ```
 
 ### using `drat` (stable):
 
-<https://github.com/FredHutch/drat>
+<https://github.com/CAVDDataSpace/drat>
 
 ``` r
 # install.packages("drat")
-drat::addRepo("fredhutch")
+drat::addRepo("CAVDDataSpace")
 install.packages("DataSpaceR")
 ```
 
@@ -78,12 +78,12 @@ con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
 #>   User: jkim2345@scharp.org
-#>   Available studies: 293
-#>     - 58 studies with data
-#>     - 1754 subjects
-#>     - 4 assays
-#>     - 225839 data points
-#>   Available groups: 2
+#>   Available studies: 295
+#>     - 59 studies with data
+#>     - 1790 subjects
+#>     - 5 assays
+#>     - 240743 data points
+#>   Available groups: 3
 ```
 
 `connectDS()` will create a connection to DataSpace. The user needs credentials stored in a `netrc` file to access the database.
@@ -94,14 +94,14 @@ con
 knitr::kable(head(con$availableStudies))
 ```
 
-| study\_name | short\_name                    | title                                                                                     | type               | status   | stage            | species            | start\_date | strategy                             |
-|:------------|:-------------------------------|:------------------------------------------------------------------------------------------|:-------------------|:---------|:-----------------|:-------------------|:------------|:-------------------------------------|
-| cvd232      | Parks\_RV\_232                 | Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques. | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-11-24  | Vector vaccines (viral or bacterial) |
-| cvd234      | Zolla-Pazner\_Mab\_test1 Study | Zolla-Pazner\_Mab\_Test1                                                                  | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         |
-| cvd235      | mAbs potency                   | Weiss mAbs potency                                                                        | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2008-08-21  | Prophylactic neutralizing Ab         |
-| cvd236      | neutralization assays          | neutralization assays                                                                     | Antibody Screening | Active   | In Progress      | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         |
-| cvd238      | Gallo\_PA\_238                 | HIV-1 neutralization responses in chronically infected individuals                        | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-01-08  | Prophylactic neutralizing Ab         |
-| cvd239      | CAVIMC-015                     | Lehner\_Thorstensson\_Allovac                                                             | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-01-08  | Protein and peptide vaccines         |
+| study\_name | short\_name                    | title                                                                                      | type               | status   | stage            | species            | start\_date | strategy                             |
+|:------------|:-------------------------------|:-------------------------------------------------------------------------------------------|:-------------------|:---------|:-----------------|:-------------------|:------------|:-------------------------------------|
+| cvd232      | Parks\_RV\_232                 | ​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques. | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-11-24  | Vector vaccines (viral or bacterial) |
+| cvd234      | Zolla-Pazner\_Mab\_test1 Study | Zolla-Pazner\_Mab\_Test1                                                                   | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         |
+| cvd235      | mAbs potency                   | Weiss mAbs potency                                                                         | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2008-08-21  | Prophylactic neutralizing Ab         |
+| cvd236      | neutralization assays          | neutralization assays                                                                      | Antibody Screening | Active   | In Progress      | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         |
+| cvd238      | Gallo\_PA\_238                 | HIV-1 neutralization responses in chronically infected individuals                         | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-01-08  | Prophylactic neutralizing Ab         |
+| cvd239      | CAVIMC-015                     | Lehner\_Thorstensson\_Allovac                                                              | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-01-08  | Protein and peptide vaccines         |
 
 ### available groups can be listed by:
 
@@ -109,10 +109,11 @@ knitr::kable(head(con$availableStudies))
 knitr::kable(con$availableGroups)
 ```
 
-|   id| label    | description                       | createdBy | shared |    n| studies                        |
-|----:|:---------|:----------------------------------|:----------|:-------|----:|:-------------------------------|
-|  216| mice     | NA                                | readjk    | FALSE  |   75| cvd468, cvd483, cvd316, cvd331 |
-|  217| CAVD 242 | This is a fake group for CAVD 242 | readjk    | FALSE  |   30| cvd242                         |
+|   id| label                       | originalLabel     | description                                                                                    | createdBy | shared |    n| studies                                   |
+|----:|:----------------------------|:------------------|:-----------------------------------------------------------------------------------------------|:----------|:-------|----:|:------------------------------------------|
+|  216| mice                        | mice              | NA                                                                                             | readjk    | FALSE  |   75| c("cvd468", "cvd483", "cvd316", "cvd331") |
+|  217| CAVD 242                    | CAVD 242          | This is a fake group for CAVD 242                                                              | readjk    | FALSE  |   30| cvd242                                    |
+|  220| NYVAC durability comparison | NYVAC\_durability | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products. | ehenrich  | TRUE   |   78| c("cvd281", "cvd434", "cvd259", "cvd277") |
 
 ### `con$getStudy("cvd408")` will create an instance of `cvd408`.
 
@@ -124,8 +125,8 @@ cvd408
 #>   URL: https://dataspace.cavd.org/CAVD/cvd408
 #>   Available datasets:
 #>     - BAMA
-#>     - Demographics
 #>     - ICS
+#>     - Demographics
 #>     - NAb
 class(cvd408)
 #> [1] "DataSpaceStudy" "R6"
@@ -140,8 +141,8 @@ knitr::kable(cvd408$availableDatasets)
 | name         | label                           |     n|
 |:-------------|:--------------------------------|-----:|
 | BAMA         | Binding Ab multiplex assay      |  1080|
-| Demographics | Demographics                    |    20|
 | ICS          | Intracellular Cytokine Staining |  3720|
+| Demographics | Demographics                    |    20|
 | NAb          | Neutralizing antibody           |   540|
 
 which will print names of available datasets.
@@ -151,7 +152,7 @@ which will print names of available datasets.
 ``` r
 NAb <- cvd408$getDataset("NAb")
 dim(NAb)
-#> [1] 540  28
+#> [1] 540  29
 colnames(NAb)
 #>  [1] "ParticipantId"          "ParticipantVisit/Visit"
 #>  [3] "visit_day"              "assay_identifier"      
@@ -166,7 +167,8 @@ colnames(NAb)
 #> [21] "lab_code"               "exp_assayid"           
 #> [23] "titer_ID50"             "titer_ID80"            
 #> [25] "nab_response_ID50"      "nab_response_ID80"     
-#> [27] "slope"                  "vaccine_matched"
+#> [27] "slope"                  "vaccine_matched"       
+#> [29] "study_prot"
 ```
 
 The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.
