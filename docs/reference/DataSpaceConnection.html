@@ -150,10 +150,6 @@
 
     <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-    
     <h2 class="hasAnchor" id="constructor"><a class="anchor" href="#constructor"></a>Constructor</h2>
 
     
@@ -176,10 +172,10 @@
   <dt><code>initialize(login = NULL, password = NULL, verbose = FALSE,
   onStaging = FALSE)</code></dt><dd><p>Initialize <code>DataSpaceConnection</code> class. See <code><a href='connectDS.html'>connectDS</a></code>.</p></dd>
   <dt><code>print()</code></dt><dd><p>Print <code>DataSpaceConnection</code> class.</p></dd>
-  <dt><code>getStudy(study, groupId = NULL)</code></dt><dd><p>Create a <code>DataSpaceStudy</code> class.
+  <dt><code>getStudy(study, groupId = NULL)</code></dt><dd><p>Create a <code><a href='DataSpaceStudy.html'>DataSpaceStudy</a></code> object.
     <code>study</code>: A character. Name of the study to retrieve.
     <code>groupId</code>: DEPRECATED. Use <code>getGroup</code> method.</p></dd>
-  <dt><code>getGroup(groupId)</code></dt><dd><p>Create a <code>DataSpaceStudy</code> class.
+  <dt><code>getGroup(groupId)</code></dt><dd><p>Create a <code><a href='DataSpaceStudy.html'>DataSpaceStudy</a></code> object.
     <code>groupId</code>: An integer. ID of the group to retrieve.</p></dd>
   <dt><code>refresh()</code></dt><dd><p>Refresh <code>DataSpaceConnection</code> class.</p></dd>
 </dl>
@@ -193,6 +189,21 @@
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Create a connection (Initiate a DataSpaceConnection object)</span>
 <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='connectDS.html'>connectDS</a></span>()
+<span class='no'>con</span>
+
+<span class='co'># Connect to cvd408</span>
+<span class='co'># https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Study/cvd408?q=408</span>
+<span class='no'>cvd408</span> <span class='kw'>&lt;-</span> <span class='no'>con</span>$<span class='fu'>getStudy</span>(<span class='st'>"cvd408"</span>)
+
+<span class='co'># Connect to all studies</span>
+<span class='no'>cvd</span> <span class='kw'>&lt;-</span> <span class='no'>con</span>$<span class='fu'>getStudy</span>(<span class='st'>"cvd408"</span>)
+
+<span class='co'># Connect to the NYVAC durability comparison group</span>
+<span class='co'># https://dataspace.cavd.org/cds/CAVD/app.view#group/groupsummary/220</span>
+<span class='no'>nyvac</span> <span class='kw'>&lt;-</span> <span class='no'>con</span>$<span class='fu'>getGroup</span>(<span class='fl'>220</span>)
+
+<span class='co'># Refresh the connection object to update available studies and groups</span>
+<span class='no'>con</span>$<span class='fu'>refresh</span>()
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -200,8 +211,6 @@
     <ul class="nav nav-pills nav-stacked">
       
       <li><a href="#format">Format</a></li>
-
-      <li><a href="#details">Details</a></li>
 
       <li><a href="#constructor">Constructor</a></li>
 

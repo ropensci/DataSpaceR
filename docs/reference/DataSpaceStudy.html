@@ -150,14 +150,11 @@
 
     <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-    
     <h2 class="hasAnchor" id="constructor"><a class="anchor" href="#constructor"></a>Constructor</h2>
 
     
-    <p><code>DataSpaceConnection$getStudy()</code></p>
+    <p><code>DataSpaceConnection$getStudy()</code>
+<code>DataSpaceConnection$getGroup()</code></p>
     
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
@@ -208,10 +205,31 @@
 <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='connectDS.html'>connectDS</a></span>()
 
 <span class='co'># Connect to cvd408 (Initiate a DataSpaceStudy object)</span>
+<span class='co'># https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Study/cvd408?q=408</span>
 <span class='no'>cvd408</span> <span class='kw'>&lt;-</span> <span class='no'>con</span>$<span class='fu'>getStudy</span>(<span class='st'>"cvd408"</span>)
+<span class='no'>cvd408</span>
 
 <span class='co'># Retrieve Neutralizing antibody dataset (NAb) for cvd408 from DataSpace</span>
-<span class='no'>cvd408</span>$<span class='fu'>getDataset</span>(<span class='st'>"NAb"</span>)
+<span class='no'>NAb</span> <span class='kw'>&lt;-</span> <span class='no'>cvd408</span>$<span class='fu'>getDataset</span>(<span class='st'>"NAb"</span>)
+
+<span class='co'># Get variable information of the NAb dataset</span>
+<span class='no'>cvd408</span>$<span class='fu'>getVariableInfo</span>(<span class='st'>"NAb"</span>)
+
+<span class='co'># Take a look at cvd408's treatment arm information</span>
+<span class='no'>cvd408</span>$<span class='no'>treatmentArm</span>
+
+<span class='co'># Clear cache of a study object</span>
+<span class='no'>cvd408</span>$<span class='fu'>clearCache</span>()
+
+<span class='co'># Connect to the NYVAC durability comparison group</span>
+<span class='co'># https://dataspace.cavd.org/cds/CAVD/app.view#group/groupsummary/220</span>
+<span class='no'>nyvac</span> <span class='kw'>&lt;-</span> <span class='no'>con</span>$<span class='fu'>getGroup</span>(<span class='fl'>220</span>)
+
+<span class='co'># Connect to all studies</span>
+<span class='no'>cvd</span> <span class='kw'>&lt;-</span> <span class='no'>con</span>$<span class='fu'>getStudy</span>(<span class='st'>""</span>)
+
+<span class='co'># Refresh a study object</span>
+<span class='no'>cvd</span>$<span class='fu'>refresh</span>()
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -219,8 +237,6 @@
     <ul class="nav nav-pills nav-stacked">
       
       <li><a href="#format">Format</a></li>
-
-      <li><a href="#details">Details</a></li>
 
       <li><a href="#constructor">Constructor</a></li>
 

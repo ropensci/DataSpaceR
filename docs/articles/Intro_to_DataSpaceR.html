@@ -101,7 +101,7 @@
       <h1>A Simple Introduction to the DataSpaceR Package</h1>
                         <h4 class="author">Ju Yeong Kim</h4>
             
-            <h4 class="date">2018-05-30</h4>
+            <h4 class="date">2018-06-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/CAVDDataSpace/DataSpaceR/blob/master/vignettes/Intro_to_DataSpaceR.Rmd"><code>vignettes/Intro_to_DataSpaceR.Rmd</code></a></small>
       <div class="hidden name"><code>Intro_to_DataSpaceR.Rmd</code></div>
@@ -450,9 +450,9 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 ##   URL: https://dataspace.cavd.org/CAVD
 ##   Available datasets:
 ##     - BAMA
-##     - ICS
-##     - ELISPOT
 ##     - Demographics
+##     - ELISPOT
+##     - ICS
 ##     - NAb</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(cavd<span class="op">$</span>availableDatasets)</code></pre></div>
 <table class="table">
@@ -468,9 +468,9 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 <td align="right">63579</td>
 </tr>
 <tr class="even">
-<td align="left">ICS</td>
-<td align="left">Intracellular Cytokine Staining</td>
-<td align="right">128226</td>
+<td align="left">Demographics</td>
+<td align="left">Demographics</td>
+<td align="right">1790</td>
 </tr>
 <tr class="odd">
 <td align="left">ELISPOT</td>
@@ -478,9 +478,9 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 <td align="right">5610</td>
 </tr>
 <tr class="even">
-<td align="left">Demographics</td>
-<td align="left">Demographics</td>
-<td align="right">1790</td>
+<td align="left">ICS</td>
+<td align="left">Intracellular Cytokine Staining</td>
+<td align="right">128226</td>
 </tr>
 <tr class="odd">
 <td align="left">NAb</td>
@@ -587,7 +587,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">str</span>(cvd408<span class="op">$</span>cache)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 222 kB</code></pre>
+<pre><code>## 226 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset" class="section level3">
 <h3 class="hasAnchor">
@@ -596,7 +596,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.127   0.000   0.165</code></pre>
+##   0.123   0.000   0.162</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
@@ -604,7 +604,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 ##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  29 variables:
 ##   .. ..- attr(*, ".internal.selfref")=&lt;externalptr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 339 kB</code></pre>
+<pre><code>## 343 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset-again" class="section level3">
 <h3 class="hasAnchor">
@@ -613,7 +613,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.002   0.000   0.002</code></pre>
+##   0.002   0.000   0.003</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
@@ -621,7 +621,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 ##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  29 variables:
 ##   .. ..- attr(*, ".internal.selfref")=&lt;externalptr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 358 kB</code></pre>
+<pre><code>## 362 kB</code></pre>
 </div>
 <div id="clear-cache" class="section level3">
 <h3 class="hasAnchor">
@@ -631,7 +631,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 242 kB</code></pre>
+<pre><code>## 245 kB</code></pre>
 </div>
 </div>
 <div id="session-information" class="section level2">
