@@ -264,7 +264,7 @@ DataSpaceConnection <- R6Class(
           createdBy = group$createdBy$displayValue,
           shared = group$category$shared,
           n = length(group$category$participantIds),
-          studies = list(unique(gsub(" \\S+$", "", group$category$participantIds)))
+          studies = list(unique(substr(group$category$participantIds, 1, 6)))
         )
       })
 
