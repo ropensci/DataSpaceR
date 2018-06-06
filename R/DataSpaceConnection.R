@@ -199,7 +199,8 @@ DataSpaceConnection <- R6Class(
         schemaName = "CDS",
         queryName = "study",
         colSelect = colSelect,
-        colNameOpt = "fieldname"
+        colNameOpt = "fieldname",
+        method = "GET"
       )
 
       setDT(availableStudies)
@@ -213,7 +214,8 @@ DataSpaceConnection <- R6Class(
         folderPath = "/CAVD",
         schemaName = "CDS",
         queryName = "ds_properties",
-        colNameOpt = "fieldname"
+        colNameOpt = "fieldname",
+        method = "GET"
       )
 
       setDT(stats)

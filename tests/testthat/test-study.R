@@ -1,5 +1,6 @@
 
 test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
+  datasets <- sort(datasets)
   target <- ifelse(study != "", study, ifelse(is.null(groupLabel), "CAVD", groupLabel))
   context(paste0("DataSpaceStudy (", target, ")"))
 

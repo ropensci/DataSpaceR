@@ -163,6 +163,7 @@ DataSpaceStudy <- R6Class(
         viewName = viewName,
         colNameOpt = "fieldname",
         colFilter = colFilter,
+        method = "GET",
         ...
       )
 
@@ -280,7 +281,7 @@ DataSpaceStudy <- R6Class(
       # convert to data.table
       setDT(availableDatasets)
 
-      private$.availableDatasets <- availableDatasets
+      private$.availableDatasets <- availableDatasets[order(name)]
     },
     .getTreatmentArm = function() {
       colSelect <- c("arm_id", "arm_part", "arm_group", "arm_name",
@@ -294,7 +295,8 @@ DataSpaceStudy <- R6Class(
           queryName = "treatmentarm",
           colSelect = colSelect,
           colNameOpt = "fieldname",
-          colFilter = makeFilter(c("arm_id", "CONTAINS", private$.study))
+          colFilter = makeFilter(c("arm_id", "CONTAINS", private$.study)),
+          method = "GET"
         )
       )
 
