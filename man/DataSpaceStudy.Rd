@@ -11,9 +11,6 @@ DataSpaceStudy
 \description{
 The DataSpaceStudy class
 }
-\details{
-
-}
 \section{Constructor}{
 
 \code{DataSpaceConnection$getStudy()}

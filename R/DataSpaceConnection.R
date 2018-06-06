@@ -1,7 +1,5 @@
 #' The DataSpaceConnection class
 #'
-#' @details
-#'
 #' @section Constructor:
 #' \code{\link{connectDS}}
 #'
