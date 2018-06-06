@@ -101,7 +101,8 @@ DataSpaceConnection <- R6Class(
           labkey.url.base = labkey.url.base,
           labkey.user.email = labkey.user.email,
           curlOptions = curlOptions,
-          verbose = verbose
+          verbose = verbose,
+          packageVersion = packageVersion("DataSpaceR")
         )
 
       # get extra fields if available
@@ -264,7 +265,7 @@ DataSpaceConnection <- R6Class(
           createdBy = group$createdBy$displayValue,
           shared = group$category$shared,
           n = length(group$category$participantIds),
-          studies = list(unique(gsub(" \\S+$", "", group$category$participantIds)))
+          studies = list(unique(substr(group$category$participantIds, 1, 6)))
         )
       })
 

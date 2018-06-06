@@ -47,7 +47,8 @@ if ("DataSpaceConnection" %in% class(con)) {
         "labkey.url.base",
         "labkey.user.email",
         "curlOptions",
-        "verbose"
+        "verbose",
+        "packageVersion"
       )
       curlOptions <- c(
         "ssl_verifyhost",
@@ -71,6 +72,7 @@ if ("DataSpaceConnection" %in% class(con)) {
         expect_equal(con$config$labkey.url.base, "https://dataspace.cavd.org")
         expect_match(con$config$labkey.user.email, "\\S+@\\S+")
         expect_false(con$config$verbose)
+        expect_equal(con$config$packageVersion, packageVersion("DataSpaceR"))
         expect_is(con$config$curlOptions, "request")
 
         if (class(con$config$curlOptions) == "request") {

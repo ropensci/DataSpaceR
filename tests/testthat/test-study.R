@@ -16,21 +16,23 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
   })
 
   if ("DataSpaceStudy" %in% class(cavd)) {
-    con_names <- c(".__enclos_env__",
-                   "studyInfo",
-                   "group",
-                   "treatmentArm",
-                   "cache",
-                   "availableDatasets",
-                   "config",
-                   "study",
-                   "clone",
-                   "refresh",
-                   "getVariableInfo",
-                   "clearCache",
-                   "getDataset",
-                   "print",
-                   "initialize")
+    con_names <- c(
+      ".__enclos_env__",
+      "studyInfo",
+      "group",
+      "treatmentArm",
+      "cache",
+      "availableDatasets",
+      "config",
+      "study",
+      "clone",
+      "refresh",
+      "getVariableInfo",
+      "clearCache",
+      "getDataset",
+      "print",
+      "initialize"
+      )
     test_that("`DataSpaceStudy` contains correct fields and methods", {
       expect_equal(names(cavd), con_names)
     })
@@ -50,8 +52,14 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       })
 
       test_that("`config`", {
-        configs <- c("labkey.url.base", "labkey.user.email", "curlOptions",
-                     "verbose", "labkey.url.path")
+        configs <- c(
+          "labkey.url.base",
+          "labkey.user.email",
+          "curlOptions",
+          "verbose",
+          "packageVersion",
+          "labkey.url.path"
+        )
 
         expect_is(cavd$config, "list")
         expect_equal(names(cavd$config), configs)
