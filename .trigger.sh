@@ -11,4 +11,4 @@ curl -s -X POST \
   -H "Travis-API-Version: 3" \
   -H "Authorization: token $TRAVIS_API_TOKEN" \
   -d "$body" \
-  https://api.travis-ci.org/repo/FredHutch%2FDataSpaceR.test/requests
+  https://api.travis-ci.org/repo/CAVDDataSpace%2FDataSpaceR.test/requests
