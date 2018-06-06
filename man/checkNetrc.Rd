@@ -4,7 +4,11 @@
 \alias{checkNetrc}
 \title{Check netrc file}
 \usage{
-checkNetrc()
+checkNetrc(onStaging = FALSE)
+}
+\arguments{
+\item{onStaging}{A logical. Whether to check the staging server instead
+of the production server.}
 }
 \value{
 The name of the netrc file

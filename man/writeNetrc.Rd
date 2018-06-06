@@ -4,15 +4,15 @@
 \alias{writeNetrc}
 \title{Write a netrc file}
 \usage{
-writeNetrc(login, password, machine = "dataspace.cavd.org",
-  netrcFile = NULL)
+writeNetrc(login, password, onStaging = FALSE, netrcFile = NULL)
 }
 \arguments{
 \item{login}{A character. Email address used for logging in on DataSpace.}
 
 \item{password}{A character. Password associated with the login.}
 
-\item{machine}{A character. Host of DataSpace.}
+\item{onStaging}{A logical. Whether to connect to the staging server instead
+of the production server.}
 
 \item{netrcFile}{A character. Credentials will be written into that file.
 If left NULL, netrc will be written into a temporary file.}

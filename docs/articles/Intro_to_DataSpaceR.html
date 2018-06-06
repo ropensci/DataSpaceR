@@ -16,19 +16,16 @@
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><!-- Google analytics --><script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111116186-1"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  ga('create', 'UA-111116186-1', 'auto');
-  ga('send', 'pageview');
-
+  gtag('config', 'UA-111116186-1');
 </script>
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -78,13 +75,13 @@
   </a>
 </li>
 <li>
-  <a href="https://twitter.com/VaxDataSpace">
+  <a href="https://twitter.com/CAVDDataSpace">
     <span class="fa fa-twitter"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://github.com/FredHutch/DataSpaceR">
+  <a href="https://github.com/CAVDDataSpace/DataSpaceR">
     <span class="fa fa-github"></span>
      
   </a>
@@ -99,20 +96,20 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>A Simple Introduction to the DataSpaceR Package</h1>
                         <h4 class="author">Ju Yeong Kim</h4>
             
-            <h4 class="date">2018-03-29</h4>
+            <h4 class="date">2018-05-30</h4>
       
-      <small>Source: <a href="https://github.com/FredHutch/DataSpaceR/blob/master/vignettes/Intro_to_DataSpaceR.Rmd"><code>vignettes/Intro_to_DataSpaceR.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CAVDDataSpace/DataSpaceR/blob/master/vignettes/Intro_to_DataSpaceR.Rmd"><code>vignettes/Intro_to_DataSpaceR.Rmd</code></a></small>
+      <div class="hidden name"><code>Intro_to_DataSpaceR.Rmd</code></div>
 
     </div>
 
     
     
-<div class="contents">
 <p>This package provides a thin wrapper around <a href="https://cran.r-project.org/web/packages/Rlabkey/index.html">Rlabkey</a> and connects to the the <a href="https://dataspace.cavd.org">CAVD DataSpace</a> database, making it easier to fetch datasets from specific studies.</p>
 <div id="configuration" class="section level2">
 <h2 class="hasAnchor">
@@ -141,12 +138,12 @@ con</code></pre></div>
 <pre><code>## &lt;DataSpaceConnection&gt;
 ##   URL: https://dataspace.cavd.org
 ##   User: jkim2345@scharp.org
-##   Available studies: 293
-##     - 58 studies with data
-##     - 1754 subjects
-##     - 4 assays
-##     - 225839 data points
-##   Available groups: 2</code></pre>
+##   Available studies: 295
+##     - 59 studies with data
+##     - 1790 subjects
+##     - 5 assays
+##     - 240743 data points
+##   Available groups: 3</code></pre>
 <p>The call to <code>connectDS</code> instantiates the connection. Printing the object shows where it’s connected and the available studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">"cvd256"</span>)
 cvd256</code></pre></div>
@@ -226,7 +223,7 @@ cvd256</code></pre></div>
 <p>We can grab any of the datasets listed in the connection (<code>availableDatasets</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
 <span class="kw">dim</span>(NAb)</code></pre></div>
-<pre><code>## [1] 1419   28</code></pre>
+<pre><code>## [1] 1419   29</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(NAb)</code></pre></div>
 <pre><code>##  [1] "ParticipantId"          "ParticipantVisit/Visit"
 ##  [3] "visit_day"              "assay_identifier"      
@@ -241,7 +238,8 @@ cvd256</code></pre></div>
 ## [21] "lab_code"               "exp_assayid"           
 ## [23] "titer_ID50"             "titer_ID80"            
 ## [25] "nab_response_ID50"      "nab_response_ID80"     
-## [27] "slope"                  "vaccine_matched"</code></pre>
+## [27] "slope"                  "vaccine_matched"       
+## [29] "study_prot"</code></pre>
 <p>The <em>cvd256</em> object is an <a href="https://cran.r-project.org/web/packages/R6/"><code>R6</code></a> class, so it behaves like a true object. Functions (like <code>getDataset</code>) are members of the object, thus the <code>$</code> semantics to access member functions.</p>
 <p>We can get detailed variable information using <code>getVariableInfo</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(cvd256<span class="op">$</span><span class="kw">getVariableInfo</span>(<span class="st">"NAb"</span>))</code></pre></div>
@@ -350,72 +348,78 @@ cvd256</code></pre></div>
 <td align="left">The type of specimen used in the assay. For nAb assays, this is generally serum or plasma.</td>
 </tr>
 <tr class="odd">
+<td align="left">study_prot</td>
+<td align="left">Study Protocol</td>
+<td align="left">Text (String)</td>
+<td align="left">Study protocol</td>
+</tr>
+<tr class="even">
 <td align="left">summary_level</td>
 <td align="left">Data summary level</td>
 <td align="left">Text (String)</td>
 <td align="left">Defines the level at which the magnitude or response has been summarized (e.g. summarized at the isolate level).</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">target_cell</td>
 <td align="left">Target cell</td>
 <td align="left">Text (String)</td>
 <td align="left">The cell line used in the assay to determine infection (lack of neutralization). Generally TZM-bl or A3R5, but can also be other cell lines or non-engineered cells.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">tier_clade_virus</td>
 <td align="left">Neutralization tier + Antigen clade + Virus</td>
 <td align="left">Text (String)</td>
 <td align="left">A combination of neutralization tier, antigen clade, and virus used for filtering.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">titer_ID50</td>
 <td align="left">Titer ID50</td>
 <td align="left">Number (Double)</td>
 <td align="left">The adjusted value of 50% maximal inhibitory dilution (ID50).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">titer_ID80</td>
 <td align="left">Titer ID80</td>
 <td align="left">Number (Double)</td>
 <td align="left">The adjusted value of 80% maximal inhibitory dilution (ID80).</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">titer_ic50</td>
 <td align="left">Titer IC50</td>
 <td align="left">Number (Double)</td>
 <td align="left">The half maximal inhibitory concentration (IC50).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">titer_ic80</td>
 <td align="left">Titer IC80</td>
 <td align="left">Number (Double)</td>
 <td align="left">The 80% maximal inhibitory concentration (IC80).</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">vaccine_matched</td>
 <td align="left">Antigen vaccine match indicator</td>
 <td align="left">True/False (Boolean)</td>
 <td align="left">Indicates if the interactive part of the antigen was designed to match the immunogen in the vaccine.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">virus</td>
 <td align="left">Virus name</td>
 <td align="left">Text (String)</td>
 <td align="left">The term for the virus (antigen) being tested.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">virus_insert_name</td>
 <td align="left">Virus insert name</td>
 <td align="left">Text (String)</td>
 <td align="left">The amino acid sequence inserted in the virus construct.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">virus_type</td>
 <td align="left">Virus type</td>
 <td align="left">Text (String)</td>
 <td align="left">The type of virus used in the construction of the nAb antigen.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">visit_day</td>
 <td align="left">Visit Day</td>
 <td align="left">Integer</td>
@@ -430,7 +434,7 @@ cvd256</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256Filter &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/Rlabkey/topics/makeFilter">makeFilter</a></span>(<span class="kw">c</span>(<span class="st">"visit_day"</span>, <span class="st">"EQUAL"</span>, <span class="st">"0"</span>))
 NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>, <span class="dt">colFilter =</span> cvd256Filter)
 <span class="kw">dim</span>(NAb_day0)</code></pre></div>
-<pre><code>## [1] 709  28</code></pre>
+<pre><code>## [1] 709  29</code></pre>
 <p>See <code><a href="http://www.rdocumentation.org/packages/Rlabkey/topics/makeFilter">?makeFilter</a></code> for more information on the syntax.</p>
 </div>
 <div id="cross-study-connection" class="section level2">
@@ -446,9 +450,9 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 ##   URL: https://dataspace.cavd.org/CAVD
 ##   Available datasets:
 ##     - BAMA
-##     - Demographics
-##     - ELISPOT
 ##     - ICS
+##     - ELISPOT
+##     - Demographics
 ##     - NAb</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(cavd<span class="op">$</span>availableDatasets)</code></pre></div>
 <table class="table">
@@ -461,17 +465,7 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 <tr class="odd">
 <td align="left">BAMA</td>
 <td align="left">Binding Ab multiplex assay</td>
-<td align="right">49971</td>
-</tr>
-<tr class="even">
-<td align="left">Demographics</td>
-<td align="left">Demographics</td>
-<td align="right">1754</td>
-</tr>
-<tr class="odd">
-<td align="left">ELISPOT</td>
-<td align="left">Enzyme-Linked ImmunoSpot</td>
-<td align="right">5610</td>
+<td align="right">63579</td>
 </tr>
 <tr class="even">
 <td align="left">ICS</td>
@@ -479,9 +473,19 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 <td align="right">128226</td>
 </tr>
 <tr class="odd">
+<td align="left">ELISPOT</td>
+<td align="left">Enzyme-Linked ImmunoSpot</td>
+<td align="right">5610</td>
+</tr>
+<tr class="even">
+<td align="left">Demographics</td>
+<td align="left">Demographics</td>
+<td align="right">1790</td>
+</tr>
+<tr class="odd">
 <td align="left">NAb</td>
 <td align="left">Neutralizing antibody</td>
-<td align="right">42032</td>
+<td align="right">43328</td>
 </tr>
 </tbody>
 </table>
@@ -489,7 +493,7 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conFilter &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/Rlabkey/topics/makeFilter">makeFilter</a></span>(<span class="kw">c</span>(<span class="st">"species"</span>, <span class="st">"EQUAL"</span>, <span class="st">"Human"</span>))
 human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"Demographics"</span>, <span class="dt">colFilter =</span> conFilter)
 <span class="kw">dim</span>(human)</code></pre></div>
-<pre><code>## [1] 250  31</code></pre>
+<pre><code>## [1] 250  32</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(human)</code></pre></div>
 <pre><code>##  [1] "SubjectId"                       "SubjectVisit/Visit"             
 ##  [3] "species"                         "subspecies"                     
@@ -506,7 +510,7 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 ## [25] "study_arm_coded_label"           "study_randomization"            
 ## [27] "study_product_class_combination" "study_product_combination"      
 ## [29] "study_short_name"                "study_grant_pi_name"            
-## [31] "study_strategy"</code></pre>
+## [31] "study_strategy"                  "study_prot"</code></pre>
 </div>
 <div id="connect-to-a-saved-group" class="section level2">
 <h2 class="hasAnchor">
@@ -517,6 +521,7 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 <thead><tr class="header">
 <th align="right">id</th>
 <th align="left">label</th>
+<th align="left">originalLabel</th>
 <th align="left">description</th>
 <th align="left">createdBy</th>
 <th align="left">shared</th>
@@ -527,6 +532,7 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 <tr class="odd">
 <td align="right">216</td>
 <td align="left">mice</td>
+<td align="left">mice</td>
 <td align="left">NA</td>
 <td align="left">readjk</td>
 <td align="left">FALSE</td>
@@ -536,11 +542,22 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 <tr class="even">
 <td align="right">217</td>
 <td align="left">CAVD 242</td>
+<td align="left">CAVD 242</td>
 <td align="left">This is a fake group for CAVD 242</td>
 <td align="left">readjk</td>
 <td align="left">FALSE</td>
 <td align="right">30</td>
 <td align="left">cvd242</td>
+</tr>
+<tr class="odd">
+<td align="right">220</td>
+<td align="left">NYVAC durability comparison</td>
+<td align="left">NYVAC_durability</td>
+<td align="left">Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products.</td>
+<td align="left">ehenrich</td>
+<td align="left">TRUE</td>
+<td align="right">78</td>
+<td align="left">c(“cvd281”, “cvd434”, “cvd259”, “cvd277”)</td>
 </tr>
 </tbody>
 </table>
@@ -556,7 +573,7 @@ mice</code></pre></div>
 <p>Retrieving a dataset is the same as before.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb_mice &lt;-<span class="st"> </span>mice<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
 <span class="kw">dim</span>(NAb_mice)</code></pre></div>
-<pre><code>## [1] 604  28</code></pre>
+<pre><code>## [1] 604  29</code></pre>
 </div>
 <div id="caching" class="section level2">
 <h2 class="hasAnchor">
@@ -570,7 +587,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">str</span>(cvd408<span class="op">$</span>cache)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 209 kB</code></pre>
+<pre><code>## 222 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset" class="section level3">
 <h3 class="hasAnchor">
@@ -579,15 +596,15 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.200   0.004   0.322</code></pre>
+##   0.127   0.000   0.165</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
 ##   ..$ args:List of 2
-##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  28 variables:
+##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  29 variables:
 ##   .. ..- attr(*, ".internal.selfref")=&lt;externalptr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 320 kB</code></pre>
+<pre><code>## 339 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset-again" class="section level3">
 <h3 class="hasAnchor">
@@ -596,15 +613,15 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.002   0.000   0.003</code></pre>
+##   0.002   0.000   0.002</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ 6987c5424e72e611c95edcb38f143005:List of 2
 ##   ..$ args:List of 2
-##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  28 variables:
+##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  29 variables:
 ##   .. ..- attr(*, ".internal.selfref")=&lt;externalptr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 338 kB</code></pre>
+<pre><code>## 358 kB</code></pre>
 </div>
 <div id="clear-cache" class="section level3">
 <h3 class="hasAnchor">
@@ -614,44 +631,48 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 227 kB</code></pre>
+<pre><code>## 242 kB</code></pre>
 </div>
 </div>
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session information</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
-<pre><code>## R version 3.4.4 (2018-03-15)
-## Platform: x86_64-apple-darwin17.3.0 (64-bit)
-## Running under: macOS High Sierra 10.13.3
+<pre><code>## R version 3.5.0 (2018-04-23)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 18.04 LTS
 ## 
 ## Matrix products: default
-## BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
-## LAPACK: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
+## BLAS: /usr/local/lib/R/lib/libRblas.so
+## LAPACK: /usr/local/lib/R/lib/libRlapack.so
 ## 
 ## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] pryr_0.1.4       Rlabkey_2.2.1    rjson_0.2.15     httr_1.3.1      
+## [1] pryr_0.1.4       Rlabkey_2.2.1    rjson_0.2.19     httr_1.3.1      
 ## [5] DataSpaceR_0.5.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.16        rstudioapi_0.7      knitr_1.20         
-##  [4] xml2_1.2.0          magrittr_1.5        roxygen2_6.0.1     
-##  [7] MASS_7.3-49         R6_2.2.2            rlang_0.2.0        
-## [10] highr_0.6           stringr_1.3.0       tools_3.4.4        
-## [13] data.table_1.10.4-3 htmltools_0.3.6     commonmark_1.4     
-## [16] yaml_2.1.18         rprojroot_1.3-2     digest_0.6.15      
-## [19] assertthat_0.2.0    pkgdown_0.1.0.9000  crayon_1.3.4       
-## [22] codetools_0.2-15    fs_1.2.2            curl_3.1           
-## [25] memoise_1.1.0       evaluate_0.10.1     rmarkdown_1.9      
-## [28] stringi_1.1.7       compiler_3.4.4      desc_1.1.1         
-## [31] backports_1.1.2</code></pre>
-</div>
+##  [1] Rcpp_0.12.17      rstudioapi_0.7    knitr_1.20       
+##  [4] xml2_1.2.0        magrittr_1.5      roxygen2_6.0.1   
+##  [7] MASS_7.3-49       R6_2.2.2          rlang_0.2.1      
+## [10] highr_0.6         stringr_1.3.1     tools_3.5.0      
+## [13] data.table_1.11.4 htmltools_0.3.6   commonmark_1.5   
+## [16] yaml_2.1.19       rprojroot_1.3-2   digest_0.6.15    
+## [19] assertthat_0.2.0  pkgdown_1.0.0     crayon_1.3.4     
+## [22] codetools_0.2-15  fs_1.2.2          curl_3.2         
+## [25] memoise_1.1.0     evaluate_0.10.1   rmarkdown_1.9    
+## [28] stringi_1.2.2     compiler_3.5.0    desc_1.2.0       
+## [31] backports_1.1.2   jsonlite_1.5</code></pre>
 </div>
   </div>
 

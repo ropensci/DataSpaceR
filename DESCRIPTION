@@ -9,8 +9,8 @@ Authors@R: c(person("Ju Yeong", "Kim",
                     role = "cph"))
 Description: Provides a convenient API for accessing datasets within
     the CAVD DataSpace (dataspace.cavd.org).
-URL: https://github.com/FredHutch/DataSpaceR
-BugReports: https://github.com/FredHutch/DataSpaceR/issues
+URL: https://github.com/CAVDDataSpace/DataSpaceR
+BugReports: https://github.com/CAVDDataSpace/DataSpaceR/issues
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true

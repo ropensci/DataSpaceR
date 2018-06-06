@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
 
 # DataSpaceR <img src="man/figures/logo.png" align="right" />
 
-[![Build Status](https://travis-ci.org/FredHutch/DataSpaceR.svg?branch=master)](https://travis-ci.org/FredHutch/DataSpaceR)
+[![Build Status](https://travis-ci.org/CAVDDataSpace/DataSpaceR.svg?branch=master)](https://travis-ci.org/CAVDDataSpace/DataSpaceR)
 [![Build status](https://ci.appveyor.com/api/projects/status/bmwyv5i32xr07bdr/branch/master?svg=true)](https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master)
-[![codecov](https://codecov.io/gh/FredHutch/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/FredHutch/DataSpaceR/branch/master)
+[![codecov](https://codecov.io/gh/CAVDDataSpace/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/CAVDDataSpace/DataSpaceR/branch/master)
 
 ## Overview
 
@@ -37,21 +37,21 @@ installed directly from github using [devtools](https://cran.r-project.org/web/p
 
 ### using `devtools` (development):
 
-https://github.com/FredHutch/DataSpaceR
+https://github.com/CAVDDataSpace/DataSpaceR
 
 ```{r, eval=FALSE}
 # install.packages("devtools")
-devtools::install_github("FredHutch/DataSpaceR")
+devtools::install_github("CAVDDataSpace/DataSpaceR")
 ```
 
 
 ### using `drat` (stable):
 
-https://github.com/FredHutch/drat
+https://github.com/CAVDDataSpace/drat
 
 ```{r, eval=FALSE}
 # install.packages("drat")
-drat::addRepo("fredhutch")
+drat::addRepo("CAVDDataSpace")
 install.packages("DataSpaceR")
 ```
 

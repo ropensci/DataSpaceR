@@ -4,7 +4,8 @@
 #'
 #' @param login A character. Email address used for logging in on DataSpace.
 #' @param password A character. Password associated with the login.
-#' @param machine A character. Host of DataSpace.
+#' @param onStaging A logical. Whether to connect to the staging server instead
+#' of the production server.
 #' @param netrcFile A character. Credentials will be written into that file.
 #' If left NULL, netrc will be written into a temporary file.
 #'
@@ -17,18 +18,23 @@
 #' @export
 writeNetrc <- function(login,
                        password,
-                       machine = "dataspace.cavd.org",
+                       onStaging = FALSE,
                        netrcFile = NULL) {
-  string <- paste("machine", machine,
-                  "login", login,
-                  "password", password)
-
   if (is.null(netrcFile)) {
     netrcFile <- tempfile()
   } else if (file.exists(netrcFile)) {
-    stop("The file you are trying to write to already exists.\n
-         Remove manually if you wish to overwrite.")
+    stop(
+      "'", netrcFile, "' already exists. ",
+      "Remove it manually if you'd like to overwrite.",
+      call. = FALSE
+    )
   }
+
+  string <- paste(
+    "machine", ifelse(onStaging, STAGING, PRODUCTION),
+    "login", login,
+    "password", password
+  )
 
   write(string, netrcFile)
 
@@ -38,6 +44,9 @@ writeNetrc <- function(login,
 #' @title Check netrc file
 #'
 #' @description Check that there is a netrc file with a valid entry for DataSpace.
+#'
+#' @param onStaging A logical. Whether to check the staging server instead
+#' of the production server.
 #'
 #' @details
 #' In order to connect to DataSpace, you will need a \code{.netrc} file in your
@@ -59,23 +68,25 @@ writeNetrc <- function(login,
 #' checkNetrc()
 #' }
 #' @export
-checkNetrc <- function() {
+checkNetrc <- function(onStaging = FALSE) {
   if (exists("labkey.netrc.file", .GlobalEnv)) {
     netrcFile <- get("labkey.netrc.file", .GlobalEnv)
   } else {
-    netrcFile <- ifelse(.Platform$OS.type == "windows", "~/_netrc", "~/.netrc")
+    netrcFile <- ifelse(isWindows(), "~/_netrc", "~/.netrc")
   }
+
   if (!file.exists(netrcFile)) {
-    stop("There is no netrc file. Use `writeNetrc()`")
-  } else {
-    cat("netrc file found at", netrcFile)
+    stop("There is no netrc file. Use `writeNetrc()` to create one.", call. = FALSE)
   }
+
   lines <- readLines(netrcFile)
   lines <- gsub("http.*//", "", lines)
-  if (length(grep("machine\\sdataspace.cavd.org", lines)) == 0) {
-    stop("No entry found for dataspace.cavd.org in the netrc file.")
+  machine <- ifelse(onStaging, STAGING, PRODUCTION)
+  if (length(grep(paste0("machine\\s", machine), lines)) == 0) {
+    stop("No entry found for '", machine, "' in '", netrcFile, "'.", call. = FALSE)
   }
-  cat(", and it looks valid.\n")
+
+  message("netrc file found at '", netrcFile, "', and it looks valid.")
 
   invisible(netrcFile)
 }

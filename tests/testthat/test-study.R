@@ -105,10 +105,12 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       })
 
       test_that("`getDataset` (access cache)", {
-        for (datasetName in cavd$availableDatasets$name) {
+        for (i in seq_len(nrow(cavd$availableDatasets))) {
+          datasetName <- cavd$availableDatasets$name[i]
+          datasetN <- cavd$availableDatasets$n[i]
           dataset <- try(cavd$getDataset(datasetName = datasetName), silent = TRUE)
           expect_is(dataset, "data.table", info = datasetName)
-          expect_gt(nrow(dataset), 0)
+          expect_equal(nrow(dataset), datasetN)
         }
       })
 
@@ -145,7 +147,8 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
 con <- connectDS()
 
-test_study("", c("BAMA", "Demographics", "ELISPOT", "ICS", "NAb"))
-test_study("cvd408", c("BAMA", "Demographics", "ICS", "NAb"))
-test_study("", c("Demographics", "NAb"), groupId = 216, groupLabel = "mice")
-test_study("", c("Demographics", "NAb"), groupId = 217, groupLabel = "CAVD 242")
+test_study("", c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"))
+test_study("cvd408", c("BAMA", "ICS", "Demographics", "NAb"))
+test_study("", c("Demographics", "NAb"), groupId = 216, groupLabel = c("mice" = "mice"))
+test_study("", c("Demographics", "NAb"), groupId = 217, groupLabel = c("CAVD 242" = "CAVD 242"))
+test_study("", c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"), groupId = 220, groupLabel = c("NYVAC_durability" = "NYVAC durability comparison"))

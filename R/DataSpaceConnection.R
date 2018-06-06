@@ -157,6 +157,7 @@ DataSpaceConnection <- R6Class(
       )
 
       group <- private$.availableGroups[.(groupId), label]
+      names(group) <- private$.availableGroups[.(groupId), originalLabel]
 
       DataSpaceStudy$new("", private$.config, group, NULL)
     },
@@ -243,6 +244,7 @@ DataSpaceConnection <- R6Class(
         data.table(
           id = group$id,
           label = group$label,
+          originalLabel = group$category$label,
           description = ifelse(is.null(group$description), NA, group$description),
           createdBy = group$createdBy$displayValue,
           shared = group$category$shared,
