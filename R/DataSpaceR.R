@@ -11,7 +11,7 @@
 #' @seealso \code{\link{connectDS}}
 #' @author Ju Yeong Kim
 #' @import R6 Rlabkey assertthat
-#' @importFrom data.table data.table setDT := rbindlist setorder setkey
+#' @importFrom data.table data.table setDT := rbindlist setorder setkey setkeyv
 NULL
 
 # Global Variables

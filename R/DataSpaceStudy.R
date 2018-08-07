@@ -210,10 +210,14 @@ DataSpaceStudy <- R6Class(
       if (args$mergeExtra) {
         if (!identical(datasetName, "Demographics")) {
           dem <- self$getDataset("Demographics")
-          dem <- dem[, -c("SubjectVisit/Visit", "study_prot")]
 
-          setkey(dem, SubjectId)
-          setkey(dataset, SubjectId)
+          subj <- ifelse(private$.study == "", "Subject", "Participant")
+          cols <- c(paste0(subj, "Visit/Visit"), "study_prot")
+          dem <- dem[, -cols, with = FALSE]
+
+          key <- paste0(subj, "Id")
+          setkeyv(dem, key)
+          setkeyv(dataset, key)
 
           dataset <- dataset[dem, nomatch = 0]
         }
@@ -235,7 +239,7 @@ DataSpaceStudy <- R6Class(
       dataset
     },
     clearCache = function() {
-      private$.cache <- list(mergeDem)
+      private$.cache <- list()
     },
     getVariableInfo = function(datasetName) {
       assert_that(is.character(datasetName))
