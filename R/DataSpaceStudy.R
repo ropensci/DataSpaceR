@@ -47,6 +47,8 @@
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
 #'
+#'     \code{mergeDem}: A logical. If set to TRUE, merge demographics dataset.
+#'
 #'     \code{colFilter}: A matrix. A filter as returned by Rlabkey's
 #'     \code{\link[Rlabkey]{makeFilter}}.
 #'
@@ -147,6 +149,7 @@ DataSpaceStudy <- R6Class(
       cat("\n")
     },
     getDataset = function(datasetName,
+                          mergeDem = FALSE,
                           colFilter = NULL,
                           reload = FALSE,
                           ...) {
@@ -154,12 +157,22 @@ DataSpaceStudy <- R6Class(
       assert_that(length(datasetName) == 1)
       assert_that(datasetName %in% private$.availableDatasets$name,
                   msg = paste0(datasetName, " is invalid dataset"))
+      assert_that(is.logical(mergeDem))
       assert_that(is.null(colFilter) | is.matrix(colFilter),
                   msg = "colFilter is not a matrix")
+      assert_that(is.logical(reload))
 
-      args <- list(datasetName = datasetName,
-                   colFilter = colFilter,
-                   ...)
+      # build a list of arguments to digest and compare
+      args <- list(
+        datasetName = datasetName,
+        colFilter = colFilter,
+        ...
+      )
+      if (!identical(datasetName, "Demographics")) {
+        args$mergeDem <- mergeDem
+      }
+
+      # retrieve dataset from cache if arguments match
       digestedArgs <- digest(args)
       if (digestedArgs %in% names(private$.cache)) {
         if (!reload) {
@@ -167,20 +180,25 @@ DataSpaceStudy <- R6Class(
         }
       }
 
-      viewName <- NULL
+      # build a colFilter for group
       if (!is.null(private$.group)) {
-        colFilter <- rbind(colFilter,
-                           makeFilter(c(paste0("SubjectId/", names(private$.group)),
-                                        "EQUAL",
-                                        private$.group)))
+        colFilter <- rbind(
+          colFilter,
+          makeFilter(c(
+            paste0("SubjectId/", names(private$.group)),
+            "EQUAL",
+            private$.group
+          ))
+        )
       }
 
+      # retrieve dataset
       dataset <- labkey.selectRows(
         baseUrl = private$.config$labkey.url.base,
         folderPath = private$.config$labkey.url.path,
         schemaName = "study",
         queryName = datasetName,
-        viewName = viewName,
+        viewName = NULL,
         colNameOpt = "fieldname",
         colFilter = colFilter,
         method = "GET",
@@ -190,13 +208,27 @@ DataSpaceStudy <- R6Class(
       # convert to data.table
       setDT(dataset)
 
+      # merge demographics if
+      if (!is.null(args$mergeDem)) {
+        dem <- self$getDataset("Demographics")
+        dem <- dem[, -c("SubjectVisit/Visit", "study_prot")]
+
+        setkey(dem, SubjectId)
+        setkey(dataset, SubjectId)
+
+        dataset <- dataset[dem]
+      }
+
       # caching
-      private$.cache[[digestedArgs]] <- list(args = args, data = dataset)
+      private$.cache[[digestedArgs]] <- list(
+        args = args,
+        data = dataset
+      )
 
       dataset
     },
     clearCache = function() {
-      private$.cache <- list()
+      private$.cache <- list(mergeDem)
     },
     getVariableInfo = function(datasetName) {
       assert_that(is.character(datasetName))
