@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DataSpaceR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.2</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@
       <h1>A Simple Introduction to the DataSpaceR Package</h1>
                         <h4 class="author">Ju Yeong Kim</h4>
             
-            <h4 class="date">2018-06-27</h4>
+            <h4 class="date">2018-08-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/CAVDDataSpace/DataSpaceR/blob/master/vignettes/Intro_to_DataSpaceR.Rmd"><code>vignettes/Intro_to_DataSpaceR.Rmd</code></a></small>
       <div class="hidden name"><code>Intro_to_DataSpaceR.Rmd</code></div>
@@ -139,7 +139,7 @@ con</code></pre></div>
 <pre><code>## &lt;DataSpaceConnection&gt;
 ##   URL: https://dataspace.cavd.org
 ##   User: jkim2345@scharp.org
-##   Available studies: 236
+##   Available studies: 245
 ##     - 62 studies with data
 ##     - 1835 subjects
 ##     - 5 assays
@@ -259,168 +259,162 @@ cvd256</code></pre></div>
 <td align="left">Subject identifier</td>
 </tr>
 <tr class="even">
-<td align="left">ParticipantVisit/Visit</td>
-<td align="left">Visit</td>
-<td align="left">int</td>
-<td align="left">The ID of the visit.</td>
-</tr>
-<tr class="odd">
 <td align="left">antigen</td>
 <td align="left">Antigen name</td>
 <td align="left">Text (String)</td>
 <td align="left">The name of the antigen (virus) being tested.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">antigen_type</td>
 <td align="left">Antigen type</td>
 <td align="left">Text (String)</td>
 <td align="left">The standardized term for the type of virus used in the construction of the nAb antigen.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">assay_identifier</td>
 <td align="left">Assay identifier</td>
 <td align="left">Text (String)</td>
 <td align="left">Name identifying assay</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">clade</td>
 <td align="left">Virus clade</td>
 <td align="left">Text (String)</td>
 <td align="left">The clade (gene subtype) of the virus (antigen) being tested.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">exp_assayid</td>
 <td align="left">Experimental Assay Design Code</td>
 <td align="left">Integer</td>
 <td align="left">Unique ID assigned to the experiment design of the assay for tracking purposes.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">initial_dilution</td>
 <td align="left">Initial dilution</td>
 <td align="left">Number (Double)</td>
 <td align="left">Indicates the initial specimen dilution.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">lab_code</td>
 <td align="left">Lab ID</td>
 <td align="left">Text (String)</td>
 <td align="left">A code indicating the lab performing the assay.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">nab_lab_source_key</td>
 <td align="left">Data provenance</td>
 <td align="left">Integer</td>
 <td align="left">Details regarding the provenance of the assay results.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">nab_response_ID50</td>
 <td align="left">Response call ID50</td>
 <td align="left">True/False (Boolean)</td>
 <td align="left">Indicates if neutralization is detected based on ID50 titer.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">nab_response_ID80</td>
 <td align="left">Response call ID80</td>
 <td align="left">True/False (Boolean)</td>
 <td align="left">Indicates if neutralization is detected based on ID80 titer.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">neutralization_tier</td>
 <td align="left">Neutralization tier</td>
 <td align="left">Text (String)</td>
 <td align="left">A classification specific to HIV NAb assay design, in which an antigen is assessed for its ease of neutralization (1=most easily neutralized, 3=least easily neutralized)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">response_call</td>
 <td align="left">Response call</td>
 <td align="left">True/False (Boolean)</td>
 <td align="left">Indicates if neutralization is detected.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">slope</td>
 <td align="left">Slope</td>
 <td align="left">Number (Double)</td>
 <td align="left">The slope calculated using the difference between 50% and 80% neutralization.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">specimen_type</td>
 <td align="left">Specimen type</td>
 <td align="left">Text (String)</td>
 <td align="left">The type of specimen used in the assay. For nAb assays, this is generally serum or plasma.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">study_prot</td>
 <td align="left">Study Protocol</td>
 <td align="left">Text (String)</td>
 <td align="left">Study protocol</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">summary_level</td>
 <td align="left">Data summary level</td>
 <td align="left">Text (String)</td>
 <td align="left">Defines the level at which the magnitude or response has been summarized (e.g. summarized at the isolate level).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">target_cell</td>
 <td align="left">Target cell</td>
 <td align="left">Text (String)</td>
 <td align="left">The cell line used in the assay to determine infection (lack of neutralization). Generally TZM-bl or A3R5, but can also be other cell lines or non-engineered cells.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">tier_clade_virus</td>
 <td align="left">Neutralization tier + Antigen clade + Virus</td>
 <td align="left">Text (String)</td>
 <td align="left">A combination of neutralization tier, antigen clade, and virus used for filtering.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">titer_ID50</td>
 <td align="left">Titer ID50</td>
 <td align="left">Number (Double)</td>
 <td align="left">The adjusted value of 50% maximal inhibitory dilution (ID50).</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">titer_ID80</td>
 <td align="left">Titer ID80</td>
 <td align="left">Number (Double)</td>
 <td align="left">The adjusted value of 80% maximal inhibitory dilution (ID80).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">titer_ic50</td>
 <td align="left">Titer IC50</td>
 <td align="left">Number (Double)</td>
 <td align="left">The half maximal inhibitory concentration (IC50).</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">titer_ic80</td>
 <td align="left">Titer IC80</td>
 <td align="left">Number (Double)</td>
 <td align="left">The 80% maximal inhibitory concentration (IC80).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">vaccine_matched</td>
 <td align="left">Antigen vaccine match indicator</td>
 <td align="left">True/False (Boolean)</td>
 <td align="left">Indicates if the interactive part of the antigen was designed to match the immunogen in the vaccine.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">virus</td>
 <td align="left">Virus name</td>
 <td align="left">Text (String)</td>
 <td align="left">The term for the virus (antigen) being tested.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">virus_insert_name</td>
 <td align="left">Virus insert name</td>
 <td align="left">Text (String)</td>
 <td align="left">The amino acid sequence inserted in the virus construct.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">virus_type</td>
 <td align="left">Virus type</td>
 <td align="left">Text (String)</td>
 <td align="left">The type of virus used in the construction of the nAb antigen.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">visit_day</td>
 <td align="left">Visit Day</td>
 <td align="left">Integer</td>
@@ -431,7 +425,7 @@ cvd256</code></pre></div>
 <p>To get only a subset of the data and speed up the download, filters can be passed to <code>getDataset</code>. The filters are created using the <code>makeFilter</code> function of the <code>Rlabkey</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Rlabkey)</code></pre></div>
 <pre><code>## Loading required package: httr</code></pre>
-<pre><code>## Loading required package: rjson</code></pre>
+<pre><code>## Loading required package: jsonlite</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256Filter &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/Rlabkey/topics/makeFilter">makeFilter</a></span>(<span class="kw">c</span>(<span class="st">"visit_day"</span>, <span class="st">"EQUAL"</span>, <span class="st">"0"</span>))
 NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>, <span class="dt">colFilter =</span> cvd256Filter)
 <span class="kw">dim</span>(NAb_day0)</code></pre></div>
@@ -598,7 +592,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">str</span>(cvd408<span class="op">$</span>cache)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 227 kB</code></pre>
+<pre><code>## 245 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset" class="section level3">
 <h3 class="hasAnchor">
@@ -607,15 +601,15 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.128   0.000   0.182</code></pre>
+##   0.142   0.004   0.184</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
-##  $ 6987c5424e72e611c95edcb38f143005:List of 2
-##   ..$ args:List of 2
+##  $ c77008daa024cbb89510cbcb600cef37:List of 2
+##   ..$ args:List of 3
 ##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  29 variables:
 ##   .. ..- attr(*, ".internal.selfref")=&lt;externalptr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 343 kB</code></pre>
+<pre><code>## 361 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset-again" class="section level3">
 <h3 class="hasAnchor">
@@ -624,15 +618,15 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.006   0.000   0.005</code></pre>
+##   0.003   0.000   0.003</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
-##  $ 6987c5424e72e611c95edcb38f143005:List of 2
-##   ..$ args:List of 2
+##  $ c77008daa024cbb89510cbcb600cef37:List of 2
+##   ..$ args:List of 3
 ##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  29 variables:
 ##   .. ..- attr(*, ".internal.selfref")=&lt;externalptr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 362 kB</code></pre>
+<pre><code>## 394 kB</code></pre>
 </div>
 <div id="clear-cache" class="section level3">
 <h3 class="hasAnchor">
@@ -642,7 +636,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/pryr/topics/object_size">object_size</a></span>(cvd408)</code></pre></div>
-<pre><code>## 246 kB</code></pre>
+<pre><code>## 278 kB</code></pre>
 </div>
 </div>
 <div id="session-information" class="section level2">
@@ -651,7 +645,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
 <pre><code>## R version 3.5.0 (2018-04-23)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 18.04 LTS
+## Running under: Ubuntu 18.04.1 LTS
 ## 
 ## Matrix products: default
 ## BLAS: /usr/local/lib/R/lib/libRblas.so
@@ -669,21 +663,21 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] pryr_0.1.4       Rlabkey_2.2.1    rjson_0.2.20     httr_1.3.1      
+## [1] pryr_0.1.4       Rlabkey_2.2.2    jsonlite_1.5     httr_1.3.1      
 ## [5] DataSpaceR_0.5.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.17      rstudioapi_0.7    knitr_1.20       
+##  [1] Rcpp_0.12.18      rstudioapi_0.7    knitr_1.20       
 ##  [4] xml2_1.2.0        magrittr_1.5      roxygen2_6.0.1   
-##  [7] MASS_7.3-49       R6_2.2.2          rlang_0.2.1      
-## [10] highr_0.7         stringr_1.3.1     tools_3.5.0      
-## [13] data.table_1.11.4 htmltools_0.3.6   commonmark_1.5   
-## [16] yaml_2.1.19       rprojroot_1.3-2   digest_0.6.15    
-## [19] assertthat_0.2.0  pkgdown_1.1.0     crayon_1.3.4     
-## [22] codetools_0.2-15  fs_1.2.3          curl_3.2         
-## [25] memoise_1.1.0     evaluate_0.10.1   rmarkdown_1.10   
-## [28] stringi_1.2.3     compiler_3.5.0    desc_1.2.0       
-## [31] backports_1.1.2   jsonlite_1.5</code></pre>
+##  [7] MASS_7.3-49       rjson_0.2.20      R6_2.2.2         
+## [10] rlang_0.2.1       highr_0.7         stringr_1.3.1    
+## [13] tools_3.5.0       data.table_1.11.4 htmltools_0.3.6  
+## [16] commonmark_1.5    yaml_2.2.0        rprojroot_1.3-2  
+## [19] digest_0.6.15     assertthat_0.2.0  pkgdown_1.1.0    
+## [22] crayon_1.3.4      codetools_0.2-15  fs_1.2.4         
+## [25] curl_3.2          memoise_1.1.0     evaluate_0.11    
+## [28] rmarkdown_1.10    stringi_1.2.4     compiler_3.5.0   
+## [31] desc_1.2.0        backports_1.1.2</code></pre>
 </div>
   </div>
 

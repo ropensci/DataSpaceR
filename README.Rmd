@@ -32,27 +32,14 @@ an object-oriented paradigm.
 ## Installation
 
 The package can be downloaded here and installed like any other R packages or 
-installed directly from github using [devtools](https://cran.r-project.org/web/packages/devtools/index.html) or [drat](https://cran.r-project.org/web/packages/drat/index.html).
-
-
-### using `devtools` (development):
-
-https://github.com/CAVDDataSpace/DataSpaceR
+installed directly from github using [devtools](https://cran.r-project.org/web/packages/devtools/index.html).
 
 ```{r, eval=FALSE}
 # install.packages("devtools")
 devtools::install_github("CAVDDataSpace/DataSpaceR")
-```
 
-
-### using `drat` (stable):
-
-https://github.com/CAVDDataSpace/drat
-
-```{r, eval=FALSE}
-# install.packages("drat")
-drat::addRepo("CAVDDataSpace")
-install.packages("DataSpaceR")
+# development version
+devtools::install_github("CAVDDataSpace/DataSpaceR", ref = "dev")
 ```
 
 

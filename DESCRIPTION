@@ -1,7 +1,7 @@
 Package: DataSpaceR
 Type: Package
 Title: An R package for CAVD DataSpace
-Version: 0.5.1
+Version: 0.5.2
 Authors@R: c(person("Ju Yeong", "Kim",
                     email = "jkim2345@fredhutch.org",
                     role = c("aut", "cre")),

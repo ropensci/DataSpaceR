@@ -15,25 +15,14 @@ It takes advantage of the standardization of the database to hide all the [Rlabk
 Installation
 ------------
 
-The package can be downloaded here and installed like any other R packages or installed directly from github using [devtools](https://cran.r-project.org/web/packages/devtools/index.html) or [drat](https://cran.r-project.org/web/packages/drat/index.html).
-
-### using `devtools` (development):
-
-<https://github.com/CAVDDataSpace/DataSpaceR>
+The package can be downloaded here and installed like any other R packages or installed directly from github using [devtools](https://cran.r-project.org/web/packages/devtools/index.html).
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("CAVDDataSpace/DataSpaceR")
-```
 
-### using `drat` (stable):
-
-<https://github.com/CAVDDataSpace/drat>
-
-``` r
-# install.packages("drat")
-drat::addRepo("CAVDDataSpace")
-install.packages("DataSpaceR")
+# development version
+devtools::install_github("CAVDDataSpace/DataSpaceR", ref = "dev")
 ```
 
 Set netrc file
@@ -78,12 +67,12 @@ con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
 #>   User: jkim2345@scharp.org
-#>   Available studies: 295
-#>     - 59 studies with data
-#>     - 1790 subjects
+#>   Available studies: 245
+#>     - 62 studies with data
+#>     - 1835 subjects
 #>     - 5 assays
-#>     - 240743 data points
-#>   Available groups: 3
+#>     - 240602 data points
+#>   Available groups: 4
 ```
 
 `connectDS()` will create a connection to DataSpace. The user needs credentials stored in a `netrc` file to access the database.
@@ -114,6 +103,7 @@ knitr::kable(con$availableGroups)
 |  216| mice                        | mice              | NA                                                                                             | readjk    | FALSE  |   75| c("cvd468", "cvd483", "cvd316", "cvd331") |
 |  217| CAVD 242                    | CAVD 242          | This is a fake group for CAVD 242                                                              | readjk    | FALSE  |   30| cvd242                                    |
 |  220| NYVAC durability comparison | NYVAC\_durability | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products. | ehenrich  | TRUE   |   78| c("cvd281", "cvd434", "cvd259", "cvd277") |
+|  224| cvd338                      | cvd338            | NA                                                                                             | readjk    | FALSE  |   36| cvd338                                    |
 
 ### `con$getStudy("cvd408")` will create an instance of `cvd408`.
 
@@ -125,8 +115,8 @@ cvd408
 #>   URL: https://dataspace.cavd.org/CAVD/cvd408
 #>   Available datasets:
 #>     - BAMA
-#>     - ICS
 #>     - Demographics
+#>     - ICS
 #>     - NAb
 class(cvd408)
 #> [1] "DataSpaceStudy" "R6"
@@ -141,8 +131,8 @@ knitr::kable(cvd408$availableDatasets)
 | name         | label                           |     n|
 |:-------------|:--------------------------------|-----:|
 | BAMA         | Binding Ab multiplex assay      |  1080|
-| ICS          | Intracellular Cytokine Staining |  3720|
 | Demographics | Demographics                    |    20|
+| ICS          | Intracellular Cytokine Staining |  3720|
 | NAb          | Neutralizing antibody           |   540|
 
 which will print names of available datasets.

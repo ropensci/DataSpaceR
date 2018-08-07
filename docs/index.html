@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">DataSpaceR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.2</span>
       </span>
     </div>
 
@@ -116,22 +116,12 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The package can be downloaded here and installed like any other R packages or installed directly from github using <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a> or <a href="https://cran.r-project.org/web/packages/drat/index.html">drat</a>.</p>
-<div id="using-devtools-development" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-devtools-development" class="anchor"></a>using <code>devtools</code> (development):</h3>
-<p><a href="https://github.com/CAVDDataSpace/DataSpaceR" class="uri">https://github.com/CAVDDataSpace/DataSpaceR</a></p>
+<p>The package can be downloaded here and installed like any other R packages or installed directly from github using <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"CAVDDataSpace/DataSpaceR"</span>)</code></pre></div>
-</div>
-<div id="using-drat-stable" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-drat-stable" class="anchor"></a>using <code>drat</code> (stable):</h3>
-<p><a href="https://github.com/CAVDDataSpace/drat" class="uri">https://github.com/CAVDDataSpace/drat</a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("drat")</span>
-drat<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/drat/topics/addRepo">addRepo</a></span>(<span class="st">"CAVDDataSpace"</span>)
-<span class="kw">install.packages</span>(<span class="st">"DataSpaceR"</span>)</code></pre></div>
-</div>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"CAVDDataSpace/DataSpaceR"</span>)
+
+<span class="co"># development version</span>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"CAVDDataSpace/DataSpaceR"</span>, <span class="dt">ref =</span> <span class="st">"dev"</span>)</code></pre></div>
 </div>
 <div id="set-netrc-file" class="section level2">
 <h2 class="hasAnchor">
@@ -175,7 +165,7 @@ con
 <span class="co">#&gt; &lt;DataSpaceConnection&gt;</span>
 <span class="co">#&gt;   URL: https://dataspace.cavd.org</span>
 <span class="co">#&gt;   User: jkim2345@scharp.org</span>
-<span class="co">#&gt;   Available studies: 236</span>
+<span class="co">#&gt;   Available studies: 245</span>
 <span class="co">#&gt;     - 62 studies with data</span>
 <span class="co">#&gt;     - 1835 subjects</span>
 <span class="co">#&gt;     - 5 assays</span>

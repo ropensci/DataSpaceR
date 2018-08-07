@@ -1,3 +1,7 @@
+# DataSpaceR 0.5.2
+
+* Modified `getDataset` method in `DataSpaceStudy` to take `mergeExtra` as an argument in order to merge extra information (demographics and treatment arm). #5
+
 # DataSpaceR 0.5.1
 
 * Adjusted the package to use the latest version of Rlabkey (v2.2) and httr packages.
