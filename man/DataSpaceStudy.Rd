@@ -63,7 +63,7 @@ The DataSpaceStudy class
 
     \code{datasetName}: A character. Name of the dataset to retrieve.
 
-    \code{mergeDem}: A logical. If set to TRUE, merge demographics dataset.
+    \code{mergeExtra}: A logical. If set to TRUE, merge extra information.
 
     \code{colFilter}: A matrix. A filter as returned by Rlabkey's
     \code{\link[Rlabkey]{makeFilter}}.

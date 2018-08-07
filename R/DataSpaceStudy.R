@@ -47,7 +47,7 @@
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
 #'
-#'     \code{mergeDem}: A logical. If set to TRUE, merge demographics dataset.
+#'     \code{mergeExtra}: A logical. If set to TRUE, merge extra information.
 #'
 #'     \code{colFilter}: A matrix. A filter as returned by Rlabkey's
 #'     \code{\link[Rlabkey]{makeFilter}}.
@@ -149,7 +149,7 @@ DataSpaceStudy <- R6Class(
       cat("\n")
     },
     getDataset = function(datasetName,
-                          mergeDem = FALSE,
+                          mergeExtra = FALSE,
                           colFilter = NULL,
                           reload = FALSE,
                           ...) {
@@ -157,7 +157,7 @@ DataSpaceStudy <- R6Class(
       assert_that(length(datasetName) == 1)
       assert_that(datasetName %in% private$.availableDatasets$name,
                   msg = paste0(datasetName, " is invalid dataset"))
-      assert_that(is.logical(mergeDem))
+      assert_that(is.logical(mergeExtra))
       assert_that(is.null(colFilter) | is.matrix(colFilter),
                   msg = "colFilter is not a matrix")
       assert_that(is.logical(reload))
@@ -165,12 +165,10 @@ DataSpaceStudy <- R6Class(
       # build a list of arguments to digest and compare
       args <- list(
         datasetName = datasetName,
+        mergeExtra = mergeExtra,
         colFilter = colFilter,
         ...
       )
-      if (!identical(datasetName, "Demographics")) {
-        args$mergeDem <- mergeDem
-      }
 
       # retrieve dataset from cache if arguments match
       digestedArgs <- digest(args)
@@ -208,15 +206,24 @@ DataSpaceStudy <- R6Class(
       # convert to data.table
       setDT(dataset)
 
-      # merge demographics if
-      if (!is.null(args$mergeDem)) {
-        dem <- self$getDataset("Demographics")
-        dem <- dem[, -c("SubjectVisit/Visit", "study_prot")]
+      # merge extra information
+      if (args$mergeExtra) {
+        if (!identical(datasetName, "Demographics")) {
+          dem <- self$getDataset("Demographics")
+          dem <- dem[, -c("SubjectVisit/Visit", "study_prot")]
 
-        setkey(dem, SubjectId)
-        setkey(dataset, SubjectId)
+          setkey(dem, SubjectId)
+          setkey(dataset, SubjectId)
 
-        dataset <- dataset[dem]
+          dataset <- dataset[dem, nomatch = 0]
+        }
+
+        # create arm_id column with demographics and set it as key
+        dataset[, arm_id := paste(study_prot, study_part, study_group, study_arm, sep = "-")]
+        setkey(dataset, arm_id)
+
+        dataset[private$.treatmentArm, nomatch= 0]
+        setkey(dataset, NULL)
       }
 
       # caching
@@ -354,6 +361,9 @@ DataSpaceStudy <- R6Class(
 
       # convert to data.table
       setDT(treatmentArm)
+
+      # set key
+      setkey(treatmentArm, arm_id)
 
       private$.treatmentArm <- treatmentArm
     }
