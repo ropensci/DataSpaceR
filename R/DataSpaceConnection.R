@@ -199,7 +199,25 @@ DataSpaceConnection <- R6Class(
       private$.availableGroups
     },
     mAbGrid = function() {
-      private$.mAbGrid
+      mAbGridBase <- private$.mAbGridBase
+      mAbMetaGridBase <- private$.mAbMetaGridBase
+
+      mAbGridBase[, n_viruses := length(unique(virus)), by = mab_mix_name_std]
+      mAbGridBase[, n_clades := length(unique(clade[!is.na(clade)])), by = mab_mix_name_std]
+      mAbGridBase[, n_tiers := length(unique(neutralization_tier[!is.na(neutralization_tier)])), by = mab_mix_name_std]
+      mAbGridBase[, goemetric_mean_curve_ic50 := exp(mean(log(as.numeric(titer_curve_ic50)))), by = mab_mix_name_std]
+      mAbGridBase[, n_studies := length(unique(study)), by = mab_mix_name_std]
+      mAbGrid <- unique(mAbGridBase[, .(mab_mix_name_std, n_viruses, n_clades, n_tiers, goemetric_mean_curve_ic50, n_studies)])
+
+      mAbMetaGridBase[, hxb2_location := paste(unique(mab_hxb2_location[!is.na(mab_hxb2_location)]), collapse = ", "), by = mab_mix_name_std]
+      mAbMetaGridBase[, isotype := paste(unique(mab_isotype[!is.na(mab_isotype)]), collapse = ", "), by = mab_mix_name_std]
+      mAbMetaGrid <- unique(mAbMetaGridBase[, .(mab_donor_species, mab_mix_name_std, isotype, hxb2_location)])
+
+      setkey(mAbGrid, mab_mix_name_std)
+      setkey(mAbMetaGrid, mab_mix_name_std)
+      mAbGrid <- mAbGrid[mAbMetaGrid, nomatch = 0]
+
+      mAbGrid[, .(mAb_mixture = mab_mix_name_std, donor_species = mab_donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, goemetric_mean_curve_ic50, n_studies)]
     }
   ),
   private = list(
@@ -207,7 +225,6 @@ DataSpaceConnection <- R6Class(
     .availableStudies = data.table(),
     .stats = data.table(),
     .availableGroups = data.table(),
-    .mAbGrid = data.table(),
     .mAbGridBase = data.table(),
     .mAbMetaGridBase = data.table(),
 
@@ -306,25 +323,10 @@ DataSpaceConnection <- R6Class(
       setDT(mAbGridBase)
       setDT(mAbMetaGridBase)
 
-      private$.mAbGridBase <- data.table::copy(mAbGridBase)
-      private$.mAbMetaGridBase <- data.table::copy(mAbMetaGridBase)
+      private$.mAbGridBase <- mAbGridBase
+      private$.mAbMetaGridBase <- mAbMetaGridBase
 
-      mAbGridBase[, n_viruses := length(unique(virus)), by = mab_mix_name_std]
-      mAbGridBase[, n_clades := length(unique(clade[!is.na(clade)])), by = mab_mix_name_std]
-      mAbGridBase[, n_tiers := length(unique(neutralization_tier[!is.na(neutralization_tier)])), by = mab_mix_name_std]
-      mAbGridBase[, goemetric_mean_curve_ic50 := exp(mean(log(as.numeric(titer_curve_ic50)))), by = mab_mix_name_std]
-      mAbGridBase[, n_studies := length(unique(study)), by = mab_mix_name_std]
-      mAbGrid <- unique(mAbGridBase[, .(mab_mix_name_std, n_viruses, n_clades, n_tiers, goemetric_mean_curve_ic50, n_studies)])
-
-      mAbMetaGridBase[, hxb2_location := paste(unique(mab_hxb2_location[!is.na(mab_hxb2_location)]), collapse = ", "), by = mab_mix_name_std]
-      mAbMetaGridBase[, isotype := paste(unique(mab_isotype[!is.na(mab_isotype)]), collapse = ", "), by = mab_mix_name_std]
-      mAbMetaGrid <- unique(mAbMetaGridBase[, .(mab_donor_species, mab_mix_name_std, isotype, hxb2_location)])
-
-      setkey(mAbGrid, mab_mix_name_std)
-      setkey(mAbMetaGrid, mab_mix_name_std)
-      mAbGrid <- mAbGrid[mAbMetaGrid, nomatch = 0]
-
-      private$.mAbGrid <- mAbGrid[, .(mAb_mixture = mab_mix_name_std, donor_species = mab_donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, goemetric_mean_curve_ic50, n_studies)]
+      NULL
     }
   )
 )
