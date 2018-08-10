@@ -177,6 +177,52 @@ DataSpaceConnection <- R6Class(
 
       DataSpaceStudy$new("", private$.config, group, NULL)
     },
+    filterMAbGrid = function(using, value) {
+      assert_that(using %in% c("mAb_mixture", "donor_species", "isotype", "hxb2_location", "viruses", "clades", "tiers", "curve_ic50", "studies"))
+
+      if (using == "mAb_mixture") {
+        assert_that(all(value %in% private$.mAbGridBase$mab_mix_name_std))
+        private$.mAbGridBase <- private$.mAbGridBase[mab_mix_name_std %in% value]
+        private$.mAbMetaGridBase <- private$.mAbMetaGridBase[mab_mix_name_std %in% value]
+      }
+      if (using == "donor_species") {
+        assert_that(all(value %in% private$.mAbMetaGridBase$mab_donor_species))
+        private$.mAbMetaGridBase <- private$.mAbMetaGridBase[mab_donor_species %in% value]
+        private$.mAbGridBase <- private$.mAbGridBase[mab_mix_name_std %in% private$.mAbMetaGridBase$mab_mix_name_std]
+      }
+      if (using == "isotype") {
+        assert_that(all(value %in% private$.mAbMetaGridBase$mab_isotype))
+        private$.mAbMetaGridBase <- private$.mAbMetaGridBase[mab_isotype %in% value]
+        private$.mAbGridBase <- private$.mAbGridBase[mab_mix_name_std %in% private$.mAbMetaGridBase$mab_mix_name_std]
+      }
+      if (using == "hxb2_location") {
+        assert_that(all(value %in% private$.mAbMetaGridBase$mab_hxb2_location))
+        private$.mAbMetaGridBase <- private$.mAbMetaGridBase[mab_hxb2_location %in% value]
+        private$.mAbGridBase <- private$.mAbGridBase[mab_mix_name_std %in% private$.mAbMetaGridBase$mab_mix_name_std]
+      }
+      if (using == "viruses") {
+        assert_that(all(value %in% private$.mAbGridBase$virus))
+        private$.mAbGridBase <- private$.mAbGridBase[virus %in% value]
+      }
+      if (using == "clades") {
+        assert_that(all(value %in% private$.mAbGridBase$clade))
+        private$.mAbGridBase <- private$.mAbGridBase[clade %in% value]
+      }
+      if (using == "tiers") {
+        assert_that(all(value %in% private$.mAbGridBase$neutralization_tier))
+        private$.mAbGridBase <- private$.mAbGridBase[neutralization_tier %in% value]
+      }
+      if (using == "studies") {
+        assert_that(all(value %in% private$.mAbGridBase$study))
+        private$.mAbGridBase <- private$.mAbGridBase[study %in% value]
+      }
+
+      invisible(NULL)
+    },
+    clearMAbGridFilters = function() {
+      private$.mAbGridBase <- private$.cache$mAbGridBase
+      private$.mAbMetaGridBase <- private$.cache$mAbMetaGridBase
+    },
     refresh = function() {
       tries <- c(
         class(try(private$.getAvailableStudies(), silent = !private$.config$verbose)),
@@ -209,15 +255,16 @@ DataSpaceConnection <- R6Class(
       mAbGridBase[, n_studies := length(unique(study)), by = mab_mix_name_std]
       mAbGrid <- unique(mAbGridBase[, .(mab_mix_name_std, n_viruses, n_clades, n_tiers, goemetric_mean_curve_ic50, n_studies)])
 
+      mAbMetaGridBase[, donor_species := paste(unique(mab_donor_species[!is.na(mab_donor_species)]), collapse = ", "), by = mab_mix_name_std]
       mAbMetaGridBase[, hxb2_location := paste(unique(mab_hxb2_location[!is.na(mab_hxb2_location)]), collapse = ", "), by = mab_mix_name_std]
       mAbMetaGridBase[, isotype := paste(unique(mab_isotype[!is.na(mab_isotype)]), collapse = ", "), by = mab_mix_name_std]
-      mAbMetaGrid <- unique(mAbMetaGridBase[, .(mab_donor_species, mab_mix_name_std, isotype, hxb2_location)])
+      mAbMetaGrid <- unique(mAbMetaGridBase[, .(donor_species, mab_mix_name_std, isotype, hxb2_location)])
 
       setkey(mAbGrid, mab_mix_name_std)
       setkey(mAbMetaGrid, mab_mix_name_std)
       mAbGrid <- mAbGrid[mAbMetaGrid, nomatch = 0]
 
-      mAbGrid[, .(mAb_mixture = mab_mix_name_std, donor_species = mab_donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, goemetric_mean_curve_ic50, n_studies)]
+      mAbGrid[, .(mAb_mixture = mab_mix_name_std, donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, goemetric_mean_curve_ic50, n_studies)]
     }
   ),
   private = list(
@@ -227,6 +274,7 @@ DataSpaceConnection <- R6Class(
     .availableGroups = data.table(),
     .mAbGridBase = data.table(),
     .mAbMetaGridBase = data.table(),
+    .cache = list(),
 
     .getAvailableStudies = function() {
       colSelect <- c("study_name", "short_name", "title", "type", "status",
@@ -325,8 +373,10 @@ DataSpaceConnection <- R6Class(
 
       private$.mAbGridBase <- mAbGridBase
       private$.mAbMetaGridBase <- mAbMetaGridBase
+      private$.cache$mAbGridBase <- data.table::copy(mAbGridBase)
+      private$.cache$mAbMetaGridBase <- data.table::copy(mAbMetaGridBase)
 
-      NULL
+      invisible(NULL)
     }
   )
 )
