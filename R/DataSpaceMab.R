@@ -1,7 +1,7 @@
-#' The DataSpaceMAb class
+#' The DataSpaceMab class
 #'
 #' @section Constructor:
-\code{DataSpaceConnection$getMAb()}
+#' \code{DataSpaceConnection$getMab()}
 #'
 #' @section Fields:
 #' \describe{
@@ -15,12 +15,22 @@
 #' \dontrun{
 #' }
 #' @docType class
-DataSpaceMAb <- R6Class(
-  classname = "DataSpaceMAb",
+DataSpaceMab <- R6Class(
+  classname = "DataSpaceMab",
   public = list(
-    nAbMAb = data.table(),
+    studyAndMabs = data.table(),
+    mabs = data.table(),
+    nabMab = data.table(),
+    metadata = data.table(),
+    studies = data.table(),
+    assays = data.table(),
+    variableDefinitions = data.table(),
+
     initialize = function(mAb_mixture, filters, config) {
-      mAbFilters <- Rlabkey::makeFilter(
+      private$.config <- config
+      private$.filters <- filters
+
+      mabFilters <- Rlabkey::makeFilter(
         c("titer_curve_ic50", "GREATER_THAN", "0"),
         c("titer_curve_ic50", "NOT_MISSING", "")
       )
@@ -28,29 +38,38 @@ DataSpaceMAb <- R6Class(
         filters <- lapply(names(filters), function(x) {
           Rlabkey::makeFilter(c(x, "IN", paste(unique(filters[[x]]), collapse = ";")))
         })
-        mAbFilters <- rbind(
-          mAbFilters,
+        mabFilters <- rbind(
+          mabFilters,
           Rlabkey::makeFilter(c("mab_mix_name_std", "IN", paste(mAb_mixture, collapse = ";"))),
           do.call(rbind, filters)
         )
       }
 
-      c("mab_mix_name_std", "IN", paste(mAb_mixture, collapse = ";"))
-      nAbMAb <- labkey.selectRows(
+      nabMab <- labkey.selectRows(
         baseUrl = config$labkey.url.base,
         folderPath = "/CAVD",
         schemaName = "study",
         queryName = "NAbMAbWithMixMeta",
         colNameOpt = "fieldname",
-        colFilter = mAbFilters,
+        colFilter = mabFilters,
         method = "GET"
       )
 
-      setDT(nAbMAb)
+      setDT(nabMab)
 
-      self$nAbMAb <- nAbMAb
+      self$nabMab <- nabMab
+    },
+    print = function() {
+      cat("<DataSpaceMab>")
+      cat("\n  URL:", private$.config$labkey.url.base)
+      cat("\n  User:", private$.config$labkey.user.email)
+      cat("\n  Available mAb mixtures:", unique(self$nabMab$mab_mix_name_std))
+      cat("\n")
     }
   ),
   active = list(),
-  private = list()
+  private = list(
+    .config = list(),
+    .filters = list()
+  )
 )

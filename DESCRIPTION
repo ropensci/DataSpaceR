@@ -28,6 +28,7 @@ Suggests:
     testthat,
     covr,
     knitr,
-    pryr
+    pryr,
+    rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
