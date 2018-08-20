@@ -1,0 +1,85 @@
+---
+title: "Monoclonal Antibodies"
+author: "Ju Yeong Kim"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Workflow
+
+In the app, the workflow of using the mAb grid looks like this:
+
+1. Navigate to the mAb Grid and browse the available mAb mixtures
+2. Select the mAb mixtures that you'd like to investigate
+3. Or filter columns by mAb/Mixture, donor species, isotype, HXB2 location, tiers, clades, and viruses
+4. Click "Neutralization Curves" or "IC50 Titer Heatmap" to visualize mAb data
+5. Click "Export CSV" or "Export Excel" to download mAb data
+
+`DataSpaceR` can mimick these steps except for the step 4.
+
+1. `con$mabGrid`
+2. `con$filterMabGrid()`
+3. `con$filterMabGrid()`
+4. NA
+5. `con$getMab()`
+
+
+## Browse the mAb Grid
+
+```{r}
+library(DataSpaceR)
+con <- connectDS()
+
+DT::datatable(con$mabGrid)
+```
+
+
+## Filter mAb grid and retrive column values from the grid
+
+You can retrive values from the grid by MAb Mixture, donor species, isotype, HXB2 location, tiers, clades, and viruses.
+
+```{r}
+# filter the grid by HXB2 location (Env and 249M Gag)
+con$filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))
+
+# filter the grid by species (llama)
+con$filterMabGrid(using = "donor_species", value = "llama")
+
+# check the updated grid
+DT::datatable(con$mabGrid)
+
+# retrieve available viruses in the grid
+con$retrieveMabGridValue(using = "viruses")
+
+# retrive available clades for 1H9 mAb mixture in the grid
+con$retrieveMabGridValue(using = "clades", mAb_mixture = "1H9")
+```
+
+
+## Create a mAb object
+
+After filtering the grid, you can retrieve mAb data:
+
+```{r}
+mab <- con$getMab()
+mab
+```
+
+
+## Session information
+
+```{r session-info}
+sessionInfo()
+```
