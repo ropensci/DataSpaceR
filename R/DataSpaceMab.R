@@ -63,8 +63,16 @@ DataSpaceMab <- R6Class(
       cat("<DataSpaceMab>")
       cat("\n  URL:", private$.config$labkey.url.base)
       cat("\n  User:", private$.config$labkey.user.email)
-      cat("\n  Available mAb mixtures:", unique(self$nabMab$mab_mix_name_std))
-      cat("\n")
+      cat("\n  Available mAb mixtures:", length(unique(self$nabMab$mab_mix_name_std)))
+      cat("\n  Filters:")
+      if (length(private$.filters) > 0) {
+        lapply(names(private$.filters), function(x) {
+          cat("\n    ", x, ": ", paste(private$.filters[[x]], collapse = ", "), sep = "")
+        })
+      } else {
+        cat("NA")
+      }
+      cat(" \n")
     }
   ),
   active = list(),
