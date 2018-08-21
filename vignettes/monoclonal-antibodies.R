@@ -21,14 +21,16 @@ con$filterMabGrid(using = "donor_species", value = "llama")
 DT::datatable(con$mabGrid, options=list(autoWidth = TRUE, scrollX = TRUE))
 
 ## ----eval=FALSE----------------------------------------------------------
-#  # Or
-#  con$filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))$filterMabGrid(using = "donor_species", value = "llama")$mabGrid
+#  con$
+#    filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))$
+#    filterMabGrid(using = "donor_species", value = "llama")$
+#    mabGrid
 
 ## ------------------------------------------------------------------------
-# retrieve available viruses in the grid
+# retrieve available viruses in the filtered grid
 con$retrieveMabGridValue(using = "viruses")
 
-# retrive available clades for 1H9 mAb mixture in the grid
+# retrive available clades for 1H9 mAb mixture in the filtered grid
 con$retrieveMabGridValue(using = "clades", mAb_mixture = "1H9")
 
 ## ------------------------------------------------------------------------

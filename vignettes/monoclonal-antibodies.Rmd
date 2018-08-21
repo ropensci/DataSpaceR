@@ -17,36 +17,40 @@ knitr::opts_chunk$set(
 ```
 
 
-## Workflow
+## Workflow overview
 
-In the app, the workflow of using the mAb grid looks like this:
+In [the app](https://dataspace.cavd.org/cds/CAVD/app.view#mabgrid), the workflow of using the mAb grid looks like this:
 
 1. Navigate to the mAb Grid and browse the available mAb mixtures
 2. Select the mAb mixtures that you'd like to investigate
-3. Or filter columns by mAb/Mixture, donor species, isotype, HXB2 location, tiers, clades, and viruses
-4. Click "Neutralization Curves" or "IC50 Titer Heatmap" to visualize mAb data
-5. Click "Export CSV" or "Export Excel" to download mAb data
+3. Or filter rows by using columns: mAb/Mixture, donor species, isotype, HXB2 location, tiers, clades, and viruses
+4. Click "Neutralization Curves" or "IC50 Titer Heatmap" to visualize the mAb data
+5. Click "Export CSV" or "Export Excel" to download the mAb data
 
 `DataSpaceR` can mimick these steps except for the step 4.
 
-1. Browse `con$mabGrid`
-2. Use `con$filterMabGrid()`
-3. Use `con$filterMabGrid()`
-4. Currently not available
-5. Use `con$getMab()` to retreive mAb data
+1. Browse the mAb Grid by `con$mabGrid`
+2. Select the mAb mixtures by `con$filterMabGrid(using = "mAb_mixture", value = c(...))`
+3. Or filter rows by `con$filterMabGrid(using = c("donor_species", "hxb2_location", ...), value = c(...))`
+4. Visualization is currently not available
+5. Use `con$getMab()` to retreive the mAb data
 
 
 ## Browse the mAb Grid
+
+You can browse the mAb Grid by calling the `mabGrid` field in the connection object:
 
 ```{r}
 library(DataSpaceR)
 con <- connectDS()
 
-DT::datatable(con$mabGrid, options=list(autoWidth = TRUE, scrollX = TRUE))
+DT::datatable(con$mabGrid, options = list(autoWidth = TRUE, scrollX = TRUE))
 ```
 
 
 ## Filter the mAb grid
+
+You can filter rows in the grid by specifying the values to keep in the columns `mAb_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`. `filterMabGrid` takes the column and the values and filters the underlying tables (private fields), and when you call the `mabGrid` field (which is actually an [active binding](https://cloud.r-project.org/web/packages/R6/vignettes/Introduction.html#active-bindings)), it returns the filtered grid with updated `n_` columns.
 
 ```{r}
 # filter the grid by HXB2 location (Env and 249M Gag)
@@ -56,24 +60,28 @@ con$filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))
 con$filterMabGrid(using = "donor_species", value = "llama")
 
 # check the updated grid
-DT::datatable(con$mabGrid, options=list(autoWidth = TRUE, scrollX = TRUE))
+DT::datatable(con$mabGrid, options = list(autoWidth = TRUE, scrollX = TRUE))
 ```
 
+Or we can use method chaining to call multiple filter methods and browse the grid. Method chaining is unique to R6 objects and related to the pipe. See Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/r6.html) for more info
+
 ```{r eval=FALSE}
-# Or
-con$filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))$filterMabGrid(using = "donor_species", value = "llama")$mabGrid
+con$
+  filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))$
+  filterMabGrid(using = "donor_species", value = "llama")$
+  mabGrid
 ```
 
 
 ## Retrive column values from the mAb grid
 
-You can retrive values from the grid by MAb Mixture, donor species, isotype, HXB2 location, tiers, clades, and viruses.
+You can retrive values from the grid by `mAb_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`.
 
 ```{r}
-# retrieve available viruses in the grid
+# retrieve available viruses in the filtered grid
 con$retrieveMabGridValue(using = "viruses")
 
-# retrive available clades for 1H9 mAb mixture in the grid
+# retrive available clades for 1H9 mAb mixture in the filtered grid
 con$retrieveMabGridValue(using = "clades", mAb_mixture = "1H9")
 ```
 
@@ -87,8 +95,10 @@ mab <- con$getMab()
 mab
 ```
 
+There are 7 public fields available in the DataSpaceMab object: `assays`, `mabs`, `metadata`, `nabmab`, `studies`, `studyAndMabs`, and `variableDefinitions`, and they are equivalent to the sheets in the excel file or the csv files you would download from the app via "Export Excel"/"Export CSV".
+
 ```{r}
-DT::datatable(mab$nabMab, options=list(autoWidth = TRUE, scrollX = TRUE))
+DT::datatable(mab$nabMab, options = list(autoWidth = TRUE, scrollX = TRUE))
 ```
 
 
