@@ -29,11 +29,11 @@ In the app, the workflow of using the mAb grid looks like this:
 
 `DataSpaceR` can mimick these steps except for the step 4.
 
-1. `con$mabGrid`
-2. `con$filterMabGrid()`
-3. `con$filterMabGrid()`
-4. NA
-5. `con$getMab()`
+1. Browse `con$mabGrid`
+2. Use `con$filterMabGrid()`
+3. Use `con$filterMabGrid()`
+4. Currently not available
+5. Use `con$getMab()` to retreive mAb data
 
 
 ## Browse the mAb Grid
@@ -42,13 +42,11 @@ In the app, the workflow of using the mAb grid looks like this:
 library(DataSpaceR)
 con <- connectDS()
 
-DT::datatable(con$mabGrid)
+DT::datatable(con$mabGrid, options=list(autoWidth = TRUE, scrollX = TRUE))
 ```
 
 
-## Filter mAb grid and retrive column values from the grid
-
-You can retrive values from the grid by MAb Mixture, donor species, isotype, HXB2 location, tiers, clades, and viruses.
+## Filter the mAb grid
 
 ```{r}
 # filter the grid by HXB2 location (Env and 249M Gag)
@@ -58,8 +56,20 @@ con$filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))
 con$filterMabGrid(using = "donor_species", value = "llama")
 
 # check the updated grid
-DT::datatable(con$mabGrid)
+DT::datatable(con$mabGrid, options=list(autoWidth = TRUE, scrollX = TRUE))
+```
 
+```{r eval=FALSE}
+# Or
+con$filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))$filterMabGrid(using = "donor_species", value = "llama")$mabGrid
+```
+
+
+## Retrive column values from the mAb grid
+
+You can retrive values from the grid by MAb Mixture, donor species, isotype, HXB2 location, tiers, clades, and viruses.
+
+```{r}
 # retrieve available viruses in the grid
 con$retrieveMabGridValue(using = "viruses")
 
@@ -68,13 +78,17 @@ con$retrieveMabGridValue(using = "clades", mAb_mixture = "1H9")
 ```
 
 
-## Create a mAb object
+## Create a DataSpaceMab object
 
-After filtering the grid, you can retrieve mAb data:
+After filtering the grid, you can create a DataSpaceMab object that contains the filtered mAb data.
 
 ```{r}
 mab <- con$getMab()
 mab
+```
+
+```{r}
+DT::datatable(mab$nabMab, options=list(autoWidth = TRUE, scrollX = TRUE))
 ```
 
 
