@@ -8,17 +8,17 @@ knitr::opts_chunk$set(
 library(DataSpaceR)
 con <- connectDS()
 
-DT::datatable(con$mabGrid, options=list(autoWidth = TRUE, scrollX = TRUE))
+DT::datatable(con$mabGrid, options = list(autoWidth = TRUE, scrollX = TRUE))
 
 ## ------------------------------------------------------------------------
-# filter the grid by HXB2 location (Env and 249M Gag)
-con$filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))
+# filter the grid by viruses
+con$filterMabGrid(using = "viruses", value = c("242-14", "Q23.17", "6535.3", "BaL.26", "DJ263.8"))
 
-# filter the grid by species (llama)
+# filter the grid by donor species (llama)
 con$filterMabGrid(using = "donor_species", value = "llama")
 
 # check the updated grid
-DT::datatable(con$mabGrid, options=list(autoWidth = TRUE, scrollX = TRUE))
+DT::datatable(con$mabGrid, options = list(autoWidth = TRUE, scrollX = TRUE))
 
 ## ----eval=FALSE----------------------------------------------------------
 #  con$
@@ -38,7 +38,7 @@ mab <- con$getMab()
 mab
 
 ## ------------------------------------------------------------------------
-DT::datatable(mab$nabMab, options=list(autoWidth = TRUE, scrollX = TRUE))
+DT::datatable(mab$nabMab, options = list(autoWidth = TRUE, scrollX = TRUE))
 
 ## ----session-info--------------------------------------------------------
 sessionInfo()

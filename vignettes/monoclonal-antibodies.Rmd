@@ -50,13 +50,13 @@ DT::datatable(con$mabGrid, options = list(autoWidth = TRUE, scrollX = TRUE))
 
 ## Filter the mAb grid
 
-You can filter rows in the grid by specifying the values to keep in the columns `mAb_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`. `filterMabGrid` takes the column and the values and filters the underlying tables (private fields), and when you call the `mabGrid` field (which is actually an [active binding](https://cloud.r-project.org/web/packages/R6/vignettes/Introduction.html#active-bindings)), it returns the filtered grid with updated `n_` columns.
+You can filter rows in the grid by specifying the values to keep in the columns `mAb_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`. `filterMabGrid` takes the column and the values and filters the underlying tables (private fields), and when you call the `mabGrid` field (which is actually an [active binding](https://cloud.r-project.org/web/packages/R6/vignettes/Introduction.html#active-bindings)), it returns the filtered grid with updated `n_` columns and `geometric_mean_curve_ic50`.
 
 ```{r}
-# filter the grid by HXB2 location (Env and 249M Gag)
-con$filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))
+# filter the grid by viruses
+con$filterMabGrid(using = "viruses", value = c("242-14", "Q23.17", "6535.3", "BaL.26", "DJ263.8"))
 
-# filter the grid by species (llama)
+# filter the grid by donor species (llama)
 con$filterMabGrid(using = "donor_species", value = "llama")
 
 # check the updated grid
