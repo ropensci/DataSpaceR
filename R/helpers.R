@@ -192,3 +192,28 @@ makeCountQuery <- function(dataset, group) {
 
   query
 }
+
+assertColumn <- function(using) {
+  assert_that(
+    using %in% c("mAb_mixture", "donor_species", "isotype", "hxb2_location", "viruses", "clades", "tiers", "curve_ic50", "studies")
+  )
+}
+
+switchColumn <- function(using) {
+  switch(
+    using,
+    "mAb_mixture" = "mab_mix_name_std",
+    "donor_species" = "mab_donor_species",
+    "isotype" = "mab_isotype",
+    "hxb2_location" = "mab_hxb2_location",
+    "viruses" = "virus",
+    "clades" = "clade",
+    "tiers" = "neutralization_tier",
+    "curve_ic50" = "titer_curve_ic50",
+    "studies" = "study"
+  )
+}
+
+isFromMabGrid <- function(column) {
+  column %in% c("mab_mix_name_std", "virus", "clade", "neutralization_tier", "titer_curve_ic50", "study")
+}
