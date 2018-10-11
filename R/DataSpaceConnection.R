@@ -73,16 +73,22 @@ DataSpaceConnection <- R6Class(
                           password = NULL,
                           verbose = FALSE,
                           onStaging = FALSE) {
-      assert_that((is.null(login) && is.null(password)) || (!is.null(login) && !is.null(password)),
-                  msg = "Enter both `login` and `password` or use netrc file.")
+      assert_that(
+        (is.null(login) && is.null(password)) || (!is.null(login) && !is.null(password)),
+        msg = "Enter both `login` and `password` or use netrc file."
+      )
       assert_that(is.logical(verbose))
       assert_that(is.logical(onStaging))
-      assert_that(has_internet(),
-                  msg = "No internet connection. Please connect to internet and try again.")
+      assert_that(
+        has_internet(),
+        msg = "No internet connection. Please connect to internet and try again."
+      )
 
       # check if the portal is up
-      assert_that(!is.null(nslookup(ifelse(onStaging, STAGING, PRODUCTION), error = FALSE)),
-                  msg = "The portal is currently down. Try again later.")
+      assert_that(
+        !is.null(nslookup(ifelse(onStaging, STAGING, PRODUCTION), error = FALSE)),
+        msg = "The portal is currently down. Try again later."
+      )
 
       # get primary fields
       labkey.url.base <- getUrlBase(onStaging)
@@ -181,19 +187,33 @@ DataSpaceConnection <- R6Class(
       assertColumn(using)
 
       column <- switchColumn(using)
-      gridBase <- ifelse(isFromMabGrid(column), ".mabGridBase", ".mabMetaGridBase")
+      gridBase <- ifelse(
+        isFromMabGrid(column),
+        ".mabGridBase",
+        ".mabMetaGridBase"
+      )
 
       assert_that(all(value %in% private[[gridBase]][[column]]))
 
       if (isFromMabGrid(column)) {
-        private$.mabGridBase <- private$.mabGridBase[get(column) %in% value]
+        private$.mabGridBase <- private$.mabGridBase[
+          get(column) %in% value
+        ]
 
         if (column == "mab_mix_name_std") {
-        private$.mabMetaGridBase <- private$.mabMetaGridBase[get(column) %in% value]
+        private$.mabMetaGridBase <- private$.mabMetaGridBase[
+          get(column) %in% value
+        ]
         }
       } else {
-        private$.mabMetaGridBase <- private$.mabMetaGridBase[, valid := any(get(column) == value, na.rm = TRUE), by = mab_mix_name_std][valid == TRUE]
-        private$.mabGridBase <- private$.mabGridBase[mab_mix_name_std %in% private$.mabMetaGridBase$mab_mix_name_std]
+        private$.mabMetaGridBase <- private$.mabMetaGridBase[
+          ,
+          valid := any(get(column) == value, na.rm = TRUE),
+          by = mab_mix_name_std
+        ][valid == TRUE]
+        private$.mabGridBase <- private$.mabGridBase[
+          mab_mix_name_std %in% private$.mabMetaGridBase$mab_mix_name_std
+        ]
       }
 
       # cache filter
@@ -249,27 +269,31 @@ DataSpaceConnection <- R6Class(
       mabGridBase <- private$.mabGridBase
       mabMetaGridBase <- private$.mabMetaGridBase
 
-      mabGridBase[,
-                  `:=`(
-                    mAb_mixture = mab_mix_name_std,
-                    n_viruses = length(unique(virus)),
-                    n_clades = length(unique(clade[!is.na(clade)])),
-                    n_tiers = length(unique(neutralization_tier[!is.na(neutralization_tier)])),
-                    geometric_mean_curve_ic50 = exp(mean(log(as.numeric(titer_curve_ic50)))),
-                    n_studies = length(unique(study))
-                  ),
-                  by = mab_mix_name_std]
+      mabGridBase[
+        ,
+        `:=`(
+          mAb_mixture = mab_mix_name_std,
+          n_viruses = length(unique(virus)),
+          n_clades = length(unique(clade[!is.na(clade)])),
+          n_tiers = length(unique(neutralization_tier[!is.na(neutralization_tier)])),
+          geometric_mean_curve_ic50 = exp(mean(log(as.numeric(titer_curve_ic50)))),
+          n_studies = length(unique(study))
+        ),
+        by = mab_mix_name_std
+      ]
       mabGrid <- unique(mabGridBase[, .(mAb_mixture, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)])
       setkey(mabGrid, mAb_mixture)
 
-      mabMetaGridBase[,
-                      `:=`(
-                        mAb_mixture = mab_mix_name_std,
-                        donor_species = paste(unique(mab_donor_species[!is.na(mab_donor_species)]), collapse = ", "),
-                        hxb2_location = paste(unique(mab_hxb2_location[!is.na(mab_hxb2_location)]), collapse = ", "),
-                        isotype = paste(unique(mab_isotype[!is.na(mab_isotype)]), collapse = ", ")
-                      ),
-                      by = mab_mix_name_std]
+      mabMetaGridBase[
+        ,
+        `:=`(
+          mAb_mixture = mab_mix_name_std,
+          donor_species = paste(unique(mab_donor_species[!is.na(mab_donor_species)]), collapse = ", "),
+          hxb2_location = paste(unique(mab_hxb2_location[!is.na(mab_hxb2_location)]), collapse = ", "),
+          isotype = paste(unique(mab_isotype[!is.na(mab_isotype)]), collapse = ", ")
+        ),
+        by = mab_mix_name_std
+      ]
       mabMetaGrid <- unique(mabMetaGridBase[, .(mAb_mixture, donor_species, isotype, hxb2_location)])
       setkey(mabMetaGrid, mAb_mixture)
 
