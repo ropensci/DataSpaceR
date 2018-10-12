@@ -130,6 +130,11 @@ colnames(NAb)
 The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.
 
 
+## Examples & Documentation
+
+For more detailed examples and detailed documentation, see [the introductory vignette](https://cavddataspace.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html) and [the pkgdown site](https://cavddataspace.github.io/DataSpaceR/).
+
+
 ## Meta
 
 * Please [report any issues or bugs](https://github.com/CAVDDataSpace/DataSpaceR/issues).
