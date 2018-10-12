@@ -73,16 +73,22 @@ DataSpaceConnection <- R6Class(
                           password = NULL,
                           verbose = FALSE,
                           onStaging = FALSE) {
-      assert_that((is.null(login) && is.null(password)) || (!is.null(login) && !is.null(password)),
-                  msg = "Enter both `login` and `password` or use netrc file.")
+      assert_that(
+        (is.null(login) && is.null(password)) || (!is.null(login) && !is.null(password)),
+        msg = "Enter both `login` and `password` or use netrc file."
+      )
       assert_that(is.logical(verbose))
       assert_that(is.logical(onStaging))
-      assert_that(has_internet(),
-                  msg = "No internet connection. Please connect to internet and try again.")
+      assert_that(
+        has_internet(),
+        msg = "No internet connection. Please connect to internet and try again."
+      )
 
       # check if the portal is up
-      assert_that(!is.null(nslookup(ifelse(onStaging, STAGING, PRODUCTION), error = FALSE)),
-                  msg = "The portal is currently down. Try again later.")
+      assert_that(
+        !is.null(nslookup(ifelse(onStaging, STAGING, PRODUCTION), error = FALSE)),
+        msg = "The portal is currently down. Try again later."
+      )
 
       # get primary fields
       labkey.url.base <- getUrlBase(onStaging)
@@ -205,8 +211,10 @@ DataSpaceConnection <- R6Class(
     .availableGroups = data.table(),
 
     .getAvailableStudies = function() {
-      colSelect <- c("study_name", "short_name", "title", "type", "status",
-                     "stage", "species", "start_date", "strategy")
+      colSelect <- c(
+        "study_name", "short_name", "title", "type", "status",
+        "stage", "species", "start_date", "strategy"
+      )
 
       availableStudies <- labkey.selectRows(
         baseUrl = private$.config$labkey.url.base,

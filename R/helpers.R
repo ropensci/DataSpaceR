@@ -33,8 +33,8 @@ getUserEmail <- function(labkey.url.base, login) {
     labkey.user.email <- get("labkey.user.email", .GlobalEnv)
   } else if (!is.null(login)) {
     labkey.user.email <- login
-  } else if (file.exists("~/.netrc") || file.exists("~/_netrc")) {
-    netrcFile <- ifelse(isWindows(), "~/_netrc", "~/.netrc")
+  } else if (file.exists(getNetrcPath())) {
+    netrcFile <- getNetrcPath()
     netrc <- readChar(netrcFile, file.info(netrcFile)$size)
     netrc <- strsplit(netrc, split = "\\s+")[[1]]
 
@@ -111,10 +111,7 @@ getNetrc <- function(login, password, onStaging = FALSE) {
   } else if (exists("labkey.netrc.file", .GlobalEnv)) {
     netrc <- get("labkey.netrc.file", .GlobalEnv)
   } else {
-    netrc <- paste0(
-      Sys.getenv("HOME"),
-      ifelse(isWindows(), "\\_netrc", "/.netrc")
-    )
+    netrc <- getNetrcPath()
   }
 
   netrc

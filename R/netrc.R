@@ -76,7 +76,7 @@ checkNetrc <- function(onStaging = FALSE) {
   if (exists("labkey.netrc.file", .GlobalEnv)) {
     netrcFile <- get("labkey.netrc.file", .GlobalEnv)
   } else {
-    netrcFile <- ifelse(isWindows(), "~/_netrc", "~/.netrc")
+    netrcFile <- getNetrcPath()
   }
 
   if (!file.exists(netrcFile)) {

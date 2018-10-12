@@ -226,7 +226,7 @@ DataSpaceStudy <- R6Class(
         dataset[, arm_id := paste(study_prot, study_part, study_group, study_arm, sep = "-")]
         setkey(dataset, arm_id)
 
-        dataset[private$.treatmentArm, nomatch= 0]
+        dataset[private$.treatmentArm, nomatch = 0]
         setkey(dataset, NULL)
       }
 
