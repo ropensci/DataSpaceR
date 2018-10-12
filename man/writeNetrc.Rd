@@ -4,7 +4,8 @@
 \alias{writeNetrc}
 \title{Write a netrc file}
 \usage{
-writeNetrc(login, password, onStaging = FALSE, netrcFile = NULL)
+writeNetrc(login, password, onStaging = FALSE,
+  netrcFile = getNetrcPath())
 }
 \arguments{
 \item{login}{A character. Email address used for logging in on DataSpace.}
