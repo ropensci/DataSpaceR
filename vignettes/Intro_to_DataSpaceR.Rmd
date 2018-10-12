@@ -1,10 +1,10 @@
 ---
-title: "A Simple Introduction to the DataSpaceR Package"
+title: "Introduction to DataSpaceR"
 author: "Ju Yeong Kim"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Introduction to DataSpaceR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
