@@ -61,7 +61,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/Intro_to_DataSpaceR.html">A Simple Introduction to the DataSpaceR Package</a>
+      <a href="articles/Intro_to_DataSpaceR.html">Introduction to DataSpaceR</a>
     </li>
   </ul>
 </li>
@@ -107,37 +107,39 @@
 <div id="dataspacer" class="section level1">
 
 
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
-<p>A thin wrapper around <a href="https://cran.r-project.org/web/packages/Rlabkey/index.html">Rlabkey</a> to access the <a href="https://dataspace.cavd.org">CAVD DataSpace</a> database from R. This package simplifies access to the database for R programmers.</p>
-<p>It takes advantage of the standardization of the database to hide all the <a href="https://cran.r-project.org/web/packages/Rlabkey/index.html">Rlabkey</a> specific code away from the user. Study-specific datasets can be accessed via an object-oriented paradigm.</p>
-</div>
+<p><code>DataSpaceR</code> is an R interface to <a href="https://dataspace.cavd.org">the CAVD DataSpace</a>, a data sharing and discovery tool that facilitates exploration of HIV immunological data from pre-clinical and clinical HIV vaccine studies.</p>
+<p>This package simplifies access to the database by taking advantage of the standardization of the database to hide all the <a href="https://cran.r-project.org/web/packages/Rlabkey/index.html">Rlabkey</a> specific code away from the user, and it allows the users to access the study-specific datasets via an object-oriented paradigm.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The package can be downloaded here and installed like any other R packages or installed directly from github using <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>.</p>
+<p>You can install the latest version of DataSpaceR from <a href="https://github.com/CAVDDataSpace/DataSpaceR">GitHub</a> with <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"CAVDDataSpace/DataSpaceR"</span>)
-
-<span class="co"># development version</span>
-devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"CAVDDataSpace/DataSpaceR"</span>, <span class="dt">ref =</span> <span class="st">"dev"</span>)</code></pre></div>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"CAVDDataSpace/DataSpaceR"</span>)</code></pre></div>
 </div>
-<div id="set-netrc-file" class="section level2">
+<div id="register-and-set-dataspace-credential" class="section level2">
 <h2 class="hasAnchor">
-<a href="#set-netrc-file" class="anchor"></a>Set netrc file</h2>
-<p>The database is accessed with the user’s credentials. A <code>netrc</code> file storing login and password information is required.</p>
-<p>Create netrc file in the computer running R.</p>
+<a href="#register-and-set-dataspace-credential" class="anchor"></a>Register and set DataSpace credential</h2>
+<p>The database is accessed with the user’s credentials. A netrc file storing login and password information is <strong><em>required</em></strong>.</p>
+<ol style="list-style-type: decimal">
+<li>
+<a href="https://dataspace.cavd.org/">Create an account</a> and read the terms of use</li>
+<li>On your R console, create a netrc file using a function from <code>DataSpaceR</code>:</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DataSpaceR<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DataSpaceR/topics/writeNetrc">writeNetrc</a></span>(<span class="st">"yourEmail@address.com"</span>, <span class="st">"yourSecretPassword"</span>)</code></pre></div>
+<p>This will create a netrc file in your home directory.</p>
+<p><strong><em>Alternatively</em></strong>, you can manually create a netrc file in the computer running R.</p>
 <ul>
-<li>On a UNIX system this file should be named <code>.netrc</code> (<strong>dot</strong><code>netrc</code>)</li>
-<li>On windows it sould be named <code>_netrc</code> (<strong>underscore</strong><code>netrc</code>).</li>
-<li>The file should be located in the users home directory and the permissions on the file should be unreadable for everybody except the owner. To determine home directory, run <code>Sys.getenv("HOME")</code> in R.</li>
+<li>On Windows, this file sould be named <code>_netrc</code>
+</li>
+<li>On UNIX, it should be named <code>.netrc</code>
+</li>
+<li>The file should be located in the user’s home directory, and the permissions on the file should be unreadable for everybody except the owner</li>
+<li>To determine home directory, run <code>Sys.getenv("HOME")</code> in R</li>
 </ul>
-<p>The following three lines must be included in the <code>.netrc</code> or <code>_netrc</code> file either separated by white space (spaces, tabs, or newlines) or commas.</p>
+<p>The following three lines must be included in the <code>.netrc</code> or <code>_netrc</code> file either separated by white space (spaces, tabs, or newlines) or commas. Multiple such blocks can exist in one file.</p>
 <pre><code>machine dataspace.cavd.org
 login myuser@domain.com
 password supersecretpassword</code></pre>
-<p>Multiple such blocks can exist in one file.</p>
 <p>See <a href="https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc">here</a> for more information about <code>netrc</code>.</p>
 </div>
 <div id="usage" class="section level2">
@@ -171,11 +173,11 @@ con
 <span class="co">#&gt;     - 5 assays</span>
 <span class="co">#&gt;     - 240602 data points</span>
 <span class="co">#&gt;   Available groups: 4</span></code></pre></div>
-<p><code><a href="reference/connectDS.html">connectDS()</a></code> will create a connection to DataSpace. The user needs credentials stored in a <code>netrc</code> file to access the database.</p>
+<p><code><a href="reference/connectDS.html">connectDS()</a></code> will create a connection to DataSpace.</p>
 </div>
-<div id="available-studies-can-be-listed-by" class="section level3">
+<div id="available-studies-can-be-listed-by-availablestudies-field" class="section level3">
 <h3 class="hasAnchor">
-<a href="#available-studies-can-be-listed-by" class="anchor"></a>available studies can be listed by:</h3>
+<a href="#available-studies-can-be-listed-by-availablestudies-field" class="anchor"></a>available studies can be listed by <code>availableStudies</code> field</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(con<span class="op">$</span>availableStudies))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -193,7 +195,7 @@ con
 <tr class="odd">
 <td align="left">cvd232</td>
 <td align="left">Parks_RV_232</td>
-<td align="left">​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.</td>
+<td align="left">Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.</td>
 <td align="left">Pre-Clinical NHP</td>
 <td align="left">Inactive</td>
 <td align="left">Assays Completed</td>
@@ -259,9 +261,9 @@ con
 </tbody>
 </table>
 </div>
-<div id="available-groups-can-be-listed-by" class="section level3">
+<div id="available-groups-can-be-listed-by-availablegroups-field" class="section level3">
 <h3 class="hasAnchor">
-<a href="#available-groups-can-be-listed-by" class="anchor"></a>available groups can be listed by:</h3>
+<a href="#available-groups-can-be-listed-by-availablegroups-field" class="anchor"></a>available groups can be listed by <code>availableGroups</code> field</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(con<span class="op">$</span>availableGroups)</code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -318,9 +320,10 @@ con
 </tbody>
 </table>
 </div>
-<div id="congetstudycvd408-will-create-an-instance-of-cvd408-" class="section level3">
+<div id="create-an-instance-of-cvd408" class="section level3">
 <h3 class="hasAnchor">
-<a href="#congetstudycvd408-will-create-an-instance-of-cvd408-" class="anchor"></a><code>con$getStudy("cvd408")</code> will create an instance of <code>cvd408</code>.</h3>
+<a href="#create-an-instance-of-cvd408" class="anchor"></a>create an instance of <code>cvd408</code>
+</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">"cvd408"</span>)
 cvd408
 <span class="co">#&gt; &lt;DataSpaceStudy&gt;</span>
@@ -334,9 +337,9 @@ cvd408
 <span class="kw">class</span>(cvd408)
 <span class="co">#&gt; [1] "DataSpaceStudy" "R6"</span></code></pre></div>
 </div>
-<div id="available-datasets-can-be-listed-by" class="section level3">
+<div id="available-datasets-can-be-listed-by-availabledatasets-field" class="section level3">
 <h3 class="hasAnchor">
-<a href="#available-datasets-can-be-listed-by" class="anchor"></a>available datasets can be listed by:</h3>
+<a href="#available-datasets-can-be-listed-by-availabledatasets-field" class="anchor"></a>available datasets can be listed by <code>availableDatasets</code> field</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(cvd408<span class="op">$</span>availableDatasets)</code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -371,7 +374,7 @@ cvd408
 </div>
 <div id="neutralizing-antibody-dataset-nab-can-be-retreived-by" class="section level3">
 <h3 class="hasAnchor">
-<a href="#neutralizing-antibody-dataset-nab-can-be-retreived-by" class="anchor"></a>neutralizing antibody dataset (<code>NAb</code>) can be retreived by:</h3>
+<a href="#neutralizing-antibody-dataset-nab-can-be-retreived-by" class="anchor"></a>Neutralizing Antibody dataset (<code>NAb</code>) can be retreived by:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
 <span class="kw">dim</span>(NAb)
 <span class="co">#&gt; [1] 540  29</span>
@@ -393,6 +396,17 @@ cvd408
 <span class="co">#&gt; [29] "study_prot"</span></code></pre></div>
 <p>The package uses a <a href="https://cran.r-project.org/web/packages/R6/index.html">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behaviour.</p>
 </div>
+</div>
+<div id="meta" class="section level2">
+<h2 class="hasAnchor">
+<a href="#meta" class="anchor"></a>Meta</h2>
+<ul>
+<li>Please <a href="https://github.com/CAVDDataSpace/DataSpaceR/issues">report any issues or bugs</a>.</li>
+<li>License: GPL-3</li>
+<li>Get citation information for <code>DataSpaceR</code> in R doing <code>citation(package = 'DataSpaceR')</code>
+</li>
+<li>Please note that this project is released with a <a href="CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</li>
+</ul>
 </div>
 </div>
   </div>
