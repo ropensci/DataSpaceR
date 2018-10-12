@@ -19,10 +19,8 @@
 writeNetrc <- function(login,
                        password,
                        onStaging = FALSE,
-                       netrcFile = NULL) {
-  if (is.null(netrcFile)) {
-    netrcFile <- tempfile()
-  } else if (file.exists(netrcFile)) {
+                       netrcFile = getNetrcPath()) {
+  if (file.exists(netrcFile)) {
     stop(
       "'", netrcFile, "' already exists. ",
       "Remove it manually if you'd like to overwrite.",
@@ -36,7 +34,13 @@ writeNetrc <- function(login,
     "password", password
   )
 
+  # create a netrc file
   write(string, netrcFile)
+
+  # set the owner-only permission
+  if (!isWindows()) {
+    Sys.chmod(netrcFile, mode = "600")
+  }
 
   invisible(netrcFile)
 }
@@ -89,4 +93,13 @@ checkNetrc <- function(onStaging = FALSE) {
   message("netrc file found at '", netrcFile, "', and it looks valid.")
 
   invisible(netrcFile)
+}
+
+getNetrcPath <- function() {
+  home <- Sys.getenv("HOME")
+  if (isWindows()) {
+    file.path(home, "_netrc")
+  } else {
+    file.path(home, ".netrc")
+  }
 }
