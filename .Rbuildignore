@@ -10,3 +10,4 @@
 ^appveyor\.yml$
 ^ci\.R$
 ^\.trigger\.sh$
+^CONDUCT\.md$
