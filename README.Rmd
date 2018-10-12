@@ -18,46 +18,43 @@ knitr::opts_chunk$set(
 [![Build status](https://ci.appveyor.com/api/projects/status/bmwyv5i32xr07bdr/branch/master?svg=true)](https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master)
 [![codecov](https://codecov.io/gh/CAVDDataSpace/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/CAVDDataSpace/DataSpaceR/branch/master)
 
-## Overview
+`DataSpaceR` is an R interface to [the CAVD DataSpace](https://dataspace.cavd.org), a data sharing and discovery tool that facilitates exploration of HIV immunological data from pre-clinical and clinical HIV vaccine studies.
 
-A thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) to access the [CAVD DataSpace](https://dataspace.cavd.org)
-database from R. This package simplifies access to the database for R programmers.
-
-It takes advantage of the standardization of the database to hide all 
-the [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) 
-specific code away from the user. Study-specific datasets can be accessed via 
-an object-oriented paradigm.
+This package simplifies access to the database by taking advantage of the standardization of the database to hide all the [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) specific code away from the user, and it allows the users to access the study-specific datasets via an object-oriented paradigm.
 
 
 ## Installation
 
-The package can be downloaded here and installed like any other R packages or 
-installed directly from github using [devtools](https://cran.r-project.org/web/packages/devtools/index.html).
+You can install the latest version of DataSpaceR from [GitHub](https://github.com/CAVDDataSpace/DataSpaceR) with [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
 
 ```{r, eval=FALSE}
 # install.packages("devtools")
 devtools::install_github("CAVDDataSpace/DataSpaceR")
-
-# development version
-devtools::install_github("CAVDDataSpace/DataSpaceR", ref = "dev")
 ```
 
 
-## Set netrc file
+## Register and set DataSpace credential
 
-The database is accessed with the user's credentials. A `netrc` file storing 
-login and password information is required.
+The database is accessed with the user's credentials. A netrc file storing 
+login and password information is ***required***.
 
-Create netrc file in the computer running R.
+1. [Create an account](https://dataspace.cavd.org/) and read the terms of use
+1. On your R console, create a netrc file using a function from `DataSpaceR`:
 
-* On a UNIX system this file should be named `.netrc` (**dot**`netrc`) 
-* On windows it sould be named `_netrc` (**underscore**`netrc`). 
-* The file should be located in the users home directory and the permissions
-on the file should be unreadable for everybody except the owner. To determine
-home directory, run `Sys.getenv("HOME")` in R.
+```{r, eval=FALSE}
+DataSpaceR::writeNetrc("yourEmail@address.com", "yourSecretPassword")
+```
 
-The following three lines must be included in the `.netrc` or `_netrc` file 
-either separated by white space (spaces, tabs, or newlines) or commas.
+This will create a netrc file in your home directory.
+
+***Alternatively***, you can manually create a netrc file in the computer running R.
+
+* On Windows, this file sould be named `_netrc`
+* On UNIX, it should be named `.netrc`
+* The file should be located in the user's home directory, and the permissions on the file should be unreadable for everybody except the owner
+* To determine home directory, run `Sys.getenv("HOME")` in R
+
+The following three lines must be included in the `.netrc` or `_netrc` file either separated by white space (spaces, tabs, or newlines) or commas. Multiple such blocks can exist in one file.
 
 ```
 machine dataspace.cavd.org
@@ -65,10 +62,7 @@ login myuser@domain.com
 password supersecretpassword
 ```
 
-Multiple such blocks can exist in one file.
-
-See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc) 
-for more information about `netrc`.
+See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc) for more information about `netrc`.
 
 
 ## Usage
@@ -76,9 +70,9 @@ for more information about `netrc`.
 The general idea is that the user:
 
 1. creates an instance of `DataSpaceConnection` class via `connectDS`
-2. browses available studies and groups in the instance via `availableStudies` and `availableGroups`
-3. creates a connection to a specific study via `getStudy` or a group via `getGroup`
-4. retrieves datasets by name via `getDataset`
+1. browses available studies and groups in the instance via `availableStudies` and `availableGroups`
+1. creates a connection to a specific study via `getStudy` or a group via `getGroup`
+1. retrieves datasets by name via `getDataset`
 
 
 ### for example:
@@ -90,25 +84,24 @@ con <- connectDS()
 con
 ```
 
-`connectDS()` will create a connection to DataSpace. The user needs 
-credentials stored in a `netrc` file to access the database. 
+`connectDS()` will create a connection to DataSpace.
 
 
-### available studies can be listed by:
+### available studies can be listed by `availableStudies` field
 
 ```{r}
 knitr::kable(head(con$availableStudies))
 ```
 
 
-### available groups can be listed by:
+### available groups can be listed by `availableGroups` field
 
 ```{r}
 knitr::kable(con$availableGroups)
 ```
 
 
-### `con$getStudy("cvd408")` will create an instance of `cvd408`.
+### create an instance of `cvd408`
 
 ```{r}
 cvd408 <- con$getStudy("cvd408")
@@ -117,7 +110,7 @@ class(cvd408)
 ```
 
 
-### available datasets can be listed by:
+### available datasets can be listed by `availableDatasets` field
 
 ```{r}
 knitr::kable(cvd408$availableDatasets)
@@ -126,7 +119,7 @@ knitr::kable(cvd408$availableDatasets)
 which will print names of available datasets.
 
 
-### neutralizing antibody dataset (`NAb`) can be retreived by:
+### Neutralizing Antibody dataset (`NAb`) can be retreived by:
 
 ```{r}
 NAb <- cvd408$getDataset("NAb")
@@ -134,6 +127,12 @@ dim(NAb)
 colnames(NAb)
 ```
 
-The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) 
-class to represent the connection to a study and get around some of R's 
-copy-on-change behaviour.
+The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.
+
+
+## Meta
+
+* Please [report any issues or bugs](https://github.com/CAVDDataSpace/DataSpaceR/issues).
+* License: GPL-3
+* Get citation information for `DataSpaceR` in R doing `citation(package = 'DataSpaceR')`
+* Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
