@@ -66,6 +66,7 @@
 #' @docType class
 #' @importFrom rjson fromJSON
 #' @importFrom curl has_internet nslookup
+#' @importFrom Rlabkey labkey.selectRows
 DataSpaceConnection <- R6Class(
   classname = "DataSpaceConnection",
   public = list(

@@ -105,6 +105,7 @@
 #' }
 #' @docType class
 #' @importFrom digest digest
+#' @importFrom Rlabkey labkey.getQueryDetails labkey.executeSql makeFilter
 DataSpaceStudy <- R6Class(
   classname = "DataSpaceStudy",
   public = list(

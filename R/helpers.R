@@ -75,6 +75,7 @@ getUrlPath <- function(study) {
   labkeyUrlPath
 }
 
+#' @importFrom Rlabkey getSession lsFolders
 getValidStudies <- function(labkeyUrlBase) {
   folders <- lsFolders(getSession(labkeyUrlBase, folderPath = "CAVD"))
   validStudies <- grep("\\w+\\d+", basename(folders), value = TRUE)
@@ -113,7 +114,11 @@ fixStudy <- function(study, labkeyUrlBase, labkeyUrlPath) {
 
 getNetrc <- function(login, password, onStaging = FALSE) {
   if (!is.null(login) && !is.null(password)) {
-    netrc <- writeNetrc(login, password, onStaging = onStaging)
+    netrc <- writeNetrc(
+      login, password,
+      onStaging = onStaging,
+      netrcFile = tempfile()
+    )
   } else if (exists("labkey.netrc.file", .GlobalEnv)) {
     netrc <- get("labkey.netrc.file", .GlobalEnv)
   } else {
@@ -124,6 +129,7 @@ getNetrc <- function(login, password, onStaging = FALSE) {
 }
 
 #' @importFrom utils packageVersion
+#' @importFrom Rlabkey labkey.setCurlOptions
 setCurlOptions <- function(netrcFile) {
   useragent <- paste0(
     "R/", R.version$major, ".", R.version$minor,
