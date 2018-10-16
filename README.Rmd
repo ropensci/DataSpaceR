@@ -100,6 +100,8 @@ knitr::kable(head(con$availableStudies))
 knitr::kable(con$availableGroups)
 ```
 
+***Note***: A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in DataSpace.
+
 
 ### create an instance of `cvd408`
 

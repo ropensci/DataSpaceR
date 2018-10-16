@@ -107,6 +107,8 @@ knitr::kable(con$availableGroups)
 |  220| NYVAC durability comparison | NYVAC\_durability | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products. | ehenrich  | TRUE   |   78| c("cvd281", "cvd434", "cvd259", "cvd277") |
 |  224| cvd338                      | cvd338            | NA                                                                                             | readjk    | FALSE  |   36| cvd338                                    |
 
+***Note***: A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in DataSpace.
+
 ### create an instance of `cvd408`
 
 ``` r
