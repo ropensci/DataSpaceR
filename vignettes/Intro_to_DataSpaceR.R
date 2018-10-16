@@ -1,3 +1,6 @@
+## ---- eval=FALSE---------------------------------------------------------
+#  DataSpaceR::writeNetrc("yourEmail@address.com", "yourSecretPassword")
+
 ## ----connectDS-----------------------------------------------------------
 library(DataSpaceR)
 con <- connectDS()

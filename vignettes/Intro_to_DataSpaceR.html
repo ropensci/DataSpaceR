@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ju Yeong Kim" />
 
-<meta name="date" content="2018-10-12" />
+<meta name="date" content="2018-10-16" />
 
 <title>Introduction to DataSpaceR</title>
 
@@ -70,23 +70,35 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Introduction to DataSpaceR</h1>
 <h4 class="author"><em>Ju Yeong Kim</em></h4>
-<h4 class="date"><em>2018-10-12</em></h4>
+<h4 class="date"><em>2018-10-16</em></h4>
 
 
 
 <p>This package provides a thin wrapper around <a href="https://cran.r-project.org/web/packages/Rlabkey/index.html">Rlabkey</a> and connects to the the <a href="https://dataspace.cavd.org">CAVD DataSpace</a> database, making it easier to fetch datasets from specific studies.</p>
 <div id="configuration" class="section level2">
 <h2>Configuration</h2>
-<p>In order to connect to DataSpace, you will need a <code>.netrc</code> file in your home directory that will contain a <code>machine</code> name (hostname of DataSpace), and <code>login</code> and <code>password</code>. See <a href="https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc">here</a> for more information.</p>
-<p>A netrc file may look like this:</p>
+<p>First, go to <a href="https://dataspace.cavd.org">DataSpace</a> now and set yourself up with an account.</p>
+<p>In order to connect to the CAVD DataSpace via <code>DataSpaceR</code>, you will need a <code>netrc</code> file in your home directory that will contain a <code>machine</code> name (hostname of DataSpace), and <code>login</code> and <code>password</code>. There are two ways to creat a netrc file.</p>
+<div id="creating-a-netrc-file-with-writenetrc" class="section level3">
+<h3>Creating a netrc file with <code>writeNetrc</code></h3>
+<p>On your R console, create a netrc file using a function from <code>DataSpaceR</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DataSpaceR<span class="op">::</span><span class="kw">writeNetrc</span>(<span class="st">&quot;yourEmail@address.com&quot;</span>, <span class="st">&quot;yourSecretPassword&quot;</span>)</code></pre></div>
+<p>This will create a netrc file in your home directory. Make sure you have a valid login and password.</p>
+</div>
+<div id="manually-creating-a-netrc-file" class="section level3">
+<h3>Manually creating a netrc file</h3>
+<p><strong><em>Alternatively</em></strong>, you can manually create a netrc file in the computer running R.</p>
+<ul>
+<li>On Windows, this file sould be named <code>_netrc</code></li>
+<li>On UNIX, it should be named <code>.netrc</code></li>
+<li>The file should be located in the user’s home directory, and the permissions on the file should be unreadable for everybody except the owner</li>
+<li>To determine home directory, run <code>Sys.getenv(&quot;HOME&quot;)</code> in R</li>
+</ul>
+<p>The following three lines must be included in the <code>.netrc</code> or <code>_netrc</code> file either separated by white space (spaces, tabs, or newlines) or commas. Multiple such blocks can exist in one file.</p>
 <pre><code>machine dataspace.cavd.org
 login myuser@domain.com
 password supersecretpassword</code></pre>
-<div id="set-up-your-netrc-file-now" class="section level3">
-<h3>Set up your netrc file now</h3>
-<p>Put it in your home directory. If you type:</p>
-<pre><code>ls ~/.netrc</code></pre>
-<p>at the command prompt, you should see it there. If it’s not there, create one now. Make sure you have a valid login and password. If you don’t have one, go to <a href="https://dataspace.cavd.org">DataSpace</a> now and set yourself up with an account.</p>
+<p>See <a href="https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc">here</a> for more information about <code>netrc</code>.</p>
 </div>
 </div>
 <div id="initiate-a-connection" class="section level2">
@@ -556,7 +568,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">str</span>(cvd408<span class="op">$</span>cache)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 333 kB</code></pre>
+<pre><code>## 334 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset" class="section level3">
 <h3>Retrieve NAb dataset</h3>
@@ -564,7 +576,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.151   0.004   0.293</code></pre>
+##   0.163   0.004   0.213</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ c77008daa024cbb89510cbcb600cef37:List of 2
@@ -572,7 +584,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 ##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  29 variables:
 ##   .. ..- attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 449 kB</code></pre>
+<pre><code>## 451 kB</code></pre>
 </div>
 <div id="retrieve-nab-dataset-again" class="section level3">
 <h3>Retrieve NAb dataset again</h3>
@@ -580,7 +592,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.002   0.000   0.002</code></pre>
+##   0.003   0.000   0.003</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ c77008daa024cbb89510cbcb600cef37:List of 2
@@ -588,7 +600,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 ##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  29 variables:
 ##   .. ..- attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 483 kB</code></pre>
+<pre><code>## 484 kB</code></pre>
 </div>
 <div id="clear-cache" class="section level3">
 <h3>Clear cache</h3>
@@ -597,7 +609,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>##  list()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 366 kB</code></pre>
+<pre><code>## 368 kB</code></pre>
 </div>
 </div>
 <div id="session-information" class="section level2">
