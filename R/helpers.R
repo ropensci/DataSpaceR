@@ -7,10 +7,10 @@ getUrlBase <- function(onStaging) {
   staging <- paste0("https://", STAGING)
 
   if (exists("labkey.url.base", .GlobalEnv)) {
-    labkey.url.base <- get("labkey.url.base", .GlobalEnv)
-    labkey.url.base <- gsub("/$", "", labkey.url.base)
+    labkeyUrlBase <- get("labkey.url.base", .GlobalEnv)
+    labkeyUrlBase <- gsub("/$", "", labkeyUrlBase)
     assert_that(
-      labkey.url.base == production || labkey.url.base == staging,
+      labkeyUrlBase == production || labkeyUrlBase == staging,
       msg = paste(
         "labkey.url.base should be either",
         production, "or", staging
@@ -18,72 +18,72 @@ getUrlBase <- function(onStaging) {
     )
   } else {
     if (onStaging) {
-      labkey.url.base <- staging
+      labkeyUrlBase <- staging
     } else {
-      labkey.url.base <- production
+      labkeyUrlBase <- production
     }
   }
 
-  labkey.url.base <- gsub("http:", "https:", labkey.url.base)
-  if (length(grep("^https://", labkey.url.base)) == 0) {
-    labkey.url.base <- paste0("https://", labkey.url.base)
+  labkeyUrlBase <- gsub("http:", "https:", labkeyUrlBase)
+  if (length(grep("^https://", labkeyUrlBase)) == 0) {
+    labkeyUrlBase <- paste0("https://", labkeyUrlBase)
   }
 
-  labkey.url.base
+  labkeyUrlBase
 }
 
-getUserEmail <- function(labkey.url.base, login) {
+getUserEmail <- function(labkeyUrlBase, login) {
   if (exists("labkey.user.email", .GlobalEnv)) {
-    labkey.user.email <- get("labkey.user.email", .GlobalEnv)
+    labkeyUserEmail <- get("labkey.user.email", .GlobalEnv)
   } else if (!is.null(login)) {
-    labkey.user.email <- login
+    labkeyUserEmail <- login
   } else if (file.exists(getNetrcPath())) {
     netrcFile <- getNetrcPath()
     netrc <- readChar(netrcFile, file.info(netrcFile)$size)
     netrc <- strsplit(netrc, split = "\\s+")[[1]]
 
     if (length(netrc) %% 6 == 0) {
-      url.base <- gsub("https://", "", labkey.url.base)
-      labkey.user.email <- netrc[which(url.base == netrc) + 2]
+      url.base <- gsub("https://", "", labkeyUrlBase)
+      labkeyUserEmail <- netrc[which(url.base == netrc) + 2]
     } else {
-      labkey.user.email <- ""
+      labkeyUserEmail <- ""
     }
   } else {
-    labkey.user.email <- ""
+    labkeyUserEmail <- ""
   }
 
-  labkey.user.email
+  labkeyUserEmail
 }
 
 getUrlPath <- function(study) {
   if (exists("labkey.url.path", .GlobalEnv)) {
     if (is.null(study)) {
-      labkey.url.path <- get("labkey.url.path", .GlobalEnv)
+      labkeyUrlPath <- get("labkey.url.path", .GlobalEnv)
     } else {
-      labkey.url.path <- file.path("", "CAVD", tolower(study))
+      labkeyUrlPath <- file.path("", "CAVD", tolower(study))
     }
   } else {
     if (is.null(study)) {
       stop("'study' cannot be NULL.", call. = FALSE)
     } else if (study == "") {
-      labkey.url.path <- file.path("", "CAVD")
+      labkeyUrlPath <- file.path("", "CAVD")
     } else {
-      labkey.url.path <- file.path("", "CAVD", tolower(study))
+      labkeyUrlPath <- file.path("", "CAVD", tolower(study))
     }
   }
 
-  labkey.url.path
+  labkeyUrlPath
 }
 
-getValidStudies <- function(labkey.url.base) {
-  folders <- lsFolders(getSession(labkey.url.base, folderPath = "CAVD"))
+getValidStudies <- function(labkeyUrlBase) {
+  folders <- lsFolders(getSession(labkeyUrlBase, folderPath = "CAVD"))
   validStudies <- grep("\\w+\\d+", basename(folders), value = TRUE)
 
   validStudies
 }
 
-checkStudy <- function(study, labkey.url.base, verbose = FALSE) {
-  validStudies <- getValidStudies(labkey.url.base)
+checkStudy <- function(study, labkeyUrlBase, verbose = FALSE) {
+  validStudies <- getValidStudies(labkeyUrlBase)
   reqStudy <- tolower(study)
 
   if (!reqStudy %in% c("", validStudies)) {
@@ -100,13 +100,13 @@ checkStudy <- function(study, labkey.url.base, verbose = FALSE) {
   invisible(NULL)
 }
 
-fixStudy <- function(study, labkey.url.base, labkey.url.path) {
+fixStudy <- function(study, labkeyUrlBase, labkeyUrlPath) {
   if (is.null(study)) {
-    study <- basename(labkey.url.path)
+    study <- basename(labkeyUrlPath)
   }
 
   # check if `study` is an actual study
-  checkStudy(study, labkey.url.base)
+  checkStudy(study, labkeyUrlBase)
 
   study
 }

@@ -44,8 +44,8 @@ if ("DataSpaceConnection" %in% class(con)) {
 
     test_that("`config`", {
       configs <- c(
-        "labkey.url.base",
-        "labkey.user.email",
+        "labkeyUrlBase",
+        "labkeyUserEmail",
         "curlOptions",
         "verbose",
         "packageVersion"
@@ -69,8 +69,8 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_equal(names(con$config), configs)
 
       if (all.equal(names(con$config), configs)) {
-        expect_equal(con$config$labkey.url.base, "https://dataspace.cavd.org")
-        expect_match(con$config$labkey.user.email, "\\S+@\\S+")
+        expect_equal(con$config$labkeyUrlBase, "https://dataspace.cavd.org")
+        expect_match(con$config$labkeyUserEmail, "\\S+@\\S+")
         expect_false(con$config$verbose)
         expect_equal(con$config$packageVersion, packageVersion("DataSpaceR"))
         expect_is(con$config$curlOptions, "request")

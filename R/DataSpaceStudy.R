@@ -119,10 +119,10 @@ DataSpaceStudy <- R6Class(
       assert_that(!is.null(config))
 
       # get primary fields
-      config$labkey.url.path <- getUrlPath(study)
+      config$labkeyUrlPath <- getUrlPath(study)
 
       # fix study
-      study <- fixStudy(study, config$labkey.url.base, config$labkey.url.path)
+      study <- fixStudy(study, config$labkeyUrlBase, config$labkeyUrlPath)
 
       # set primary fields
       private$.study <- tolower(study)
@@ -138,8 +138,8 @@ DataSpaceStudy <- R6Class(
     print = function() {
       study <- ifelse(private$.study == "", "CAVD", private$.study)
       url <- file.path(
-        gsub("/$", "", private$.config$labkey.url.base),
-        gsub("^/", "", private$.config$labkey.url.path)
+        gsub("/$", "", private$.config$labkeyUrlBase),
+        gsub("^/", "", private$.config$labkeyUrlPath)
       )
 
       cat("<DataSpaceStudy>")
@@ -203,8 +203,8 @@ DataSpaceStudy <- R6Class(
 
       # retrieve dataset
       dataset <- labkey.selectRows(
-        baseUrl = private$.config$labkey.url.base,
-        folderPath = private$.config$labkey.url.path,
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = private$.config$labkeyUrlPath,
         schemaName = "study",
         queryName = datasetName,
         viewName = NULL,
@@ -234,7 +234,10 @@ DataSpaceStudy <- R6Class(
         }
 
         # create arm_id column with demographics and set it as key
-        dataset[, arm_id := paste(study_prot, study_part, study_group, study_arm, sep = "-")]
+        dataset[, arm_id := paste(
+          study_prot, study_part, study_group, study_arm,
+          sep = "-"
+        )]
         setkey(dataset, arm_id)
 
         dataset[private$.treatmentArm, nomatch = 0]
@@ -261,8 +264,8 @@ DataSpaceStudy <- R6Class(
       )
 
       varInfo <- labkey.getQueryDetails(
-        baseUrl = private$.config$labkey.url.base,
-        folderPath = private$.config$labkey.url.path,
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = private$.config$labkeyUrlPath,
         schemaName = "study",
         queryName = datasetName
       )
@@ -358,8 +361,8 @@ DataSpaceStudy <- R6Class(
 
       availableDatasets <- suppressWarnings(
         labkey.executeSql(
-          baseUrl = private$.config$labkey.url.base,
-          folderPath = private$.config$labkey.url.path,
+          baseUrl = private$.config$labkeyUrlBase,
+          folderPath = private$.config$labkeyUrlPath,
           schemaName = "study",
           sql = datasetQuery,
           colNameOpt = "fieldname"
@@ -379,8 +382,8 @@ DataSpaceStudy <- R6Class(
 
       treatmentArm <- suppressWarnings(
         labkey.selectRows(
-          baseUrl = private$.config$labkey.url.base,
-          folderPath = private$.config$labkey.url.path,
+          baseUrl = private$.config$labkeyUrlBase,
+          folderPath = private$.config$labkeyUrlPath,
           schemaName = "CDS",
           queryName = "treatmentarm",
           colSelect = colSelect,

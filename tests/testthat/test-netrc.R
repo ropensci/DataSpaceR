@@ -14,6 +14,10 @@ test_that("`writeNetrc`", {
     readLines(temp),
     "machine dataspace.cavd.org login fake@email.org password fakePwd"
   )
+  expect_error(
+    writeNetrc("fake@email.org", "fakePwd", netrcFile = temp),
+    "Remove it manually if you'd like to overwrite."
+  )
 })
 
 test_that("`checkNetrc`", {

@@ -74,25 +74,29 @@ DataSpaceConnection <- R6Class(
                               verbose = FALSE,
                               onStaging = FALSE) {
       assert_that(
-        (is.null(login) && is.null(password)) || (!is.null(login) && !is.null(password)),
+        (is.null(login) && is.null(password)) ||
+          (!is.null(login) && !is.null(password)),
         msg = "Enter both `login` and `password` or use netrc file."
       )
       assert_that(is.logical(verbose))
       assert_that(is.logical(onStaging))
       assert_that(
         has_internet(),
-        msg = "No internet connection. Please connect to internet and try again."
+        msg = "No internet connection. Connect to internet and try again."
       )
 
       # check if the portal is up
       assert_that(
-        !is.null(nslookup(ifelse(onStaging, STAGING, PRODUCTION), error = FALSE)),
+        !is.null(nslookup(
+          ifelse(onStaging, STAGING, PRODUCTION),
+          error = FALSE
+        )),
         msg = "The portal is currently down. Try again later."
       )
 
       # get primary fields
-      labkey.url.base <- getUrlBase(onStaging)
-      labkey.user.email <- getUserEmail(labkey.url.base, login)
+      labkeyUrlBase <- getUrlBase(onStaging)
+      labkeyUserEmail <- getUserEmail(labkeyUrlBase, login)
 
       # set Curl options
       netrcFile <- getNetrc(login, password, onStaging)
@@ -104,8 +108,8 @@ DataSpaceConnection <- R6Class(
       # set primary fields
       private$.config <-
         list(
-          labkey.url.base = labkey.url.base,
-          labkey.user.email = labkey.user.email,
+          labkeyUrlBase = labkeyUrlBase,
+          labkeyUserEmail = labkeyUserEmail,
           curlOptions = curlOptions,
           verbose = verbose,
           packageVersion = packageVersion("DataSpaceR")
@@ -118,8 +122,8 @@ DataSpaceConnection <- R6Class(
     },
     print = function() {
       cat("<DataSpaceConnection>")
-      cat("\n  URL:", private$.config$labkey.url.base)
-      cat("\n  User:", private$.config$labkey.user.email)
+      cat("\n  URL:", private$.config$labkeyUrlBase)
+      cat("\n  User:", private$.config$labkeyUserEmail)
       cat("\n  Available studies:", private$.stats$studies)
       cat("\n    -", private$.stats$subjectlevelstudies, "studies with data")
       cat("\n    -", private$.stats$subjects, "subjects")
@@ -185,9 +189,18 @@ DataSpaceConnection <- R6Class(
     },
     refresh = function() {
       tries <- c(
-        class(try(private$.getAvailableStudies(), silent = !private$.config$verbose)),
-        class(try(private$.getStats(), silent = !private$.config$verbose)),
-        class(try(private$.getAvailableGroups(), silent = !private$.config$verbose))
+        class(try(
+          private$.getAvailableStudies(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getStats(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getAvailableGroups(),
+          silent = !private$.config$verbose
+        ))
       )
 
       invisible(!"try-error" %in% tries)
@@ -217,7 +230,7 @@ DataSpaceConnection <- R6Class(
       )
 
       availableStudies <- labkey.selectRows(
-        baseUrl = private$.config$labkey.url.base,
+        baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
         queryName = "study",
@@ -233,7 +246,7 @@ DataSpaceConnection <- R6Class(
     },
     .getStats = function() {
       stats <- labkey.selectRows(
-        baseUrl = private$.config$labkey.url.base,
+        baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
         queryName = "ds_properties",
@@ -247,7 +260,7 @@ DataSpaceConnection <- R6Class(
     },
     .getAvailableGroups = function() {
       participantGroupApi <- paste0(
-        private$.config$labkey.url.base,
+        private$.config$labkeyUrlBase,
         "/participant-group",
         "/CAVD",
         "/browseParticipantGroups.api?",
@@ -269,7 +282,11 @@ DataSpaceConnection <- R6Class(
           id = group$id,
           label = group$label,
           originalLabel = group$category$label,
-          description = ifelse(is.null(group$description), NA, group$description),
+          description = ifelse(
+            is.null(group$description),
+            NA,
+            group$description
+          ),
           createdBy = group$createdBy$displayValue,
           shared = group$category$shared,
           n = length(group$category$participantIds),

@@ -1,7 +1,19 @@
+library(testthat)
+
+con <- connectDS()
 
 test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
   datasets <- sort(datasets)
-  target <- ifelse(study != "", study, ifelse(is.null(groupLabel), "CAVD", groupLabel))
+  target <- ifelse(
+    study != "",
+    study,
+    ifelse(
+      is.null(groupLabel),
+      "CAVD",
+      groupLabel
+    )
+  )
+
   context(paste0("DataSpaceStudy (", target, ")"))
 
   if (is.null(groupId)) {
@@ -56,12 +68,12 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
       test_that("`config`", {
         configs <- c(
-          "labkey.url.base",
-          "labkey.user.email",
+          "labkeyUrlBase",
+          "labkeyUserEmail",
           "curlOptions",
           "verbose",
           "packageVersion",
-          "labkey.url.path"
+          "labkeyUrlPath"
         )
 
         expect_is(cavd$config, "list")
@@ -135,7 +147,10 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
       test_that("`getDataset` (mergeExtra)", {
         for (datasetName in cavd$availableDatasets$name) {
-          dataset <- try(cavd$getDataset(datasetName, mergeExtra = TRUE), silent = TRUE)
+          dataset <- try(
+            cavd$getDataset(datasetName, mergeExtra = TRUE),
+            silent = TRUE
+          )
           expect_is(dataset, "data.table", info = datasetName)
           expect_gt(nrow(dataset), 0)
           expect_true("arm_id" %in% names(dataset))
@@ -156,10 +171,16 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
       test_that("`getVariableInfo`", {
         for (datasetName in cavd$availableDatasets$name) {
-          dataset <- try(cavd$getVariableInfo(datasetName = datasetName), silent = TRUE)
+          dataset <- try(
+            cavd$getVariableInfo(datasetName = datasetName),
+            silent = TRUE
+          )
           expect_is(dataset, "data.table", info = datasetName)
           expect_gt(nrow(dataset), 0)
-          expect_equal(names(dataset), c("fieldName", "caption", "type", "description"))
+          expect_equal(
+            names(dataset),
+            c("fieldName", "caption", "type", "description")
+          )
         }
       })
 
@@ -173,10 +194,29 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
   }
 }
 
-con <- connectDS()
-
-test_study("", c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"))
-test_study("cvd408", c("BAMA", "ICS", "Demographics", "NAb"))
-test_study("", c("Demographics", "NAb"), groupId = 216, groupLabel = c("mice" = "mice"))
-test_study("", c("Demographics", "NAb"), groupId = 217, groupLabel = c("CAVD 242" = "CAVD 242"))
-test_study("", c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"), groupId = 220, groupLabel = c("NYVAC_durability" = "NYVAC durability comparison"))
+test_study(
+  study = "",
+  datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb")
+)
+test_study(
+  study = "cvd408",
+  datasets = c("BAMA", "ICS", "Demographics", "NAb")
+)
+test_study(
+  study = "",
+  datasets = c("Demographics", "NAb"),
+  groupId = 216,
+  groupLabel = c("mice" = "mice")
+)
+test_study(
+  study = "",
+  datasets = c("Demographics", "NAb"),
+  groupId = 217,
+  groupLabel = c("CAVD 242" = "CAVD 242")
+)
+test_study(
+  study = "",
+  datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"),
+  groupId = 220,
+  groupLabel = c("NYVAC_durability" = "NYVAC durability comparison")
+)

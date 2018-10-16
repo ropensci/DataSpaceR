@@ -80,14 +80,20 @@ checkNetrc <- function(onStaging = FALSE) {
   }
 
   if (!file.exists(netrcFile)) {
-    stop("There is no netrc file. Use `writeNetrc()` to create one.", call. = FALSE)
+    stop(
+      "There is no netrc file. Use `writeNetrc()` to create one.",
+      call. = FALSE
+    )
   }
 
   lines <- readLines(netrcFile)
   lines <- gsub("http.*//", "", lines)
   machine <- ifelse(onStaging, STAGING, PRODUCTION)
   if (length(grep(paste0("machine\\s", machine), lines)) == 0) {
-    stop("No entry found for '", machine, "' in '", netrcFile, "'.", call. = FALSE)
+    stop(
+      "No entry found for '", machine, "' in '", netrcFile, "'.",
+      call. = FALSE
+    )
   }
 
   message("netrc file found at '", netrcFile, "', and it looks valid.")
