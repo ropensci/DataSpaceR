@@ -1,6 +1,9 @@
 language: R
 sudo: false
 cache: packages
+os:
+  - linux
+  - osx
 before_script:
 - Rscript ci.R
 after_success:
