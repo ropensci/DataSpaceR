@@ -32,21 +32,24 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       "getDataset",
       "print",
       "initialize"
-      )
+    )
     test_that("`DataSpaceStudy` contains correct fields and methods", {
       expect_equal(names(cavd), con_names)
     })
 
     if (identical(names(cavd), con_names)) {
       test_that("`print`", {
-        path <- ifelse(study == "", study,  paste0("/", study))
-        con_output <- c("<DataSpaceStudy>",
-                        ifelse(is.null(groupLabel),
-                               paste0("  Study: ", ifelse(study == "", "CAVD", study)),
-                               paste0("  Group: ", groupLabel)),
-                        paste0("  URL: https://dataspace.cavd.org/CAVD", path),
-                        "  Available datasets:",
-                        strwrap(datasets, prefix = "    - "))
+        path <- ifelse(study == "", study, paste0("/", study))
+        con_output <- c(
+          "<DataSpaceStudy>",
+          ifelse(is.null(groupLabel),
+            paste0("  Study: ", ifelse(study == "", "CAVD", study)),
+            paste0("  Group: ", groupLabel)
+          ),
+          paste0("  URL: https://dataspace.cavd.org/CAVD", path),
+          "  Available datasets:",
+          strwrap(datasets, prefix = "    - ")
+        )
         cap_output <- capture.output(cavd$print())
         expect_equal(cap_output, con_output)
       })
@@ -67,10 +70,14 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
       test_that("`availableDatasets`", {
         expect_is(cavd$availableDatasets, "data.table")
-        expect_equal(names(cavd$availableDatasets),
-                     c("name", "label", "n"))
-        expect_equal(cavd$availableDatasets$name,
-                     datasets)
+        expect_equal(
+          names(cavd$availableDatasets),
+          c("name", "label", "n")
+        )
+        expect_equal(
+          cavd$availableDatasets$name,
+          datasets
+        )
       })
 
       test_that("`study`", {
@@ -84,9 +91,13 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
       test_that("`treatmentArm`", {
         expect_is(cavd$treatmentArm, "data.table")
-        expect_equal(names(cavd$treatmentArm),
-                     c("arm_id", "arm_part", "arm_group", "arm_name",
-                       "randomization", "coded_label", "last_day", "description"))
+        expect_equal(
+          names(cavd$treatmentArm),
+          c(
+            "arm_id", "arm_part", "arm_group", "arm_name",
+            "randomization", "coded_label", "last_day", "description"
+          )
+        )
         expect_gt(nrow(cavd$treatmentArm), 0)
       })
 

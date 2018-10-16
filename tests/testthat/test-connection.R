@@ -92,17 +92,25 @@ if ("DataSpaceConnection" %in% class(con)) {
 
     test_that("`availableStudies`", {
       expect_is(con$availableStudies, "data.table")
-      expect_equal(names(con$availableStudies),
-                   c("study_name", "short_name", "title", "type", "status",
-                     "stage", "species", "start_date", "strategy"))
+      expect_equal(
+        names(con$availableStudies),
+        c(
+          "study_name", "short_name", "title", "type", "status",
+          "stage", "species", "start_date", "strategy"
+        )
+      )
       expect_gt(nrow(con$availableStudies), 0)
     })
 
     test_that("`availableGroups`", {
       expect_is(con$availableGroups, "data.table")
-      expect_equal(names(con$availableGroups),
-                   c("id", "label", "originalLabel", "description", "createdBy",
-                     "shared", "n", "studies"))
+      expect_equal(
+        names(con$availableGroups),
+        c(
+          "id", "label", "originalLabel", "description", "createdBy",
+          "shared", "n", "studies"
+        )
+      )
       expect_gt(nrow(con$availableGroups), 0)
     })
 

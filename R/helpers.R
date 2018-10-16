@@ -9,9 +9,13 @@ getUrlBase <- function(onStaging) {
   if (exists("labkey.url.base", .GlobalEnv)) {
     labkey.url.base <- get("labkey.url.base", .GlobalEnv)
     labkey.url.base <- gsub("/$", "", labkey.url.base)
-    assert_that(labkey.url.base == production || labkey.url.base == staging,
-                msg = paste("labkey.url.base should be either",
-                            production, "or", staging))
+    assert_that(
+      labkey.url.base == production || labkey.url.base == staging,
+      msg = paste(
+        "labkey.url.base should be either",
+        production, "or", staging
+      )
+    )
   } else {
     if (onStaging) {
       labkey.url.base <- staging
@@ -86,8 +90,10 @@ checkStudy <- function(study, labkey.url.base, verbose = FALSE) {
     if (!verbose) {
       stop(paste0("'", reqStudy, "' is not a valid study."), call. = FALSE)
     } else {
-      stop(paste0("'", reqStudy, " is not a valid study.\nValid studies: ",
-                  paste(validStudies, collapse = ", ")), call. = FALSE)
+      stop(paste0(
+        "'", reqStudy, " is not a valid study.\nValid studies: ",
+        paste(validStudies, collapse = ", ")
+      ), call. = FALSE)
     }
   }
 
@@ -155,35 +161,56 @@ checkCredential <- function(onStaging, verbose) {
       parsed <- content(res)
 
       if (parsed$displayName == "guest") {
-        stop("Invalid credential or deactivated account. Check your account in the portal.", call. = FALSE)
+        stop(
+          "Invalid credential or deactivated account. ",
+          "Check your account in the portal.",
+          call. = FALSE
+        )
       } else {
         return(TRUE)
       }
     } else {
-      stop("Something went wrong. Check the portal and try again.", call. = FALSE)
+      stop(
+        "Something went wrong. Check the portal and try again.",
+        call. = FALSE
+      )
     }
   } else if (res$status_code == 401) {
-    stop("Invalid credential or deactivated account. Check your account in the portal.", call. = FALSE)
+    stop(
+      "Invalid credential or deactivated account. ",
+      "Check your account in the portal.",
+      call. = FALSE
+    )
   } else if (res$status_code == 403) {
-    stop("The portal is in admin-only mode. Please try again later.", call. = FALSE)
+    stop(
+      "The portal is in admin-only mode. ",
+      "Please try again later.",
+      call. = FALSE
+    )
   } else {
-    stop("Something went wrong. Check the portal and try again.", call. = FALSE)
+    stop(
+      "Something went wrong. ",
+      "Check the portal and try again.",
+      call. = FALSE
+    )
   }
 }
 
 makeCountQuery <- function(dataset, group) {
   query <-
-    paste("SELECT",
-            "COUNT(participantid) AS n,",
-            paste0("'", dataset, "' AS Name"),
-          "FROM",
-            dataset)
+    paste(
+      "SELECT",
+      "COUNT(participantid) AS n,",
+      paste0("'", dataset, "' AS Name"),
+      "FROM",
+      dataset
+    )
 
   if (!is.null(group)) {
     query <- paste(
       query,
       "WHERE",
-        paste0("participantid.\"", names(group), "\" = '", group, "'")
+      paste0("participantid.\"", names(group), "\" = '", group, "'")
     )
   }
 

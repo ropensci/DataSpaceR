@@ -108,9 +108,14 @@
 DataSpaceStudy <- R6Class(
   classname = "DataSpaceStudy",
   public = list(
-    initialize = function(study = NULL, config = NULL, group = NULL, studyInfo = NULL) {
-      assert_that(length(study) <= 1,
-                  msg = "For multiple studies, create a group in the portal.")
+    initialize = function(study = NULL,
+                              config = NULL,
+                              group = NULL,
+                              studyInfo = NULL) {
+      assert_that(
+        length(study) <= 1,
+        msg = "For multiple studies, create a group in the portal."
+      )
       assert_that(!is.null(config))
 
       # get primary fields
@@ -132,8 +137,10 @@ DataSpaceStudy <- R6Class(
     },
     print = function() {
       study <- ifelse(private$.study == "", "CAVD", private$.study)
-      url <- file.path(gsub("/$", "", private$.config$labkey.url.base),
-                       gsub("^/", "", private$.config$labkey.url.path))
+      url <- file.path(
+        gsub("/$", "", private$.config$labkey.url.base),
+        gsub("^/", "", private$.config$labkey.url.path)
+      )
 
       cat("<DataSpaceStudy>")
       if (is.null(private$.group)) {
@@ -149,17 +156,21 @@ DataSpaceStudy <- R6Class(
       cat("\n")
     },
     getDataset = function(datasetName,
-                          mergeExtra = FALSE,
-                          colFilter = NULL,
-                          reload = FALSE,
-                          ...) {
+                              mergeExtra = FALSE,
+                              colFilter = NULL,
+                              reload = FALSE,
+                              ...) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
-      assert_that(datasetName %in% private$.availableDatasets$name,
-                  msg = paste0(datasetName, " is invalid dataset"))
+      assert_that(
+        datasetName %in% private$.availableDatasets$name,
+        msg = paste0(datasetName, " is invalid dataset")
+      )
       assert_that(is.logical(mergeExtra))
-      assert_that(is.null(colFilter) | is.matrix(colFilter),
-                  msg = "colFilter is not a matrix")
+      assert_that(
+        is.null(colFilter) | is.matrix(colFilter),
+        msg = "colFilter is not a matrix"
+      )
       assert_that(is.logical(reload))
 
       # build a list of arguments to digest and compare
@@ -244,8 +255,10 @@ DataSpaceStudy <- R6Class(
     getVariableInfo = function(datasetName) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
-      assert_that(datasetName %in% private$.availableDatasets$name,
-                  msg = paste0(datasetName, " is not a available dataset"))
+      assert_that(
+        datasetName %in% private$.availableDatasets$name,
+        msg = paste0(datasetName, " is not a available dataset")
+      )
 
       varInfo <- labkey.getQueryDetails(
         baseUrl = private$.config$labkey.url.base,
@@ -258,20 +271,30 @@ DataSpaceStudy <- R6Class(
       setDT(varInfo)
       setkey(varInfo, fieldName)
 
-      extraVars <- c("Created", "CreatedBy", "Modified", "ModifiedBy",
-                     "SequenceNum", "date")
+      extraVars <- c(
+        "Created", "CreatedBy", "Modified", "ModifiedBy",
+        "SequenceNum", "date"
+      )
 
-      varInfo <- varInfo[isHidden == "FALSE" &
-                           isSelectable == "TRUE" &
-                           !fieldName %in% extraVars,
-                         .(fieldName, caption, type, description)]
+      varInfo <- varInfo[
+        isHidden == "FALSE" &
+          isSelectable == "TRUE" &
+          !fieldName %in% extraVars,
+        .(fieldName, caption, type, description)
+      ]
 
       varInfo
     },
     refresh = function() {
       tries <- c(
-        class(try(private$.getAvailableDatasets(), silent = private$.config$verbose)),
-        class(try(private$.getTreatmentArm(), silent = private$.config$verbose))
+        class(try(
+          private$.getAvailableDatasets(),
+          silent = private$.config$verbose
+        )),
+        class(try(
+          private$.getTreatmentArm(),
+          silent = private$.config$verbos
+        ))
       )
 
       invisible(!"try-error" %in% tries)
@@ -311,25 +334,27 @@ DataSpaceStudy <- R6Class(
 
     .getAvailableDatasets = function() {
       datasetQuery <-
-        paste("SELECT",
-                "DataSets.Name as name,",
-                "DataSets.Label as label,",
-                "dataset_n.n",
-              "FROM",
-                "(",
-                  makeCountQuery("ICS", private$.group),
-                  "UNION",
-                  makeCountQuery("BAMA", private$.group),
-                  "UNION",
-                  makeCountQuery("ELISPOT", private$.group),
-                  "UNION",
-                  makeCountQuery("NAb", private$.group),
-                  "UNION",
-                  makeCountQuery("Demographics", private$.group),
-                ") AS dataset_n,",
-                "DataSets",
-              "WHERE",
-                "Datasets.Name = dataset_n.Name AND dataset_n.n > 0")
+        paste(
+          "SELECT",
+          "DataSets.Name as name,",
+          "DataSets.Label as label,",
+          "dataset_n.n",
+          "FROM",
+          "(",
+          makeCountQuery("ICS", private$.group),
+          "UNION",
+          makeCountQuery("BAMA", private$.group),
+          "UNION",
+          makeCountQuery("ELISPOT", private$.group),
+          "UNION",
+          makeCountQuery("NAb", private$.group),
+          "UNION",
+          makeCountQuery("Demographics", private$.group),
+          ") AS dataset_n,",
+          "DataSets",
+          "WHERE",
+          "Datasets.Name = dataset_n.Name AND dataset_n.n > 0"
+        )
 
       availableDatasets <- suppressWarnings(
         labkey.executeSql(
@@ -347,8 +372,10 @@ DataSpaceStudy <- R6Class(
       private$.availableDatasets <- availableDatasets[order(name)]
     },
     .getTreatmentArm = function() {
-      colSelect <- c("arm_id", "arm_part", "arm_group", "arm_name",
-                     "randomization", "coded_label", "last_day", "description")
+      colSelect <- c(
+        "arm_id", "arm_part", "arm_group", "arm_name",
+        "randomization", "coded_label", "last_day", "description"
+      )
 
       treatmentArm <- suppressWarnings(
         labkey.selectRows(
