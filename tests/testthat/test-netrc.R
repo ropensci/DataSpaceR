@@ -29,4 +29,8 @@ test_that("`checkNetrc`", {
   expect_is(netrcFile, "character")
   expect_true(file.exists(netrcFile))
   expect_message(checkNetrc(), "it looks valid")
+
+  assign("labkey.netrc.file", "/there/.netrc", envir = .GlobalEnv)
+  expect_error(DataSpaceR:::checkNetrc(), "There is no netrc file.")
+  suppressWarnings(rm("labkey.netrc.file", envir = .GlobalEnv))
 })
