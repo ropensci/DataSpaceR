@@ -204,19 +204,22 @@ test_study(
 )
 test_study(
   study = "",
-  datasets = c("Demographics", "NAb"),
-  groupId = 216,
-  groupLabel = c("mice" = "mice")
-)
-test_study(
-  study = "",
-  datasets = c("Demographics", "NAb"),
-  groupId = 217,
-  groupLabel = c("CAVD 242" = "CAVD 242")
-)
-test_study(
-  study = "",
   datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"),
   groupId = 220,
   groupLabel = c("NYVAC_durability" = "NYVAC durability comparison")
 )
+
+if (identical(DataSpaceR:::getUserEmail(DataSpaceR:::PRODUCTION, NULL), "jkim2345@scharp.org")) {
+  test_study(
+    study = "",
+    datasets = c("Demographics", "NAb"),
+    groupId = 216,
+    groupLabel = c("mice" = "mice")
+  )
+  test_study(
+    study = "",
+    datasets = c("Demographics", "NAb"),
+    groupId = 217,
+    groupLabel = c("CAVD 242" = "CAVD 242")
+  )
+}

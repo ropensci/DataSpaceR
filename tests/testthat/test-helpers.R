@@ -18,7 +18,7 @@ test_that("`getUserEmail`", {
   email <- "jkim2345@scharp.org"
 
   expect_equal(DataSpaceR:::getUserEmail(url, email), email)
-  expect_equal(DataSpaceR:::getUserEmail(url, NULL), email)
+  expect_match(DataSpaceR:::getUserEmail(url, NULL), "\\w+@\\w+")
 
   assign("labkey.user.email", email, envir = .GlobalEnv)
   expect_equal(DataSpaceR:::getUserEmail(url, email), email)
