@@ -2,8 +2,7 @@
   packageStartupMessage(
     "By exporting data from the CAVD DataSpace, ",
     "you agree to be bound by the Terms of Use available on ",
-    "the CAVD DataSpace sign-in page at ",
-    "https://dataspace.cavd.org/cds/CAVD/app.view?"
+    "the CAVD DataSpace sign-in page at https://dataspace.cavd.org"
   )
 
   netrc <- getNetrcPath()
