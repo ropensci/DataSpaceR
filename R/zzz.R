@@ -11,7 +11,8 @@
     !exists("labkey.sessionCookieName") &&
     Sys.getenv("DS_login") == "") {
     packageStartupMessage(
-      "A netrc file is required to connect to the DataSpace."
+      "A netrc file is required to connect to the DataSpace. ",
+      "Use `writeNetrc()` to create a new netrc file."
     )
   }
 }
