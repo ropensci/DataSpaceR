@@ -24,9 +24,18 @@ A character vector containing the file paths for netrc
 \description{
 Write a netrc file that is valid for accessing DataSpace.
 }
+\details{
+The database is accessed with the user's credentials.
+A netrc file storing login and password information is required.
+See \href{https://cavddataspace.github.io/DataSpaceR/}{here}
+for instruction on how to register and set DataSpace credential.
+By default \code{curl} will look for the file in your home directoty.
+}
 \examples{
 \dontrun{
-writeNetrc("dataspaceuser@email.com", "mypassword")
+# First, create an account in the DataSpace App and read the terms of use
+# Next, create a netrc file using writeNetrc()
+writeNetrc("dataspaceuser@email.com", "yourSecretPassword")
 }
 }
 \seealso{

@@ -104,6 +104,11 @@ DataSpaceConnection <- R6Class(
       netrcFile <- getNetrc(login, password, onStaging)
       curlOptions <- setCurlOptions(netrcFile)
 
+      # check netrc file
+      if (!exists("labkey.sessionCookieName")) {
+        checkNetrc(netrcFile, onStaging, verbose = FALSE)
+      }
+
       # check credential
       checkCredential(onStaging, verbose)
 
