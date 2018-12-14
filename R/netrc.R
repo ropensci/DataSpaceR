@@ -72,7 +72,7 @@ writeNetrc <- function(login,
 #' checkNetrc()
 #' }
 #' @export
-checkNetrc <- function(onStaging = FALSE) {
+checkNetrc <- function(onStaging = FALSE, verbose = TRUE) {
   if (exists("labkey.netrc.file", .GlobalEnv)) {
     netrcFile <- get("labkey.netrc.file", .GlobalEnv)
   } else {
@@ -96,9 +96,11 @@ checkNetrc <- function(onStaging = FALSE) {
     )
   }
 
+  if (verbose) {
   message("netrc file found at '", netrcFile, "', and it looks valid.")
+  }
 
-  invisible(netrcFile)
+  netrcFile
 }
 
 getNetrcPath <- function() {

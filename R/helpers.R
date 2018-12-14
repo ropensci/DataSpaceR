@@ -151,6 +151,10 @@ setCurlOptions <- function(netrcFile) {
 checkCredential <- function(onStaging, verbose) {
   if (verbose) message("Checking credential...")
 
+  if (!exists("labkey.sessionCookieName")) {
+    checkNetrc(onStaging, verbose = FALSE)
+  }
+
   url <- paste0(
     "https://",
     ifelse(onStaging, STAGING, PRODUCTION),
