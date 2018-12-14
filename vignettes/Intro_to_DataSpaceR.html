@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ju Yeong Kim" />
 
-<meta name="date" content="2018-10-16" />
+<meta name="date" content="2018-12-13" />
 
 <title>Introduction to DataSpaceR</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Introduction to DataSpaceR</h1>
 <h4 class="author"><em>Ju Yeong Kim</em></h4>
-<h4 class="date"><em>2018-10-16</em></h4>
+<h4 class="date"><em>2018-12-13</em></h4>
 
 
 
@@ -78,21 +78,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="configuration" class="section level2">
 <h2>Configuration</h2>
 <p>First, go to <a href="https://dataspace.cavd.org">DataSpace</a> now and set yourself up with an account.</p>
-<p>In order to connect to the CAVD DataSpace via <code>DataSpaceR</code>, you will need a <code>netrc</code> file in your home directory that will contain a <code>machine</code> name (hostname of DataSpace), and <code>login</code> and <code>password</code>. There are two ways to creat a netrc file.</p>
+<p>In order to connect to the CAVD DataSpace via <code>DataSpaceR</code>, you will need a <code>netrc</code> file in your home directory that will contain a <code>machine</code> name (hostname of DataSpace), and <code>login</code> and <code>password</code>. There are two ways to create a <code>netrc</code> file.</p>
 <div id="creating-a-netrc-file-with-writenetrc" class="section level3">
 <h3>Creating a netrc file with <code>writeNetrc</code></h3>
-<p>On your R console, create a netrc file using a function from <code>DataSpaceR</code>:</p>
+<p>On your R console, create a <code>netrc</code> file using a function from <code>DataSpaceR</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DataSpaceR<span class="op">::</span><span class="kw">writeNetrc</span>(<span class="st">&quot;yourEmail@address.com&quot;</span>, <span class="st">&quot;yourSecretPassword&quot;</span>)</code></pre></div>
-<p>This will create a netrc file in your home directory. Make sure you have a valid login and password.</p>
+<p>This will create a <code>netrc</code> file in your home directory. Make sure you have a valid login and password.</p>
 </div>
 <div id="manually-creating-a-netrc-file" class="section level3">
 <h3>Manually creating a netrc file</h3>
-<p><strong><em>Alternatively</em></strong>, you can manually create a netrc file in the computer running R.</p>
+<p><strong><em>Alternatively</em></strong>, you can manually create a netrc file.</p>
 <ul>
 <li>On Windows, this file sould be named <code>_netrc</code></li>
-<li>On UNIX, it should be named <code>.netrc</code></li>
+<li>On UNIX/Mac, it should be named <code>.netrc</code></li>
 <li>The file should be located in the user’s home directory, and the permissions on the file should be unreadable for everybody except the owner</li>
-<li>To determine home directory, run <code>Sys.getenv(&quot;HOME&quot;)</code> in R</li>
+<li>To determine your home directory, run <code>Sys.getenv(&quot;HOME&quot;)</code> in R</li>
 </ul>
 <p>The following three lines must be included in the <code>.netrc</code> or <code>_netrc</code> file either separated by white space (spaces, tabs, or newlines) or commas. Multiple such blocks can exist in one file.</p>
 <pre><code>machine dataspace.cavd.org
@@ -103,19 +103,19 @@ password supersecretpassword</code></pre>
 </div>
 <div id="initiate-a-connection" class="section level2">
 <h2>Initiate a connection</h2>
-<p>We’ll be looking at study <code>cvd256</code>. If you want to use a different study, change that string. The connections have state, so you can instantiate multiple connections to different studies simultaneously.</p>
+<p>We’ll be looking at study <code>cvd256</code>. If you want to use a different study, change that string. You can instantiate multiple connections to different studies simultaneously.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DataSpaceR)
 con &lt;-<span class="st"> </span><span class="kw">connectDS</span>()
 con</code></pre></div>
 <pre><code>## &lt;DataSpaceConnection&gt;
 ##   URL: https://dataspace.cavd.org
 ##   User: jkim2345@scharp.org
-##   Available studies: 245
-##     - 62 studies with data
-##     - 1835 subjects
+##   Available studies: 249
+##     - 65 studies with data
+##     - 4499 subjects
 ##     - 5 assays
-##     - 240602 data points
-##   Available groups: 4</code></pre>
+##     - 288603 data points
+##   Available groups: 6</code></pre>
 <p>The call to <code>connectDS</code> instantiates the connection. Printing the object shows where it’s connected and the available studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;cvd256&quot;</span>)
 cvd256</code></pre></div>
@@ -191,7 +191,7 @@ cvd256</code></pre></div>
 </tr>
 </tbody>
 </table>
-<p>Available datasets and treatment arm information for the connection can be access by <code>availableDatasets</code> and <code>treatmentArm</code>.</p>
+<p>Available datasets and treatment arm information for the connection can be accessed by <code>availableDatasets</code> and <code>treatmentArm</code>.</p>
 </div>
 <div id="fetching-datasets" class="section level2">
 <h2>Fetching datasets</h2>
@@ -402,6 +402,11 @@ cvd256</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Rlabkey)</code></pre></div>
 <pre><code>## Loading required package: httr</code></pre>
 <pre><code>## Loading required package: jsonlite</code></pre>
+<pre><code>## 
+## Attaching package: 'jsonlite'</code></pre>
+<pre><code>## The following object is masked from 'package:DataSpaceR':
+## 
+##     fromJSON</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256Filter &lt;-<span class="st"> </span><span class="kw">makeFilter</span>(<span class="kw">c</span>(<span class="st">&quot;visit_day&quot;</span>, <span class="st">&quot;EQUAL&quot;</span>, <span class="st">&quot;0&quot;</span>))
 NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>, <span class="dt">colFilter =</span> cvd256Filter)
 <span class="kw">dim</span>(NAb_day0)</code></pre></div>
@@ -410,10 +415,10 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 </div>
 <div id="cross-study-connection" class="section level2">
 <h2>Cross-study connection</h2>
-<p>To fetch data from multiple studies, simply create a connection at the project level.</p>
+<p>To fetch data from multiple studies, create a connection at the project level.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cavd &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;&quot;</span>)</code></pre></div>
 <p>This will instantiate a connection at the <code>CAVD</code> level. Most functions work cross study connections just like they do on single studies.</p>
-<p>You can get a list of datasets available accross all studies.</p>
+<p>You can get a list of datasets available across all studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cavd</code></pre></div>
 <pre><code>## &lt;DataSpaceStudy&gt;
 ##   Study: CAVD
@@ -437,12 +442,12 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 <tr class="odd">
 <td align="left">BAMA</td>
 <td align="left">Binding Ab multiplex assay</td>
-<td align="right">63579</td>
+<td align="right">86289</td>
 </tr>
 <tr class="even">
 <td align="left">Demographics</td>
 <td align="left">Demographics</td>
-<td align="right">1835</td>
+<td align="right">4499</td>
 </tr>
 <tr class="odd">
 <td align="left">ELISPOT</td>
@@ -452,37 +457,39 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 <tr class="even">
 <td align="left">ICS</td>
 <td align="left">Intracellular Cytokine Staining</td>
-<td align="right">128226</td>
+<td align="right">150910</td>
 </tr>
 <tr class="odd">
 <td align="left">NAb</td>
 <td align="left">Neutralizing antibody</td>
-<td align="right">43187</td>
+<td align="right">45794</td>
 </tr>
 </tbody>
 </table>
-<p>In cross-study connections, <code>getDataset</code> will combine the requested datasets. Note that in most cases the datasets will have too many subjects, making the filtering of the data a necessity. The <code>colFilter</code> argument can be used here, as described in the <code>getDataset</code> section.</p>
+<p>In cross-study connections, <code>getDataset</code> will combine the requested datasets. Note that in most cases the datasets will have too many subjects for quick data transfer, making filtering of the data a necessity. The <code>colFilter</code> argument can be used here, as described in the <code>getDataset</code> section.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conFilter &lt;-<span class="st"> </span><span class="kw">makeFilter</span>(<span class="kw">c</span>(<span class="st">&quot;species&quot;</span>, <span class="st">&quot;EQUAL&quot;</span>, <span class="st">&quot;Human&quot;</span>))
 human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;Demographics&quot;</span>, <span class="dt">colFilter =</span> conFilter)
 <span class="kw">dim</span>(human)</code></pre></div>
-<pre><code>## [1] 250  32</code></pre>
+<pre><code>## [1] 2754   36</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(human)</code></pre></div>
 <pre><code>##  [1] &quot;SubjectId&quot;                       &quot;SubjectVisit/Visit&quot;             
 ##  [3] &quot;species&quot;                         &quot;subspecies&quot;                     
 ##  [5] &quot;sexatbirth&quot;                      &quot;race&quot;                           
 ##  [7] &quot;ethnicity&quot;                       &quot;country_enrollment&quot;             
 ##  [9] &quot;circumcised_enrollment&quot;          &quot;bmi_enrollment&quot;                 
-## [11] &quot;agegroup_range&quot;                  &quot;age_enrollment&quot;                 
-## [13] &quot;study_label&quot;                     &quot;study_start_date&quot;               
-## [15] &quot;study_first_enr_date&quot;            &quot;study_fu_complete_date&quot;         
-## [17] &quot;study_public_date&quot;               &quot;study_network&quot;                  
-## [19] &quot;study_last_vaccination_day&quot;      &quot;study_type&quot;                     
-## [21] &quot;study_part&quot;                      &quot;study_group&quot;                    
-## [23] &quot;study_arm&quot;                       &quot;study_arm_summary&quot;              
-## [25] &quot;study_arm_coded_label&quot;           &quot;study_randomization&quot;            
-## [27] &quot;study_product_class_combination&quot; &quot;study_product_combination&quot;      
-## [29] &quot;study_short_name&quot;                &quot;study_grant_pi_name&quot;            
-## [31] &quot;study_strategy&quot;                  &quot;study_prot&quot;</code></pre>
+## [11] &quot;agegroup_range&quot;                  &quot;agegroup_enrollment&quot;            
+## [13] &quot;age_enrollment&quot;                  &quot;study_label&quot;                    
+## [15] &quot;study_start_date&quot;                &quot;study_first_enr_date&quot;           
+## [17] &quot;study_fu_complete_date&quot;          &quot;study_public_date&quot;              
+## [19] &quot;study_network&quot;                   &quot;study_last_vaccination_day&quot;     
+## [21] &quot;study_type&quot;                      &quot;study_part&quot;                     
+## [23] &quot;study_group&quot;                     &quot;study_arm&quot;                      
+## [25] &quot;study_arm_summary&quot;               &quot;study_arm_coded_label&quot;          
+## [27] &quot;study_randomization&quot;             &quot;study_product_class_combination&quot;
+## [29] &quot;study_product_combination&quot;       &quot;study_short_name&quot;               
+## [31] &quot;study_grant_pi_name&quot;             &quot;study_strategy&quot;                 
+## [33] &quot;study_prot&quot;                      &quot;genderidentity&quot;                 
+## [35] &quot;studycohort&quot;                     &quot;bmi_category&quot;</code></pre>
 </div>
 <div id="connect-to-a-saved-group" class="section level2">
 <h2>Connect to a saved group</h2>
@@ -542,9 +549,29 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 <td align="right">36</td>
 <td align="left">cvd338</td>
 </tr>
+<tr class="odd">
+<td align="right">228</td>
+<td align="left">HVTN 505 case control subjects</td>
+<td align="left">HVTN 505 case control subjects</td>
+<td align="left">Participants from HVTN 505 included in the case-control analysis</td>
+<td align="left">drienna</td>
+<td align="left">TRUE</td>
+<td align="right">189</td>
+<td align="left">vtn505</td>
+</tr>
+<tr class="even">
+<td align="right">230</td>
+<td align="left">HVTN 505 polyfunctionality vs BAMA</td>
+<td align="left">HVTN 505 polyfunctionality vs BAMA</td>
+<td align="left">Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort</td>
+<td align="left">drienna</td>
+<td align="left">TRUE</td>
+<td align="right">170</td>
+<td align="left">vtn505</td>
+</tr>
 </tbody>
 </table>
-<p>To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to <code>mice</code> group which has group ID 208 by <code>getGroup</code>.</p>
+<p>To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to <code>mice</code> group which has group ID 216 by <code>getGroup</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mice &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getGroup</span>(<span class="dv">216</span>)
 mice</code></pre></div>
 <pre><code>## &lt;DataSpaceStudy&gt;
@@ -576,7 +603,7 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 <span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
 <span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.163   0.004   0.213</code></pre>
+##   0.235   0.021   0.298</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## List of 1
 ##  $ c77008daa024cbb89510cbcb600cef37:List of 2
@@ -630,21 +657,26 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] pryr_0.1.4       Rlabkey_2.2.2    jsonlite_1.5     httr_1.3.1      
+## [1] pryr_0.1.4       Rlabkey_2.2.4    jsonlite_1.5     httr_1.3.1      
 ## [5] DataSpaceR_0.5.2
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.19      rstudioapi_0.8    knitr_1.20       
-##  [4] xml2_1.2.0        magrittr_1.5      roxygen2_6.1.0   
-##  [7] devtools_1.13.6   rjson_0.2.20      R6_2.3.0         
-## [10] rlang_0.2.2       highr_0.7         stringr_1.3.1    
-## [13] tools_3.5.1       data.table_1.11.8 withr_2.1.2      
-## [16] htmltools_0.3.6   commonmark_1.6    yaml_2.2.0       
-## [19] rprojroot_1.3-2   digest_0.6.17     assertthat_0.2.0 
-## [22] crayon_1.3.4      purrr_0.2.5       codetools_0.2-15 
-## [25] testthat_2.0.0    curl_3.2          evaluate_0.11    
-## [28] memoise_1.1.0     rmarkdown_1.10    stringi_1.2.4    
-## [31] compiler_3.5.1    backports_1.1.2   desc_1.2.0</code></pre>
+##  [1] Rcpp_1.0.0        highr_0.7         compiler_3.5.1   
+##  [4] prettyunits_1.0.2 base64enc_0.1-3   remotes_2.0.2    
+##  [7] tools_3.5.1       testthat_2.0.1    digest_0.6.18    
+## [10] pkgbuild_1.0.2    pkgload_1.0.2     evaluate_0.12    
+## [13] memoise_1.1.0     debugme_1.1.0     rlang_0.3.0.1    
+## [16] cli_1.0.1         rstudioapi_0.8    commonmark_1.7   
+## [19] yaml_2.2.0        curl_3.2          knitr_1.20       
+## [22] withr_2.1.2       stringr_1.3.1     roxygen2_6.1.1   
+## [25] xml2_1.2.0        desc_1.2.0        fs_1.2.6         
+## [28] devtools_2.0.1    rprojroot_1.3-2   data.table_1.11.8
+## [31] glue_1.3.0        R6_2.3.0          processx_3.2.0   
+## [34] rmarkdown_1.10    sessioninfo_1.1.1 callr_3.0.0      
+## [37] purrr_0.2.5       magrittr_1.5      codetools_0.2-15 
+## [40] htmltools_0.3.6   backports_1.1.2   ps_1.2.1         
+## [43] usethis_1.4.0     assertthat_0.2.0  stringi_1.2.4    
+## [46] rjson_0.2.20      crayon_1.3.4</code></pre>
 </div>
 
 

@@ -96,7 +96,6 @@ knitr::kable(cvd256$getVariableInfo("NAb"))
 To get only a subset of the data and speed up the download, filters can be passed to `getDataset`. The filters are created using the `makeFilter` function of the `Rlabkey` package.
 
 ```{r getDataset-filter}
-library(Rlabkey)
 cvd256Filter <- makeFilter(c("visit_day", "EQUAL", "0"))
 NAb_day0 <- cvd256$getDataset("NAb", colFilter = cvd256Filter)
 dim(NAb_day0)

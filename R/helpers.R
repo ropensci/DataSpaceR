@@ -222,3 +222,7 @@ makeCountQuery <- function(dataset, group) {
 
   query
 }
+
+#' @importFrom Rlabkey makeFilter
+#' @export
+Rlabkey::makeFilter

@@ -2,6 +2,7 @@
 
 export(checkNetrc)
 export(connectDS)
+export(makeFilter)
 export(writeNetrc)
 importFrom(R6,R6Class)
 importFrom(Rlabkey,getSession)
