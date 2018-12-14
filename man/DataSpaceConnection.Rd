@@ -4,7 +4,6 @@
 \name{DataSpaceConnection}
 \alias{DataSpaceConnection}
 \title{The DataSpaceConnection class}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 DataSpaceConnection
 }
@@ -55,7 +54,7 @@ The DataSpaceConnection class
     \code{groupId}: An integer. ID of the group to retrieve.
   }
   \item{\code{refresh()}}{
-    Refresh \code{DataSpaceConnection} class.
+    Refresh the connection object to update available studies and groups.
   }
 }
 }

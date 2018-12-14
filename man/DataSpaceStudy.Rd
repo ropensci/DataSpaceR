@@ -4,7 +4,6 @@
 \name{DataSpaceStudy}
 \alias{DataSpaceStudy}
 \title{The DataSpaceStudy class}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 DataSpaceStudy
 }
@@ -83,7 +82,7 @@ The DataSpaceStudy class
     \code{datasetName}: A character. Name of the dataset to retrieve.
   }
   \item{\code{refresh()}}{
-    Refresh \code{DataSpaceStudy} class.
+    Refresh the study object to update available datasets and treatment info.
   }
 }
 }
@@ -117,7 +116,7 @@ nyvac <- con$getGroup(220)
 # Connect to all studies
 cvd <- con$getStudy("")
 
-# Refresh a study object
+# Refresh the study object to update available datasets and treatment info
 cvd$refresh()
 }
 }

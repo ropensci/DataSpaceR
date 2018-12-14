@@ -39,7 +39,7 @@
 #'     \code{groupId}: An integer. ID of the group to retrieve.
 #'   }
 #'   \item{\code{refresh()}}{
-#'     Refresh \code{DataSpaceConnection} class.
+#'     Refresh the connection object to update available studies and groups.
 #'   }
 #' }
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceR-package}}
@@ -64,6 +64,7 @@
 #' con$refresh()
 #' }
 #' @docType class
+#' @format NULL
 #' @importFrom rjson fromJSON
 #' @importFrom curl has_internet nslookup
 #' @importFrom Rlabkey labkey.selectRows

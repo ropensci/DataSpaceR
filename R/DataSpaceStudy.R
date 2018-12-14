@@ -67,7 +67,7 @@
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
 #'   }
 #'   \item{\code{refresh()}}{
-#'     Refresh \code{DataSpaceStudy} class.
+#'     Refresh the study object to update available datasets and treatment info.
 #'   }
 #' }
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
@@ -100,10 +100,11 @@
 #' # Connect to all studies
 #' cvd <- con$getStudy("")
 #'
-#' # Refresh a study object
+#' # Refresh the study object to update available datasets and treatment info
 #' cvd$refresh()
 #' }
 #' @docType class
+#' @format NULL
 #' @importFrom digest digest
 #' @importFrom Rlabkey labkey.getQueryDetails labkey.executeSql
 DataSpaceStudy <- R6Class(
