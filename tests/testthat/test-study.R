@@ -39,7 +39,7 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       "study",
       "clone",
       "refresh",
-      "getVariableInfo",
+      "getDatasetDescription",
       "clearCache",
       "getDataset",
       "print",
@@ -169,10 +169,10 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
         expect_lte(after, before)
       })
 
-      test_that("`getVariableInfo`", {
+      test_that("`getDatasetDescription`", {
         for (datasetName in cavd$availableDatasets$name) {
           dataset <- try(
-            cavd$getVariableInfo(datasetName = datasetName),
+            cavd$getDatasetDescription(datasetName = datasetName),
             silent = TRUE
           )
           expect_is(dataset, "data.table", info = datasetName)
