@@ -31,8 +31,6 @@
 #'     Create a \code{\link{DataSpaceStudy}} object.
 #'
 #'     \code{study}: A character. Name of the study to retrieve.
-#'
-#'     \code{groupId}: DEPRECATED. Use \code{getGroup} method.
 #'   }
 #'   \item{\code{getGroup(groupId)}}{
 #'     Create a \code{\link{DataSpaceStudy}} object.
@@ -140,36 +138,7 @@ DataSpaceConnection <- R6Class(
       cat("\n  Available groups:", nrow(private$.availableGroups))
       cat("\n")
     },
-    getStudy = function(study, groupId = NULL) {
-      if (!is.null(groupId)) {
-        warning(
-          "`groupId` argument is deprecated. ",
-          "Use `getGroup()` method to retrieve a group.",
-          immediate. = TRUE
-        )
-      }
-
-      assert_that(
-        is.number(groupId) || is.null(groupId),
-        msg = "groupId should be an integer or null."
-      )
-      assert_that(
-        (study == "" && is.null(groupId)) ||
-          (study == "" && is.number(groupId)) ||
-          (study != "" && is.null(groupId)),
-        msg = "Use empty string if you are using a group filter"
-      )
-
-      if (is.number(groupId)) {
-        assert_that(
-          groupId %in% private$.availableGroups$id,
-          msg = paste(groupId, "is not a valid group ID")
-        )
-        group <- private$.availableGroups[.(groupId), label]
-      } else {
-        group <- NULL
-      }
-
+    getStudy = function(study) {
       if (study != "") {
         studyInfo <- as.list(
           private$.availableStudies[.(study)]
@@ -178,7 +147,7 @@ DataSpaceConnection <- R6Class(
         studyInfo <- NULL
       }
 
-      DataSpaceStudy$new(study, private$.config, group, studyInfo)
+      DataSpaceStudy$new(study, private$.config, NULL, studyInfo)
     },
     getGroup = function(groupId) {
       assert_that(

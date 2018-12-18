@@ -46,8 +46,6 @@ The DataSpaceConnection class
     Create a \code{\link{DataSpaceStudy}} object.
 
     \code{study}: A character. Name of the study to retrieve.
-
-    \code{groupId}: DEPRECATED. Use \code{getGroup} method.
   }
   \item{\code{getGroup(groupId)}}{
     Create a \code{\link{DataSpaceStudy}} object.

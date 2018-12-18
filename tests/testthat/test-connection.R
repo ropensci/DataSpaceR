@@ -121,8 +121,6 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_is(cavd, "R6")
 
       expect_error(con$getStudy("cvd0"))
-      expect_error(suppressWarnings(con$getStudy("", 0)))
-      expect_error(suppressWarnings(con$getStudy("cvd208", 208)))
     })
 
     test_that("`refresh`", {
