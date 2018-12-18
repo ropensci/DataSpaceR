@@ -61,7 +61,7 @@
 #'   \item{\code{clearCache()}}{
 #'     Clear \code{cache}. Remove downloaded datasets.
 #'   }
-#'   \item{\code{getVariableInfo(datasetName)}}{
+#'   \item{\code{getDatasetDescription(datasetName)}}{
 #'     Get variable information.
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
@@ -85,7 +85,7 @@
 #' NAb <- cvd408$getDataset("NAb")
 #'
 #' # Get variable information of the NAb dataset
-#' cvd408$getVariableInfo("NAb")
+#' cvd408$getDatasetDescription("NAb")
 #'
 #' # Take a look at cvd408's treatment arm information
 #' cvd408$treatmentArm
@@ -257,7 +257,7 @@ DataSpaceStudy <- R6Class(
     clearCache = function() {
       private$.cache <- list()
     },
-    getVariableInfo = function(datasetName) {
+    getDatasetDescription = function(datasetName) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
       assert_that(

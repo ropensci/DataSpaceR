@@ -76,7 +76,7 @@ The DataSpaceStudy class
   \item{\code{clearCache()}}{
     Clear \code{cache}. Remove downloaded datasets.
   }
-  \item{\code{getVariableInfo(datasetName)}}{
+  \item{\code{getDatasetDescription(datasetName)}}{
     Get variable information.
 
     \code{datasetName}: A character. Name of the dataset to retrieve.
@@ -101,7 +101,7 @@ cvd408
 NAb <- cvd408$getDataset("NAb")
 
 # Get variable information of the NAb dataset
-cvd408$getVariableInfo("NAb")
+cvd408$getDatasetDescription("NAb")
 
 # Take a look at cvd408's treatment arm information
 cvd408$treatmentArm
