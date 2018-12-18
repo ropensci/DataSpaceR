@@ -60,6 +60,12 @@ con
 
 The call to `connectDS` instantiates the connection. Printing the object shows where it's connected and the available studies.
 
+```{r availableStudies}
+knitr::kable(head(con$availableStudies))
+```
+
+`con$availableStudies` shows the available studies in the CAVD DataSpace.
+
 ```{r getStudy}
 cvd256 <- con$getStudy("cvd256")
 cvd256
@@ -87,10 +93,10 @@ colnames(NAb)
 
 The *cvd256* object is an [`R6`](https://cran.r-project.org/web/packages/R6/) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
 
-We can get detailed variable information using `getVariableInfo`.
+We can get detailed variable information using `getDatasetDescription`.
 
 ```{r getVariableInfo}
-knitr::kable(cvd256$getVariableInfo("NAb"))
+knitr::kable(cvd256$getDatasetDescription("NAb"))
 ```
 
 To get only a subset of the data and speed up the download, filters can be passed to `getDataset`. The filters are created using the `makeFilter` function of the `Rlabkey` package.
@@ -104,11 +110,11 @@ dim(NAb_day0)
 See `?makeFilter` for more information on the syntax.
 
 
-## Cross-study connection
+## Creating a connection to all studies
 
 To fetch data from multiple studies, create a connection at the project level.
 
-```{r cross-connection}
+```{r connection-all-studies}
 cavd <- con$getStudy("")
 ```
 
@@ -116,14 +122,14 @@ This will instantiate a connection at the `CAVD` level. Most functions work cros
 
 You can get a list of datasets available across all studies.
 
-```{r cross-connection-print}
+```{r connection-all-studies-datasets}
 cavd
 knitr::kable(cavd$availableDatasets)
 ```
 
-In cross-study connections, `getDataset` will combine the requested datasets. Note that in most cases the datasets will have too many subjects for quick data transfer, making filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
+In all-study connection, `getDataset` will combine the requested datasets. Note that in most cases, the datasets will have too many subjects for quick data transfer, making filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
 
-```{r cross-connection-dem}
+```{r connection-all-studies-dem}
 conFilter <- makeFilter(c("species", "EQUAL", "Human"))
 human <- cavd$getDataset("Demographics", colFilter = conFilter)
 dim(human)
@@ -133,69 +139,63 @@ colnames(human)
 
 ## Connect to a saved group
 
-We can browse available saved groups via `availableGroups`.
+A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
+
+Let's say you are using the App to filter and visualize data and want to save them for later or explore in R with `DataSpaceR`. You can save a group by clicking the Save button on the Active Filter Panel.
+
+We can browse available the saved groups or the curated groups by DataSpace Team via `availableGroups`.
 
 ```{r availableGroups}
 knitr::kable(con$availableGroups)
 ```
 
-To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to `mice` group which has group ID 216 by `getGroup`.
+To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to the "NYVAC durability comparison" group which has group ID 220 by `getGroup`.
 
 ```{r group-connection}
-mice <- con$getGroup(216)
-mice
+nyvac <- con$getGroup(220)
+nyvac
 ```
 
 Retrieving a dataset is the same as before.
 
 ```{r group-connection-nab}
-NAb_mice <- mice$getDataset("NAb")
-dim(NAb_mice)
+NAb_nyvac <- nyvac$getDataset("NAb")
+dim(NAb_nyvac)
 ```
 
 
-## Caching
+## Reference Tables
 
-### Connect to `cvd408` study
+### `DataSpaceConnection`
 
-```{r}
-library(pryr)
-cvd408 <- con$getStudy("cvd408")
+| Name | Type | Description |
+| --- | --- | --- |
+| `availableStudies` | Field | The table of available studies. |
+| `availableGroups` | Field | The table of available groups. |
+| `config` | Field | Stores configuration of the connection object such as URL, path and username. |
+| `getStudy` | Method | Create a `DataSpaceStudy` object by study. |
+| `getGroup` | Method | Create a `DataSpaceStudy` object by group. |
+| `refresh` | Method | Refresh the connection object to update available studies and groups. |
+| `initialize` | Method | Initialize a `DataSpaceConnection` object. |
+| `print` | Method | Print `DataSpaceConnection` object |
 
-str(cvd408$cache)
-object_size(cvd408)
-```
+### `DataSpaceStudy`
 
-### Retrieve NAb dataset
-
-```{r}
-ptm <- proc.time()
-invisible(cvd408$getDataset("NAb"))
-proc.time() - ptm
-
-str(cvd408$cache, max.level = 2)
-object_size(cvd408)
-```
-
-### Retrieve NAb dataset again
-
-```{r}
-ptm <- proc.time()
-invisible(cvd408$getDataset("NAb"))
-proc.time() - ptm
-
-str(cvd408$cache, max.level = 2)
-object_size(cvd408)
-```
-
-### Clear cache
-
-```{r}
-cvd408$clearCache()
-
-str(cvd408$cache, max.level = 2)
-object_size(cvd408)
-```
+| Name | Type | Description |
+| --- | --- | --- |
+| `study` | Field | The study name. |
+| `group` | Field | The group name. |
+| `availableDatasets` | Field | The table of datasets available in the study object. |
+| `treatmentArm` | Field | The table of treatment arm information for the connectedstudy. Not available for all study connection. |
+| `config` | Field | Stores configuration of the connection object such as URL, path and username. |
+| `cache` | Field | Stores the data to avoid downloading the same tables multiple times. |
+| `studyInfo` | Field | Stores the information about the study. |
+| `getDataset` | Method | Get a dataset from the connection. |
+| `getDatasetDescription` | Method | Get variable information. |
+| `clearCache` | Method | Clear `cache`. Remove downloaded datasets. |
+| `refresh` | Method | Refresh the study object to update available datasets and treatment info. |
+| `initialize` | Method | Initialize `DataSpaceStudy` class. |
+| `print` | Method | Print `DataSpaceStudy` class. |
 
 
 ## Session information

@@ -6,6 +6,9 @@ library(DataSpaceR)
 con <- connectDS()
 con
 
+## ----availableStudies----------------------------------------------------
+knitr::kable(head(con$availableStudies))
+
 ## ----getStudy------------------------------------------------------------
 cvd256 <- con$getStudy("cvd256")
 cvd256
@@ -20,22 +23,21 @@ dim(NAb)
 colnames(NAb)
 
 ## ----getVariableInfo-----------------------------------------------------
-knitr::kable(cvd256$getVariableInfo("NAb"))
+knitr::kable(cvd256$getDatasetDescription("NAb"))
 
 ## ----getDataset-filter---------------------------------------------------
-library(Rlabkey)
 cvd256Filter <- makeFilter(c("visit_day", "EQUAL", "0"))
 NAb_day0 <- cvd256$getDataset("NAb", colFilter = cvd256Filter)
 dim(NAb_day0)
 
-## ----cross-connection----------------------------------------------------
+## ----connection-all-studies----------------------------------------------
 cavd <- con$getStudy("")
 
-## ----cross-connection-print----------------------------------------------
+## ----connection-all-studies-datasets-------------------------------------
 cavd
 knitr::kable(cavd$availableDatasets)
 
-## ----cross-connection-dem------------------------------------------------
+## ----connection-all-studies-dem------------------------------------------
 conFilter <- makeFilter(c("species", "EQUAL", "Human"))
 human <- cavd$getDataset("Demographics", colFilter = conFilter)
 dim(human)
@@ -45,41 +47,12 @@ colnames(human)
 knitr::kable(con$availableGroups)
 
 ## ----group-connection----------------------------------------------------
-mice <- con$getGroup(216)
-mice
+nyvac <- con$getGroup(220)
+nyvac
 
 ## ----group-connection-nab------------------------------------------------
-NAb_mice <- mice$getDataset("NAb")
-dim(NAb_mice)
-
-## ------------------------------------------------------------------------
-library(pryr)
-cvd408 <- con$getStudy("cvd408")
-
-str(cvd408$cache)
-object_size(cvd408)
-
-## ------------------------------------------------------------------------
-ptm <- proc.time()
-invisible(cvd408$getDataset("NAb"))
-proc.time() - ptm
-
-str(cvd408$cache, max.level = 2)
-object_size(cvd408)
-
-## ------------------------------------------------------------------------
-ptm <- proc.time()
-invisible(cvd408$getDataset("NAb"))
-proc.time() - ptm
-
-str(cvd408$cache, max.level = 2)
-object_size(cvd408)
-
-## ------------------------------------------------------------------------
-cvd408$clearCache()
-
-str(cvd408$cache, max.level = 2)
-object_size(cvd408)
+NAb_nyvac <- nyvac$getDataset("NAb")
+dim(NAb_nyvac)
 
 ## ----session-info--------------------------------------------------------
 sessionInfo()

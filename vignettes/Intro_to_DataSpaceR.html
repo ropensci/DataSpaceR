@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ju Yeong Kim" />
 
-<meta name="date" content="2018-12-13" />
+<meta name="date" content="2018-12-17" />
 
 <title>Introduction to DataSpaceR</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Introduction to DataSpaceR</h1>
 <h4 class="author"><em>Ju Yeong Kim</em></h4>
-<h4 class="date"><em>2018-12-13</em></h4>
+<h4 class="date"><em>2018-12-17</em></h4>
 
 
 
@@ -117,6 +117,91 @@ con</code></pre></div>
 ##     - 288603 data points
 ##   Available groups: 6</code></pre>
 <p>The call to <code>connectDS</code> instantiates the connection. Printing the object shows where it’s connected and the available studies.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(con<span class="op">$</span>availableStudies))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">study_name</th>
+<th align="left">short_name</th>
+<th align="left">title</th>
+<th align="left">type</th>
+<th align="left">status</th>
+<th align="left">stage</th>
+<th align="left">species</th>
+<th align="left">start_date</th>
+<th align="left">strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">cvd232</td>
+<td align="left">Parks_RV_232</td>
+<td align="left">Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.</td>
+<td align="left">Pre-Clinical NHP</td>
+<td align="left">Inactive</td>
+<td align="left">Assays Completed</td>
+<td align="left">Rhesus macaque</td>
+<td align="left">2009-11-24</td>
+<td align="left">Vector vaccines (viral or bacterial)</td>
+</tr>
+<tr class="even">
+<td align="left">cvd234</td>
+<td align="left">Zolla-Pazner_Mab_test1 Study</td>
+<td align="left">Zolla-Pazner_Mab_Test1</td>
+<td align="left">Antibody Screening</td>
+<td align="left">Inactive</td>
+<td align="left">Assays Completed</td>
+<td align="left">Non-Organism Study</td>
+<td align="left">2009-02-03</td>
+<td align="left">Prophylactic neutralizing Ab</td>
+</tr>
+<tr class="odd">
+<td align="left">cvd235</td>
+<td align="left">mAbs potency</td>
+<td align="left">Weiss mAbs potency</td>
+<td align="left">Antibody Screening</td>
+<td align="left">Inactive</td>
+<td align="left">Assays Completed</td>
+<td align="left">Non-Organism Study</td>
+<td align="left">2008-08-21</td>
+<td align="left">Prophylactic neutralizing Ab</td>
+</tr>
+<tr class="even">
+<td align="left">cvd236</td>
+<td align="left">neutralization assays</td>
+<td align="left">neutralization assays</td>
+<td align="left">Antibody Screening</td>
+<td align="left">Active</td>
+<td align="left">In Progress</td>
+<td align="left">Non-Organism Study</td>
+<td align="left">2009-02-03</td>
+<td align="left">Prophylactic neutralizing Ab</td>
+</tr>
+<tr class="odd">
+<td align="left">cvd238</td>
+<td align="left">Gallo_PA_238</td>
+<td align="left">HIV-1 neutralization responses in chronically infected individuals</td>
+<td align="left">Antibody Screening</td>
+<td align="left">Inactive</td>
+<td align="left">Assays Completed</td>
+<td align="left">Non-Organism Study</td>
+<td align="left">2009-01-08</td>
+<td align="left">Prophylactic neutralizing Ab</td>
+</tr>
+<tr class="even">
+<td align="left">cvd239</td>
+<td align="left">CAVIMC-015</td>
+<td align="left">Lehner_Thorstensson_Allovac</td>
+<td align="left">Pre-Clinical NHP</td>
+<td align="left">Inactive</td>
+<td align="left">Assays Completed</td>
+<td align="left">Rhesus macaque</td>
+<td align="left">2009-01-08</td>
+<td align="left">Protein and peptide vaccines</td>
+</tr>
+</tbody>
+</table>
+<p><code>con$availableStudies</code> shows the available studies in the CAVD DataSpace.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;cvd256&quot;</span>)
 cvd256</code></pre></div>
 <pre><code>## &lt;DataSpaceStudy&gt;
@@ -216,8 +301,8 @@ cvd256</code></pre></div>
 ## [27] &quot;slope&quot;                  &quot;vaccine_matched&quot;       
 ## [29] &quot;study_prot&quot;</code></pre>
 <p>The <em>cvd256</em> object is an <a href="https://cran.r-project.org/web/packages/R6/"><code>R6</code></a> class, so it behaves like a true object. Functions (like <code>getDataset</code>) are members of the object, thus the <code>$</code> semantics to access member functions.</p>
-<p>We can get detailed variable information using <code>getVariableInfo</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(cvd256<span class="op">$</span><span class="kw">getVariableInfo</span>(<span class="st">&quot;NAb&quot;</span>))</code></pre></div>
+<p>We can get detailed variable information using <code>getDatasetDescription</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(cvd256<span class="op">$</span><span class="kw">getDatasetDescription</span>(<span class="st">&quot;NAb&quot;</span>))</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -399,22 +484,14 @@ cvd256</code></pre></div>
 </tbody>
 </table>
 <p>To get only a subset of the data and speed up the download, filters can be passed to <code>getDataset</code>. The filters are created using the <code>makeFilter</code> function of the <code>Rlabkey</code> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Rlabkey)</code></pre></div>
-<pre><code>## Loading required package: httr</code></pre>
-<pre><code>## Loading required package: jsonlite</code></pre>
-<pre><code>## 
-## Attaching package: 'jsonlite'</code></pre>
-<pre><code>## The following object is masked from 'package:DataSpaceR':
-## 
-##     fromJSON</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd256Filter &lt;-<span class="st"> </span><span class="kw">makeFilter</span>(<span class="kw">c</span>(<span class="st">&quot;visit_day&quot;</span>, <span class="st">&quot;EQUAL&quot;</span>, <span class="st">&quot;0&quot;</span>))
 NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>, <span class="dt">colFilter =</span> cvd256Filter)
 <span class="kw">dim</span>(NAb_day0)</code></pre></div>
 <pre><code>## [1] 709  29</code></pre>
 <p>See <code>?makeFilter</code> for more information on the syntax.</p>
 </div>
-<div id="cross-study-connection" class="section level2">
-<h2>Cross-study connection</h2>
+<div id="creating-a-connection-to-all-studies" class="section level2">
+<h2>Creating a connection to all studies</h2>
 <p>To fetch data from multiple studies, create a connection at the project level.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cavd &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;&quot;</span>)</code></pre></div>
 <p>This will instantiate a connection at the <code>CAVD</code> level. Most functions work cross study connections just like they do on single studies.</p>
@@ -466,7 +543,7 @@ NAb_day0 &lt;-<span class="st"> </span>cvd256<span class="op">$</span><span clas
 </tr>
 </tbody>
 </table>
-<p>In cross-study connections, <code>getDataset</code> will combine the requested datasets. Note that in most cases the datasets will have too many subjects for quick data transfer, making filtering of the data a necessity. The <code>colFilter</code> argument can be used here, as described in the <code>getDataset</code> section.</p>
+<p>In all-study connection, <code>getDataset</code> will combine the requested datasets. Note that in most cases, the datasets will have too many subjects for quick data transfer, making filtering of the data a necessity. The <code>colFilter</code> argument can be used here, as described in the <code>getDataset</code> section.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conFilter &lt;-<span class="st"> </span><span class="kw">makeFilter</span>(<span class="kw">c</span>(<span class="st">&quot;species&quot;</span>, <span class="st">&quot;EQUAL&quot;</span>, <span class="st">&quot;Human&quot;</span>))
 human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;Demographics&quot;</span>, <span class="dt">colFilter =</span> conFilter)
 <span class="kw">dim</span>(human)</code></pre></div>
@@ -493,7 +570,9 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 </div>
 <div id="connect-to-a-saved-group" class="section level2">
 <h2>Connect to a saved group</h2>
-<p>We can browse available saved groups via <code>availableGroups</code>.</p>
+<p>A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in <a href="https://dataspace.cavd.org/cds/CAVD/app.view">the DataSpace App</a>.</p>
+<p>Let’s say you are using the App to filter and visualize data and want to save them for later or explore in R with <code>DataSpaceR</code>. You can save a group by clicking the Save button on the Active Filter Panel.</p>
+<p>We can browse available the saved groups or the curated groups by DataSpace Team via <code>availableGroups</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(con<span class="op">$</span>availableGroups)</code></pre></div>
 <table>
 <thead>
@@ -571,72 +650,167 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 </tr>
 </tbody>
 </table>
-<p>To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to <code>mice</code> group which has group ID 216 by <code>getGroup</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mice &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getGroup</span>(<span class="dv">216</span>)
-mice</code></pre></div>
+<p>To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to the “NYVAC durability comparison” group which has group ID 220 by <code>getGroup</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nyvac &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getGroup</span>(<span class="dv">220</span>)
+nyvac</code></pre></div>
 <pre><code>## &lt;DataSpaceStudy&gt;
-##   Group: mice
+##   Group: NYVAC durability comparison
 ##   URL: https://dataspace.cavd.org/CAVD
 ##   Available datasets:
+##     - BAMA
 ##     - Demographics
+##     - ELISPOT
+##     - ICS
 ##     - NAb</code></pre>
 <p>Retrieving a dataset is the same as before.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb_mice &lt;-<span class="st"> </span>mice<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>)
-<span class="kw">dim</span>(NAb_mice)</code></pre></div>
-<pre><code>## [1] 604  29</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb_nyvac &lt;-<span class="st"> </span>nyvac<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>)
+<span class="kw">dim</span>(NAb_nyvac)</code></pre></div>
+<pre><code>## [1] 4281   29</code></pre>
 </div>
-<div id="caching" class="section level2">
-<h2>Caching</h2>
-<div id="connect-to-cvd408-study" class="section level3">
-<h3>Connect to <code>cvd408</code> study</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pryr)
-cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">&quot;cvd408&quot;</span>)
-
-<span class="kw">str</span>(cvd408<span class="op">$</span>cache)</code></pre></div>
-<pre><code>##  list()</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 334 kB</code></pre>
+<div id="reference-tables" class="section level2">
+<h2>Reference Tables</h2>
+<div id="dataspaceconnection" class="section level3">
+<h3><code>DataSpaceConnection</code></h3>
+<table style="width:17%;">
+<colgroup>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>availableStudies</code></td>
+<td>Field</td>
+<td>The table of available studies.</td>
+</tr>
+<tr class="even">
+<td><code>availableGroups</code></td>
+<td>Field</td>
+<td>The table of available groups.</td>
+</tr>
+<tr class="odd">
+<td><code>config</code></td>
+<td>Field</td>
+<td>Stores configuration of the connection object such as URL, path and username.</td>
+</tr>
+<tr class="even">
+<td><code>getStudy</code></td>
+<td>Method</td>
+<td>Create a <code>DataSpaceStudy</code> object by study.</td>
+</tr>
+<tr class="odd">
+<td><code>getGroup</code></td>
+<td>Method</td>
+<td>Create a <code>DataSpaceStudy</code> object by group.</td>
+</tr>
+<tr class="even">
+<td><code>refresh</code></td>
+<td>Method</td>
+<td>Refresh the connection object to update available studies and groups.</td>
+</tr>
+<tr class="odd">
+<td><code>initialize</code></td>
+<td>Method</td>
+<td>Initialize a <code>DataSpaceConnection</code> object.</td>
+</tr>
+<tr class="even">
+<td><code>print</code></td>
+<td>Method</td>
+<td>Print <code>DataSpaceConnection</code> object</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="retrieve-nab-dataset" class="section level3">
-<h3>Retrieve NAb dataset</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ptm &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
-<span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
-<span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
-<pre><code>##    user  system elapsed 
-##   0.235   0.021   0.298</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
-<pre><code>## List of 1
-##  $ c77008daa024cbb89510cbcb600cef37:List of 2
-##   ..$ args:List of 3
-##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  29 variables:
-##   .. ..- attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 451 kB</code></pre>
-</div>
-<div id="retrieve-nab-dataset-again" class="section level3">
-<h3>Retrieve NAb dataset again</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ptm &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
-<span class="kw">invisible</span>(cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">&quot;NAb&quot;</span>))
-<span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</code></pre></div>
-<pre><code>##    user  system elapsed 
-##   0.003   0.000   0.003</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
-<pre><code>## List of 1
-##  $ c77008daa024cbb89510cbcb600cef37:List of 2
-##   ..$ args:List of 3
-##   ..$ data:Classes 'data.table' and 'data.frame':    540 obs. of  29 variables:
-##   .. ..- attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 484 kB</code></pre>
-</div>
-<div id="clear-cache" class="section level3">
-<h3>Clear cache</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408<span class="op">$</span><span class="kw">clearCache</span>()
-
-<span class="kw">str</span>(cvd408<span class="op">$</span>cache, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
-<pre><code>##  list()</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object_size</span>(cvd408)</code></pre></div>
-<pre><code>## 368 kB</code></pre>
+<div id="dataspacestudy" class="section level3">
+<h3><code>DataSpaceStudy</code></h3>
+<table style="width:17%;">
+<colgroup>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>study</code></td>
+<td>Field</td>
+<td>The study name.</td>
+</tr>
+<tr class="even">
+<td><code>group</code></td>
+<td>Field</td>
+<td>The group name.</td>
+</tr>
+<tr class="odd">
+<td><code>availableDatasets</code></td>
+<td>Field</td>
+<td>The table of datasets available in the study object.</td>
+</tr>
+<tr class="even">
+<td><code>treatmentArm</code></td>
+<td>Field</td>
+<td>The table of treatment arm information for the connectedstudy. Not available for all study connection.</td>
+</tr>
+<tr class="odd">
+<td><code>config</code></td>
+<td>Field</td>
+<td>Stores configuration of the connection object such as URL, path and username.</td>
+</tr>
+<tr class="even">
+<td><code>cache</code></td>
+<td>Field</td>
+<td>Stores the data to avoid downloading the same tables multiple times.</td>
+</tr>
+<tr class="odd">
+<td><code>studyInfo</code></td>
+<td>Field</td>
+<td>Stores the information about the study.</td>
+</tr>
+<tr class="even">
+<td><code>getDataset</code></td>
+<td>Method</td>
+<td>Get a dataset from the connection.</td>
+</tr>
+<tr class="odd">
+<td><code>getDatasetDescription</code></td>
+<td>Method</td>
+<td>Get variable information.</td>
+</tr>
+<tr class="even">
+<td><code>clearCache</code></td>
+<td>Method</td>
+<td>Clear <code>cache</code>. Remove downloaded datasets.</td>
+</tr>
+<tr class="odd">
+<td><code>refresh</code></td>
+<td>Method</td>
+<td>Refresh the study object to update available datasets and treatment info.</td>
+</tr>
+<tr class="even">
+<td><code>initialize</code></td>
+<td>Method</td>
+<td>Initialize <code>DataSpaceStudy</code> class.</td>
+</tr>
+<tr class="odd">
+<td><code>print</code></td>
+<td>Method</td>
+<td>Print <code>DataSpaceStudy</code> class.</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="session-information" class="section level2">
@@ -657,26 +831,26 @@ cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] pryr_0.1.4       Rlabkey_2.2.4    jsonlite_1.5     httr_1.3.1      
-## [5] DataSpaceR_0.5.2
+## [1] DataSpaceR_0.5.2
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.0        highr_0.7         compiler_3.5.1   
 ##  [4] prettyunits_1.0.2 base64enc_0.1-3   remotes_2.0.2    
 ##  [7] tools_3.5.1       testthat_2.0.1    digest_0.6.18    
 ## [10] pkgbuild_1.0.2    pkgload_1.0.2     evaluate_0.12    
-## [13] memoise_1.1.0     debugme_1.1.0     rlang_0.3.0.1    
-## [16] cli_1.0.1         rstudioapi_0.8    commonmark_1.7   
-## [19] yaml_2.2.0        curl_3.2          knitr_1.20       
-## [22] withr_2.1.2       stringr_1.3.1     roxygen2_6.1.1   
-## [25] xml2_1.2.0        desc_1.2.0        fs_1.2.6         
-## [28] devtools_2.0.1    rprojroot_1.3-2   data.table_1.11.8
-## [31] glue_1.3.0        R6_2.3.0          processx_3.2.0   
-## [34] rmarkdown_1.10    sessioninfo_1.1.1 callr_3.0.0      
-## [37] purrr_0.2.5       magrittr_1.5      codetools_0.2-15 
-## [40] htmltools_0.3.6   backports_1.1.2   ps_1.2.1         
-## [43] usethis_1.4.0     assertthat_0.2.0  stringi_1.2.4    
-## [46] rjson_0.2.20      crayon_1.3.4</code></pre>
+## [13] jsonlite_1.5      memoise_1.1.0     debugme_1.1.0    
+## [16] rlang_0.3.0.1     cli_1.0.1         rstudioapi_0.8   
+## [19] commonmark_1.7    yaml_2.2.0        curl_3.2         
+## [22] knitr_1.20        withr_2.1.2       stringr_1.3.1    
+## [25] httr_1.3.1        roxygen2_6.1.1    xml2_1.2.0       
+## [28] desc_1.2.0        fs_1.2.6          devtools_2.0.1   
+## [31] rprojroot_1.3-2   data.table_1.11.8 glue_1.3.0       
+## [34] R6_2.3.0          processx_3.2.0    Rlabkey_2.2.4    
+## [37] rmarkdown_1.10    sessioninfo_1.1.1 callr_3.0.0      
+## [40] purrr_0.2.5       magrittr_1.5      htmltools_0.3.6  
+## [43] backports_1.1.2   ps_1.2.1          usethis_1.4.0    
+## [46] assertthat_0.2.0  stringi_1.2.4     rjson_0.2.20     
+## [49] crayon_1.3.4</code></pre>
 </div>
 
 
