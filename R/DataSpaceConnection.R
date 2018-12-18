@@ -21,10 +21,11 @@
 #' \describe{
 #'   \item{\code{initialize(login = NULL, password = NULL, verbose = FALSE,
 #'   onStaging = FALSE)}}{
-#'     Initialize \code{DataSpaceConnection} class. See \code{\link{connectDS}}.
+#'     Initialize a \code{DataSpaceConnection} object.
+#'     See \code{\link{connectDS}}.
 #'   }
 #'   \item{\code{print()}}{
-#'     Print \code{DataSpaceConnection} class.
+#'     Print the \code{DataSpaceConnection} object.
 #'   }
 #'   \item{\code{getStudy(study, groupId = NULL)}}{
 #'     Create a \code{\link{DataSpaceStudy}} object.

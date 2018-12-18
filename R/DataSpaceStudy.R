@@ -22,7 +22,7 @@
 #'   }
 #'   \item{\code{treatmentArm}}{
 #'     A data.table. The table of treatment arm information for the connected
-#'     study. Not available for cross study connection.
+#'     study. Not available for all study connection.
 #'   }
 #'   \item{\code{group}}{
 #'     A character. The group name.
