@@ -248,7 +248,7 @@ DataSpaceConnection <- R6Class(
       )
 
       # execute via Rlabkey's standard GET function
-      response <- Rlabkey:::labkey.get(participantGroupApi)
+      response <- labkey.get(participantGroupApi)
 
       # parse JSON response via rjson's fromJSON parsing function
       parsed <- fromJSON(response)

@@ -159,7 +159,7 @@ checkCredential <- function(onStaging, verbose) {
 
   res <- GET(
     url = url,
-    config = Rlabkey:::labkey.getRequestOptions()
+    config = labkey.getRequestOptions()
   )
 
   if (res$status_code == 200) {
@@ -226,3 +226,7 @@ makeCountQuery <- function(dataset, group) {
 #' @importFrom Rlabkey makeFilter
 #' @export
 Rlabkey::makeFilter
+
+#' @importFrom utils getFromNamespace
+labkey.getRequestOptions <- getFromNamespace("labkey.getRequestOptions", "Rlabkey")
+labkey.get <- getFromNamespace("labkey.get", "Rlabkey")
