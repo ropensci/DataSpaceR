@@ -7,7 +7,9 @@ DataSpaceR <img src="man/figures/logo.png" align="right" />
 
 `DataSpaceR` is an R interface to [the CAVD DataSpace](https://dataspace.cavd.org), a data sharing and discovery tool that facilitates exploration of HIV immunological data from pre-clinical and clinical HIV vaccine studies.
 
-This package simplifies access to the database by taking advantage of the standardization of the database to hide all the [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) specific code away from the user, and it allows the users to access the study-specific datasets via an object-oriented paradigm.
+The package is intended for use by immunologists, bioinformaticians, and statisticians in HIV vaccine research, or anyone interested in the analysis of HIV immunological data across assays, studies, and time.
+
+This package simplifies access to the database by taking advantage of the standardization of the database to hide all the [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) specific code away from the user, and it allows the users to access the study-specific datasets via [an object-oriented paradigm](https://cran.r-project.org/web/packages/R6/readme/README.html).
 
 Installation
 ------------
@@ -62,19 +64,19 @@ The general idea is that the user:
 
 ``` r
 library(DataSpaceR)
-#> By exporting data from the CAVD DataSpace, you agree to be bound by the Terms of Use available on the CAVD DataSpace sign-in page at https://dataspace.cavd.org/cds/CAVD/app.view?
+#> By exporting data from the CAVD DataSpace, you agree to be bound by the Terms of Use available on the CAVD DataSpace sign-in page at https://dataspace.cavd.org
 
 con <- connectDS()
 con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
 #>   User: jkim2345@scharp.org
-#>   Available studies: 245
-#>     - 62 studies with data
-#>     - 1835 subjects
+#>   Available studies: 249
+#>     - 65 studies with data
+#>     - 4499 subjects
 #>     - 5 assays
-#>     - 240602 data points
-#>   Available groups: 4
+#>     - 288603 data points
+#>   Available groups: 6
 ```
 
 `connectDS()` will create a connection to DataSpace.
@@ -100,14 +102,16 @@ knitr::kable(head(con$availableStudies))
 knitr::kable(con$availableGroups)
 ```
 
-|   id| label                       | originalLabel     | description                                                                                    | createdBy | shared |    n| studies                                   |
-|----:|:----------------------------|:------------------|:-----------------------------------------------------------------------------------------------|:----------|:-------|----:|:------------------------------------------|
-|  216| mice                        | mice              | NA                                                                                             | readjk    | FALSE  |   75| c("cvd468", "cvd483", "cvd316", "cvd331") |
-|  217| CAVD 242                    | CAVD 242          | This is a fake group for CAVD 242                                                              | readjk    | FALSE  |   30| cvd242                                    |
-|  220| NYVAC durability comparison | NYVAC\_durability | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products. | ehenrich  | TRUE   |   78| c("cvd281", "cvd434", "cvd259", "cvd277") |
-|  224| cvd338                      | cvd338            | NA                                                                                             | readjk    | FALSE  |   36| cvd338                                    |
+|   id| label                              | originalLabel                      | description                                                                                                               | createdBy | shared |    n| studies                                   |
+|----:|:-----------------------------------|:-----------------------------------|:--------------------------------------------------------------------------------------------------------------------------|:----------|:-------|----:|:------------------------------------------|
+|  216| mice                               | mice                               | NA                                                                                                                        | readjk    | FALSE  |   75| c("cvd468", "cvd483", "cvd316", "cvd331") |
+|  217| CAVD 242                           | CAVD 242                           | This is a fake group for CAVD 242                                                                                         | readjk    | FALSE  |   30| cvd242                                    |
+|  220| NYVAC durability comparison        | NYVAC\_durability                  | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products.                            | ehenrich  | TRUE   |   78| c("cvd281", "cvd434", "cvd259", "cvd277") |
+|  224| cvd338                             | cvd338                             | NA                                                                                                                        | readjk    | FALSE  |   36| cvd338                                    |
+|  228| HVTN 505 case control subjects     | HVTN 505 case control subjects     | Participants from HVTN 505 included in the case-control analysis                                                          | drienna   | TRUE   |  189| vtn505                                    |
+|  230| HVTN 505 polyfunctionality vs BAMA | HVTN 505 polyfunctionality vs BAMA | Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort | drienna   | TRUE   |  170| vtn505                                    |
 
-***Note***: A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in DataSpace.
+***Note***: A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
 
 ### create an instance of `cvd408`
 
