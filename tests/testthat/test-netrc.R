@@ -16,7 +16,7 @@ test_that("`writeNetrc`", {
   )
   expect_error(
     writeNetrc("fake@email.org", "fakePwd", netrcFile = temp),
-    "Remove it manually if you'd like to overwrite."
+    "Set `overwrite=TRUE` if you'd like to overwrite."
   )
 })
 
