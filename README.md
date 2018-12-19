@@ -74,7 +74,6 @@ con
 #>   Available studies: 249
 #>     - 65 studies with data
 #>     - 4499 subjects
-#>     - 5 assays
 #>     - 288603 data points
 #>   Available groups: 6
 ```
