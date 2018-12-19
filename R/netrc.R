@@ -15,6 +15,7 @@
 #' of the production server.
 #' @param netrcFile A character. Credentials will be written into that file.
 #' If left NULL, netrc will be written into a temporary file.
+#' @param overwrite A logical. Whether to overwrite the existing netric file.
 #'
 #' @return A character vector containing the file paths for netrc
 #' @seealso \code{\link{connectDS}} \code{\link{checkNetrc}}
@@ -28,11 +29,12 @@
 writeNetrc <- function(login,
                        password,
                        onStaging = FALSE,
-                       netrcFile = getNetrcPath()) {
-  if (file.exists(netrcFile)) {
+                       netrcFile = getNetrcPath(),
+                       overwrite = FALSE) {
+  if (file.exists(netrcFile) && !overwrite) {
     stop(
       "'", netrcFile, "' already exists. ",
-      "Remove it manually if you'd like to overwrite.",
+      "Set `overwrite=TRUE` if you'd like to overwrite.",
       call. = FALSE
     )
   }

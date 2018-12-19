@@ -5,7 +5,7 @@
 \title{Write a netrc file}
 \usage{
 writeNetrc(login, password, onStaging = FALSE,
-  netrcFile = getNetrcPath())
+  netrcFile = getNetrcPath(), overwrite = FALSE)
 }
 \arguments{
 \item{login}{A character. Email address used for logging in on DataSpace.}
@@ -17,6 +17,8 @@ of the production server.}
 
 \item{netrcFile}{A character. Credentials will be written into that file.
 If left NULL, netrc will be written into a temporary file.}
+
+\item{overwrite}{A logical. Whether to overwrite the existing netric file.}
 }
 \value{
 A character vector containing the file paths for netrc
