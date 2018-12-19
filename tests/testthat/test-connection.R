@@ -27,18 +27,17 @@ if ("DataSpaceConnection" %in% class(con)) {
   if (identical(names(con), con_names)) {
     test_that("`print`", {
       cap_output <- capture.output(con$print())
-      expect_length(cap_output, 9)
+      expect_length(cap_output, 8)
 
-      if (length(cap_output) == 9) {
+      if (length(cap_output) == 8) {
         expect_equal(cap_output[1], "<DataSpaceConnection>")
         expect_equal(cap_output[2], "  URL: https://dataspace.cavd.org")
         expect_match(cap_output[3], "  User: \\S+@\\S+")
         expect_match(cap_output[4], "  Available studies: \\d+")
         expect_match(cap_output[5], "  - \\d+ studies with data")
         expect_match(cap_output[6], "  - \\d+ subjects")
-        expect_match(cap_output[7], "  - \\d+ assays")
-        expect_match(cap_output[8], "  - \\d+ data points")
-        expect_match(cap_output[9], "  Available groups: \\d+")
+        expect_match(cap_output[7], "  - \\d+ data points")
+        expect_match(cap_output[8], "  Available groups: \\d+")
       }
     })
 
