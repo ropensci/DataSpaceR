@@ -158,6 +158,8 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       })
 
       test_that("`clear_cache`", {
+        skip_if_not_installed("pryr")
+
         expect_gt(length(cavd$cache), 0)
 
         before <- pryr::object_size(cavd)
