@@ -104,6 +104,8 @@ knitr::kable(con$availableGroups)
 
 ***Note***: A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
 
+Check out [the reference page](https://cavddataspace.github.io/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
+
 
 ### create an instance of `cvd408`
 
@@ -131,7 +133,9 @@ dim(NAb)
 colnames(NAb)
 ```
 
-The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.
+Check out [the reference page](https://cavddataspace.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
+
+***Note***: The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.
 
 
 ## Examples & Documentation

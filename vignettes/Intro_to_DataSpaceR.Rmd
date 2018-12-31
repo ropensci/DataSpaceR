@@ -75,7 +75,7 @@ The call to `connectDS` instantiates the connection. Printing the object shows w
 knitr::kable(head(con$availableStudies))
 ```
 
-`con$availableStudies` shows the available studies in the CAVD DataSpace.
+`con$availableStudies` shows the available studies in the CAVD DataSpace. Check out [the reference page](https://cavddataspace.github.io/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
 
 ```{r getStudy}
 cvd256 <- con$getStudy("cvd256")
@@ -147,6 +147,8 @@ dim(human)
 colnames(human)
 ```
 
+Check out [the reference page](https://cavddataspace.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
+
 
 ## Connect to a saved group
 
@@ -177,36 +179,28 @@ dim(NAb_nyvac)
 
 ## Reference Tables
 
+The followings are the tables of all fields and methods that work on `DataSpaceConnection` and `DataSpaceStudy` objects and could be used as a quick reference.
+
 ### `DataSpaceConnection`
 
-| Name | Type | Description |
-| --- | --- | --- |
-| `availableStudies` | Field | The table of available studies. |
-| `availableGroups` | Field | The table of available groups. |
-| `config` | Field | Stores configuration of the connection object such as URL, path and username. |
-| `getStudy` | Method | Create a `DataSpaceStudy` object by study. |
-| `getGroup` | Method | Create a `DataSpaceStudy` object by group. |
-| `refresh` | Method | Refresh the connection object to update available studies and groups. |
-| `initialize` | Method | Initialize a `DataSpaceConnection` object. |
-| `print` | Method | Print `DataSpaceConnection` object |
+| Name | Description |
+| --- | --- |
+| `availableStudies` | The table of available studies. |
+| `availableGroups` | The table of available groups. |
+| `getStudy` | Create a `DataSpaceStudy` object by study. |
+| `getGroup` | Create a `DataSpaceStudy` object by group. |
 
 ### `DataSpaceStudy`
 
-| Name | Type | Description |
-| --- | --- | --- |
-| `study` | Field | The study name. |
-| `group` | Field | The group name. |
-| `availableDatasets` | Field | The table of datasets available in the study object. |
-| `treatmentArm` | Field | The table of treatment arm information for the connectedstudy. Not available for all study connection. |
-| `config` | Field | Stores configuration of the connection object such as URL, path and username. |
-| `cache` | Field | Stores the data to avoid downloading the same tables multiple times. |
-| `studyInfo` | Field | Stores the information about the study. |
-| `getDataset` | Method | Get a dataset from the connection. |
-| `getDatasetDescription` | Method | Get variable information. |
-| `clearCache` | Method | Clear `cache`. Remove downloaded datasets. |
-| `refresh` | Method | Refresh the study object to update available datasets and treatment info. |
-| `initialize` | Method | Initialize `DataSpaceStudy` class. |
-| `print` | Method | Print `DataSpaceStudy` class. |
+| Name | Description |
+| --- | --- |
+| `study` | The study name. |
+| `group` | The group name. |
+| `availableDatasets` | The table of datasets available in the study object. |
+| `treatmentArm` | The table of treatment arm information for the connectedstudy. Not available for all study connection. |
+| `studyInfo` | Stores the information about the study. |
+| `getDataset` | Get a dataset from the connection. |
+| `getDatasetDescription` | Get variable information. |
 
 
 ## Session information
