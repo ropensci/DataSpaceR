@@ -29,7 +29,7 @@ Write a netrc file that is valid for accessing DataSpace.
 \details{
 The database is accessed with the user's credentials.
 A netrc file storing login and password information is required.
-See \href{https://cavddataspace.github.io/DataSpaceR/}{here}
+See \href{https://ropensci/DataSpaceR/}{here}
 for instruction on how to register and set DataSpace credential.
 By default \code{curl} will look for the file in your home directoty.
 }

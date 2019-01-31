@@ -13,4 +13,4 @@ navbar:
     - icon: fa-twitter
       href: https://twitter.com/CAVDDataSpace
     - icon: fa-github
-      href: https://github.com/CAVDDataSpace/DataSpaceR
+      href: https://github.com/ropensci/DataSpaceR

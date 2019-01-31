@@ -75,7 +75,7 @@ The call to `connectDS` instantiates the connection. Printing the object shows w
 knitr::kable(head(con$availableStudies))
 ```
 
-`con$availableStudies` shows the available studies in the CAVD DataSpace. Check out [the reference page](https://cavddataspace.github.io/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
+`con$availableStudies` shows the available studies in the CAVD DataSpace. Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
 
 ```{r getStudy}
 cvd256 <- con$getStudy("cvd256")
@@ -147,7 +147,7 @@ dim(human)
 colnames(human)
 ```
 
-Check out [the reference page](https://cavddataspace.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
+Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
 
 
 ## Connect to a saved group

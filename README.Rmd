@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
 
 # DataSpaceR <img src="man/figures/logo.png" align="right" />
 
-[![Build Status](https://travis-ci.org/CAVDDataSpace/DataSpaceR.svg?branch=master)](https://travis-ci.org/CAVDDataSpace/DataSpaceR)
-[![Build status](https://ci.appveyor.com/api/projects/status/bmwyv5i32xr07bdr/branch/master?svg=true)](https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master)
-[![codecov](https://codecov.io/gh/CAVDDataSpace/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/CAVDDataSpace/DataSpaceR/branch/master)
+[![Build Status](https://travis-ci.org/ropensci/DataSpaceR.svg?branch=master)](https://travis-ci.org/ropensci/DataSpaceR)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/ropensci/DataSpaceR?branch=master&svg=true)](https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master)
+[![codecov](https://codecov.io/gh/ropensci/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/DataSpaceR/branch/master)
 
 `DataSpaceR` is an R interface to [the CAVD DataSpace](https://dataspace.cavd.org), a data sharing and discovery tool that facilitates exploration of HIV immunological data from pre-clinical and clinical HIV vaccine studies.
 
@@ -27,11 +27,11 @@ This package simplifies access to the database by taking advantage of the standa
 
 ## Installation
 
-You can install the latest version of DataSpaceR from [GitHub](https://github.com/CAVDDataSpace/DataSpaceR) with [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
+You can install the latest version of DataSpaceR from [GitHub](https://github.com/ropensci/DataSpaceR) with [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
 
 ```{r, eval=FALSE}
 # install.packages("devtools")
-devtools::install_github("CAVDDataSpace/DataSpaceR")
+devtools::install_github("ropensci/DataSpaceR")
 ```
 
 
@@ -104,7 +104,7 @@ knitr::kable(con$availableGroups)
 
 ***Note***: A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
 
-Check out [the reference page](https://cavddataspace.github.io/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
+Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
 
 
 ### create an instance of `cvd408`
@@ -133,19 +133,21 @@ dim(NAb)
 colnames(NAb)
 ```
 
-Check out [the reference page](https://cavddataspace.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
+Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
 
 ***Note***: The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.
 
 
 ## Examples & Documentation
 
-For more detailed examples and detailed documentation, see [the introductory vignette](https://cavddataspace.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html) and [the pkgdown site](https://cavddataspace.github.io/DataSpaceR/).
+For more detailed examples and detailed documentation, see [the introductory vignette](https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html) and [the pkgdown site](https://ropensci.github.io/DataSpaceR/).
 
 
 ## Meta
 
-* Please [report any issues or bugs](https://github.com/CAVDDataSpace/DataSpaceR/issues).
+* Please [report any issues or bugs](https://github.com/ropensci/DataSpaceR/issues).
 * License: GPL-3
 * Get citation information for `DataSpaceR` in R doing `citation(package = 'DataSpaceR')`
 * Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+[![ropensci_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
