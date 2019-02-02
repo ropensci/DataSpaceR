@@ -1,5 +1,8 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "DataSpaceR",
   "description": "Provides a convenient API for accessing datasets within\n    the CAVD DataSpace (dataspace.cavd.org).",
@@ -193,7 +196,17 @@
   ],
   "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/DataSpaceR/blob/master/README.md",
-  "fileSize": "62.013KB",
-  "contIntegration": ["https://travis-ci.org/ropensci/DataSpaceR", "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master", "https://codecov.io/gh/ropensci/DataSpaceR/branch/master"],
-  "keywords": ["r", "labkey", "dataspace", "cavd"]
+  "fileSize": "62.288KB",
+  "contIntegration": [
+    "https://travis-ci.org/ropensci/DataSpaceR",
+    "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master",
+    "https://codecov.io/gh/ropensci/DataSpaceR/branch/master"
+  ],
+  "keywords": [
+    "r",
+    "labkey",
+    "dataspace",
+    "cavd"
+  ],
+  "developmentStatus": "https://www.repostatus.org/#active"
 }

@@ -5,6 +5,9 @@ Version: 0.6.0
 Authors@R: c(person("Ju Yeong", "Kim",
                     email = "jkim2345@fredhutch.org",
                     role = c("aut", "cre")),
+             person("Sean", "Hughes",
+                    comment = "Sean reviewed the package for ropensci, see <https://github.com/ropensci/software-review/issues/261>",
+                    role = "rev"),
              person("The Collaboration for AIDS Vaccine Discovery",
                     role = "cph"))
 Description: Provides a convenient API for accessing datasets within
