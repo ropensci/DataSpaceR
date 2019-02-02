@@ -1,4 +1,4 @@
-if [ "$TRAVIS_OS_NAME" == "linux"]
+if [ "$TRAVIS_OS_NAME" == "linux" ]
 then
   body='{
     "request": {
