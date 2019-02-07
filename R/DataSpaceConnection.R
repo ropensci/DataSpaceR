@@ -64,7 +64,7 @@
 #' }
 #' @docType class
 #' @format NULL
-#' @importFrom rjson fromJSON
+#' @importFrom jsonlite fromJSON
 #' @importFrom curl has_internet nslookup
 #' @importFrom Rlabkey labkey.selectRows
 DataSpaceConnection <- R6Class(
@@ -249,8 +249,8 @@ DataSpaceConnection <- R6Class(
       # execute via Rlabkey's standard GET function
       response <- labkey.get(participantGroupApi)
 
-      # parse JSON response via rjson's fromJSON parsing function
-      parsed <- fromJSON(response)
+      # parse JSON response via jsonlite's fromJSON parsing function
+      parsed <- fromJSON(response, simplifyDataFrame = FALSE)
 
       # construct a data.table for each group
       groupsList <- lapply(parsed$groups, function(group) {
