@@ -18,7 +18,7 @@ of the production server.}
 \item{netrcFile}{A character. Credentials will be written into that file.
 If left NULL, netrc will be written into a temporary file.}
 
-\item{overwrite}{A logical. Whether to overwrite the existing netric file.}
+\item{overwrite}{A logical. Whether to overwrite the existing netrc file.}
 }
 \value{
 A character vector containing the file paths for netrc
@@ -31,7 +31,7 @@ The database is accessed with the user's credentials.
 A netrc file storing login and password information is required.
 See \href{https://ropensci.github.io/DataSpaceR/}{here}
 for instruction on how to register and set DataSpace credential.
-By default \code{curl} will look for the file in your home directoty.
+By default \code{curl} will look for the file in your home directory.
 }
 \examples{
 \dontrun{

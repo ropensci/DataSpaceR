@@ -37,7 +37,7 @@ This will create a netrc file in your home directory.
 
 ***Alternatively***, you can manually create a netrc file in the computer running R.
 
--   On Windows, this file sould be named `_netrc`
+-   On Windows, this file should be named `_netrc`
 -   On UNIX, it should be named `.netrc`
 -   The file should be located in the user's home directory, and the permissions on the file should be unreadable for everybody except the owner
 -   To determine home directory, run `Sys.getenv("HOME")` in R
@@ -70,12 +70,12 @@ con <- connectDS()
 con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
-#>   User: jkim2345@scharp.org
-#>   Available studies: 249
-#>     - 65 studies with data
-#>     - 4499 subjects
-#>     - 288603 data points
-#>   Available groups: 6
+#>   User: jkim2345@fredhutch.org
+#>   Available studies: 342
+#>     - 66 studies with data
+#>     - 4523 subjects
+#>     - 305239 data points
+#>   Available groups: 8
 ```
 
 `connectDS()` will create a connection to DataSpace.
@@ -101,14 +101,16 @@ knitr::kable(head(con$availableStudies))
 knitr::kable(con$availableGroups)
 ```
 
-|   id| label                              | originalLabel                      | description                                                                                                               | createdBy | shared |    n| studies                                   |
-|----:|:-----------------------------------|:-----------------------------------|:--------------------------------------------------------------------------------------------------------------------------|:----------|:-------|----:|:------------------------------------------|
-|  216| mice                               | mice                               | NA                                                                                                                        | readjk    | FALSE  |   75| c("cvd468", "cvd483", "cvd316", "cvd331") |
-|  217| CAVD 242                           | CAVD 242                           | This is a fake group for CAVD 242                                                                                         | readjk    | FALSE  |   30| cvd242                                    |
-|  220| NYVAC durability comparison        | NYVAC\_durability                  | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products.                            | ehenrich  | TRUE   |   78| c("cvd281", "cvd434", "cvd259", "cvd277") |
-|  224| cvd338                             | cvd338                             | NA                                                                                                                        | readjk    | FALSE  |   36| cvd338                                    |
-|  228| HVTN 505 case control subjects     | HVTN 505 case control subjects     | Participants from HVTN 505 included in the case-control analysis                                                          | drienna   | TRUE   |  189| vtn505                                    |
-|  230| HVTN 505 polyfunctionality vs BAMA | HVTN 505 polyfunctionality vs BAMA | Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort | drienna   | TRUE   |  170| vtn505                                    |
+|   id| label                              | originalLabel                      | description                                                                                                               | createdBy | shared |    n| studies                                             |
+|----:|:-----------------------------------|:-----------------------------------|:--------------------------------------------------------------------------------------------------------------------------|:----------|:-------|----:|:----------------------------------------------------|
+|  188| cvd 239                            | cvd239                             | NA                                                                                                                        | jkim2345  | FALSE  |    0| character(0)                                        |
+|  190| rabbit                             | rabbit                             | NA                                                                                                                        | jkim2345  | FALSE  |  100| c("cvd338", "cvd317", "cvd305", "cvd324", "cvd320") |
+|  207| mice                               | mice                               | NA                                                                                                                        | jkim2345  | FALSE  |   51| c("cvd483", "cvd316", "cvd331")                     |
+|  209| cavd 239 important study           | cavd 239                           | cavd 239                                                                                                                  | jkim2345  | FALSE  |    0| character(0)                                        |
+|  220| NYVAC durability comparison        | NYVAC\_durability                  | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products.                            | ehenrich  | TRUE   |   78| c("cvd281", "cvd434", "cvd259", "cvd277")           |
+|  223| cvd338                             | cvd338                             | NA                                                                                                                        | jkim2345  | FALSE  |   36| cvd338                                              |
+|  228| HVTN 505 case control subjects     | HVTN 505 case control subjects     | Participants from HVTN 505 included in the case-control analysis                                                          | drienna   | TRUE   |  189| vtn505                                              |
+|  230| HVTN 505 polyfunctionality vs BAMA | HVTN 505 polyfunctionality vs BAMA | Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort | drienna   | TRUE   |  170| vtn505                                              |
 
 ***Note***: A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
 
@@ -146,7 +148,7 @@ knitr::kable(cvd408$availableDatasets)
 
 which will print names of available datasets.
 
-### Neutralizing Antibody dataset (`NAb`) can be retreived by:
+### Neutralizing Antibody dataset (`NAb`) can be retrieved by:
 
 ``` r
 NAb <- cvd408$getDataset("NAb")
@@ -172,7 +174,7 @@ colnames(NAb)
 
 Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
 
-***Note***: The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behaviour.
+***Note***: The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behavior.
 
 Examples & Documentation
 ------------------------

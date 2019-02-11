@@ -43,7 +43,7 @@ This will create a `netrc` file in your home directory. Make sure you have a val
 
 ***Alternatively***, you can manually create a netrc file.
 
-* On Windows, this file sould be named `_netrc`
+* On Windows, this file should be named `_netrc`
 * On UNIX/Mac, it should be named `.netrc`
 * The file should be located in the user's home directory, and the permissions on the file should be unreadable for everybody except the owner
 * To determine your home directory, run `Sys.getenv("HOME")` in R

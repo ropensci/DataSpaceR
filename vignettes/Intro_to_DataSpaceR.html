@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ju Yeong Kim" />
 
-<meta name="date" content="2019-01-30" />
+<meta name="date" content="2019-02-11" />
 
 <title>Introduction to DataSpaceR</title>
 
@@ -92,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Introduction to DataSpaceR</h1>
 <h4 class="author"><em>Ju Yeong Kim</em></h4>
-<h4 class="date"><em>2019-01-30</em></h4>
+<h4 class="date"><em>2019-02-11</em></h4>
 
 
 
@@ -111,7 +111,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h3>Manually creating a netrc file</h3>
 <p><strong><em>Alternatively</em></strong>, you can manually create a netrc file.</p>
 <ul>
-<li>On Windows, this file sould be named <code>_netrc</code></li>
+<li>On Windows, this file should be named <code>_netrc</code></li>
 <li>On UNIX/Mac, it should be named <code>.netrc</code></li>
 <li>The file should be located in the user’s home directory, and the permissions on the file should be unreadable for everybody except the owner</li>
 <li>To determine your home directory, run <code>Sys.getenv(&quot;HOME&quot;)</code> in R</li>
@@ -131,12 +131,12 @@ con &lt;-<span class="st"> </span><span class="kw">connectDS</span>()
 con
 <span class="co">#&gt; &lt;DataSpaceConnection&gt;</span>
 <span class="co">#&gt;   URL: https://dataspace.cavd.org</span>
-<span class="co">#&gt;   User: jkim2345@scharp.org</span>
-<span class="co">#&gt;   Available studies: 249</span>
-<span class="co">#&gt;     - 65 studies with data</span>
-<span class="co">#&gt;     - 4499 subjects</span>
-<span class="co">#&gt;     - 288603 data points</span>
-<span class="co">#&gt;   Available groups: 6</span></code></pre></div>
+<span class="co">#&gt;   User: jkim2345@fredhutch.org</span>
+<span class="co">#&gt;   Available studies: 342</span>
+<span class="co">#&gt;     - 66 studies with data</span>
+<span class="co">#&gt;     - 4523 subjects</span>
+<span class="co">#&gt;     - 305239 data points</span>
+<span class="co">#&gt;   Available groups: 8</span></code></pre></div>
 <p>The call to <code>connectDS</code> instantiates the connection. Printing the object shows where it’s connected and the available studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(con<span class="op">$</span>availableStudies))</code></pre></div>
 <table>
@@ -540,12 +540,12 @@ knitr<span class="op">::</span><span class="kw">kable</span>(cavd<span class="op
 <tr class="odd">
 <td align="left">BAMA</td>
 <td align="left">Binding Ab multiplex assay</td>
-<td align="right">86289</td>
+<td align="right">91988</td>
 </tr>
 <tr class="even">
 <td align="left">Demographics</td>
 <td align="left">Demographics</td>
-<td align="right">4499</td>
+<td align="right">4523</td>
 </tr>
 <tr class="odd">
 <td align="left">ELISPOT</td>
@@ -555,12 +555,12 @@ knitr<span class="op">::</span><span class="kw">kable</span>(cavd<span class="op
 <tr class="even">
 <td align="left">ICS</td>
 <td align="left">Intracellular Cytokine Staining</td>
-<td align="right">150910</td>
+<td align="right">160647</td>
 </tr>
 <tr class="odd">
 <td align="left">NAb</td>
 <td align="left">Neutralizing antibody</td>
-<td align="right">45794</td>
+<td align="right">46994</td>
 </tr>
 </tbody>
 </table>
@@ -611,24 +611,44 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">216</td>
+<td align="right">188</td>
+<td align="left">cvd 239</td>
+<td align="left">cvd239</td>
+<td align="left">NA</td>
+<td align="left">jkim2345</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="left">character(0)</td>
+</tr>
+<tr class="even">
+<td align="right">190</td>
+<td align="left">rabbit</td>
+<td align="left">rabbit</td>
+<td align="left">NA</td>
+<td align="left">jkim2345</td>
+<td align="left">FALSE</td>
+<td align="right">100</td>
+<td align="left">c(“cvd338”, “cvd317”, “cvd305”, “cvd324”, “cvd320”)</td>
+</tr>
+<tr class="odd">
+<td align="right">207</td>
 <td align="left">mice</td>
 <td align="left">mice</td>
 <td align="left">NA</td>
-<td align="left">readjk</td>
+<td align="left">jkim2345</td>
 <td align="left">FALSE</td>
-<td align="right">75</td>
-<td align="left">c(“cvd468”, “cvd483”, “cvd316”, “cvd331”)</td>
+<td align="right">51</td>
+<td align="left">c(“cvd483”, “cvd316”, “cvd331”)</td>
 </tr>
 <tr class="even">
-<td align="right">217</td>
-<td align="left">CAVD 242</td>
-<td align="left">CAVD 242</td>
-<td align="left">This is a fake group for CAVD 242</td>
-<td align="left">readjk</td>
+<td align="right">209</td>
+<td align="left">cavd 239 important study</td>
+<td align="left">cavd 239</td>
+<td align="left">cavd 239</td>
+<td align="left">jkim2345</td>
 <td align="left">FALSE</td>
-<td align="right">30</td>
-<td align="left">cvd242</td>
+<td align="right">0</td>
+<td align="left">character(0)</td>
 </tr>
 <tr class="odd">
 <td align="right">220</td>
@@ -641,11 +661,11 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 <td align="left">c(“cvd281”, “cvd434”, “cvd259”, “cvd277”)</td>
 </tr>
 <tr class="even">
-<td align="right">224</td>
+<td align="right">223</td>
 <td align="left">cvd338</td>
 <td align="left">cvd338</td>
 <td align="left">NA</td>
-<td align="left">readjk</td>
+<td align="left">jkim2345</td>
 <td align="left">FALSE</td>
 <td align="right">36</td>
 <td align="left">cvd338</td>
@@ -793,16 +813,16 @@ nyvac
 <span class="co">#&gt; [10] pkgload_1.0.2     evaluate_0.12     jsonlite_1.6     </span>
 <span class="co">#&gt; [13] memoise_1.1.0     rlang_0.3.1       cli_1.0.1        </span>
 <span class="co">#&gt; [16] rstudioapi_0.9.0  commonmark_1.7    yaml_2.2.0       </span>
-<span class="co">#&gt; [19] curl_3.3          xfun_0.4          knitr_1.21       </span>
-<span class="co">#&gt; [22] withr_2.1.2       stringr_1.3.1     httr_1.4.0       </span>
-<span class="co">#&gt; [25] roxygen2_6.1.1    xml2_1.2.0        desc_1.2.0       </span>
+<span class="co">#&gt; [19] curl_3.3          xfun_0.4          withr_2.1.2      </span>
+<span class="co">#&gt; [22] stringr_1.3.1     httr_1.4.0        roxygen2_6.1.1   </span>
+<span class="co">#&gt; [25] xml2_1.2.0        knitr_1.21        desc_1.2.0       </span>
 <span class="co">#&gt; [28] fs_1.2.6          devtools_2.0.1    rprojroot_1.3-2  </span>
 <span class="co">#&gt; [31] glue_1.3.0        data.table_1.12.0 R6_2.3.0         </span>
 <span class="co">#&gt; [34] processx_3.2.1    Rlabkey_2.2.4     rmarkdown_1.11   </span>
 <span class="co">#&gt; [37] sessioninfo_1.1.1 callr_3.1.1       purrr_0.2.5      </span>
 <span class="co">#&gt; [40] magrittr_1.5      htmltools_0.3.6   backports_1.1.3  </span>
 <span class="co">#&gt; [43] ps_1.3.0          usethis_1.4.0     assertthat_0.2.0 </span>
-<span class="co">#&gt; [46] stringi_1.2.4     crayon_1.3.4      rjson_0.2.20</span></code></pre></div>
+<span class="co">#&gt; [46] stringi_1.2.4     crayon_1.3.4</span></code></pre></div>
 </div>
 
 

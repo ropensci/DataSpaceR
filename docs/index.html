@@ -131,7 +131,7 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 <p>This will create a netrc file in your home directory.</p>
 <p><strong><em>Alternatively</em></strong>, you can manually create a netrc file in the computer running R.</p>
 <ul>
-<li>On Windows, this file sould be named <code>_netrc</code>
+<li>On Windows, this file should be named <code>_netrc</code>
 </li>
 <li>On UNIX, it should be named <code>.netrc</code>
 </li>
@@ -168,12 +168,12 @@ con &lt;-<span class="st"> </span><span class="kw"><a href="reference/connectDS.
 con
 <span class="co">#&gt; &lt;DataSpaceConnection&gt;</span>
 <span class="co">#&gt;   URL: https://dataspace.cavd.org</span>
-<span class="co">#&gt;   User: jkim2345@scharp.org</span>
-<span class="co">#&gt;   Available studies: 249</span>
-<span class="co">#&gt;     - 65 studies with data</span>
-<span class="co">#&gt;     - 4499 subjects</span>
-<span class="co">#&gt;     - 288603 data points</span>
-<span class="co">#&gt;   Available groups: 6</span></code></pre></div>
+<span class="co">#&gt;   User: jkim2345@fredhutch.org</span>
+<span class="co">#&gt;   Available studies: 342</span>
+<span class="co">#&gt;     - 66 studies with data</span>
+<span class="co">#&gt;     - 4523 subjects</span>
+<span class="co">#&gt;     - 305239 data points</span>
+<span class="co">#&gt;   Available groups: 8</span></code></pre></div>
 <p><code><a href="reference/connectDS.html">connectDS()</a></code> will create a connection to DataSpace.</p>
 </div>
 <div id="available-studies-can-be-listed-by-availablestudies-field" class="section level3">
@@ -279,24 +279,44 @@ con
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">216</td>
+<td align="right">188</td>
+<td align="left">cvd 239</td>
+<td align="left">cvd239</td>
+<td align="left">NA</td>
+<td align="left">jkim2345</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="left">character(0)</td>
+</tr>
+<tr class="even">
+<td align="right">190</td>
+<td align="left">rabbit</td>
+<td align="left">rabbit</td>
+<td align="left">NA</td>
+<td align="left">jkim2345</td>
+<td align="left">FALSE</td>
+<td align="right">100</td>
+<td align="left">c(“cvd338”, “cvd317”, “cvd305”, “cvd324”, “cvd320”)</td>
+</tr>
+<tr class="odd">
+<td align="right">207</td>
 <td align="left">mice</td>
 <td align="left">mice</td>
 <td align="left">NA</td>
-<td align="left">readjk</td>
+<td align="left">jkim2345</td>
 <td align="left">FALSE</td>
-<td align="right">75</td>
-<td align="left">c(“cvd468”, “cvd483”, “cvd316”, “cvd331”)</td>
+<td align="right">51</td>
+<td align="left">c(“cvd483”, “cvd316”, “cvd331”)</td>
 </tr>
 <tr class="even">
-<td align="right">217</td>
-<td align="left">CAVD 242</td>
-<td align="left">CAVD 242</td>
-<td align="left">This is a fake group for CAVD 242</td>
-<td align="left">readjk</td>
+<td align="right">209</td>
+<td align="left">cavd 239 important study</td>
+<td align="left">cavd 239</td>
+<td align="left">cavd 239</td>
+<td align="left">jkim2345</td>
 <td align="left">FALSE</td>
-<td align="right">30</td>
-<td align="left">cvd242</td>
+<td align="right">0</td>
+<td align="left">character(0)</td>
 </tr>
 <tr class="odd">
 <td align="right">220</td>
@@ -309,11 +329,11 @@ con
 <td align="left">c(“cvd281”, “cvd434”, “cvd259”, “cvd277”)</td>
 </tr>
 <tr class="even">
-<td align="right">224</td>
+<td align="right">223</td>
 <td align="left">cvd338</td>
 <td align="left">cvd338</td>
 <td align="left">NA</td>
-<td align="left">readjk</td>
+<td align="left">jkim2345</td>
 <td align="left">FALSE</td>
 <td align="right">36</td>
 <td align="left">cvd338</td>
@@ -395,9 +415,9 @@ cvd408
 </table>
 <p>which will print names of available datasets.</p>
 </div>
-<div id="neutralizing-antibody-dataset-nab-can-be-retreived-by" class="section level3">
+<div id="neutralizing-antibody-dataset-nab-can-be-retrieved-by" class="section level3">
 <h3 class="hasAnchor">
-<a href="#neutralizing-antibody-dataset-nab-can-be-retreived-by" class="anchor"></a>Neutralizing Antibody dataset (<code>NAb</code>) can be retreived by:</h3>
+<a href="#neutralizing-antibody-dataset-nab-can-be-retrieved-by" class="anchor"></a>Neutralizing Antibody dataset (<code>NAb</code>) can be retrieved by:</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(NAb)
 <span class="co">#&gt; [1] 540  29</span>
@@ -418,7 +438,7 @@ cvd408
 <span class="co">#&gt; [27] "slope"                  "vaccine_matched"       </span>
 <span class="co">#&gt; [29] "study_prot"</span></code></pre></div>
 <p>Check out <a href="https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html">the reference page</a> of <code>DataSpaceStudy</code> for all available fields and methods.</p>
-<p><strong><em>Note</em></strong>: The package uses a <a href="https://cran.r-project.org/web/packages/R6/index.html">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behaviour.</p>
+<p><strong><em>Note</em></strong>: The package uses a <a href="https://cran.r-project.org/web/packages/R6/index.html">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behavior.</p>
 </div>
 </div>
 <div id="examples-documentation" class="section level2">

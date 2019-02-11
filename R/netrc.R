@@ -7,7 +7,7 @@
 #' A netrc file storing login and password information is required.
 #' See \href{https://ropensci.github.io/DataSpaceR/}{here}
 #' for instruction on how to register and set DataSpace credential.
-#' By default \code{curl} will look for the file in your home directoty.
+#' By default \code{curl} will look for the file in your home directory.
 #'
 #' @param login A character. Email address used for logging in on DataSpace.
 #' @param password A character. Password associated with the login.
@@ -15,7 +15,7 @@
 #' of the production server.
 #' @param netrcFile A character. Credentials will be written into that file.
 #' If left NULL, netrc will be written into a temporary file.
-#' @param overwrite A logical. Whether to overwrite the existing netric file.
+#' @param overwrite A logical. Whether to overwrite the existing netrc file.
 #'
 #' @return A character vector containing the file paths for netrc
 #' @seealso \code{\link{connectDS}} \code{\link{checkNetrc}}
