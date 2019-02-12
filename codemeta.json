@@ -196,7 +196,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/DataSpaceR/blob/master/README.md",
-  "fileSize": "62.483KB",
+  "fileSize": "62.324KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/DataSpaceR",
     "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master",

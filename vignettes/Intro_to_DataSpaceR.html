@@ -96,7 +96,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<p>This package provides a thin wrapper around <a href="https://cran.r-project.org/web/packages/Rlabkey/index.html">Rlabkey</a> and connects to the the <a href="https://dataspace.cavd.org">CAVD DataSpace</a> database, making it easier to fetch datasets from specific studies.</p>
+<p>This package provides a thin wrapper around <a href="https://cran.r-project.org/package=Rlabkey">Rlabkey</a> and connects to the the <a href="https://dataspace.cavd.org">CAVD DataSpace</a> database, making it easier to fetch datasets from specific studies.</p>
 <div id="configuration" class="section level2">
 <h2>Configuration</h2>
 <p>First, go to <a href="https://dataspace.cavd.org">DataSpace</a> now and set yourself up with an account.</p>
@@ -321,7 +321,7 @@ cvd256
 <span class="co">#&gt; [25] &quot;nab_response_ID50&quot;      &quot;nab_response_ID80&quot;     </span>
 <span class="co">#&gt; [27] &quot;slope&quot;                  &quot;vaccine_matched&quot;       </span>
 <span class="co">#&gt; [29] &quot;study_prot&quot;</span></code></pre></div>
-<p>The <em>cvd256</em> object is an <a href="https://cran.r-project.org/web/packages/R6/"><code>R6</code></a> class, so it behaves like a true object. Functions (like <code>getDataset</code>) are members of the object, thus the <code>$</code> semantics to access member functions.</p>
+<p>The <em>cvd256</em> object is an <a href="https://cran.r-project.org/package=R6"><code>R6</code></a> class, so it behaves like a true object. Functions (like <code>getDataset</code>) are members of the object, thus the <code>$</code> semantics to access member functions.</p>
 <p>We can get detailed variable information using <code>getDatasetDescription</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(cvd256<span class="op">$</span><span class="kw">getDatasetDescription</span>(<span class="st">&quot;NAb&quot;</span>))</code></pre></div>
 <table>

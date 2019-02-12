@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 ```
 
 
-This package provides a thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) and connects to the the [CAVD DataSpace](https://dataspace.cavd.org) database, making it easier to fetch datasets from specific studies.
+This package provides a thin wrapper around [Rlabkey](https://cran.r-project.org/package=Rlabkey) and connects to the the [CAVD DataSpace](https://dataspace.cavd.org) database, making it easier to fetch datasets from specific studies.
 
 
 ## Configuration
@@ -102,7 +102,7 @@ dim(NAb)
 colnames(NAb)
 ```
 
-The *cvd256* object is an [`R6`](https://cran.r-project.org/web/packages/R6/) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
+The *cvd256* object is an [`R6`](https://cran.r-project.org/package=R6) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
 
 We can get detailed variable information using `getDatasetDescription`.
 
