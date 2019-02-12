@@ -1,3 +1,7 @@
+# DataSpaceR 0.6.1
+
+* Remove LICENSE file for CRAN submission
+
 # DataSpaceR 0.6.0
 
 * rOpenSci submission: https://github.com/ropensci/software-review/issues/261

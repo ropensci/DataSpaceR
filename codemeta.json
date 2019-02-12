@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/DataSpaceR",
   "issueTracker": "https://github.com/ropensci/DataSpaceR/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -196,7 +196,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/DataSpaceR/blob/master/README.md",
-  "fileSize": "62.324KB",
+  "fileSize": "50.138KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/DataSpaceR",
     "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master",
@@ -206,7 +206,11 @@
     "r",
     "labkey",
     "dataspace",
-    "cavd"
+    "cavd",
+    "hiv",
+    "vaccine",
+    "r-package",
+    "rstats"
   ],
   "developmentStatus": "https://www.repostatus.org/#active"
 }
