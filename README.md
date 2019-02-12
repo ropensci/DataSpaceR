@@ -3,7 +3,7 @@
 DataSpaceR <img src="man/figures/logo.png" align="right" />
 ===========================================================
 
-[![Build Status](https://travis-ci.org/ropensci/DataSpaceR.svg?branch=master)](https://travis-ci.org/ropensci/DataSpaceR) [![Build status](https://ci.appveyor.com/api/projects/status/github/ropensci/DataSpaceR?branch=master&svg=true)](https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master) [![codecov](https://codecov.io/gh/ropensci/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/DataSpaceR/branch/master) [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![](https://badges.ropensci.org/261_status.svg)](https://github.com/ropensci/software-review/issues/261)
+[![Build Status](https://travis-ci.org/ropensci/DataSpaceR.svg?branch=master)](https://travis-ci.org/ropensci/DataSpaceR) [![Build status](https://ci.appveyor.com/api/projects/status/github/ropensci/DataSpaceR?branch=master&svg=true)](https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master) [![codecov](https://codecov.io/gh/ropensci/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/DataSpaceR/branch/master) [![CRAN Status](http://www.r-pkg.org/badges/version/DataSpaceR)](http://cran.r-project.org/package=DataSpaceR) [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/DataSpaceR)](https://www.rpackages.io/package/DataSpaceR) [![monthly](https://cranlogs.r-pkg.org/badges/DataSpaceR)](https://www.rpackages.io/package/DataSpaceR) [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![](https://badges.ropensci.org/261_status.svg)](https://github.com/ropensci/software-review/issues/261)
 
 `DataSpaceR` is an R interface to [the CAVD DataSpace](https://dataspace.cavd.org), a data sharing and discovery tool that facilitates exploration of HIV immunological data from pre-clinical and clinical HIV vaccine studies.
 
@@ -14,7 +14,13 @@ This package simplifies access to the database by taking advantage of the standa
 Installation
 ------------
 
-You can install the latest version of DataSpaceR from [GitHub](https://github.com/ropensci/DataSpaceR) with [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
+Install from CRAN:
+
+``` r
+install.packages("DataSpaceR")
+```
+
+You can install the latest development version from [GitHub](https://github.com/ropensci/DataSpaceR) with [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
 
 ``` r
 # install.packages("devtools")
