@@ -4,24 +4,24 @@
 \alias{writeNetrc}
 \title{Write a netrc file}
 \usage{
-writeNetrc(login, password, onStaging = FALSE,
-  netrcFile = getNetrcPath(), overwrite = FALSE)
+writeNetrc(login, password, netrcFile = NULL, onStaging = FALSE,
+  overwrite = FALSE)
 }
 \arguments{
 \item{login}{A character. Email address used for logging in on DataSpace.}
 
 \item{password}{A character. Password associated with the login.}
 
-\item{onStaging}{A logical. Whether to connect to the staging server instead
-of the production server.}
-
 \item{netrcFile}{A character. Credentials will be written into that file.
 If left NULL, netrc will be written into a temporary file.}
+
+\item{onStaging}{A logical. Whether to connect to the staging server instead
+of the production server.}
 
 \item{overwrite}{A logical. Whether to overwrite the existing netrc file.}
 }
 \value{
-A character vector containing the file paths for netrc
+A character vector containing the netrc file path
 }
 \description{
 Write a netrc file that is valid for accessing DataSpace.
@@ -37,7 +37,11 @@ By default \code{curl} will look for the file in your home directory.
 \dontrun{
 # First, create an account in the DataSpace App and read the terms of use
 # Next, create a netrc file using writeNetrc()
-writeNetrc("dataspaceuser@email.com", "yourSecretPassword")
+writeNetrc(
+  login = "dataspaceuser@email.com",
+  password = "yourSecretPassword",
+  netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path
+)
 }
 }
 \seealso{

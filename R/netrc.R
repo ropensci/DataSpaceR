@@ -11,26 +11,31 @@
 #'
 #' @param login A character. Email address used for logging in on DataSpace.
 #' @param password A character. Password associated with the login.
-#' @param onStaging A logical. Whether to connect to the staging server instead
-#' of the production server.
 #' @param netrcFile A character. Credentials will be written into that file.
 #' If left NULL, netrc will be written into a temporary file.
+#' @param onStaging A logical. Whether to connect to the staging server instead
+#' of the production server.
 #' @param overwrite A logical. Whether to overwrite the existing netrc file.
 #'
-#' @return A character vector containing the file paths for netrc
+#' @return A character vector containing the netrc file path
 #' @seealso \code{\link{connectDS}} \code{\link{checkNetrc}}
 #' @examples
 #' \dontrun{
 #' # First, create an account in the DataSpace App and read the terms of use
 #' # Next, create a netrc file using writeNetrc()
-#' writeNetrc("dataspaceuser@email.com", "yourSecretPassword")
+#' writeNetrc(
+#'   login = "dataspaceuser@email.com",
+#'   password = "yourSecretPassword",
+#'   netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path
+#' )
 #' }
 #' @export
 writeNetrc <- function(login,
                        password,
+                       netrcFile = NULL,
                        onStaging = FALSE,
-                       netrcFile = getNetrcPath(),
                        overwrite = FALSE) {
+  if (is.null(netrcFile)) netrcFile <- tempfile()
   if (file.exists(netrcFile) && !overwrite) {
     stop(
       "'", netrcFile, "' already exists. ",
@@ -104,6 +109,17 @@ checkNetrc <- function(netrcFile = getNetrcPath(),
   netrcFile
 }
 
+#' @title Get a default netrc file path
+#'
+#' @description Get a default netrc file path
+#'
+#' @return A character vector containing the default netrc file path
+#'
+#' @examples
+#' \dontrun{
+#' getNetrcPath()
+#' }
+#' @export
 getNetrcPath <- function() {
   home <- Sys.getenv("HOME")
   if (isWindows()) {

@@ -2,6 +2,7 @@
 
 export(checkNetrc)
 export(connectDS)
+export(getNetrcPath)
 export(makeFilter)
 export(writeNetrc)
 importFrom(R6,R6Class)

@@ -57,7 +57,12 @@ login and password information is ***required***.
 1. On your R console, create a netrc file using a function from `DataSpaceR`:
 
 ```{r, eval=FALSE}
-DataSpaceR::writeNetrc("yourEmail@address.com", "yourSecretPassword")
+library(DataSpaceR)
+writeNetrc(
+  login = "yourEmail@address.com", 
+  password = "yourSecretPassword",
+  netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path 
+)
 ```
 
 This will create a netrc file in your home directory.

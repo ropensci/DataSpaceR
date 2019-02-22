@@ -8,7 +8,11 @@ knitr::opts_chunk$set(
 )
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  DataSpaceR::writeNetrc("yourEmail@address.com", "yourSecretPassword")
+#  writeNetrc(
+#    login = "yourEmail@address.com",
+#    password = "yourSecretPassword",
+#    netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path
+#  )
 
 ## ----connectDS-----------------------------------------------------------
 library(DataSpaceR)

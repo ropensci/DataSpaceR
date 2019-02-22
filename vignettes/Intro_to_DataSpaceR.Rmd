@@ -34,7 +34,11 @@ In order to connect to the CAVD DataSpace via `DataSpaceR`, you will need a `net
 On your R console, create a `netrc` file using a function from `DataSpaceR`:
 
 ```{r, eval=FALSE}
-DataSpaceR::writeNetrc("yourEmail@address.com", "yourSecretPassword")
+writeNetrc(
+  login = "yourEmail@address.com", 
+  password = "yourSecretPassword",
+  netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path 
+)
 ```
 
 This will create a `netrc` file in your home directory. Make sure you have a valid login and password.
@@ -197,7 +201,7 @@ The followings are the tables of all fields and methods that work on `DataSpaceC
 | `study` | The study name. |
 | `group` | The group name. |
 | `availableDatasets` | The table of datasets available in the study object. |
-| `treatmentArm` | The table of treatment arm information for the connectedstudy. Not available for all study connection. |
+| `treatmentArm` | The table of treatment arm information for the connected study. Not available for all study connection. |
 | `studyInfo` | Stores the information about the study. |
 | `getDataset` | Get a dataset from the connection. |
 | `getDatasetDescription` | Get variable information. |

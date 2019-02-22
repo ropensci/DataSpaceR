@@ -5,12 +5,12 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "DataSpaceR",
-  "description": "Provides a convenient API for accessing datasets within\n    the CAVD DataSpace (dataspace.cavd.org).",
-  "name": "DataSpaceR: An R Interface to the CAVD DataSpace",
+  "description": "Provides a convenient API interface to access immunological assays\n    such as BAMA, ELISpot, ICS, NAb, and mAb within 'the CAVD DataSpace'\n    (<https://dataspace.cavd.org>), a data sharing and discovery tool that \n    facilitates exploration of HIV immunological data from pre-clinical and \n    clinical HIV vaccine studies.",
+  "name": "DataSpaceR: An R Interface to 'the CAVD DataSpace'",
   "codeRepository": "https://github.com/ropensci/DataSpaceR",
   "issueTracker": "https://github.com/ropensci/DataSpaceR/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -28,8 +28,10 @@
   ],
   "copyrightHolder": [
     {
-      "@type": "Organization",
-      "name": "The Collaboration for AIDS Vaccine Discovery"
+      "@type": "Person",
+      "givenName": "Ju Yeong",
+      "familyName": "Kim",
+      "email": "jkim2345@fredhutch.org"
     }
   ],
   "maintainer": [
@@ -196,7 +198,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/DataSpaceR/blob/master/README.md",
-  "fileSize": "50.138KB",
+  "fileSize": "50.444KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/DataSpaceR",
     "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master",

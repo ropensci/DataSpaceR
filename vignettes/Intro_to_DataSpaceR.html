@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ju Yeong Kim" />
 
-<meta name="date" content="2019-02-11" />
+<meta name="date" content="2019-02-22" />
 
 <title>Introduction to DataSpaceR</title>
 
@@ -92,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Introduction to DataSpaceR</h1>
 <h4 class="author"><em>Ju Yeong Kim</em></h4>
-<h4 class="date"><em>2019-02-11</em></h4>
+<h4 class="date"><em>2019-02-22</em></h4>
 
 
 
@@ -104,7 +104,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="creating-a-netrc-file-with-writenetrc" class="section level3">
 <h3>Creating a netrc file with <code>writeNetrc</code></h3>
 <p>On your R console, create a <code>netrc</code> file using a function from <code>DataSpaceR</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DataSpaceR<span class="op">::</span><span class="kw">writeNetrc</span>(<span class="st">&quot;yourEmail@address.com&quot;</span>, <span class="st">&quot;yourSecretPassword&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">writeNetrc</span>(
+  <span class="dt">login =</span> <span class="st">&quot;yourEmail@address.com&quot;</span>, 
+  <span class="dt">password =</span> <span class="st">&quot;yourSecretPassword&quot;</span>,
+  <span class="dt">netrcFile =</span> <span class="st">&quot;/your/home/directory/.netrc&quot;</span> <span class="co"># use getNetrcPath() to get the default path </span>
+)</code></pre></div>
 <p>This will create a <code>netrc</code> file in your home directory. Make sure you have a valid login and password.</p>
 </div>
 <div id="manually-creating-a-netrc-file" class="section level3">
@@ -131,12 +135,12 @@ con &lt;-<span class="st"> </span><span class="kw">connectDS</span>()
 con
 <span class="co">#&gt; &lt;DataSpaceConnection&gt;</span>
 <span class="co">#&gt;   URL: https://dataspace.cavd.org</span>
-<span class="co">#&gt;   User: jkim2345@fredhutch.org</span>
-<span class="co">#&gt;   Available studies: 342</span>
-<span class="co">#&gt;     - 66 studies with data</span>
-<span class="co">#&gt;     - 4523 subjects</span>
-<span class="co">#&gt;     - 305239 data points</span>
-<span class="co">#&gt;   Available groups: 8</span></code></pre></div>
+<span class="co">#&gt;   User: jkim2345@scharp.org</span>
+<span class="co">#&gt;   Available studies: 249</span>
+<span class="co">#&gt;     - 65 studies with data</span>
+<span class="co">#&gt;     - 4499 subjects</span>
+<span class="co">#&gt;     - 288603 data points</span>
+<span class="co">#&gt;   Available groups: 6</span></code></pre></div>
 <p>The call to <code>connectDS</code> instantiates the connection. Printing the object shows where it’s connected and the available studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(con<span class="op">$</span>availableStudies))</code></pre></div>
 <table>
@@ -540,12 +544,12 @@ knitr<span class="op">::</span><span class="kw">kable</span>(cavd<span class="op
 <tr class="odd">
 <td align="left">BAMA</td>
 <td align="left">Binding Ab multiplex assay</td>
-<td align="right">91988</td>
+<td align="right">86289</td>
 </tr>
 <tr class="even">
 <td align="left">Demographics</td>
 <td align="left">Demographics</td>
-<td align="right">4523</td>
+<td align="right">4499</td>
 </tr>
 <tr class="odd">
 <td align="left">ELISPOT</td>
@@ -555,12 +559,12 @@ knitr<span class="op">::</span><span class="kw">kable</span>(cavd<span class="op
 <tr class="even">
 <td align="left">ICS</td>
 <td align="left">Intracellular Cytokine Staining</td>
-<td align="right">160647</td>
+<td align="right">150910</td>
 </tr>
 <tr class="odd">
 <td align="left">NAb</td>
 <td align="left">Neutralizing antibody</td>
-<td align="right">46994</td>
+<td align="right">45794</td>
 </tr>
 </tbody>
 </table>
@@ -611,44 +615,24 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">188</td>
-<td align="left">cvd 239</td>
-<td align="left">cvd239</td>
-<td align="left">NA</td>
-<td align="left">jkim2345</td>
-<td align="left">FALSE</td>
-<td align="right">0</td>
-<td align="left">character(0)</td>
-</tr>
-<tr class="even">
-<td align="right">190</td>
-<td align="left">rabbit</td>
-<td align="left">rabbit</td>
-<td align="left">NA</td>
-<td align="left">jkim2345</td>
-<td align="left">FALSE</td>
-<td align="right">100</td>
-<td align="left">c(“cvd338”, “cvd317”, “cvd305”, “cvd324”, “cvd320”)</td>
-</tr>
-<tr class="odd">
-<td align="right">207</td>
+<td align="right">216</td>
 <td align="left">mice</td>
 <td align="left">mice</td>
 <td align="left">NA</td>
-<td align="left">jkim2345</td>
+<td align="left">readjk</td>
 <td align="left">FALSE</td>
-<td align="right">51</td>
-<td align="left">c(“cvd483”, “cvd316”, “cvd331”)</td>
+<td align="right">75</td>
+<td align="left">c(“cvd468”, “cvd483”, “cvd316”, “cvd331”)</td>
 </tr>
 <tr class="even">
-<td align="right">209</td>
-<td align="left">cavd 239 important study</td>
-<td align="left">cavd 239</td>
-<td align="left">cavd 239</td>
-<td align="left">jkim2345</td>
+<td align="right">217</td>
+<td align="left">CAVD 242</td>
+<td align="left">CAVD 242</td>
+<td align="left">This is a fake group for CAVD 242</td>
+<td align="left">readjk</td>
 <td align="left">FALSE</td>
-<td align="right">0</td>
-<td align="left">character(0)</td>
+<td align="right">30</td>
+<td align="left">cvd242</td>
 </tr>
 <tr class="odd">
 <td align="right">220</td>
@@ -661,11 +645,11 @@ human &lt;-<span class="st"> </span>cavd<span class="op">$</span><span class="kw
 <td align="left">c(“cvd281”, “cvd434”, “cvd259”, “cvd277”)</td>
 </tr>
 <tr class="even">
-<td align="right">223</td>
+<td align="right">224</td>
 <td align="left">cvd338</td>
 <td align="left">cvd338</td>
 <td align="left">NA</td>
-<td align="left">jkim2345</td>
+<td align="left">readjk</td>
 <td align="left">FALSE</td>
 <td align="right">36</td>
 <td align="left">cvd338</td>
@@ -769,7 +753,7 @@ nyvac
 </tr>
 <tr class="even">
 <td><code>treatmentArm</code></td>
-<td>The table of treatment arm information for the connectedstudy. Not available for all study connection.</td>
+<td>The table of treatment arm information for the connected study. Not available for all study connection.</td>
 </tr>
 <tr class="odd">
 <td><code>studyInfo</code></td>
@@ -791,11 +775,12 @@ nyvac
 <h2>Session information</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()
 <span class="co">#&gt; R version 3.5.2 (2018-12-20)</span>
-<span class="co">#&gt; Platform: x86_64-apple-darwin18.2.0 (64-bit)</span>
+<span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span>
 <span class="co">#&gt; Running under: macOS Mojave 10.14.2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
-<span class="co">#&gt; BLAS/LAPACK: /usr/local/Cellar/openblas/0.3.5/lib/libopenblasp-r0.3.5.dylib</span>
+<span class="co">#&gt; BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib</span>
+<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; locale:</span>
 <span class="co">#&gt; [1] C/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span>
@@ -804,25 +789,25 @@ nyvac
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] DataSpaceR_0.6.0</span>
+<span class="co">#&gt; [1] DataSpaceR_0.6.2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
 <span class="co">#&gt;  [1] Rcpp_1.0.0        highr_0.7         compiler_3.5.2   </span>
 <span class="co">#&gt;  [4] prettyunits_1.0.2 remotes_2.0.2     tools_3.5.2      </span>
 <span class="co">#&gt;  [7] testthat_2.0.1    digest_0.6.18     pkgbuild_1.0.2   </span>
-<span class="co">#&gt; [10] pkgload_1.0.2     evaluate_0.12     jsonlite_1.6     </span>
+<span class="co">#&gt; [10] pkgload_1.0.2     evaluate_0.13     jsonlite_1.6     </span>
 <span class="co">#&gt; [13] memoise_1.1.0     rlang_0.3.1       cli_1.0.1        </span>
 <span class="co">#&gt; [16] rstudioapi_0.9.0  commonmark_1.7    yaml_2.2.0       </span>
-<span class="co">#&gt; [19] curl_3.3          xfun_0.4          withr_2.1.2      </span>
-<span class="co">#&gt; [22] stringr_1.3.1     httr_1.4.0        roxygen2_6.1.1   </span>
+<span class="co">#&gt; [19] curl_3.3          xfun_0.5          withr_2.1.2      </span>
+<span class="co">#&gt; [22] stringr_1.4.0     httr_1.4.0        roxygen2_6.1.1   </span>
 <span class="co">#&gt; [25] xml2_1.2.0        knitr_1.21        desc_1.2.0       </span>
 <span class="co">#&gt; [28] fs_1.2.6          devtools_2.0.1    rprojroot_1.3-2  </span>
-<span class="co">#&gt; [31] glue_1.3.0        data.table_1.12.0 R6_2.3.0         </span>
+<span class="co">#&gt; [31] glue_1.3.0        data.table_1.12.0 R6_2.4.0         </span>
 <span class="co">#&gt; [34] processx_3.2.1    Rlabkey_2.2.4     rmarkdown_1.11   </span>
-<span class="co">#&gt; [37] sessioninfo_1.1.1 callr_3.1.1       purrr_0.2.5      </span>
+<span class="co">#&gt; [37] sessioninfo_1.1.1 callr_3.1.1       purrr_0.3.0      </span>
 <span class="co">#&gt; [40] magrittr_1.5      htmltools_0.3.6   backports_1.1.3  </span>
 <span class="co">#&gt; [43] ps_1.3.0          usethis_1.4.0     assertthat_0.2.0 </span>
-<span class="co">#&gt; [46] stringi_1.2.4     crayon_1.3.4</span></code></pre></div>
+<span class="co">#&gt; [46] stringi_1.3.1     crayon_1.3.4</span></code></pre></div>
 </div>
 
 

@@ -1,3 +1,7 @@
+# DataSpaceR 0.6.2
+
+* Write the netrc in temporary directory as default in `writeNetrc`. (CRAN requirement)
+
 # DataSpaceR 0.6.1
 
 * Remove LICENSE file for CRAN submission
