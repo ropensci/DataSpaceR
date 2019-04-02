@@ -20,15 +20,13 @@
 #' @return A character vector containing the netrc file path
 #' @seealso \code{\link{connectDS}} \code{\link{checkNetrc}}
 #' @examples
-#' \dontrun{
 #' # First, create an account in the DataSpace App and read the terms of use
 #' # Next, create a netrc file using writeNetrc()
 #' writeNetrc(
 #'   login = "dataspaceuser@email.com",
-#'   password = "yourSecretPassword",
-#'   netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path
+#'   password = "yourSecretPassword"
 #' )
-#' }
+#' # Specify `netrcFile = getNetrcPath()` to write netrc in the default path
 #' @export
 writeNetrc <- function(login,
                        password,
@@ -63,7 +61,8 @@ writeNetrc <- function(login,
 
 #' @title Check netrc file
 #'
-#' @description Check that there is a netrc file with a valid entry for DataSpace.
+#' @description Check that there is a netrc file with a valid entry for the
+#' CAVD DataSpace.
 #'
 #' @param netrcFile A character. File path to netrc file to check.
 #' @param onStaging A logical. Whether to check the staging server instead
@@ -74,9 +73,7 @@ writeNetrc <- function(login,
 #' @return The name of the netrc file
 #' @seealso \code{\link{connectDS}} \code{\link{writeNetrc}}
 #' @examples
-#' \dontrun{
-#' checkNetrc()
-#' }
+#' try(checkNetrc())
 #' @export
 checkNetrc <- function(netrcFile = getNetrcPath(),
                        onStaging = FALSE,
@@ -116,9 +113,7 @@ checkNetrc <- function(netrcFile = getNetrcPath(),
 #' @return A character vector containing the default netrc file path
 #'
 #' @examples
-#' \dontrun{
 #' getNetrcPath()
-#' }
 #' @export
 getNetrcPath <- function() {
   home <- Sys.getenv("HOME")

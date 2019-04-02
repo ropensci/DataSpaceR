@@ -7,6 +7,9 @@
 \usage{
 DataSpaceStudy
 }
+\value{
+an instance of \code{DataSpaceStudy}
+}
 \description{
 The DataSpaceStudy class
 }
@@ -49,7 +52,8 @@ The DataSpaceStudy class
 \section{Methods}{
 
 \describe{
-  \item{\code{initialize(study = NULL, config = NULL, group = NULL, studyInfo = NULL)}}{
+  \item{\code{initialize(study = NULL, config = NULL, group = NULL,
+  studyInfo = NULL)}}{
     Initialize \code{DataSpaceStudy} class.
     See \code{\link{DataSpaceConnection}}.
   }
@@ -119,6 +123,7 @@ cvd <- con$getStudy("")
 # Refresh the study object to update available datasets and treatment info
 cvd$refresh()
 }
+
 }
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}

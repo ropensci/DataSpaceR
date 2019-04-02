@@ -1,5 +1,7 @@
 #' The DataSpaceConnection class
 #'
+#' @return an instance of \code{DataSpaceConnection}
+#'
 #' @section Constructor:
 #' \code{\link{connectDS}}
 #'
@@ -41,7 +43,9 @@
 #'     Refresh the connection object to update available studies and groups.
 #'   }
 #' }
+#'
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceR-package}}
+#'
 #' @examples
 #' \dontrun{
 #' # Create a connection (Initiate a DataSpaceConnection object)
@@ -62,8 +66,10 @@
 #' # Refresh the connection object to update available studies and groups
 #' con$refresh()
 #' }
+#'
 #' @docType class
 #' @format NULL
+#'
 #' @importFrom jsonlite fromJSON
 #' @importFrom curl has_internet nslookup
 #' @importFrom Rlabkey labkey.selectRows

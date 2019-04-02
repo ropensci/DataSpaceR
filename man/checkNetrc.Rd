@@ -20,12 +20,11 @@ troubleshooting.}
 The name of the netrc file
 }
 \description{
-Check that there is a netrc file with a valid entry for DataSpace.
+Check that there is a netrc file with a valid entry for the
+CAVD DataSpace.
 }
 \examples{
-\dontrun{
-checkNetrc()
-}
+try(checkNetrc())
 }
 \seealso{
 \code{\link{connectDS}} \code{\link{writeNetrc}}

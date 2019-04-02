@@ -34,15 +34,13 @@ for instruction on how to register and set DataSpace credential.
 By default \code{curl} will look for the file in your home directory.
 }
 \examples{
-\dontrun{
 # First, create an account in the DataSpace App and read the terms of use
 # Next, create a netrc file using writeNetrc()
 writeNetrc(
   login = "dataspaceuser@email.com",
-  password = "yourSecretPassword",
-  netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path
+  password = "yourSecretPassword"
 )
-}
+# Specify `netrcFile = getNetrcPath()` to write netrc in the default path
 }
 \seealso{
 \code{\link{connectDS}} \code{\link{checkNetrc}}

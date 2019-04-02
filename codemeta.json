@@ -5,12 +5,12 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "DataSpaceR",
-  "description": "Provides a convenient API interface to access immunological assays\n    such as BAMA, ELISpot, ICS, NAb, and mAb within 'the CAVD DataSpace'\n    (<https://dataspace.cavd.org>), a data sharing and discovery tool that \n    facilitates exploration of HIV immunological data from pre-clinical and \n    clinical HIV vaccine studies.",
-  "name": "DataSpaceR: An R Interface to 'the CAVD DataSpace'",
+  "description": "Provides a convenient API interface to access immunological data\n    within 'the CAVD DataSpace'(<https://dataspace.cavd.org>), a data sharing \n    and discovery tool that facilitates exploration of HIV immunological data \n    from pre-clinical and clinical HIV vaccine studies.",
+  "name": "DataSpaceR: Interface to 'the CAVD DataSpace'",
   "codeRepository": "https://github.com/ropensci/DataSpaceR",
   "issueTracker": "https://github.com/ropensci/DataSpaceR/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -197,8 +197,7 @@
     }
   ],
   "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
-  "readme": "https://github.com/ropensci/DataSpaceR/blob/master/README.md",
-  "fileSize": "50.444KB",
+  "fileSize": "41.341KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/DataSpaceR",
     "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master",
@@ -212,7 +211,10 @@
     "hiv",
     "vaccine",
     "r-package",
-    "rstats"
+    "rstats",
+    "hvtn"
   ],
-  "developmentStatus": "https://www.repostatus.org/#active"
+  "developmentStatus": "https://www.repostatus.org/#active",
+  "contributor": {},
+  "funder": {}
 }

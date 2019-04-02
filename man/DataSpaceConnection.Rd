@@ -7,6 +7,9 @@
 \usage{
 DataSpaceConnection
 }
+\value{
+an instance of \code{DataSpaceConnection}
+}
 \description{
 The DataSpaceConnection class
 }
@@ -78,6 +81,7 @@ nyvac <- con$getGroup(220)
 # Refresh the connection object to update available studies and groups
 con$refresh()
 }
+
 }
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceR-package}}

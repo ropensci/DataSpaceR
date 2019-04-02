@@ -74,7 +74,7 @@ if ("DataSpaceConnection" %in% class(con)) {
         expect_equal(con$config$packageVersion, packageVersion("DataSpaceR"))
         expect_is(con$config$curlOptions, "request")
 
-        if (class(con$config$curlOptions) == "request") {
+        if (is(con$config$curlOptions, "request")) {
           expect_equal(names(con$config$curlOptions$options), curlOptions)
 
           if (all.equal(names(con$config$curlOptions$options), curlOptions)) {

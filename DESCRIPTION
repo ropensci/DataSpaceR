@@ -1,18 +1,17 @@
 Package: DataSpaceR
 Type: Package
-Title: An R Interface to 'the CAVD DataSpace'
-Version: 0.6.2
+Title: Interface to 'the CAVD DataSpace'
+Version: 0.6.3
 Authors@R: c(person("Ju Yeong", "Kim",
                     email = "jkim2345@fredhutch.org",
                     role = c("aut", "cre", "cph")),
              person("Sean", "Hughes",
                     comment = "Sean reviewed the package for ropensci, see <https://github.com/ropensci/software-review/issues/261>",
                     role = "rev"))
-Description: Provides a convenient API interface to access immunological assays
-    such as BAMA, ELISpot, ICS, NAb, and mAb within 'the CAVD DataSpace'
-    (<https://dataspace.cavd.org>), a data sharing and discovery tool that 
-    facilitates exploration of HIV immunological data from pre-clinical and 
-    clinical HIV vaccine studies.
+Description: Provides a convenient API interface to access immunological data
+    within 'the CAVD DataSpace'(<https://dataspace.cavd.org>), a data sharing 
+    and discovery tool that facilitates exploration of HIV immunological data 
+    from pre-clinical and clinical HIV vaccine studies.
 URL: https://github.com/ropensci/DataSpaceR
 BugReports: https://github.com/ropensci/DataSpaceR/issues
 License: GPL-3

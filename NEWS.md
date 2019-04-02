@@ -1,3 +1,7 @@
+# DataSpaceR 0.6.3
+
+* Prepare for CRAN submission
+
 # DataSpaceR 0.6.2
 
 * Write the netrc in temporary directory as default in `writeNetrc`. (CRAN requirement)

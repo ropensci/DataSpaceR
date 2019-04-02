@@ -1,5 +1,8 @@
 #' The DataSpaceStudy class
 #'
+#'
+#' @return an instance of \code{DataSpaceStudy}
+#'
 #' @section Constructor:
 #' \code{DataSpaceConnection$getStudy()}
 #' \code{DataSpaceConnection$getGroup()}
@@ -34,7 +37,8 @@
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{\code{initialize(study = NULL, config = NULL, group = NULL, studyInfo = NULL)}}{
+#'   \item{\code{initialize(study = NULL, config = NULL, group = NULL,
+#'   studyInfo = NULL)}}{
 #'     Initialize \code{DataSpaceStudy} class.
 #'     See \code{\link{DataSpaceConnection}}.
 #'   }
@@ -70,7 +74,9 @@
 #'     Refresh the study object to update available datasets and treatment info.
 #'   }
 #' }
+#'
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
+#'
 #' @examples
 #' \dontrun{
 #' # Create a connection (Initiate a DataSpaceConnection object)
@@ -103,8 +109,10 @@
 #' # Refresh the study object to update available datasets and treatment info
 #' cvd$refresh()
 #' }
+#'
 #' @docType class
 #' @format NULL
+#'
 #' @importFrom digest digest
 #' @importFrom Rlabkey labkey.getQueryDetails labkey.executeSql
 DataSpaceStudy <- R6Class(

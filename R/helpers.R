@@ -102,9 +102,7 @@ checkStudy <- function(study, labkeyUrlBase, verbose = FALSE) {
 }
 
 fixStudy <- function(study, labkeyUrlBase, labkeyUrlPath) {
-  if (is.null(study)) {
-    study <- basename(labkeyUrlPath)
-  }
+  if (is.null(study)) study <- basename(labkeyUrlPath)
 
   # check if `study` is an actual study
   checkStudy(study, labkeyUrlBase)
@@ -157,10 +155,7 @@ checkCredential <- function(onStaging, verbose) {
     "/login-whoami.view"
   )
 
-  res <- GET(
-    url = url,
-    config = labkey.getRequestOptions()
-  )
+  res <- GET(url, labkey.getRequestOptions())
 
   if (res$status_code == 200) {
     if (grepl("json", res$headers$`content-type`)) {

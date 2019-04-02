@@ -24,6 +24,11 @@
 #' \dontrun{
 #' con <- connectDS()
 #' }
+#'
+#' con <- try(connectDS())
+#' if (inherits(con, "try-error")) {
+#'   warning("Read README for more information on how to set up a .netrc file.")
+#' }
 #' @export
 connectDS <- function(login = NULL,
                       password = NULL,
