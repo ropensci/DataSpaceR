@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DataSpaceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
       </span>
     </div>
 
@@ -153,6 +153,10 @@
 
     <pre class="usage"><span class='no'>DataSpaceStudy</span></pre>
         
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>an instance of <code>DataSpaceStudy</code></p>
+    
     <h2 class="hasAnchor" id="constructor"><a class="anchor" href="#constructor"></a>Constructor</h2>
 
     
@@ -179,7 +183,8 @@
 
     
     <dl class='dl-horizontal'>
-  <dt><code>initialize(study = NULL, config = NULL, group = NULL, studyInfo = NULL)</code></dt><dd><p>Initialize <code>DataSpaceStudy</code> class.
+  <dt><code>initialize(study = NULL, config = NULL, group = NULL,
+  studyInfo = NULL)</code></dt><dd><p>Initialize <code>DataSpaceStudy</code> class.
     See <code><a href='DataSpaceConnection.html'>DataSpaceConnection</a></code>.</p></dd>
   <dt><code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print()</a></code></dt><dd><p>Print <code>DataSpaceStudy</code> class.</p></dd>
   <dt><code>getDataset(datasetName, colFilter = NULL,
@@ -234,12 +239,15 @@
 
 <span class='co'># Refresh the study object to update available datasets and treatment info</span>
 <span class='no'>cvd</span>$<span class='fu'>refresh</span>()
-<span class='co'># }</span></pre>
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#constructor">Constructor</a></li>
 
       <li><a href="#fields">Fields</a></li>

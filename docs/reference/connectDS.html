@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DataSpaceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
       </span>
     </div>
 
@@ -200,7 +200,11 @@ default values. These are assigned to `options`, which are then used by the
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'>connectDS</span>()
-<span class='co'># }</span></pre>
+<span class='co'># }</span><div class='input'>
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'>connectDS</span>())
+<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>inherits</a></span>(<span class='no'>con</span>, <span class='st'>"try-error"</span>)) {
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/warning'>warning</a></span>(<span class='st'>"Read README for more information on how to set up a .netrc file."</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
