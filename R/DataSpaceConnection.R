@@ -263,13 +263,13 @@ DataSpaceConnection <- R6Class(
         data.table(
           id = group$id,
           label = group$label,
-          originalLabel = group$category$label,
+          original_label = group$category$label,
           description = ifelse(
             is.null(group$description),
             NA,
             group$description
           ),
-          createdBy = group$createdBy$displayValue,
+          created_by = group$createdBy$displayValue,
           shared = group$category$shared,
           n = length(group$category$participantIds),
           studies = list(unique(substr(group$category$participantIds, 1, 6)))
