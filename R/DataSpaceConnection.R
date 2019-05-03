@@ -51,22 +51,22 @@
 #' # Create a connection (Initiate a DataSpaceConnection object)
 #' con <- connectDS()
 #' con
-#'
+#' 
 #' # Connect to cvd408
 #' # https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Study/cvd408?q=408
 #' cvd408 <- con$getStudy("cvd408")
-#'
+#' 
 #' # Connect to all studies
 #' cvd <- con$getStudy("cvd408")
-#'
+#' 
 #' # Connect to the NYVAC durability comparison group
 #' # https://dataspace.cavd.org/cds/CAVD/app.view#group/groupsummary/220
 #' nyvac <- con$getGroup(220)
-#'
+#' 
 #' # Refresh the connection object to update available studies and groups
 #' con$refresh()
 #' }
-#'
+#' 
 #' @docType class
 #' @format NULL
 #'

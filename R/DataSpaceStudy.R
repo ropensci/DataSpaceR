@@ -81,35 +81,35 @@
 #' \dontrun{
 #' # Create a connection (Initiate a DataSpaceConnection object)
 #' con <- connectDS()
-#'
+#' 
 #' # Connect to cvd408 (Initiate a DataSpaceStudy object)
 #' # https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Study/cvd408?q=408
 #' cvd408 <- con$getStudy("cvd408")
 #' cvd408
-#'
+#' 
 #' # Retrieve Neutralizing antibody dataset (NAb) for cvd408 from DataSpace
 #' NAb <- cvd408$getDataset("NAb")
-#'
+#' 
 #' # Get variable information of the NAb dataset
 #' cvd408$getDatasetDescription("NAb")
-#'
+#' 
 #' # Take a look at cvd408's treatment arm information
 #' cvd408$treatmentArm
-#'
+#' 
 #' # Clear cache of a study object
 #' cvd408$clearCache()
-#'
+#' 
 #' # Connect to the NYVAC durability comparison group
 #' # https://dataspace.cavd.org/cds/CAVD/app.view#group/groupsummary/220
 #' nyvac <- con$getGroup(220)
-#'
+#' 
 #' # Connect to all studies
 #' cvd <- con$getStudy("")
-#'
+#' 
 #' # Refresh the study object to update available datasets and treatment info
 #' cvd$refresh()
 #' }
-#'
+#' 
 #' @docType class
 #' @format NULL
 #'
