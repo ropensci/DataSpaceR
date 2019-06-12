@@ -106,7 +106,7 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_equal(
         names(con$availableGroups),
         c(
-          "id", "label", "originalLabel", "description", "createdBy",
+          "id", "label", "original_label", "description", "created_by",
           "shared", "n", "studies"
         )
       )
