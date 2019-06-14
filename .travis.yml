@@ -5,7 +5,7 @@ os:
   - linux
   - osx
 before_script:
-- Rscript ci.R
+- travis_wait 40 Rscript ci.R
 after_success:
 - ./.trigger.sh
 - Rscript -e 'covr::codecov()'
