@@ -30,17 +30,12 @@ DataSpaceMab <- R6Class(
       private$.config <- config
       private$.filters <- filters
 
-      mabFilters <- Rlabkey::makeFilter(
-        c("titer_curve_ic50", "GREATER_THAN", "0"),
-        c("titer_curve_ic50", "NOT_MISSING", "")
-      )
       if (length(filters) > 0) {
         filters <- lapply(names(filters), function(x) {
-          Rlabkey::makeFilter(c(x, "IN", paste(unique(filters[[x]]), collapse = ";")))
+          Rlabkey::makeFilter(c(x, "IN", paste(unique(unlist(lapply(filters[[x]], URLencode, reserved = TRUE))), collapse = ";")))
         })
         mabFilters <- rbind(
-          mabFilters,
-          Rlabkey::makeFilter(c("mab_mix_name_std", "IN", paste(mAb_mixture, collapse = ";"))),
+          Rlabkey::makeFilter(c("mab_mix_name_std", "IN", paste(unlist(lapply(mAb_mixture, URLencode, reserved = TRUE)), collapse = ";"))),
           do.call(rbind, filters)
         )
       }

@@ -193,7 +193,7 @@ DataSpaceConnection <- R6Class(
         ".mabMetaGridBase"
       )
 
-      assert_that(all(value %in% private[[gridBase]][[column]]))
+      assert_that(all(value %in% private[[gridBase]][[column]]), msg = "The `value` and `using` parameter combination are not found in the mAb grid.")
 
       if (isFromMabGrid(column)) {
         private$.mabGridBase <- private$.mabGridBase[
