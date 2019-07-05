@@ -268,7 +268,6 @@ DataSpaceConnection <- R6Class(
     mabGrid = function() {
       mabGridBase <- private$.mabGridBase
       mabMetaGridBase <- private$.mabMetaGridBase
-
       mabGridBase[
         ,
         `:=`(
@@ -276,11 +275,19 @@ DataSpaceConnection <- R6Class(
           n_viruses = length(unique(virus)),
           n_clades = length(unique(clade[!is.na(clade)])),
           n_tiers = length(unique(neutralization_tier[!is.na(neutralization_tier)])),
-          geometric_mean_curve_ic50 = exp(mean(log(as.numeric(titer_curve_ic50)))),
+          geometric_mean_curve_ic50 = as.numeric(
+          {
+            if(all(titer_curve_ic50 %in% c(-Inf, Inf))){
+              NA
+            } else {
+              exp(mean(log(as.numeric(titer_curve_ic50[!titer_curve_ic50 %in% c(-Inf, Inf)]))))
+            }
+          }),
           n_studies = length(unique(study))
         ),
         by = mab_mix_name_std
       ]
+      
       mabGrid <- unique(mabGridBase[, .(mAb_mixture, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)])
       setkey(mabGrid, mAb_mixture)
 
