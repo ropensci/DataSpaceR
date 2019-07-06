@@ -166,6 +166,5 @@ con <- connectDS()
 
 test_study("", c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"))
 test_study("cvd408", c("BAMA", "ICS", "Demographics", "NAb"))
-test_study("", c("Demographics", "NAb"), groupId = 216, groupLabel = c("mice" = "mice"))
-test_study("", c("Demographics", "NAb"), groupId = 217, groupLabel = c("CAVD 242" = "CAVD 242"))
 test_study("", c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"), groupId = 220, groupLabel = c("NYVAC_durability" = "NYVAC durability comparison"))
+test_study("", c("BAMA", "Demographics", "ICS", "NAb"), groupId = 228, groupLabel = c("HVTN 505 case control subjects" = "HVTN 505 case control subjects"))

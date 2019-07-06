@@ -1,10 +1,10 @@
 ---
-title: "Monoclonal Antibodies"
+title: "Accessing Monoclonal Antibodies using DataSpaceR"
 author: "Ju Yeong Kim"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Accessing Monoclonal Antibodies}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -30,7 +30,7 @@ In [the app](https://dataspace.cavd.org/cds/CAVD/app.view#mabgrid), the workflow
 `DataSpaceR` can mimick these steps except for the step 4.
 
 1. Browse the mAb Grid by `con$mabGrid`
-2. Select the mAb mixtures by `con$filterMabGrid(using = "mAb_mixture", value = c(...))`
+2. Select the mAb mixtures by `con$filterMabGrid(using = "mab_mixture", value = c(...))`
 3. Or filter rows by `con$filterMabGrid(using = c("donor_species", "hxb2_location", ...), value = c(...))`
 4. Visualization is currently not available
 5. Use `con$getMab()` to retreive the mAb data
@@ -50,7 +50,7 @@ DT::datatable(con$mabGrid, options = list(autoWidth = TRUE, scrollX = TRUE))
 
 ## Filter the mAb grid
 
-You can filter rows in the grid by specifying the values to keep in the columns `mAb_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`. `filterMabGrid` takes the column and the values and filters the underlying tables (private fields), and when you call the `mabGrid` field (which is actually an [active binding](https://cloud.r-project.org/web/packages/R6/vignettes/Introduction.html#active-bindings)), it returns the filtered grid with updated `n_` columns and `geometric_mean_curve_ic50`.
+You can filter rows in the grid by specifying the values to keep in the columns `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`. `filterMabGrid` takes the column and the values and filters the underlying tables (private fields), and when you call the `mabGrid` field (which is actually an [active binding](https://cloud.r-project.org/web/packages/R6/vignettes/Introduction.html#active-bindings)), it returns the filtered grid with updated `n_` columns and `geometric_mean_curve_ic50`.
 
 ```{r}
 # filter the grid by viruses
@@ -67,7 +67,7 @@ Or we can use method chaining to call multiple filter methods and browse the gri
 
 ```{r eval=FALSE}
 con$
-  filterMabGrid(using = "hxb2_location", value = c("Env", "Gag"))$
+  filterMabGrid(using = "hxb2_location", value = c("Env", "gp160"))$
   filterMabGrid(using = "donor_species", value = "llama")$
   mabGrid
 ```
@@ -75,14 +75,14 @@ con$
 
 ## Retrive column values from the mAb grid
 
-You can retrive values from the grid by `mAb_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`.
+You can retrive values from the grid by `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`.
 
 ```{r}
 # retrieve available viruses in the filtered grid
 con$retrieveMabGridValue(using = "viruses")
 
 # retrive available clades for 1H9 mAb mixture in the filtered grid
-con$retrieveMabGridValue(using = "clades", mAb_mixture = "1H9")
+con$retrieveMabGridValue(using = "clades", mab_mixture = "1H9")
 ```
 
 

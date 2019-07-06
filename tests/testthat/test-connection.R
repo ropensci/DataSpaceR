@@ -128,5 +128,45 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_is(refresh, "logical")
       expect_true(refresh)
     })
+
+    test_that("`resetMabGrid`", {
+      oriCnt <- nrow(con$mabGrid)
+      con$filterMabGrid("mab_mixture", c("mAb 96"))
+      expect_true(oriCnt > nrow(con$mabGrid))
+      con$resetMabGrid()
+      expect_true(oriCnt == nrow(con$mabGrid))
+    })
+
+    test_that("Test query error", {
+      expect_error(
+        con$filterMabGrid("mab_mixture", "NotAMab"),
+        regexp = "The `value` and `using` parameter combination are not found in the mAb grid."
+      )
+    })
+
+    test_that("Test `retrieveMabGridValue`", {
+      testVal <- 23
+      expect_error(
+        con$retrieveMabGridValue(using = "mab_mixture", mab_mixture = testVal),
+        regexp = "Use only character arguments for"
+      )
+      con$resetMabGrid()
+      expect_true(
+        con$retrieveMabGridValue(using = "donor_species", mab_mixture = "mAb 96") == "human"
+      )
+    })
+
+    test_that("Test geomean calculation", {
+      con$filterMabGrid("mab_mixture", "mAb 96")
+      mab <- con$getMab()$nabMab
+      expect_equal(all(mab$titer_curve_ic50 %in% c(-Inf, Inf)), is.na(con$mabGrid$geometric_mean_curve_ic50))
+      con$resetMabGrid()
+
+      con$filterMabGrid("mab_mixture", "PGDM1400")
+      mab <- con$getMab()$nabMab
+      expect_true(round(con$mabGrid$geometric_mean_curve_ic50, 2) == 0.05)
+      con$resetMabGrid()
+    })
+
   }
 }

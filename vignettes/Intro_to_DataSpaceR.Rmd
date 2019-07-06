@@ -4,7 +4,7 @@ author: "Ju Yeong Kim"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Intro To DataSpaceR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -130,15 +130,15 @@ knitr::kable(con$availableGroups)
 To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to `mice` group which has group ID 208 by `getGroup`.
 
 ```{r group-connection}
-mice <- con$getGroup(216)
-mice
+subjects <- con$getGroup(220)
+subjects
 ```
 
 Retrieving a dataset is the same as before.
 
 ```{r group-connection-nab}
-NAb_mice <- mice$getDataset("NAb")
-dim(NAb_mice)
+NAb_subjects <- subjects$getDataset("NAb")
+dim(NAb_subjects)
 ```
 
 
