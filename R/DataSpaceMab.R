@@ -26,7 +26,7 @@ DataSpaceMab <- R6Class(
     assays = data.table(),
     variableDefinitions = data.table(),
 
-    initialize = function(mAb_mixture, filters, config) {
+    initialize = function(mab_mixture, filters, config) {
       private$.config <- config
       private$.filters <- filters
 
@@ -35,7 +35,7 @@ DataSpaceMab <- R6Class(
           Rlabkey::makeFilter(c(x, "IN", paste(unique(unlist(lapply(filters[[x]], URLencode, reserved = TRUE))), collapse = ";")))
         })
         mabFilters <- rbind(
-          Rlabkey::makeFilter(c("mab_mix_name_std", "IN", paste(unlist(lapply(mAb_mixture, URLencode, reserved = TRUE)), collapse = ";"))),
+          Rlabkey::makeFilter(c("mab_mix_name_std", "IN", paste(unlist(lapply(mab_mixture, URLencode, reserved = TRUE)), collapse = ";"))),
           do.call(rbind, filters)
         )
       }

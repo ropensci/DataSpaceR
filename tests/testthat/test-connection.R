@@ -10,12 +10,16 @@ test_that("can connect to DataSpace", {
 if ("DataSpaceConnection" %in% class(con)) {
   con_names <- c(
     ".__enclos_env__",
-    "mAbGrid",
+    "mabGrid",
     "availableGroups",
     "availableStudies",
     "config",
     "clone",
     "refresh",
+    "getMab",
+    "resetMabGrid",
+    "retrieveMabGridValue",
+    "filterMabGrid",
     "getGroup",
     "getStudy",
     "print",

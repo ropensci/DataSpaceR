@@ -195,14 +195,15 @@ makeCountQuery <- function(dataset, group) {
 
 assertColumn <- function(using) {
   assert_that(
-    using %in% c("mAb_mixture", "donor_species", "isotype", "hxb2_location", "viruses", "clades", "tiers", "curve_ic50", "studies")
+    using %in% c("mab_mixture", "donor_species", "isotype", "hxb2_location", "viruses", "clades", "tiers", "curve_ic50", "studies"),
+    msg = paste("\"", using, "\" is not a valid column.")
   )
 }
 
 switchColumn <- function(using) {
   switch(
     using,
-    "mAb_mixture" = "mab_mix_name_std",
+    "mab_mixture" = "mab_mix_name_std",
     "donor_species" = "mab_donor_species",
     "isotype" = "mab_isotype",
     "hxb2_location" = "mab_hxb2_location",
