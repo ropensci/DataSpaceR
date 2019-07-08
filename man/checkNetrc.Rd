@@ -4,35 +4,27 @@
 \alias{checkNetrc}
 \title{Check netrc file}
 \usage{
-checkNetrc(onStaging = FALSE)
+checkNetrc(netrcFile = getNetrcPath(), onStaging = FALSE,
+  verbose = TRUE)
 }
 \arguments{
+\item{netrcFile}{A character. File path to netrc file to check.}
+
 \item{onStaging}{A logical. Whether to check the staging server instead
 of the production server.}
+
+\item{verbose}{A logical. Whether to print the extra details for
+troubleshooting.}
 }
 \value{
 The name of the netrc file
 }
 \description{
-Check that there is a netrc file with a valid entry for DataSpace.
-}
-\details{
-In order to connect to DataSpace, you will need a \code{.netrc} file in your
-contains a \code{machine} name (hostname of DataSpace), and \code{login} and
-\code{password}.
-See \href{https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc}{here}
-for more information. By default \code{RCurl} will look for the file in your
-home directoty.
-
-If no netrc is available or it is not formatted properly,
-\code{\link{writeNetrc}}  can be used to write one.
-Otherwise, when specifying login and password in \code{connectDS},
-a temporary file will be created for that connection.
+Check that there is a netrc file with a valid entry for the
+CAVD DataSpace.
 }
 \examples{
-\dontrun{
-checkNetrc()
-}
+try(checkNetrc())
 }
 \seealso{
 \code{\link{connectDS}} \code{\link{writeNetrc}}

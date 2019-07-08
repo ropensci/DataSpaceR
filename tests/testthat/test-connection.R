@@ -32,25 +32,24 @@ if ("DataSpaceConnection" %in% class(con)) {
   if (identical(names(con), con_names)) {
     test_that("`print`", {
       cap_output <- capture.output(con$print())
-      expect_length(cap_output, 9)
+      expect_length(cap_output, 8)
 
-      if (length(cap_output) == 9) {
+      if (length(cap_output) == 8) {
         expect_equal(cap_output[1], "<DataSpaceConnection>")
         expect_equal(cap_output[2], "  URL: https://dataspace.cavd.org")
         expect_match(cap_output[3], "  User: \\S+@\\S+")
         expect_match(cap_output[4], "  Available studies: \\d+")
         expect_match(cap_output[5], "  - \\d+ studies with data")
         expect_match(cap_output[6], "  - \\d+ subjects")
-        expect_match(cap_output[7], "  - \\d+ assays")
-        expect_match(cap_output[8], "  - \\d+ data points")
-        expect_match(cap_output[9], "  Available groups: \\d+")
+        expect_match(cap_output[7], "  - \\d+ data points")
+        expect_match(cap_output[8], "  Available groups: \\d+")
       }
     })
 
     test_that("`config`", {
       configs <- c(
-        "labkey.url.base",
-        "labkey.user.email",
+        "labkeyUrlBase",
+        "labkeyUserEmail",
         "curlOptions",
         "verbose",
         "packageVersion"
@@ -74,13 +73,13 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_equal(names(con$config), configs)
 
       if (all.equal(names(con$config), configs)) {
-        expect_equal(con$config$labkey.url.base, "https://dataspace.cavd.org")
-        expect_match(con$config$labkey.user.email, "\\S+@\\S+")
+        expect_equal(con$config$labkeyUrlBase, "https://dataspace.cavd.org")
+        expect_match(con$config$labkeyUserEmail, "\\S+@\\S+")
         expect_false(con$config$verbose)
         expect_equal(con$config$packageVersion, packageVersion("DataSpaceR"))
         expect_is(con$config$curlOptions, "request")
 
-        if (class(con$config$curlOptions) == "request") {
+        if (is(con$config$curlOptions, "request")) {
           expect_equal(names(con$config$curlOptions$options), curlOptions)
 
           if (all.equal(names(con$config$curlOptions$options), curlOptions)) {
@@ -97,17 +96,25 @@ if ("DataSpaceConnection" %in% class(con)) {
 
     test_that("`availableStudies`", {
       expect_is(con$availableStudies, "data.table")
-      expect_equal(names(con$availableStudies),
-                   c("study_name", "short_name", "title", "type", "status",
-                     "stage", "species", "start_date", "strategy"))
+      expect_equal(
+        names(con$availableStudies),
+        c(
+          "study_name", "short_name", "title", "type", "status",
+          "stage", "species", "start_date", "strategy"
+        )
+      )
       expect_gt(nrow(con$availableStudies), 0)
     })
 
     test_that("`availableGroups`", {
       expect_is(con$availableGroups, "data.table")
-      expect_equal(names(con$availableGroups),
-                   c("id", "label", "originalLabel", "description", "createdBy",
-                     "shared", "n", "studies"))
+      expect_equal(
+        names(con$availableGroups),
+        c(
+          "id", "label", "original_label", "description", "created_by",
+          "shared", "n", "studies"
+        )
+      )
       expect_gt(nrow(con$availableGroups), 0)
     })
 
@@ -118,8 +125,6 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_is(cavd, "R6")
 
       expect_error(con$getStudy("cvd0"))
-      expect_error(suppressWarnings(con$getStudy("", 0)))
-      expect_error(suppressWarnings(con$getStudy("cvd208", 208)))
     })
 
     test_that("`refresh`", {

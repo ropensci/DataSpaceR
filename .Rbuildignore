@@ -1,3 +1,5 @@
+^codemeta\.json$
+^\.github$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
@@ -10,3 +12,4 @@
 ^appveyor\.yml$
 ^ci\.R$
 ^\.trigger\.sh$
+^CONDUCT\.md$

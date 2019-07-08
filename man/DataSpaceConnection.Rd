@@ -4,9 +4,11 @@
 \name{DataSpaceConnection}
 \alias{DataSpaceConnection}
 \title{The DataSpaceConnection class}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 DataSpaceConnection
+}
+\value{
+an instance of \code{DataSpaceConnection}
 }
 \description{
 The DataSpaceConnection class
@@ -37,17 +39,16 @@ The DataSpaceConnection class
 \describe{
   \item{\code{initialize(login = NULL, password = NULL, verbose = FALSE,
   onStaging = FALSE)}}{
-    Initialize \code{DataSpaceConnection} class. See \code{\link{connectDS}}.
+    Initialize a \code{DataSpaceConnection} object.
+    See \code{\link{connectDS}}.
   }
   \item{\code{print()}}{
-    Print \code{DataSpaceConnection} class.
+    Print the \code{DataSpaceConnection} object.
   }
   \item{\code{getStudy(study, groupId = NULL)}}{
     Create a \code{\link{DataSpaceStudy}} object.
 
     \code{study}: A character. Name of the study to retrieve.
-
-    \code{groupId}: DEPRECATED. Use \code{getGroup} method.
   }
   \item{\code{getGroup(groupId)}}{
     Create a \code{\link{DataSpaceStudy}} object.
@@ -55,7 +56,7 @@ The DataSpaceConnection class
     \code{groupId}: An integer. ID of the group to retrieve.
   }
   \item{\code{refresh()}}{
-    Refresh \code{DataSpaceConnection} class.
+    Refresh the connection object to update available studies and groups.
   }
 }
 }
@@ -80,6 +81,7 @@ nyvac <- con$getGroup(220)
 # Refresh the connection object to update available studies and groups
 con$refresh()
 }
+
 }
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceR-package}}

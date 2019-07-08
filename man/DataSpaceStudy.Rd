@@ -4,9 +4,11 @@
 \name{DataSpaceStudy}
 \alias{DataSpaceStudy}
 \title{The DataSpaceStudy class}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 DataSpaceStudy
+}
+\value{
+an instance of \code{DataSpaceStudy}
 }
 \description{
 The DataSpaceStudy class
@@ -36,7 +38,7 @@ The DataSpaceStudy class
   }
   \item{\code{treatmentArm}}{
     A data.table. The table of treatment arm information for the connected
-    study. Not available for cross study connection.
+    study. Not available for all study connection.
   }
   \item{\code{group}}{
     A character. The group name.
@@ -50,7 +52,8 @@ The DataSpaceStudy class
 \section{Methods}{
 
 \describe{
-  \item{\code{initialize(study = NULL, config = NULL, group = NULL, studyInfo = NULL)}}{
+  \item{\code{initialize(study = NULL, config = NULL, group = NULL,
+  studyInfo = NULL)}}{
     Initialize \code{DataSpaceStudy} class.
     See \code{\link{DataSpaceConnection}}.
   }
@@ -77,13 +80,13 @@ The DataSpaceStudy class
   \item{\code{clearCache()}}{
     Clear \code{cache}. Remove downloaded datasets.
   }
-  \item{\code{getVariableInfo(datasetName)}}{
+  \item{\code{getDatasetDescription(datasetName)}}{
     Get variable information.
 
     \code{datasetName}: A character. Name of the dataset to retrieve.
   }
   \item{\code{refresh()}}{
-    Refresh \code{DataSpaceStudy} class.
+    Refresh the study object to update available datasets and treatment info.
   }
 }
 }
@@ -102,7 +105,7 @@ cvd408
 NAb <- cvd408$getDataset("NAb")
 
 # Get variable information of the NAb dataset
-cvd408$getVariableInfo("NAb")
+cvd408$getDatasetDescription("NAb")
 
 # Take a look at cvd408's treatment arm information
 cvd408$treatmentArm
@@ -117,9 +120,10 @@ nyvac <- con$getGroup(220)
 # Connect to all studies
 cvd <- con$getStudy("")
 
-# Refresh a study object
+# Refresh the study object to update available datasets and treatment info
 cvd$refresh()
 }
+
 }
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}

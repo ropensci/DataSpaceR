@@ -1,7 +1,19 @@
+library(testthat)
+
+con <- connectDS()
 
 test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
   datasets <- sort(datasets)
-  target <- ifelse(study != "", study, ifelse(is.null(groupLabel), "CAVD", groupLabel))
+  target <- ifelse(
+    study != "",
+    study,
+    ifelse(
+      is.null(groupLabel),
+      "CAVD",
+      groupLabel
+    )
+  )
+
   context(paste0("DataSpaceStudy (", target, ")"))
 
   if (is.null(groupId)) {
@@ -27,38 +39,41 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       "study",
       "clone",
       "refresh",
-      "getVariableInfo",
+      "getDatasetDescription",
       "clearCache",
       "getDataset",
       "print",
       "initialize"
-      )
+    )
     test_that("`DataSpaceStudy` contains correct fields and methods", {
       expect_equal(names(cavd), con_names)
     })
 
     if (identical(names(cavd), con_names)) {
       test_that("`print`", {
-        path <- ifelse(study == "", study,  paste0("/", study))
-        con_output <- c("<DataSpaceStudy>",
-                        ifelse(is.null(groupLabel),
-                               paste0("  Study: ", ifelse(study == "", "CAVD", study)),
-                               paste0("  Group: ", groupLabel)),
-                        paste0("  URL: https://dataspace.cavd.org/CAVD", path),
-                        "  Available datasets:",
-                        strwrap(datasets, prefix = "    - "))
+        path <- ifelse(study == "", study, paste0("/", study))
+        con_output <- c(
+          "<DataSpaceStudy>",
+          ifelse(is.null(groupLabel),
+            paste0("  Study: ", ifelse(study == "", "CAVD", study)),
+            paste0("  Group: ", groupLabel)
+          ),
+          paste0("  URL: https://dataspace.cavd.org/CAVD", path),
+          "  Available datasets:",
+          strwrap(datasets, prefix = "    - ")
+        )
         cap_output <- capture.output(cavd$print())
         expect_equal(cap_output, con_output)
       })
 
       test_that("`config`", {
         configs <- c(
-          "labkey.url.base",
-          "labkey.user.email",
+          "labkeyUrlBase",
+          "labkeyUserEmail",
           "curlOptions",
           "verbose",
           "packageVersion",
-          "labkey.url.path"
+          "labkeyUrlPath"
         )
 
         expect_is(cavd$config, "list")
@@ -67,10 +82,14 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
       test_that("`availableDatasets`", {
         expect_is(cavd$availableDatasets, "data.table")
-        expect_equal(names(cavd$availableDatasets),
-                     c("name", "label", "n"))
-        expect_equal(cavd$availableDatasets$name,
-                     datasets)
+        expect_equal(
+          names(cavd$availableDatasets),
+          c("name", "label", "n")
+        )
+        expect_equal(
+          cavd$availableDatasets$name,
+          datasets
+        )
       })
 
       test_that("`study`", {
@@ -84,9 +103,13 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
       test_that("`treatmentArm`", {
         expect_is(cavd$treatmentArm, "data.table")
-        expect_equal(names(cavd$treatmentArm),
-                     c("arm_id", "arm_part", "arm_group", "arm_name",
-                       "randomization", "coded_label", "last_day", "description"))
+        expect_equal(
+          names(cavd$treatmentArm),
+          c(
+            "arm_id", "arm_part", "arm_group", "arm_name",
+            "randomization", "coded_label", "last_day", "description"
+          )
+        )
         expect_gt(nrow(cavd$treatmentArm), 0)
       })
 
@@ -124,7 +147,10 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
       test_that("`getDataset` (mergeExtra)", {
         for (datasetName in cavd$availableDatasets$name) {
-          dataset <- try(cavd$getDataset(datasetName, mergeExtra = TRUE), silent = TRUE)
+          dataset <- try(
+            cavd$getDataset(datasetName, mergeExtra = TRUE),
+            silent = TRUE
+          )
           expect_is(dataset, "data.table", info = datasetName)
           expect_gt(nrow(dataset), 0)
           expect_true("arm_id" %in% names(dataset))
@@ -132,6 +158,8 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
       })
 
       test_that("`clear_cache`", {
+        skip_if_not_installed("pryr")
+
         expect_gt(length(cavd$cache), 0)
 
         before <- pryr::object_size(cavd)
@@ -143,12 +171,18 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
         expect_lte(after, before)
       })
 
-      test_that("`getVariableInfo`", {
+      test_that("`getDatasetDescription`", {
         for (datasetName in cavd$availableDatasets$name) {
-          dataset <- try(cavd$getVariableInfo(datasetName = datasetName), silent = TRUE)
+          dataset <- try(
+            cavd$getDatasetDescription(datasetName = datasetName),
+            silent = TRUE
+          )
           expect_is(dataset, "data.table", info = datasetName)
           expect_gt(nrow(dataset), 0)
-          expect_equal(names(dataset), c("fieldName", "caption", "type", "description"))
+          expect_equal(
+            names(dataset),
+            c("fieldName", "caption", "type", "description")
+          )
         }
       })
 
@@ -162,9 +196,39 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
   }
 }
 
-con <- connectDS()
+test_study(
+  study = "",
+  datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb")
+)
+test_study(
+  study = "cvd408",
+  datasets = c("BAMA", "ICS", "Demographics", "NAb")
+)
+test_study(
+  study = "",
+  datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"),
+  groupId = 220,
+  groupLabel = c("NYVAC_durability" = "NYVAC durability comparison")
+)
+test_study(
+    study = "",
+    datasets = c("BAMA", "Demographics", "ICS", "NAb"),
+    groupId = 228,
+    groupLabel = c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
+)
 
-test_study("", c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"))
-test_study("cvd408", c("BAMA", "ICS", "Demographics", "NAb"))
-test_study("", c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"), groupId = 220, groupLabel = c("NYVAC_durability" = "NYVAC durability comparison"))
-test_study("", c("BAMA", "Demographics", "ICS", "NAb"), groupId = 228, groupLabel = c("HVTN 505 case control subjects" = "HVTN 505 case control subjects"))
+email <- DataSpaceR:::getUserEmail(DataSpaceR:::PRODUCTION, NULL)
+if (identical(email, "jkim2345@scharp.org")) {
+  test_study(
+    study = "",
+    datasets = c("Demographics", "NAb"),
+    groupId = 216,
+    groupLabel = c("mice" = "mice")
+  )
+  test_study(
+    study = "",
+    datasets = c("Demographics", "NAb"),
+    groupId = 217,
+    groupLabel = c("CAVD 242" = "CAVD 242")
+  )
+}

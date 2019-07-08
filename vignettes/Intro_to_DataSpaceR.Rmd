@@ -1,22 +1,58 @@
 ---
-title: "A Simple Introduction to the DataSpaceR Package"
+title: "Introduction to DataSpaceR"
 author: "Ju Yeong Kim"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Intro To DataSpaceR}
+  %\VignetteIndexEntry{Introduction to DataSpaceR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-This package provides a thin wrapper around [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) and connects to the the [CAVD DataSpace](https://dataspace.cavd.org) database, making it easier to fetch datasets from specific studies.
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  purl = NOT_CRAN,
+  eval = NOT_CRAN
+)
+```
+
+
+This package provides a thin wrapper around [Rlabkey](https://cran.r-project.org/package=Rlabkey) and connects to the the [CAVD DataSpace](https://dataspace.cavd.org) database, making it easier to fetch datasets from specific studies.
 
 
 ## Configuration
 
-In order to connect to DataSpace, you will need a `.netrc` file in your home directory that will contain a `machine` name (hostname of DataSpace), and `login` and `password`. See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc) for more information.
+First, go to [DataSpace](https://dataspace.cavd.org) now and set yourself up with an account.
 
-A netrc file may look like this:
+In order to connect to the CAVD DataSpace via `DataSpaceR`, you will need a `netrc` file in your home directory that will contain a `machine` name (hostname of DataSpace), and `login` and `password`. There are two ways to create a `netrc` file.
+
+### Creating a netrc file with `writeNetrc`
+
+On your R console, create a `netrc` file using a function from `DataSpaceR`:
+
+```{r, eval=FALSE}
+writeNetrc(
+  login = "yourEmail@address.com", 
+  password = "yourSecretPassword",
+  netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path 
+)
+```
+
+This will create a `netrc` file in your home directory. Make sure you have a valid login and password.
+
+### Manually creating a netrc file
+
+***Alternatively***, you can manually create a netrc file.
+
+* On Windows, this file should be named `_netrc`
+* On UNIX/Mac, it should be named `.netrc`
+* The file should be located in the user's home directory, and the permissions on the file should be unreadable for everybody except the owner
+* To determine your home directory, run `Sys.getenv("HOME")` in R
+
+The following three lines must be included in the `.netrc` or `_netrc` file either separated by white space (spaces, tabs, or newlines) or commas. Multiple such blocks can exist in one file.
 
 ```
 machine dataspace.cavd.org
@@ -24,20 +60,12 @@ login myuser@domain.com
 password supersecretpassword
 ```
 
-### Set up your netrc file now
-
-Put it in your home directory. If you type:
-
-``` 
-ls ~/.netrc
-```
-
-at the command prompt, you should see it there. If it's not there, create one now. Make sure you have a valid login and password. If you don't have one, go to [DataSpace](https://dataspace.cavd.org) now and set yourself up with an account.
+See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc) for more information about `netrc`.
 
 
 ## Initiate a connection
 
-We'll be looking at study `cvd256`. If you want to use a different study, change that string. The connections have state, so you can instantiate multiple connections to different studies simultaneously.
+We'll be looking at study `cvd256`. If you want to use a different study, change that string. You can instantiate multiple connections to different studies simultaneously.
 
 ```{r connectDS}
 library(DataSpaceR)
@@ -47,19 +75,25 @@ con
 
 The call to `connectDS` instantiates the connection. Printing the object shows where it's connected and the available studies.
 
+```{r availableStudies}
+knitr::kable(head(con$availableStudies))
+```
+
+`con$availableStudies` shows the available studies in the CAVD DataSpace. Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
+
 ```{r getStudy}
 cvd256 <- con$getStudy("cvd256")
 cvd256
 ```
 
-`con$getStudy` creates a connection to the study `cvd256`. Printing the object  shows where it's connected, to what study, and the available datasets.
+`con$getStudy` creates a connection to the study `cvd256`. Printing the object shows where it's connected, to what study, and the available datasets.
 
 ```{r other-fields}
 knitr::kable(cvd256$availableDatasets)
 knitr::kable(cvd256$treatmentArm)
 ```
 
-Available datasets and treatment arm information for the connection can be access by `availableDatasets` and `treatmentArm`.
+Available datasets and treatment arm information for the connection can be accessed by `availableDatasets` and `treatmentArm`.
 
 
 ## Fetching datasets
@@ -72,18 +106,17 @@ dim(NAb)
 colnames(NAb)
 ```
 
-The *cvd256* object is an [`R6`](https://cran.r-project.org/web/packages/R6/) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
+The *cvd256* object is an [`R6`](https://cran.r-project.org/package=R6) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
 
-We can get detailed variable information using `getVariableInfo`.
+We can get detailed variable information using `getDatasetDescription`.
 
 ```{r getVariableInfo}
-knitr::kable(cvd256$getVariableInfo("NAb"))
+knitr::kable(cvd256$getDatasetDescription("NAb"))
 ```
 
 To get only a subset of the data and speed up the download, filters can be passed to `getDataset`. The filters are created using the `makeFilter` function of the `Rlabkey` package.
 
 ```{r getDataset-filter}
-library(Rlabkey)
 cvd256Filter <- makeFilter(c("visit_day", "EQUAL", "0"))
 NAb_day0 <- cvd256$getDataset("NAb", colFilter = cvd256Filter)
 dim(NAb_day0)
@@ -92,98 +125,86 @@ dim(NAb_day0)
 See `?makeFilter` for more information on the syntax.
 
 
-## Cross-study connection
+## Creating a connection to all studies
 
-To fetch data from multiple studies, simply create a connection at the project level.
+To fetch data from multiple studies, create a connection at the project level.
 
-```{r cross-connection}
+```{r connection-all-studies}
 cavd <- con$getStudy("")
 ```
 
 This will instantiate a connection at the `CAVD` level. Most functions work cross study connections just like they do on single studies.
 
-You can get a list of datasets available accross all studies.
+You can get a list of datasets available across all studies.
 
-```{r cross-connection-print}
+```{r connection-all-studies-datasets}
 cavd
 knitr::kable(cavd$availableDatasets)
 ```
 
-In cross-study connections, `getDataset` will combine the requested datasets. Note that in most cases the datasets will have too many subjects, making the filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
+In all-study connection, `getDataset` will combine the requested datasets. Note that in most cases, the datasets will have too many subjects for quick data transfer, making filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
 
-```{r cross-connection-dem}
+```{r connection-all-studies-dem}
 conFilter <- makeFilter(c("species", "EQUAL", "Human"))
 human <- cavd$getDataset("Demographics", colFilter = conFilter)
 dim(human)
 colnames(human)
 ```
 
+Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
+
 
 ## Connect to a saved group
 
-We can browse available saved groups via `availableGroups`.
+A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
+
+Let's say you are using the App to filter and visualize data and want to save them for later or explore in R with `DataSpaceR`. You can save a group by clicking the Save button on the Active Filter Panel.
+
+We can browse available the saved groups or the curated groups by DataSpace Team via `availableGroups`.
 
 ```{r availableGroups}
 knitr::kable(con$availableGroups)
 ```
 
-To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to `mice` group which has group ID 208 by `getGroup`.
+To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to the "NYVAC durability comparison" group which has group ID 220 by `getGroup`.
 
 ```{r group-connection}
-subjects <- con$getGroup(220)
-subjects
+nyvac <- con$getGroup(220)
+nyvac
 ```
 
 Retrieving a dataset is the same as before.
 
 ```{r group-connection-nab}
-NAb_subjects <- subjects$getDataset("NAb")
-dim(NAb_subjects)
+NAb_nyvac <- nyvac$getDataset("NAb")
+dim(NAb_nyvac)
 ```
 
 
-## Caching
+## Reference Tables
 
-### Connect to `cvd408` study
+The followings are the tables of all fields and methods that work on `DataSpaceConnection` and `DataSpaceStudy` objects and could be used as a quick reference.
 
-```{r}
-library(pryr)
-cvd408 <- con$getStudy("cvd408")
+### `DataSpaceConnection`
 
-str(cvd408$cache)
-object_size(cvd408)
-```
+| Name | Description |
+| --- | --- |
+| `availableStudies` | The table of available studies. |
+| `availableGroups` | The table of available groups. |
+| `getStudy` | Create a `DataSpaceStudy` object by study. |
+| `getGroup` | Create a `DataSpaceStudy` object by group. |
 
-### Retrieve NAb dataset
+### `DataSpaceStudy`
 
-```{r}
-ptm <- proc.time()
-invisible(cvd408$getDataset("NAb"))
-proc.time() - ptm
-
-str(cvd408$cache, max.level = 2)
-object_size(cvd408)
-```
-
-### Retrieve NAb dataset again
-
-```{r}
-ptm <- proc.time()
-invisible(cvd408$getDataset("NAb"))
-proc.time() - ptm
-
-str(cvd408$cache, max.level = 2)
-object_size(cvd408)
-```
-
-### Clear cache
-
-```{r}
-cvd408$clearCache()
-
-str(cvd408$cache, max.level = 2)
-object_size(cvd408)
-```
+| Name | Description |
+| --- | --- |
+| `study` | The study name. |
+| `group` | The group name. |
+| `availableDatasets` | The table of datasets available in the study object. |
+| `treatmentArm` | The table of treatment arm information for the connected study. Not available for all study connection. |
+| `studyInfo` | Stores the information about the study. |
+| `getDataset` | Get a dataset from the connection. |
+| `getDatasetDescription` | Get variable information. |
 
 
 ## Session information
