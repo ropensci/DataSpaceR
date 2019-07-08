@@ -208,7 +208,8 @@ DataSpaceConnection <- R6Class(
     .getAvailableStudies = function() {
       colSelect <- c(
         "study_name", "short_name", "title", "type", "status",
-        "stage", "species", "start_date", "strategy"
+        "stage", "species", "start_date", "strategy",
+        "network", "data_availability"
       )
 
       availableStudies <- labkey.selectRows(
