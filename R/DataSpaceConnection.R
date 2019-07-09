@@ -129,10 +129,7 @@ DataSpaceConnection <- R6Class(
 
       # get extra fields if available
       self$refresh()
-
-      # load mab grid
-      private$.getMabGrid();
-
+      
       NULL
     },
     print = function() {
@@ -246,6 +243,10 @@ DataSpaceConnection <- R6Class(
         )),
         class(try(
           private$.getAvailableGroups(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getMabGrid(),
           silent = !private$.config$verbose
         ))
       )
