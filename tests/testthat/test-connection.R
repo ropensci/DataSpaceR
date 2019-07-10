@@ -142,11 +142,36 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_true(oriCnt == nrow(con$mabGrid))
     })
 
-    test_that("Test query error", {
+    test_that("Test `filterMab` errors, warnings, and subsetting.", {
       expect_error(
         con$filterMabGrid("mab_mixture", "NotAMab"),
-        regexp = "The `value` and `using` parameter combination are not found in the mAb grid."
+        regexp = "NotAMab set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
       )
+      expect_error(
+        con$filterMabGrid("mab_mixture", c("NotAMab1", "NotAMab2", "NotAMab3", "NotAMab4")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3, and others set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "NotAMab")),
+        regexp = "NotAMab set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      con$resetMabGrid()
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "NotAMab1", "NotAMab2", "NotAMab3")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3 set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      con$resetMabGrid()
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "NotAMab1", "NotAMab2", "NotAMab3", "NotAMab4")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3, and others set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      con$resetMabGrid()
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "PGT121", "PGT125", "PGT125", "PGT125", "NotAMab1", "NotAMab2", "NotAMab3", "NotAMab4")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3, and others set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      expect_true(nrow(con$mabGrid) == 2)
+      con$resetMabGrid()
     })
 
     test_that("Test `retrieveMabGridValue`", {

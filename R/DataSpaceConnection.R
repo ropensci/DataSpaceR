@@ -179,17 +179,26 @@ DataSpaceConnection <- R6Class(
         ".mabMetaGridBase"
       )
 
-      assert_that(all(value %in% private[[gridBase]][[column]]), msg = "The `value` and `using` parameter combination are not found in the mAb grid.")
-
+      if (!all(value %in% private[[gridBase]][[column]])) {
+        missingValue <- unique(value[!value %in% private[[gridBase]][[column]]])
+        value <- unique(value[value %in% private[[gridBase]][[column]]])
+        if (length(missingValue) > 3) {
+          msgText <- paste(c(missingValue[c(1, 2, 3)], "and others"), collapse = ", ")
+        } else {
+          msgText <- paste(missingValue, collapse = ", ")
+        }
+        assert_that(length(value) != 0, msg = paste0(msgText, " set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."))
+        warning(msgText, " set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found.")
+      }
       if (isFromMabGrid(column)) {
         private$.mabGridBase <- private$.mabGridBase[
           get(column) %in% value
         ]
 
         if (column == "mab_mix_name_std") {
-        private$.mabMetaGridBase <- private$.mabMetaGridBase[
-          get(column) %in% value
-        ]
+          private$.mabMetaGridBase <- private$.mabMetaGridBase[
+            get(column) %in% value
+          ]
         }
       } else {
         private$.mabMetaGridBase <- private$.mabMetaGridBase[
