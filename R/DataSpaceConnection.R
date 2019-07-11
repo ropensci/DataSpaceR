@@ -431,6 +431,7 @@ DataSpaceConnection <- R6Class(
 
       private$.mabGridBase <- mabGridBase
       private$.mabMetaGridBase <- mabMetaGridBase
+      private$.mabFilters <- list()
       private$.cache$mabGridBase <- data.table::copy(mabGridBase)
       private$.cache$mabMetaGridBase <- data.table::copy(mabMetaGridBase)
 
