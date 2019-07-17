@@ -170,7 +170,7 @@ DataSpaceConnection <- R6Class(
       DataSpaceStudy$new("", private$.config, group, NULL)
     },
     filterMabGrid = function(using, value) {
-      assertColumn(using)
+      assertColumn(using, self)
 
       column <- switchColumn(using)
       gridBase <- ifelse(
@@ -217,8 +217,8 @@ DataSpaceConnection <- R6Class(
       invisible(self)
     },
     retrieveMabGridValue = function(using, mab_mixture = "") {
-      assertColumn(using)
-      assert_that(is.character(mab_mixture), msg="Use only character arguments for `mab_mixture`.")
+      assertColumn(using, self)
+      assert_that(is.character(mab_mixture), msg = "Use only character arguments for `mab_mixture`.")
 
       column <- switchColumn(using)
       gridBase <- ifelse(isFromMabGrid(column), ".mabGridBase", ".mabMetaGridBase")
@@ -226,7 +226,7 @@ DataSpaceConnection <- R6Class(
         unique(private[[gridBase]][[column]])
       } else {
         mab <- mab_mixture
-        assert_that(all(mab %in% private$.mabGridBase$mab_mix_name_std))
+        assert_that(all(mab %in% private$.mabGridBase$mab_mix_name_std), msg = "`mab_mixture` value not found in `mabGridBase`")
         unique(private[[gridBase]][mab_mix_name_std %in% mab][[column]])
       }
     },
@@ -238,7 +238,7 @@ DataSpaceConnection <- R6Class(
       invisible(self)
     },
     getMab = function() {
-      DataSpaceMab$new(self$mabGrid$mab_mixture, private$.mabFilters, private$.config)
+      DataSpaceMab$new(self$mabGridSummary$mab_mixture, private$.mabFilters, private$.config)
     },
     refresh = function() {
       tries <- c(
@@ -273,9 +273,9 @@ DataSpaceConnection <- R6Class(
     availableGroups = function() {
       private$.availableGroups
     },
-    mabGrid = function() {
-      mabGridBase <- private$.mabGridBase
-      mabMetaGridBase <- private$.mabMetaGridBase
+    mabGridSummary = function() {
+      mabGridBase <- data.table::copy(private$.mabGridBase)
+      mabMetaGridBase <- data.table::copy(private$.mabMetaGridBase)
       mabGridBase[
         ,
         `:=`(
@@ -303,9 +303,9 @@ DataSpaceConnection <- R6Class(
         ,
         `:=`(
           mab_mixture = mab_mix_name_std,
-          donor_species = paste(unique(mab_donor_species[!is.na(mab_donor_species)]), collapse = ", "),
-          hxb2_location = paste(unique(mab_hxb2_location[!is.na(mab_hxb2_location)]), collapse = ", "),
-          isotype = paste(unique(mab_isotype[!is.na(mab_isotype)]), collapse = ", ")
+          donor_species = paste(sort(unique(mab_donor_species[!is.na(mab_donor_species)])), collapse = ", "),
+          hxb2_location = paste(sort(unique(mab_hxb2_location[!is.na(mab_hxb2_location)])), collapse = ", "),
+          isotype = paste(sort(unique(mab_isotype[!is.na(mab_isotype)])), collapse = ", ")
         ),
         by = mab_mix_name_std
       ]
@@ -316,6 +316,50 @@ DataSpaceConnection <- R6Class(
       mabGrid <- mabGrid[mabMetaGrid, nomatch = 0]
 
       mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)]
+    },
+    mabGridBase = function() {
+      mabGridBase <- data.table::copy(private$.mabGridBase)
+      mabMetaGridBase <- data.table::copy(private$.mabMetaGridBase)
+
+      mabGridBase <- unique(
+        mabGridBase[
+         ,
+           .(
+             mab_mix_id = mab_mix_id,
+             mab_mixture = mab_mix_name_std,
+             viruses = virus,
+             clades = clade,
+             tiers = neutralization_tier,
+             curve_ic50 = titer_curve_ic50,
+             studies = study
+           )
+        ]
+      )
+      
+      mabMetaGridBase <- unique(
+        mabMetaGridBase[
+         ,
+           .(
+             mab_mix_id = mab_mix_id,
+             mab_mixture = mab_mix_name_std,
+             donor_species = paste(sort(unique(mab_donor_species)), collapse = ", "),
+             hxb2_location = paste(sort(unique(mab_hxb2_location)), collapse = ", "),
+             isotype = paste(sort(unique(mab_isotype)), collapse = ", ")
+           ),
+           by = mab_mix_name_std
+        ]
+      )
+      
+      setkey(mabGridBase, mab_mix_id, viruses, studies)
+      setkey(mabMetaGridBase, mab_mix_id)
+
+      # left join mabGrid with mabMetaGrid
+      mabGrid <- merge(
+        mabGridBase,
+        unique(mabMetaGridBase[,.(mab_mix_id, donor_species, hxb2_location, isotype)])
+      )
+
+      mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, viruses, clades, tiers, curve_ic50, studies)]
     }
   ),
   private = list(

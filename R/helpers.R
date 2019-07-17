@@ -218,10 +218,14 @@ makeCountQuery <- function(dataset, group) {
   query
 }
 
-assertColumn <- function(using) {
+assertColumn <- function(using, self) {
   assert_that(
-    using %in% c("mab_mixture", "donor_species", "isotype", "hxb2_location", "viruses", "clades", "tiers", "curve_ic50", "studies"),
-    msg = paste("\"", using, "\" is not a valid column.")
+    length(using) == 1,
+    msg = "May only pass one column at a time"
+  )
+  assert_that(
+    using %in% names(self$mabGridBase),
+    msg = paste0("\"", using, "\" is not a valid column in the mabGridBase.")
   )
 }
 

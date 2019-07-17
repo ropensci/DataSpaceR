@@ -10,7 +10,8 @@ test_that("can connect to DataSpace", {
 if ("DataSpaceConnection" %in% class(con)) {
   con_names <- c(
     ".__enclos_env__",
-    "mabGrid",
+    "mabGridBase",
+    "mabGridSummary",
     "availableGroups",
     "availableStudies",
     "config",
@@ -135,11 +136,11 @@ if ("DataSpaceConnection" %in% class(con)) {
     })
 
     test_that("`resetMabGrid`", {
-      oriCnt <- nrow(con$mabGrid)
+      oriCnt <- nrow(con$mabGridSummary)
       con$filterMabGrid("mab_mixture", c("mAb 96"))
-      expect_true(oriCnt > nrow(con$mabGrid))
+      expect_true(oriCnt > nrow(con$mabGridSummary))
       con$resetMabGrid()
-      expect_true(oriCnt == nrow(con$mabGrid))
+      expect_true(oriCnt == nrow(con$mabGridSummary))
     })
 
     test_that("Test `filterMab` errors, warnings, and subsetting.", {
@@ -170,8 +171,19 @@ if ("DataSpaceConnection" %in% class(con)) {
         con$filterMabGrid("mab_mixture", c("PGT121", "PGT121", "PGT125", "PGT125", "PGT125", "NotAMab1", "NotAMab2", "NotAMab3", "NotAMab4")),
         regexp = "NotAMab1, NotAMab2, NotAMab3, and others set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
       )
-      expect_true(nrow(con$mabGrid) == 2)
+      expect_true(nrow(con$mabGridSummary) == 2)
       con$resetMabGrid()
+    })
+
+    test_that("Test `assertColumn`", {
+      expect_error(
+        con$filterMabGrid(c("This", "That"), "A Thing"),
+        regexp = "May only pass one column at a time"
+      )
+      expect_error(
+        con$filterMabGrid("This", "A Thing"),
+        regexp = "\"This\" is not a valid column in the mabGridBase."
+      )
     })
 
     test_that("Test `retrieveMabGridValue`", {
@@ -184,17 +196,21 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_true(
         con$retrieveMabGridValue(using = "donor_species", mab_mixture = "mAb 96") == "human"
       )
+      expect_error(
+        con$retrieveMabGridValue("viruses", "PGT 121"),
+        regexp = "`mab_mixture` value not found in `mabGridBase`"
+      )
     })
 
     test_that("Test geomean calculation", {
       con$filterMabGrid("mab_mixture", "mAb 96")
       mab <- con$getMab()$nabMab
-      expect_equal(all(mab$titer_curve_ic50 %in% c(-Inf, Inf)), is.na(con$mabGrid$geometric_mean_curve_ic50))
+      expect_equal(all(mab$titer_curve_ic50 %in% c(-Inf, Inf)), is.na(con$mabGridSummary$geometric_mean_curve_ic50))
       con$resetMabGrid()
 
       con$filterMabGrid("mab_mixture", "PGDM1400")
       mab <- con$getMab()$nabMab
-      expect_true(round(con$mabGrid$geometric_mean_curve_ic50, 2) == 0.05)
+      expect_true(round(con$mabGridSummary$geometric_mean_curve_ic50, 2) == 0.05)
       con$resetMabGrid()
     })
 
