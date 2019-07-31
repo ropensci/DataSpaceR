@@ -455,7 +455,7 @@ DataSpaceConnection <- R6Class(
     },
     .getMabGrid = function() {
       mabGridBase <- labkey.selectRows(
-        baseUrl = private$.config$labkey.url.base,
+        baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
         queryName = "mAbGridBase",
@@ -463,7 +463,7 @@ DataSpaceConnection <- R6Class(
         method = "GET"
       )
       mabMetaGridBase <- labkey.selectRows(
-        baseUrl = private$.config$labkey.url.base,
+        baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
         queryName = "mAbMetaGridBase",

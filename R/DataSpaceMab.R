@@ -41,7 +41,7 @@ DataSpaceMab <- R6Class(
       }
 
       nabMab <- labkey.selectRows(
-        baseUrl = config$labkey.url.base,
+        baseUrl = config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "study",
         queryName = "NAbMAbWithMixMeta",
