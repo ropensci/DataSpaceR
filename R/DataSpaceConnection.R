@@ -325,38 +325,39 @@ DataSpaceConnection <- R6Class(
         mabGridBase[
          ,
            .(
-             mab_mix_id = mab_mix_id,
+             mab_mix_id  = mab_mix_id,
              mab_mixture = mab_mix_name_std,
-             viruses = virus,
-             clades = clade,
-             tiers = neutralization_tier,
-             curve_ic50 = titer_curve_ic50,
-             studies = study
+             viruses     = virus,
+             clades      = clade,
+             tiers       = neutralization_tier,
+             curve_ic50  = titer_curve_ic50,
+             studies     = study
            )
         ]
       )
-      
+
       mabMetaGridBase <- unique(
         mabMetaGridBase[
          ,
            .(
-             mab_mix_id = mab_mix_id,
-             mab_mixture = mab_mix_name_std,
-             donor_species = paste(sort(unique(mab_donor_species)), collapse = ", "),
-             hxb2_location = paste(sort(unique(mab_hxb2_location)), collapse = ", "),
-             isotype = paste(sort(unique(mab_isotype)), collapse = ", ")
+             mab_mix_id    = mab_mix_id,
+             mab_mixture   = mab_mix_name_std,
+             donor_species = mab_donor_species,
+             hxb2_location = mab_hxb2_location,
+             isotype       = mab_isotype
            ),
-           by = mab_mix_name_std
         ]
       )
+
       
-      setkey(mabGridBase, mab_mix_id, viruses, studies)
+      setkey(mabGridBase, mab_mix_id)
       setkey(mabMetaGridBase, mab_mix_id)
 
       # left join mabGrid with mabMetaGrid
       mabGrid <- merge(
         mabGridBase,
-        unique(mabMetaGridBase[,.(mab_mix_id, donor_species, hxb2_location, isotype)])
+        mabMetaGridBase[,.(mab_mix_id, donor_species, hxb2_location, isotype)],
+        allow.cartesian = TRUE
       )
 
       mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, viruses, clades, tiers, curve_ic50, studies)]
