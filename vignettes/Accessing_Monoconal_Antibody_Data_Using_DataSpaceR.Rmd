@@ -55,7 +55,7 @@ You can filter rows in the grid by specifying the values to keep in the columns 
 
 ```{r}
 # filter the grid by viruses
-con$filterMabGrid(using = "viruses", value = c("242-14", "Q23.17", "6535.3", "BaL.26", "DJ263.8"))
+con$filterMabGrid(using = "virus", value = c("242-14", "Q23.17", "6535.3", "BaL.26", "DJ263.8"))
 
 # filter the grid by donor species (llama)
 con$filterMabGrid(using = "donor_species", value = "llama")
@@ -76,20 +76,20 @@ con$
 
 ## Retrive column values from the mAb grid
 
-You can retrive values from the grid by `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`, or you can access values in the `mabGridBase` field in the connection object
+You can retrive values from the grid by `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tier`, `clade`, `virus`, and `studies`, or any variables found in the `mabGridBase` field in the connection object.
 
 ```{r}
 # retrieve available viruses in the filtered grid
-con$retrieveMabGridValue(using = "viruses")
+con$retrieveMabGridValue(using = "virus")
 
 # retrive available clades for 1H9 mAb mixture in the filtered grid
-con$retrieveMabGridValue(using = "clades", mab_mixture = "1H9")
+con$retrieveMabGridValue(using = "clade", mab_mixture = "1H9")
 
 # retrive first 10 available viruses using mabGridBase 
-con$mabGridBase[,viruses]
+con$mabGridBase[,virus]
 
 # retrive available clades for 1H9 mAb mixture using mabGridBase
-con$mabGridBase[mab_mixture == "1H9", clades]
+con$mabGridBase[mab_mixture == "1H9", clade]
 ```
 
 
@@ -108,6 +108,13 @@ There are 7 public fields available in the DataSpaceMab object: `assays`, `mabs`
 DT::datatable(mab$nabMab, options = list(autoWidth = TRUE, scrollX = TRUE))
 ```
 
+## View metadata concerning the mAb object
+
+There are several metadata fields that can be expored in the mAb object.
+
+```{r}
+names(mab)
+```
 
 ## Session information
 
