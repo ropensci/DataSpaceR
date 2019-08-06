@@ -327,11 +327,11 @@ DataSpaceConnection <- R6Class(
            .(
              mab_mix_id  = mab_mix_id,
              mab_mixture = mab_mix_name_std,
-             viruses     = virus,
-             clades      = clade,
-             tiers       = neutralization_tier,
+             virus       = virus,
+             clade       = clade,
+             tier        = neutralization_tier,
              curve_ic50  = titer_curve_ic50,
-             studies     = study
+             study       = study
            )
         ]
       )
@@ -360,7 +360,7 @@ DataSpaceConnection <- R6Class(
         allow.cartesian = TRUE
       )
 
-      mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, viruses, clades, tiers, curve_ic50, studies)]
+      mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, virus, clade, tier, curve_ic50, study)]
     }
   ),
   private = list(
