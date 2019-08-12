@@ -203,7 +203,7 @@ DataSpaceConnection <- R6Class(
       } else {
         private$.mabMetaGridBase <- private$.mabMetaGridBase[
           ,
-          valid := any(get(column) == value, na.rm = TRUE),
+          valid := any(get(column) %in% value, na.rm = TRUE),
           by = mab_mix_name_std
         ][valid == TRUE]
         private$.mabGridBase <- private$.mabGridBase[

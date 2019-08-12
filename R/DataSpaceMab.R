@@ -40,6 +40,8 @@ DataSpaceMab <- R6Class(
             do.call(rbind, filters)
           )
         )
+      } else {
+        mabFilters <- NULL
       }
       
       nabMab <- labkey.selectRows(
@@ -145,8 +147,8 @@ DataSpaceMab <- R6Class(
     },
     print = function() {
       cat("<DataSpaceMab>")
-      cat("\n  URL:", private$.config$labkey.url.base)
-      cat("\n  User:", private$.config$labkey.user.email)
+      cat("\n  URL:", private$.config$labkeyUrlBase)
+      cat("\n  User:", private$.config$labkeyUserEmail)
       cat("\n  Summary:")
       cat("\n    -", length(unique(self$nabMab$prot)), "studies")
       cat("\n    -", length(unique(self$nabMab$mab_mix_name_std)), "mAb mixtures")

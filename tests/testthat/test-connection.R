@@ -218,5 +218,20 @@ if ("DataSpaceConnection" %in% class(con)) {
       con$resetMabGrid()
     })
 
+    test_that("getMab pulls mAb data when filters are not set.", {
+      con$resetMabGrid()
+      mab <- con$getMab()
+      expect_true(nrow(mab$nabMab) > 0)
+
+      con <- try(connectDS(), silent = TRUE)
+      mab <- con$getMab()
+      expect_true(nrow(mab$nabMab) > 0)
+    })
+
+    test_that("Check for warnings.", {
+      con$filterMabGrid(using = "hxb2_location", value = c("Env", "gp160"))
+      expect_true(length(warnings()) == 0)
+    })
+
   }
 }
