@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 ## Workflow overview
 
-In [the app](https://dataspace.cavd.org/cds/CAVD/app.view#mabgrid), the workflow of using the mAb grid looks like this:
+Using the DataSpace [app](https://dataspace.cavd.org/cds/CAVD/app.view#mabgrid), the workflow of using the mAb grid is the following:
 
 1. Navigate to the mAb Grid and browse the available mAb mixtures
 2. Select the mAb mixtures that you'd like to investigate
@@ -27,10 +27,10 @@ In [the app](https://dataspace.cavd.org/cds/CAVD/app.view#mabgrid), the workflow
 4. Click "Neutralization Curves" or "IC50 Titer Heatmap" to visualize the mAb data
 5. Click "Export CSV" or "Export Excel" to download the mAb data
 
-`DataSpaceR` can mimick these steps except for the step 4.
+`DataSpaceR` offers a similar interface:
 
 1. Browse the mAb Grid by `con$mabGridSummary`
-2. Select the mAb mixtures by filtering the mAb grid using any columns found in `con$mabGridBase`
+2. Select the mAb mixtures by filtering the mAb grid using any columns found in `con$mabGrid` using `con$filterMabGrid()`
 3. Use `con$getMab()` to retreive the mAb data
 
 
@@ -47,11 +47,11 @@ DT::datatable(con$mabGridSummary, options = list(autoWidth = TRUE, scrollX = TRU
 
 This table is designed to mimick the mAb grid found in the app.
 
-One can also accesss the unsummarized data from the mAb grid by calling `con$mabGridBase`.
+One can also accesss the unsummarized data from the mAb grid by calling `con$mabGrid`.
 
 ## Filter the mAb grid
 
-You can filter rows in the grid by specifying the values to keep in the columns found in the field `con$mabGridBase`: `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`. `filterMabGrid` takes the column and the values and filters the underlying tables (private fields), and when you call the `mabGridSummary` or (which is actually an [active binding](https://cloud.r-project.org/web/packages/R6/vignettes/Introduction.html#active-bindings)), it returns the filtered grid with updated `n_` columns and `geometric_mean_curve_ic50`.
+You can filter rows in the grid by specifying the values to keep in the columns found in the field `con$mabGrid`: `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`. `filterMabGrid` takes the column and the values and filters the underlying tables (private fields), and when you call the `mabGridSummary` or (which is actually an [active binding](https://cloud.r-project.org/web/packages/R6/vignettes/Introduction.html#active-bindings)), it returns the filtered grid with updated `n_` columns and `geometric_mean_curve_ic50`.
 
 ```{r}
 # filter the grid by viruses
@@ -76,20 +76,24 @@ con$
 
 ## Retrive column values from the mAb grid
 
-You can retrive values from the grid by `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tier`, `clade`, `virus`, and `studies`, or any variables found in the `mabGridBase` field in the connection object.
+You can retrive values from the grid by `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tier`, `clade`, `virus`, and `studies`, or any variables found in the `mabGrid` field in the connection object.
+
+There are do options of doing so: using the `retrieveMabGrid` method, or using `data.table` operations.
 
 ```{r}
+# using `retrieveMabGridValue`
 # retrieve available viruses in the filtered grid
 con$retrieveMabGridValue(using = "virus")
 
 # retrive available clades for 1H9 mAb mixture in the filtered grid
 con$retrieveMabGridValue(using = "clade", mab_mixture = "1H9")
 
-# retrive first 10 available viruses using mabGridBase 
-con$mabGridBase[,virus]
+# using `data.table` operations
+# retrive first 10 available viruses using mabGrid
+con$mabGrid[,virus]
 
-# retrive available clades for 1H9 mAb mixture using mabGridBase
-con$mabGridBase[mab_mixture == "1H9", clade]
+# retrive available clades for 1H9 mAb mixture using mabGrid
+con$mabGrid[mab_mixture == "1H9", clade]
 ```
 
 
