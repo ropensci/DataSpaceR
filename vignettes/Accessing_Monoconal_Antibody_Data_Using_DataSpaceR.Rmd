@@ -31,7 +31,7 @@ Using the DataSpace [app](https://dataspace.cavd.org/cds/CAVD/app.view#mabgrid),
 
 1. Browse the mAb Grid by `con$mabGridSummary`
 2. Select the mAb mixtures by filtering the mAb grid using any columns found in `con$mabGrid` using `con$filterMabGrid()`
-3. Use `con$getMab()` to retreive the mAb data
+3. Use `con$getMab()` to retrieve the mAb data
 
 
 ## Browse the mAb Grid
@@ -45,9 +45,9 @@ con <- connectDS()
 DT::datatable(con$mabGridSummary, options = list(autoWidth = TRUE, scrollX = TRUE))
 ```
 
-This table is designed to mimick the mAb grid found in the app.
+This table is designed to mimic the mAb grid found in the app.
 
-One can also accesss the unsummarized data from the mAb grid by calling `con$mabGrid`.
+One can also access's the unsummarized data from the mAb grid by calling `con$mabGrid`.
 
 ## Filter the mAb grid
 
@@ -74,9 +74,9 @@ con$
 ```
 
 
-## Retrive column values from the mAb grid
+## Retrieve column values from the mAb grid
 
-You can retrive values from the grid by `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tier`, `clade`, `virus`, and `studies`, or any variables found in the `mabGrid` field in the connection object.
+You can retrieve values from the grid by `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tier`, `clade`, `virus`, and `studies`, or any variables found in the `mabGrid` field in the connection object.
 
 There are do options of doing so: using the `retrieveMabGrid` method, or using `data.table` operations.
 
@@ -85,14 +85,14 @@ There are do options of doing so: using the `retrieveMabGrid` method, or using `
 # retrieve available viruses in the filtered grid
 con$retrieveMabGridValue(using = "virus")
 
-# retrive available clades for 1H9 mAb mixture in the filtered grid
+# retrieve available clades for 1H9 mAb mixture in the filtered grid
 con$retrieveMabGridValue(using = "clade", mab_mixture = "1H9")
 
 # using `data.table` operations
-# retrive first 10 available viruses using mabGrid
+# retrieve first 10 available viruses using mabGrid
 con$mabGrid[,virus]
 
-# retrive available clades for 1H9 mAb mixture using mabGrid
+# retrieve available clades for 1H9 mAb mixture using mabGrid
 con$mabGrid[mab_mixture == "1H9", clade]
 ```
 
@@ -114,7 +114,7 @@ DT::datatable(mab$nabMab, options = list(autoWidth = TRUE, scrollX = TRUE))
 
 ## View metadata concerning the mAb object
 
-There are several metadata fields that can be expored in the mAb object.
+There are several metadata fields that can be exported in the mAb object.
 
 ```{r}
 names(mab)
