@@ -224,8 +224,8 @@ assertColumn <- function(using, self) {
     msg = "May only pass one column at a time"
   )
   assert_that(
-    using %in% names(self$mabGridBase),
-    msg = paste0("\"", using, "\" is not a valid column in the mabGridBase.")
+    using %in% names(self$mabGrid),
+    msg = paste0("\"", using, "\" is not a valid column in the mabGrid.")
   )
 }
 

@@ -10,7 +10,7 @@ test_that("can connect to DataSpace", {
 if ("DataSpaceConnection" %in% class(con)) {
   con_names <- c(
     ".__enclos_env__",
-    "mabGridBase",
+    "mabGrid",
     "mabGridSummary",
     "availableGroups",
     "availableStudies",
@@ -182,7 +182,7 @@ if ("DataSpaceConnection" %in% class(con)) {
       )
       expect_error(
         con$filterMabGrid("This", "A Thing"),
-        regexp = "\"This\" is not a valid column in the mabGridBase."
+        regexp = "\"This\" is not a valid column in the mabGrid."
       )
     })
 
@@ -198,11 +198,11 @@ if ("DataSpaceConnection" %in% class(con)) {
       )
       expect_error(
         con$retrieveMabGridValue("viruses", "PGT 121"),
-        regexp = "\"viruses\" is not a valid column in the mabGridBase."
+        regexp = "\"viruses\" is not a valid column in the mabGrid."
       )
       expect_error(
         con$retrieveMabGridValue("virus", "PGT 121"),
-        regexp = "`mab_mixture` value not found in `mabGridBase`"
+        regexp = "`mab_mixture` value not found in `mabGrid`"
       )
     })
 

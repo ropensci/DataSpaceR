@@ -226,7 +226,7 @@ DataSpaceConnection <- R6Class(
         unique(private[[gridBase]][[column]])
       } else {
         mab <- mab_mixture
-        assert_that(all(mab %in% private$.mabGridBase$mab_mix_name_std), msg = "`mab_mixture` value not found in `mabGridBase`")
+        assert_that(all(mab %in% private$.mabGridBase$mab_mix_name_std), msg = "`mab_mixture` value not found in `mabGrid`")
         unique(private[[gridBase]][mab_mix_name_std %in% mab][[column]])
       }
     },
@@ -317,7 +317,7 @@ DataSpaceConnection <- R6Class(
 
       mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)]
     },
-    mabGridBase = function() {
+    mabGrid = function() {
       mabGridBase <- data.table::copy(private$.mabGridBase)
       mabMetaGridBase <- data.table::copy(private$.mabMetaGridBase)
 
