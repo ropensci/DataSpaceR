@@ -105,7 +105,7 @@ DataSpaceMab <- R6Class(
         method = "GET"
       )
       setDT(studyDocument)
-      studies <- merge(studies,studyDocument, by = "prot")
+      studies <- merge(studies, studyDocument, by = "prot", all.x = T)
       self$studies <- unique(
         studies[,.(
           network,

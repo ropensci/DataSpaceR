@@ -82,6 +82,7 @@ test_that("test mab object results", {
     expect_true(all(mab$studiesAndMabs$mab_mix_name_std %in% c("CH27")))
     expect_true(nrow(mab$variableDefinitions) == 45)
     expect_true(ncol(mab$variableDefinitions) == 3)
+    expect_true(length(unique(mab$nabMab$prot)) == nrow(mab$studies))
+    expect_true(length(unique(mab$studiesAndMabs$prot)) == nrow(mab$studies))
 
 })
-
