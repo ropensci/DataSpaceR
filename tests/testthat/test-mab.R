@@ -40,7 +40,7 @@ test_that("test mab object", {
                    "caption",
                    "description")
 
-    cklist <- list(mab$studyAndMabs,
+    cklist <- list(mab$studiesAndMabs,
                    mab$mabs,
                    mab$nabMab,
                    mab$metadata,
@@ -66,3 +66,22 @@ test_that("test mab object", {
     expect_equal(length(setdiff(mab$mab_mix_name_std, c("PGT128", "PGT121", "PGT125"))), 0)
 
 })
+
+test_that("test mab object results", {
+    con$resetMabGrid()
+    con$filterMabGrid("mab_mixture", "CH27")
+    mab <- con$getMab()
+    expect_true(all(sapply(mab$assays,         function(x) !is.na(x))))
+    expect_true(all(sapply(mab$mabs,           function(x) !is.na(x))))
+    expect_true(all(sapply(mab$metadata,       function(x) !is.na(x))))
+    expect_true(all(sapply(mab$studies,        function(x) !is.na(x))))
+    expect_true(all(sapply(mab$studiesAndMabs, function(x) !is.na(x))))
+    expect_true(all(mab$assays$prot %in% c("cvd409", "cvd425")))
+    expect_true(all(mab$nabMab$virus %in% c("MN.3", "PVO.4", "TH023.6", "Ce0682_E4", "SHIV_C3", "SHIV_C4", "SHIV_C5")))
+    expect_true(all(mab$studies$species %in% c("Non-Organism Study")))
+    expect_true(all(mab$studiesAndMabs$mab_mix_name_std %in% c("CH27")))
+    expect_true(nrow(mab$variableDefinitions) == 45)
+    expect_true(ncol(mab$variableDefinitions) == 3)
+
+})
+

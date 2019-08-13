@@ -18,7 +18,7 @@
 DataSpaceMab <- R6Class(
   classname = "DataSpaceMab",
   public = list(
-    studyAndMabs        = data.table(),
+    studiesAndMabs      = data.table(),
     mabs                = data.table(),
     nabMab              = data.table(),
     metadata            = data.table(),
@@ -56,7 +56,7 @@ DataSpaceMab <- R6Class(
       setDT(nabMab)
       self$nabMab <- nabMab
 
-      self$studyAndMabs <- unique(data.table::copy(nabMab[,.(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)]))
+      self$studiesAndMabs <- unique(data.table::copy(nabMab[,.(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)]))
 
       mabs <- labkey.executeSql(
         baseUrl = private$.config$labkeyUrlBase,
