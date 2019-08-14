@@ -62,6 +62,33 @@ The DataSpaceMab class
 
 \examples{
 \dontrun{
+# Create a connection (Initiate a DataSpaceConnection object)
+con <- connectDS()
+
+# Browse the mAb Grid
+con$mabGridSummary
+
+# Filter the grid by viruses
+con$filterMabGrid(using = "virus", value = c("242-14", "Q23.17", "6535.3", "BaL.26", "DJ263.8"))
+
+# Filter the grid by donor species (llama)
+con$filterMabGrid(using = "donor_species", value = "llama")
+
+# Check the updated grid
+con$mabGridSummary
+
+# Retrieve available viruses in the filtered grid
+con$mabGrid[, unique(virus)]
+
+# Retrieve available clades for 1H9 mAb mixture in the filtered grid
+con$mabGrid[mab_mixture == "1H9", unique(clade)]
+
+# Create a DataSpaceMab object that contains the filtered mAb data
+mab <- con$getMab()
+mab
+
+# Inspect the `nabMab` field
+mab$nabMab
 }
 
 }
