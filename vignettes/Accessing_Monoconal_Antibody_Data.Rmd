@@ -1,10 +1,12 @@
 ---
-title: "Accessing Monoclonal Antibodies Using DataSpaceR"
-author: "Ju Yeong Kim"
+title: "Accessing Monoclonal Antibody Data"
+author:
+- Ju Yeong Kim
+- Jason Taylor
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Accessing Monoclonal Antibodies}
+  %\VignetteIndexEntry{Accessing Monoclonal Antibody Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,7 +25,14 @@ Using the DataSpace [app](https://dataspace.cavd.org/cds/CAVD/app.view#mabgrid),
 
 1. Navigate to the mAb Grid and browse the available mAb mixtures
 2. Select the mAb mixtures that you'd like to investigate
-3. Or filter rows by using columns: mAb/Mixture, donor species, isotype, HXB2 location, tiers, clades, and viruses
+3. Or filter rows by using columns:
+    - mAb/Mixture
+    - donor species
+    - isotype
+    - HXB2 location
+    - tiers
+    - clades
+    - viruses
 4. Click "Neutralization Curves" or "IC50 Titer Heatmap" to visualize the mAb data
 5. Click "Export CSV" or "Export Excel" to download the mAb data
 
@@ -47,7 +56,7 @@ DT::datatable(con$mabGridSummary, options = list(autoWidth = TRUE, scrollX = TRU
 
 This table is designed to mimic the mAb grid found in the app.
 
-One can also access's the unsummarized data from the mAb grid by calling `con$mabGrid`.
+One can also access the unsummarized data from the mAb grid by calling `con$mabGrid`.
 
 ## Filter the mAb grid
 
