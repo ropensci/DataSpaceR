@@ -1,5 +1,5 @@
 ---
-title: "Accessing Monoclonal Antibodies using DataSpaceR"
+title: "Accessing Monoclonal Antibodies Using DataSpaceR"
 author: "Ju Yeong Kim"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
