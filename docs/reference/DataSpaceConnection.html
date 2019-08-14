@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DataSpaceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -99,6 +99,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/Accessing_Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
+    </li>
     <li>
       <a href="../articles/Intro_to_DataSpaceR.html">Introduction to DataSpaceR</a>
     </li>
@@ -170,6 +173,9 @@
     URL, path and username.</p></dd>
   <dt><code>availableStudies</code></dt><dd><p>A data.table. The table of available studies.</p></dd>
   <dt><code>availableGroups</code></dt><dd><p>A data.table. The table of available groups.</p></dd>
+  <dt><code>mabGrid</code></dt><dd><p>A data.table. The filtered mAb grid.</p></dd>
+  <dt><code>mabGridSummary</code></dt><dd><p>A data.table. The filtered grid with updated <code>n_</code> columns and
+    <code>geometric_mean_curve_ic50</code>.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -185,6 +191,13 @@
   <dt><code>getGroup(groupId)</code></dt><dd><p>Create a <code><a href='DataSpaceStudy.html'>DataSpaceStudy</a></code> object.
     <code>groupId</code>: An integer. ID of the group to retrieve.</p></dd>
   <dt><code>refresh()</code></dt><dd><p>Refresh the connection object to update available studies and groups.</p></dd>
+  <dt><code>filterMabGrid(using, value)</code></dt><dd><p>Filter rows in the mAb grid by specifying the values to keep in the
+    columns found in the <code>mabGrid</code> field. It takes the column and the
+    values and filters the underlying tables.
+    <code>using</code>: A character. Name of the column to filter.
+    <code>value</code>: A character vector. Values to keep in the mAb grid.</p></dd>
+  <dt><code>getMab()</code></dt><dd><p>Create a <code><a href='DataSpaceMab.html'>DataSpaceMab</a></code> object.</p></dd>
+  <dt><code>resetMabGrid()</code></dt><dd><p>Reset the mAb grid to the unfiltered state.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -236,7 +249,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Ju Yeong Kim.</p>
+  <p>Developed by Ju Yeong Kim, Jason Taylor.</p>
 </div>
 
 <div class="pkgdown">

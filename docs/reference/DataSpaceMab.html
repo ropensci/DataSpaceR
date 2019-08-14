@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The DataSpaceStudy class — DataSpaceStudy • DataSpaceR</title>
+<title>The DataSpaceMab class — DataSpaceMab • DataSpaceR</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,9 +32,9 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="The DataSpaceStudy class — DataSpaceStudy" />
+<meta property="og:title" content="The DataSpaceMab class — DataSpaceMab" />
 
-<meta property="og:description" content="The DataSpaceStudy class" />
+<meta property="og:description" content="The DataSpaceMab class" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -143,67 +143,50 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>The DataSpaceStudy class</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/DataSpaceR/blob/master/R/DataSpaceStudy.R'><code>R/DataSpaceStudy.R</code></a></small>
-    <div class="hidden name"><code>DataSpaceStudy.Rd</code></div>
+    <h1>The DataSpaceMab class</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/DataSpaceR/blob/master/R/DataSpaceMab.R'><code>R/DataSpaceMab.R</code></a></small>
+    <div class="hidden name"><code>DataSpaceMab.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The DataSpaceStudy class</p>
+    <p>The DataSpaceMab class</p>
     
     </div>
 
-    <pre class="usage"><span class='no'>DataSpaceStudy</span></pre>
+    <pre class="usage"><span class='no'>DataSpaceMab</span></pre>
         
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an instance of <code>DataSpaceStudy</code></p>
+    <p>an instance of <code>DataSpaceMab</code></p>
     
     <h2 class="hasAnchor" id="constructor"><a class="anchor" href="#constructor"></a>Constructor</h2>
 
     
-    <p><code>DataSpaceConnection$getStudy()</code>
-<code>DataSpaceConnection$getGroup()</code></p>
+    <p><code>DataSpaceConnection$getMab()</code></p>
     
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
     <dl class='dl-horizontal'>
-  <dt><code>study</code></dt><dd><p>A character. The study name.</p></dd>
   <dt><code>config</code></dt><dd><p>A list. Stores configuration of the connection object such as
     URL, path and username.</p></dd>
-  <dt><code>availableDatasets</code></dt><dd><p>A data.table. The table of datasets available in the study object.</p></dd>
-  <dt><code>cache</code></dt><dd><p>A list. Stores the data to avoid downloading the same tables multiple
-    times.</p></dd>
-  <dt><code>treatmentArm</code></dt><dd><p>A data.table. The table of treatment arm information for the connected
-    study. Not available for all study connection.</p></dd>
-  <dt><code>group</code></dt><dd><p>A character. The group name.</p></dd>
-  <dt><code>studyInfo</code></dt><dd><p>A list. Stores the information about the study.</p></dd>
+  <dt><code>studyAndMabs</code></dt><dd><p>A data.table. The table of available mAbs by study.</p></dd>
+  <dt><code>mabs</code></dt><dd><p>A data.table. The table of available mAbs and their attributes.</p></dd>
+  <dt><code>nabMab</code></dt><dd><p>A data.table. The table of mAbs and their neutralizing measurements
+    against viruses.</p></dd>
+  <dt><code>studies</code></dt><dd><p>A data.table. The table of available studies.</p></dd>
+  <dt><code>assays</code></dt><dd><p>A data.table. The table of assay status by study.</p></dd>
+  <dt><code>variableDefinitions</code></dt><dd><p>A data.table. The table of variable definitions.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
     <dl class='dl-horizontal'>
-  <dt><code>initialize(study = NULL, config = NULL, group = NULL,
-  studyInfo = NULL)</code></dt><dd><p>Initialize <code>DataSpaceStudy</code> class.
+  <dt><code>initialize()</code></dt><dd><p>Initialize <code>DataSpaceMab</code> object.
     See <code><a href='DataSpaceConnection.html'>DataSpaceConnection</a></code>.</p></dd>
-  <dt><code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print()</a></code></dt><dd><p>Print <code>DataSpaceStudy</code> class.</p></dd>
-  <dt><code>getDataset(datasetName, colFilter = NULL,
-  reload = FALSE, ...)</code></dt><dd><p>Get a dataset from the connection.
-    <code>datasetName</code>: A character. Name of the dataset to retrieve.
-    <code>mergeExtra</code>: A logical. If set to TRUE, merge extra information.
-    <code>colFilter</code>: A matrix. A filter as returned by Rlabkey's
-    <code><a href='https://www.rdocumentation.org/packages/Rlabkey/topics/makeFilter'>makeFilter</a></code>.
-    <code>reload</code>: A logical. If set to TRUE, download the dataset, whether
-    a cached version exist or not.
-    <code>...</code>: Extra arguments to be passed to
-    <code><a href='https://www.rdocumentation.org/packages/Rlabkey/topics/labkey.selectRows'>labkey.selectRows</a></code></p></dd>
-  <dt><code>clearCache()</code></dt><dd><p>Clear <code>cache</code>. Remove downloaded datasets.</p></dd>
-  <dt><code>getDatasetDescription(datasetName)</code></dt><dd><p>Get variable information.
-    <code>datasetName</code>: A character. Name of the dataset to retrieve.</p></dd>
-  <dt><code>refresh()</code></dt><dd><p>Refresh the study object to update available datasets and treatment info.</p></dd>
+  <dt><code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print()</a></code></dt><dd><p>Print <code>DataSpaceMab</code> object summary.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -216,32 +199,30 @@
 <span class='co'># Create a connection (Initiate a DataSpaceConnection object)</span>
 <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='connectDS.html'>connectDS</a></span>()
 
-<span class='co'># Connect to cvd408 (Initiate a DataSpaceStudy object)</span>
-<span class='co'># https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Study/cvd408?q=408</span>
-<span class='no'>cvd408</span> <span class='kw'>&lt;-</span> <span class='no'>con</span>$<span class='fu'>getStudy</span>(<span class='st'>"cvd408"</span>)
-<span class='no'>cvd408</span>
+<span class='co'># Browse the mAb Grid</span>
+<span class='no'>con</span>$<span class='no'>mabGridSummary</span>
 
-<span class='co'># Retrieve Neutralizing antibody dataset (NAb) for cvd408 from DataSpace</span>
-<span class='no'>NAb</span> <span class='kw'>&lt;-</span> <span class='no'>cvd408</span>$<span class='fu'>getDataset</span>(<span class='st'>"NAb"</span>)
+<span class='co'># Filter the grid by viruses</span>
+<span class='no'>con</span>$<span class='fu'>filterMabGrid</span>(<span class='kw'>using</span> <span class='kw'>=</span> <span class='st'>"virus"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"242-14"</span>, <span class='st'>"Q23.17"</span>, <span class='st'>"6535.3"</span>, <span class='st'>"BaL.26"</span>, <span class='st'>"DJ263.8"</span>))
 
-<span class='co'># Get variable information of the NAb dataset</span>
-<span class='no'>cvd408</span>$<span class='fu'>getDatasetDescription</span>(<span class='st'>"NAb"</span>)
+<span class='co'># Filter the grid by donor species (llama)</span>
+<span class='no'>con</span>$<span class='fu'>filterMabGrid</span>(<span class='kw'>using</span> <span class='kw'>=</span> <span class='st'>"donor_species"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"llama"</span>)
 
-<span class='co'># Take a look at cvd408's treatment arm information</span>
-<span class='no'>cvd408</span>$<span class='no'>treatmentArm</span>
+<span class='co'># Check the updated grid</span>
+<span class='no'>con</span>$<span class='no'>mabGridSummary</span>
 
-<span class='co'># Clear cache of a study object</span>
-<span class='no'>cvd408</span>$<span class='fu'>clearCache</span>()
+<span class='co'># Retrieve available viruses in the filtered grid</span>
+<span class='no'>con</span>$<span class='no'>mabGrid</span>[, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unique'>unique</a></span>(<span class='no'>virus</span>)]
 
-<span class='co'># Connect to the NYVAC durability comparison group</span>
-<span class='co'># https://dataspace.cavd.org/cds/CAVD/app.view#group/groupsummary/220</span>
-<span class='no'>nyvac</span> <span class='kw'>&lt;-</span> <span class='no'>con</span>$<span class='fu'>getGroup</span>(<span class='fl'>220</span>)
+<span class='co'># Retrieve available clades for 1H9 mAb mixture in the filtered grid</span>
+<span class='no'>con</span>$<span class='no'>mabGrid</span>[<span class='no'>mab_mixture</span> <span class='kw'>==</span> <span class='st'>"1H9"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unique'>unique</a></span>(<span class='no'>clade</span>)]
 
-<span class='co'># Connect to all studies</span>
-<span class='no'>cvd</span> <span class='kw'>&lt;-</span> <span class='no'>con</span>$<span class='fu'>getStudy</span>(<span class='st'>""</span>)
+<span class='co'># Create a DataSpaceMab object that contains the filtered mAb data</span>
+<span class='no'>mab</span> <span class='kw'>&lt;-</span> <span class='no'>con</span>$<span class='fu'>getMab</span>()
+<span class='no'>mab</span>
 
-<span class='co'># Refresh the study object to update available datasets and treatment info</span>
-<span class='no'>cvd</span>$<span class='fu'>refresh</span>()
+<span class='co'># Inspect the `nabMab` field</span>
+<span class='no'>mab</span>$<span class='no'>nabMab</span>
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>

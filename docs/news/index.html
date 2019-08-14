@@ -75,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DataSpaceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -97,6 +97,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/Accessing_Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
+    </li>
     <li>
       <a href="../articles/Intro_to_DataSpaceR.html">Introduction to DataSpaceR</a>
     </li>
@@ -142,30 +145,42 @@
       <small>Source: <a href='https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="dataspacer-0-7-0" class="section level1">
+<h1 class="page-header">
+<a href="#dataspacer-0-7-0" class="anchor"></a>DataSpaceR 0.7.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added <code>DataSpaceMab</code> class and several methods and fields in <code>DataSpaceConnection</code> to allow access to monoclonal antibody data (thanks <a href='https://github.com/jmtaylor-fhcrc'>@jmtaylor-fhcrc</a> <a href='https://github.com/ropensci/DataSpaceR/issues/14'>#14</a>, <a href='https://github.com/ropensci/DataSpaceR/issues/19'>#19</a>, <a href='https://github.com/ropensci/DataSpaceR/issues/21'>#21</a>)</li>
+</ul>
+</div>
     <div id="dataspacer-0-6-3" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-6-3" class="anchor"></a>DataSpaceR 0.6.3</h1>
+<a href="#dataspacer-0-6-3" class="anchor"></a>DataSpaceR 0.6.3<small> 2019-04-05 </small>
+</h1>
 <ul>
 <li>Prepare for CRAN submission</li>
 </ul>
 </div>
     <div id="dataspacer-0-6-2" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-6-2" class="anchor"></a>DataSpaceR 0.6.2</h1>
+<a href="#dataspacer-0-6-2" class="anchor"></a>DataSpaceR 0.6.2<small> Unreleased </small>
+</h1>
 <ul>
 <li>Write the netrc in temporary directory as default in <code>writeNetrc</code>. (CRAN requirement)</li>
 </ul>
 </div>
     <div id="dataspacer-0-6-1" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-6-1" class="anchor"></a>DataSpaceR 0.6.1</h1>
+<a href="#dataspacer-0-6-1" class="anchor"></a>DataSpaceR 0.6.1<small> Unreleased </small>
+</h1>
 <ul>
 <li>Remove LICENSE file for CRAN submission</li>
 </ul>
 </div>
     <div id="dataspacer-0-6-0" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-6-0" class="anchor"></a>DataSpaceR 0.6.0</h1>
+<a href="#dataspacer-0-6-0" class="anchor"></a>DataSpaceR 0.6.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>rOpenSci submission: <a href="https://github.com/ropensci/software-review/issues/261" class="uri">https://github.com/ropensci/software-review/issues/261</a>
 </li>
@@ -173,21 +188,24 @@
 </div>
     <div id="dataspacer-0-5-2" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-5-2" class="anchor"></a>DataSpaceR 0.5.2</h1>
+<a href="#dataspacer-0-5-2" class="anchor"></a>DataSpaceR 0.5.2<small> Unreleased </small>
+</h1>
 <ul>
 <li>Modified <code>getDataset</code> method in <code>DataSpaceStudy</code> to take <code>mergeExtra</code> as an argument in order to merge extra information (demographics and treatment arm). <a href='https://github.com/ropensci/DataSpaceR/issues/5'>#5</a></li>
 </ul>
 </div>
     <div id="dataspacer-0-5-1" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-5-1" class="anchor"></a>DataSpaceR 0.5.1</h1>
+<a href="#dataspacer-0-5-1" class="anchor"></a>DataSpaceR 0.5.1<small> Unreleased </small>
+</h1>
 <ul>
 <li>Adjusted the package to use the latest version of Rlabkey (v2.2) and httr packages.</li>
 </ul>
 </div>
     <div id="dataspacer-0-5-0" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-5-0" class="anchor"></a>DataSpaceR 0.5.0</h1>
+<a href="#dataspacer-0-5-0" class="anchor"></a>DataSpaceR 0.5.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>Modified <code>DataSpaceConnection</code> and <code>DataSpaceStudy</code> classes to convert data.frame objects to data.table.</li>
 <li>Added a package startup message on the terms of use.</li>
@@ -196,7 +214,8 @@
 </div>
     <div id="dataspacer-0-4-2" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-4-2" class="anchor"></a>DataSpaceR 0.4.2</h1>
+<a href="#dataspacer-0-4-2" class="anchor"></a>DataSpaceR 0.4.2<small> Unreleased </small>
+</h1>
 <ul>
 <li>Added <code>refresh</code> method for both connection and study classes.</li>
 <li>Added <code>studyInfo</code> field in study class.</li>
@@ -204,7 +223,8 @@
 </div>
     <div id="dataspacer-0-4-1" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-4-1" class="anchor"></a>DataSpaceR 0.4.1</h1>
+<a href="#dataspacer-0-4-1" class="anchor"></a>DataSpaceR 0.4.1<small> Unreleased </small>
+</h1>
 <ul>
 <li>Included additional columns (<code>short_name</code>, <code>type</code>, <code>status</code>, <code>stage</code>, <code>species</code>, <code>start_date</code>, <code>strategy</code>) in <code>availableStudies</code>.</li>
 <li>Updated the introductory vignette.</li>
@@ -212,7 +232,8 @@
 </div>
     <div id="dataspacer-0-4-0" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-4-0" class="anchor"></a>DataSpaceR 0.4.0</h1>
+<a href="#dataspacer-0-4-0" class="anchor"></a>DataSpaceR 0.4.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>Added <code>availableGroups</code> field to <code>DataSpaceConnection</code> class.</li>
 <li>Modified <code>getStudy</code> method in <code>DataSpaceConnection</code> to take <code>groupId</code> as an argument in order to create a <code>DataSpaceStudy</code> object for a particular group.</li>
@@ -220,14 +241,16 @@
 </div>
     <div id="dataspacer-0-3-0" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-3-0" class="anchor"></a>DataSpaceR 0.3.0</h1>
+<a href="#dataspacer-0-3-0" class="anchor"></a>DataSpaceR 0.3.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>Updated <code>DataSpaceConnection</code> class and <code>connectDS</code> constructor to be not study-specific.</li>
 </ul>
 </div>
     <div id="dataspacer-0-2-1" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-2-1" class="anchor"></a>DataSpaceR 0.2.1</h1>
+<a href="#dataspacer-0-2-1" class="anchor"></a>DataSpaceR 0.2.1<small> Unreleased </small>
+</h1>
 <ul>
 <li>Modified <code>getUserEmail()</code> to get email from netrc file.</li>
 <li>Updated license to GPL-3.</li>
@@ -235,7 +258,8 @@
 </div>
     <div id="dataspacer-0-2-0" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-2-0" class="anchor"></a>DataSpaceR 0.2.0</h1>
+<a href="#dataspacer-0-2-0" class="anchor"></a>DataSpaceR 0.2.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>Added <code>getVariableInfo</code> method to <code>DataSpaceConnection</code> class.</li>
 <li>Changed variable names in <code>getAvailableDatasets</code> to lowercase.</li>
@@ -248,7 +272,8 @@
 </div>
     <div id="dataspacer-0-1-0" class="section level1">
 <h1 class="page-header">
-<a href="#dataspacer-0-1-0" class="anchor"></a>DataSpaceR 0.1.0</h1>
+<a href="#dataspacer-0-1-0" class="anchor"></a>DataSpaceR 0.1.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>Initialized the package with <code><a href="../reference/connectDS.html">connectDS()</a></code> and other basic functions.</li>
 <li>Added a test framework on <code>tests</code> to test the package.</li>
@@ -266,6 +291,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#dataspacer-0-7-0">0.7.0</a></li>
         <li><a href="#dataspacer-0-6-3">0.6.3</a></li>
         <li><a href="#dataspacer-0-6-2">0.6.2</a></li>
         <li><a href="#dataspacer-0-6-1">0.6.1</a></li>
@@ -288,7 +314,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Ju Yeong Kim.</p>
+  <p>Developed by Ju Yeong Kim, Jason Taylor.</p>
 </div>
 
 <div class="pkgdown">
