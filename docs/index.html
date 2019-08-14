@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">DataSpaceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -64,6 +64,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/Accessing_Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
+    </li>
+    <li>
       <a href="articles/Intro_to_DataSpaceR.html">Introduction to DataSpaceR</a>
     </li>
   </ul>
@@ -117,10 +120,10 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install from CRAN:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"DataSpaceR"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"DataSpaceR"</span>)</a></code></pre></div>
 <p>You can install the latest development version from <a href="https://github.com/ropensci/DataSpaceR">GitHub</a> with <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/DataSpaceR"</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/DataSpaceR"</span>)</a></code></pre></div>
 </div>
 <div id="register-and-set-dataspace-credential" class="section level2">
 <h2 class="hasAnchor">
@@ -131,12 +134,12 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 <a href="https://dataspace.cavd.org/">Create an account</a> and read the terms of use</li>
 <li>On your R console, create a netrc file using a function from <code>DataSpaceR</code>:</li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DataSpaceR)
-<span class="kw"><a href="reference/writeNetrc.html">writeNetrc</a></span>(
-  <span class="dt">login =</span> <span class="st">"yourEmail@address.com"</span>, 
-  <span class="dt">password =</span> <span class="st">"yourSecretPassword"</span>,
-  <span class="dt">netrcFile =</span> <span class="st">"/your/home/directory/.netrc"</span> <span class="co"># use getNetrcPath() to get the default path </span>
-)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DataSpaceR)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/writeNetrc.html">writeNetrc</a></span>(</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">login =</span> <span class="st">"yourEmail@address.com"</span>, </a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">password =</span> <span class="st">"yourSecretPassword"</span>,</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">netrcFile =</span> <span class="st">"/your/home/directory/.netrc"</span> <span class="co"># use getNetrcPath() to get the default path </span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">)</a></code></pre></div>
 <p>This will create a netrc file in your home directory.</p>
 <p><strong><em>Alternatively</em></strong>, you can manually create a netrc file in the computer running R.</p>
 <ul>
@@ -170,25 +173,25 @@ password supersecretpassword</code></pre>
 <div id="for-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#for-example" class="anchor"></a>for example:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DataSpaceR)
-<span class="co">#&gt; By exporting data from the CAVD DataSpace, you agree to be bound by the Terms of Use available on the CAVD DataSpace sign-in page at https://dataspace.cavd.org</span>
-
-con &lt;-<span class="st"> </span><span class="kw"><a href="reference/connectDS.html">connectDS</a></span>()
-con
-<span class="co">#&gt; &lt;DataSpaceConnection&gt;</span>
-<span class="co">#&gt;   URL: https://dataspace.cavd.org</span>
-<span class="co">#&gt;   User: jkim2345@scharp.org</span>
-<span class="co">#&gt;   Available studies: 249</span>
-<span class="co">#&gt;     - 65 studies with data</span>
-<span class="co">#&gt;     - 4499 subjects</span>
-<span class="co">#&gt;     - 288603 data points</span>
-<span class="co">#&gt;   Available groups: 6</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DataSpaceR)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; By exporting data from the CAVD DataSpace, you agree to be bound by the Terms of Use available on the CAVD DataSpace sign-in page at https://dataspace.cavd.org</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/connectDS.html">connectDS</a></span>()</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">con</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; &lt;DataSpaceConnection&gt;</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;   URL: https://dataspace.cavd.org</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;   User: jkim2345@scharp.org</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;   Available studies: 253</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;     - 70 studies with data</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;     - 4815 subjects</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;     - 407558 data points</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;   Available groups: 6</span></a></code></pre></div>
 <p><code><a href="reference/connectDS.html">connectDS()</a></code> will create a connection to DataSpace.</p>
 </div>
 <div id="available-studies-can-be-listed-by-availablestudies-field" class="section level3">
 <h3 class="hasAnchor">
 <a href="#available-studies-can-be-listed-by-availablestudies-field" class="anchor"></a>available studies can be listed by <code>availableStudies</code> field</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(con<span class="op">$</span>availableStudies))</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(con<span class="op">$</span>availableStudies))</a></code></pre></div>
 <table class="table table">
 <thead><tr class="header">
 <th align="left">study_name</th>
@@ -205,7 +208,7 @@ con
 <tr class="odd">
 <td align="left">cvd232</td>
 <td align="left">Parks_RV_232</td>
-<td align="left">Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.</td>
+<td align="left">​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.</td>
 <td align="left">Pre-Clinical NHP</td>
 <td align="left">Inactive</td>
 <td align="left">Assays Completed</td>
@@ -274,14 +277,14 @@ con
 <div id="available-groups-can-be-listed-by-availablegroups-field" class="section level3">
 <h3 class="hasAnchor">
 <a href="#available-groups-can-be-listed-by-availablegroups-field" class="anchor"></a>available groups can be listed by <code>availableGroups</code> field</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(con<span class="op">$</span>availableGroups)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(con<span class="op">$</span>availableGroups)</a></code></pre></div>
 <table class="table table">
 <thead><tr class="header">
 <th align="right">id</th>
 <th align="left">label</th>
-<th align="left">originalLabel</th>
+<th align="left">original_label</th>
 <th align="left">description</th>
-<th align="left">createdBy</th>
+<th align="left">created_by</th>
 <th align="left">shared</th>
 <th align="right">n</th>
 <th align="left">studies</th>
@@ -356,23 +359,23 @@ con
 <h3 class="hasAnchor">
 <a href="#create-an-instance-of-cvd408" class="anchor"></a>create an instance of <code>cvd408</code>
 </h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">"cvd408"</span>)
-cvd408
-<span class="co">#&gt; &lt;DataSpaceStudy&gt;</span>
-<span class="co">#&gt;   Study: cvd408</span>
-<span class="co">#&gt;   URL: https://dataspace.cavd.org/CAVD/cvd408</span>
-<span class="co">#&gt;   Available datasets:</span>
-<span class="co">#&gt;     - BAMA</span>
-<span class="co">#&gt;     - Demographics</span>
-<span class="co">#&gt;     - ICS</span>
-<span class="co">#&gt;     - NAb</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(cvd408)
-<span class="co">#&gt; [1] "DataSpaceStudy" "R6"</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">cvd408 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">"cvd408"</span>)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">cvd408</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; &lt;DataSpaceStudy&gt;</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt;   Study: cvd408</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt;   URL: https://dataspace.cavd.org/CAVD/cvd408</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;   Available datasets:</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt;     - BAMA</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt;     - Demographics</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt;     - ICS</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt;     - NAb</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(cvd408)</a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; [1] "DataSpaceStudy" "R6"</span></a></code></pre></div>
 </div>
 <div id="available-datasets-can-be-listed-by-availabledatasets-field" class="section level3">
 <h3 class="hasAnchor">
 <a href="#available-datasets-can-be-listed-by-availabledatasets-field" class="anchor"></a>available datasets can be listed by <code>availableDatasets</code> field</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(cvd408<span class="op">$</span>availableDatasets)</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(cvd408<span class="op">$</span>availableDatasets)</a></code></pre></div>
 <table class="table table">
 <thead><tr class="header">
 <th align="left">name</th>
@@ -407,25 +410,25 @@ cvd408
 <div id="neutralizing-antibody-dataset-nab-can-be-retrieved-by" class="section level3">
 <h3 class="hasAnchor">
 <a href="#neutralizing-antibody-dataset-nab-can-be-retrieved-by" class="anchor"></a>Neutralizing Antibody dataset (<code>NAb</code>) can be retrieved by:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NAb &lt;-<span class="st"> </span>cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(NAb)
-<span class="co">#&gt; [1] 540  29</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(NAb)
-<span class="co">#&gt;  [1] "ParticipantId"          "ParticipantVisit/Visit"</span>
-<span class="co">#&gt;  [3] "visit_day"              "assay_identifier"      </span>
-<span class="co">#&gt;  [5] "summary_level"          "specimen_type"         </span>
-<span class="co">#&gt;  [7] "antigen"                "antigen_type"          </span>
-<span class="co">#&gt;  [9] "virus"                  "virus_type"            </span>
-<span class="co">#&gt; [11] "virus_insert_name"      "clade"                 </span>
-<span class="co">#&gt; [13] "neutralization_tier"    "tier_clade_virus"      </span>
-<span class="co">#&gt; [15] "target_cell"            "initial_dilution"      </span>
-<span class="co">#&gt; [17] "titer_ic50"             "titer_ic80"            </span>
-<span class="co">#&gt; [19] "response_call"          "nab_lab_source_key"    </span>
-<span class="co">#&gt; [21] "lab_code"               "exp_assayid"           </span>
-<span class="co">#&gt; [23] "titer_ID50"             "titer_ID80"            </span>
-<span class="co">#&gt; [25] "nab_response_ID50"      "nab_response_ID80"     </span>
-<span class="co">#&gt; [27] "slope"                  "vaccine_matched"       </span>
-<span class="co">#&gt; [29] "study_prot"</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">NAb &lt;-<span class="st"> </span>cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(NAb)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] 540  29</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(NAb)</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  [1] "ParticipantId"          "ParticipantVisit/Visit"</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  [3] "visit_day"              "assay_identifier"      </span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  [5] "summary_level"          "specimen_type"         </span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  [7] "antigen"                "antigen_type"          </span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  [9] "virus"                  "virus_type"            </span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; [11] "virus_insert_name"      "clade"                 </span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; [13] "neutralization_tier"    "tier_clade_virus"      </span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt; [15] "target_cell"            "initial_dilution"      </span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt; [17] "titer_ic50"             "titer_ic80"            </span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; [19] "response_call"          "nab_lab_source_key"    </span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; [21] "lab_code"               "exp_assayid"           </span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt; [23] "titer_ID50"             "titer_ID80"            </span></a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt; [25] "nab_response_ID50"      "nab_response_ID80"     </span></a>
+<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt; [27] "slope"                  "vaccine_matched"       </span></a>
+<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt; [29] "study_prot"</span></a></code></pre></div>
 <p>Check out <a href="https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html">the reference page</a> of <code>DataSpaceStudy</code> for all available fields and methods.</p>
 <p><strong><em>Note</em></strong>: The package uses a <a href="https://cran.r-project.org/web/packages/R6/index.html">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behavior.</p>
 </div>
@@ -454,6 +457,8 @@ cvd408
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=DataSpaceR">https://​cloud.r-project.org/​package=DataSpaceR</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/ropensci/DataSpaceR">https://​github.com/​ropensci/​DataSpaceR</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/ropensci/DataSpaceR/issues">https://​github.com/​ropensci/​DataSpaceR/​issues</a>
@@ -470,6 +475,7 @@ cvd408
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Ju Yeong Kim <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
+<li>Jason Taylor <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
@@ -494,7 +500,7 @@ cvd408
 
 
       <footer><div class="copyright">
-  <p>Developed by Ju Yeong Kim.</p>
+  <p>Developed by Ju Yeong Kim, Jason Taylor.</p>
 </div>
 
 <div class="pkgdown">
