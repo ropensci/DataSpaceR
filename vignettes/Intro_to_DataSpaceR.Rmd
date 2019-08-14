@@ -181,6 +181,15 @@ dim(NAb_nyvac)
 ```
 
 
+## Access monoclonal antibody data
+
+See other vignette for a tutorial on accessing monoclonal antibody data with `DataSpaceR`:
+
+```{r eval=FALSE}
+vignette("Accessing_Monoconal_Antibody_Data")
+```
+
+
 ## Reference Tables
 
 The followings are the tables of all fields and methods that work on `DataSpaceConnection` and `DataSpaceStudy` objects and could be used as a quick reference.

@@ -10,11 +10,16 @@ test_that("can connect to DataSpace", {
 if ("DataSpaceConnection" %in% class(con)) {
   con_names <- c(
     ".__enclos_env__",
+    "mabGrid",
+    "mabGridSummary",
     "availableGroups",
     "availableStudies",
     "config",
     "clone",
     "refresh",
+    "getMab",
+    "resetMabGrid",
+    "filterMabGrid",
     "getGroup",
     "getStudy",
     "print",
@@ -127,6 +132,84 @@ if ("DataSpaceConnection" %in% class(con)) {
 
       expect_is(refresh, "logical")
       expect_true(refresh)
+    })
+
+    test_that("`resetMabGrid`", {
+      oriCnt <- nrow(con$mabGridSummary)
+      con$filterMabGrid("mab_mixture", c("mAb 96"))
+      expect_true(oriCnt > nrow(con$mabGridSummary))
+      con$resetMabGrid()
+      expect_true(oriCnt == nrow(con$mabGridSummary))
+    })
+
+    test_that("Test `filterMab` errors, warnings, and subsetting.", {
+      expect_error(
+        con$filterMabGrid("mab_mixture", "NotAMab"),
+        regexp = "NotAMab set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      expect_error(
+        con$filterMabGrid("mab_mixture", c("NotAMab1", "NotAMab2", "NotAMab3", "NotAMab4")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3, and others set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "NotAMab")),
+        regexp = "NotAMab set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      con$resetMabGrid()
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "NotAMab1", "NotAMab2", "NotAMab3")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3 set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      con$resetMabGrid()
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "NotAMab1", "NotAMab2", "NotAMab3", "NotAMab4")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3, and others set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      con$resetMabGrid()
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "PGT121", "PGT125", "PGT125", "PGT125", "NotAMab1", "NotAMab2", "NotAMab3", "NotAMab4")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3, and others set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      expect_true(nrow(con$mabGridSummary) == 2)
+      con$resetMabGrid()
+    })
+
+    test_that("Test `assertColumn`", {
+      expect_error(
+        con$filterMabGrid(c("This", "That"), "A Thing"),
+        regexp = "May only pass one column at a time"
+      )
+      expect_error(
+        con$filterMabGrid("This", "A Thing"),
+        regexp = "\"This\" is not a valid column in the mabGrid."
+      )
+    })
+
+    test_that("Test geomean calculation", {
+      con$filterMabGrid("mab_mixture", "mAb 96")
+      mab <- con$getMab()$nabMab
+      expect_equal(all(mab$titer_curve_ic50 %in% c(-Inf, Inf)), is.na(con$mabGridSummary$geometric_mean_curve_ic50))
+      con$resetMabGrid()
+
+      con$filterMabGrid("mab_mixture", "PGDM1400")
+      mab <- con$getMab()$nabMab
+      expect_true(round(con$mabGridSummary$geometric_mean_curve_ic50, 2) == 0.05)
+      con$resetMabGrid()
+    })
+
+    test_that("getMab pulls mAb data when filters are not set.", {
+      con$resetMabGrid()
+      mab <- con$getMab()
+      expect_true(nrow(mab$nabMab) > 0)
+
+      con <- try(connectDS(), silent = TRUE)
+      mab <- con$getMab()
+      expect_true(nrow(mab$nabMab) > 0)
+    })
+
+    test_that("Check for warnings.", {
+      con$filterMabGrid(using = "hxb2_location", value = c("Env", "gp160"))
+      expect_true(length(warnings()) == 0)
     })
   }
 }

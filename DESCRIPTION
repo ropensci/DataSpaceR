@@ -31,6 +31,8 @@ Suggests:
     testthat,
     covr,
     knitr,
-    pryr
+    pryr,
+    rmarkdown,
+    DT
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1

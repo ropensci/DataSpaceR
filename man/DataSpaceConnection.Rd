@@ -31,6 +31,13 @@ The DataSpaceConnection class
   \item{\code{availableGroups}}{
     A data.table. The table of available groups.
   }
+  \item{\code{mabGrid}}{
+    A data.table. The filtered mAb grid.
+  }
+  \item{\code{mabGridSummary}}{
+    A data.table. The filtered grid with updated \code{n_} columns and
+    \code{geometric_mean_curve_ic50}.
+  }
 }
 }
 
@@ -57,6 +64,21 @@ The DataSpaceConnection class
   }
   \item{\code{refresh()}}{
     Refresh the connection object to update available studies and groups.
+  }
+  \item{\code{filterMabGrid(using, value)}}{
+    Filter rows in the mAb grid by specifying the values to keep in the
+    columns found in the \code{mabGrid} field. It takes the column and the
+    values and filters the underlying tables.
+
+    \code{using}: A character. Name of the column to filter.
+
+    \code{value}: A character vector. Values to keep in the mAb grid.
+  }
+  \item{\code{getMab()}}{
+    Create a \code{\link{DataSpaceMab}} object.
+  }
+  \item{\code{resetMabGrid()}}{
+    Reset the mAb grid to the unfiltered state.
   }
 }
 }

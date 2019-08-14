@@ -218,6 +218,36 @@ makeCountQuery <- function(dataset, group) {
   query
 }
 
+assertColumn <- function(using, self) {
+  assert_that(
+    length(using) == 1,
+    msg = "May only pass one column at a time"
+  )
+  assert_that(
+    using %in% names(self$mabGrid),
+    msg = paste0("\"", using, "\" is not a valid column in the mabGrid.")
+  )
+}
+
+switchColumn <- function(using) {
+  switch(
+    using,
+    "mab_mixture" = "mab_mix_name_std",
+    "donor_species" = "mab_donor_species",
+    "isotype" = "mab_isotype",
+    "hxb2_location" = "mab_hxb2_location",
+    "virus" = "virus",
+    "clade" = "clade",
+    "tier" = "neutralization_tier",
+    "curve_ic50" = "titer_curve_ic50",
+    "study" = "study"
+  )
+}
+
+isFromMabGrid <- function(column) {
+  column %in% c("mab_mix_name_std", "virus", "clade", "neutralization_tier", "titer_curve_ic50", "study")
+}
+
 #' @importFrom Rlabkey makeFilter
 #' @export
 Rlabkey::makeFilter

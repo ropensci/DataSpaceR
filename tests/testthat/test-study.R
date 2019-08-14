@@ -210,6 +210,12 @@ test_study(
   groupId = 220,
   groupLabel = c("NYVAC_durability" = "NYVAC durability comparison")
 )
+test_study(
+  study = "",
+  datasets = c("BAMA", "Demographics", "ICS", "NAb"),
+  groupId = 228,
+  groupLabel = c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
+)
 
 email <- DataSpaceR:::getUserEmail(DataSpaceR:::PRODUCTION, NULL)
 if (identical(email, "jkim2345@scharp.org")) {
