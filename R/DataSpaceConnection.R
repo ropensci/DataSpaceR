@@ -95,6 +95,7 @@
 #' @importFrom jsonlite fromJSON
 #' @importFrom curl has_internet nslookup
 #' @importFrom Rlabkey labkey.selectRows
+#' @importFrom data.table copy
 DataSpaceConnection <- R6Class(
   classname = "DataSpaceConnection",
   public = list(
@@ -282,8 +283,8 @@ DataSpaceConnection <- R6Class(
       private$.availableGroups
     },
     mabGridSummary = function() {
-      mabGridBase <- data.table::copy(private$.mabGridBase)
-      mabMetaGridBase <- data.table::copy(private$.mabMetaGridBase)
+      mabGridBase <- copy(private$.mabGridBase)
+      mabMetaGridBase <- copy(private$.mabMetaGridBase)
       mabGridBase[
         ,
         `:=`(
@@ -326,8 +327,8 @@ DataSpaceConnection <- R6Class(
       mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)]
     },
     mabGrid = function() {
-      mabGridBase <- data.table::copy(private$.mabGridBase)
-      mabMetaGridBase <- data.table::copy(private$.mabMetaGridBase)
+      mabGridBase <- copy(private$.mabGridBase)
+      mabMetaGridBase <- copy(private$.mabMetaGridBase)
 
       mabGridBase <- unique(
         mabGridBase[
@@ -485,8 +486,8 @@ DataSpaceConnection <- R6Class(
       private$.mabGridBase <- mabGridBase
       private$.mabMetaGridBase <- mabMetaGridBase
       private$.mabFilters <- list()
-      private$.cache$mabGridBase <- data.table::copy(mabGridBase)
-      private$.cache$mabMetaGridBase <- data.table::copy(mabMetaGridBase)
+      private$.cache$mabGridBase <- copy(mabGridBase)
+      private$.cache$mabMetaGridBase <- copy(mabMetaGridBase)
 
       invisible(NULL)
     }

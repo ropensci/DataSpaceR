@@ -47,7 +47,11 @@
 #' @examples
 #' \dontrun{
 #' }
+#'
 #' @docType class
+#' @format NULL
+#'
+#' @importFrom data.table setnames
 DataSpaceMab <- R6Class(
   classname = "DataSpaceMab",
   public = list(
@@ -64,11 +68,11 @@ DataSpaceMab <- R6Class(
 
       if (length(filters) > 0) {
         filters <- lapply(names(filters), function(x) {
-          Rlabkey::makeFilter(c(x, "IN", paste(unique(unlist(lapply(filters[[x]], URLencode, reserved = TRUE))), collapse = ";")))
+          makeFilter(c(x, "IN", paste(unique(unlist(lapply(filters[[x]], URLencode, reserved = TRUE))), collapse = ";")))
         })
         mabFilters <- unique(
           rbind(
-            Rlabkey::makeFilter(c("mab_mix_name_std", "IN", paste(unlist(lapply(mab_mixture, URLencode, reserved = TRUE)), collapse = ";"))),
+            makeFilter(c("mab_mix_name_std", "IN", paste(unlist(lapply(mab_mixture, URLencode, reserved = TRUE)), collapse = ";"))),
             do.call(rbind, filters)
           )
         )
@@ -88,7 +92,7 @@ DataSpaceMab <- R6Class(
       setDT(nabMab)
       self$nabMab <- nabMab
 
-      self$studyAndMabs <- unique(data.table::copy(nabMab[,.(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)]))
+      self$studyAndMabs <- unique(copy(nabMab[,.(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)]))
 
       mabs <- labkey.executeSql(
         baseUrl = private$.config$labkeyUrlBase,
@@ -115,18 +119,18 @@ DataSpaceMab <- R6Class(
         schemaName = "cds",
         queryName = "study",
         colNameOpt = "fieldname",
-        colFilter = Rlabkey::makeFilter(c("study_name", "IN", paste(unique(nabMab$prot), collapse = ";"))),
+        colFilter = makeFilter(c("study_name", "IN", paste(unique(nabMab$prot), collapse = ";"))),
         method = "GET"
       )
       setDT(studies)
-      data.table::setnames(studies, "study_name", "prot")
+      setnames(studies, "study_name", "prot")
       studyDocument <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "cds",
         queryName = "studydocument",
         colNameOpt = "fieldname",
-        colFilter = Rlabkey::makeFilter(c("prot", "IN", paste(unique(nabMab$prot), collapse = ";"))),
+        colFilter = makeFilter(c("prot", "IN", paste(unique(nabMab$prot), collapse = ";"))),
         method = "GET"
       )
       setDT(studyDocument)
@@ -152,7 +156,7 @@ DataSpaceMab <- R6Class(
         schemaName = "cds",
         queryName = "studyassay",
         colNameOpt = "fieldname",
-        colFilter = Rlabkey::makeFilter(c("prot", "IN", paste(unique(nabMab$prot), collapse = ";")),
+        colFilter = makeFilter(c("prot", "IN", paste(unique(nabMab$prot), collapse = ";")),
                                         c("assay_identifier", "IN", "NAB MAB")),
         method = "GET"
       )
@@ -166,7 +170,7 @@ DataSpaceMab <- R6Class(
         queryName = "NAbMAbWithMixMeta"
       )
       setDT(varInfo)
-      data.table::setnames(varInfo, "fieldName", "field_name")
+      setnames(varInfo, "fieldName", "field_name")
       self$variableDefinitions <- varInfo[,.(field_name, caption, description)]
 
     },
