@@ -1,4 +1,6 @@
 library(testthat)
 library(DataSpaceR)
 
-test_check("DataSpaceR")
+if (identical(tolower(Sys.getenv("NOT_CRAN")), "true")) {
+  test_check("DataSpaceR")
+}

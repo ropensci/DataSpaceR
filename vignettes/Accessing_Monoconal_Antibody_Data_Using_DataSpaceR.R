@@ -31,7 +31,7 @@ DT::datatable(con$mabGrid, options = list(autoWidth = TRUE, scrollX = TRUE))
 con$retrieveMabGridValue(using = "viruses")
 
 # retrive available clades for 1H9 mAb mixture in the filtered grid
-con$retrieveMabGridValue(using = "clades", mAb_mixture = "1H9")
+con$retrieveMabGridValue(using = "clades", mab_mixture = "1H9")
 
 ## ------------------------------------------------------------------------
 mab <- con$getMab()

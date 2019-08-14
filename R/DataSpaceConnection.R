@@ -1,5 +1,7 @@
 #' The DataSpaceConnection class
 #'
+#' @return an instance of \code{DataSpaceConnection}
+#'
 #' @section Constructor:
 #' \code{\link{connectDS}}
 #'
@@ -21,17 +23,16 @@
 #' \describe{
 #'   \item{\code{initialize(login = NULL, password = NULL, verbose = FALSE,
 #'   onStaging = FALSE)}}{
-#'     Initialize \code{DataSpaceConnection} class. See \code{\link{connectDS}}.
+#'     Initialize a \code{DataSpaceConnection} object.
+#'     See \code{\link{connectDS}}.
 #'   }
 #'   \item{\code{print()}}{
-#'     Print \code{DataSpaceConnection} class.
+#'     Print the \code{DataSpaceConnection} object.
 #'   }
 #'   \item{\code{getStudy(study, groupId = NULL)}}{
 #'     Create a \code{\link{DataSpaceStudy}} object.
 #'
 #'     \code{study}: A character. Name of the study to retrieve.
-#'
-#'     \code{groupId}: DEPRECATED. Use \code{getGroup} method.
 #'   }
 #'   \item{\code{getGroup(groupId)}}{
 #'     Create a \code{\link{DataSpaceStudy}} object.
@@ -39,10 +40,12 @@
 #'     \code{groupId}: An integer. ID of the group to retrieve.
 #'   }
 #'   \item{\code{refresh()}}{
-#'     Refresh \code{DataSpaceConnection} class.
+#'     Refresh the connection object to update available studies and groups.
 #'   }
 #' }
+#'
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceR-package}}
+#'
 #' @examples
 #' \dontrun{
 #' # Create a connection (Initiate a DataSpaceConnection object)
@@ -63,9 +66,13 @@
 #' # Refresh the connection object to update available studies and groups
 #' con$refresh()
 #' }
+#'
 #' @docType class
-#' @importFrom rjson fromJSON
+#' @format NULL
+#'
+#' @importFrom jsonlite fromJSON
 #' @importFrom curl has_internet nslookup
+#' @importFrom Rlabkey labkey.selectRows
 DataSpaceConnection <- R6Class(
   classname = "DataSpaceConnection",
   public = list(
@@ -74,29 +81,38 @@ DataSpaceConnection <- R6Class(
                           verbose = FALSE,
                           onStaging = FALSE) {
       assert_that(
-        (is.null(login) && is.null(password)) || (!is.null(login) && !is.null(password)),
+        (is.null(login) && is.null(password)) ||
+          (!is.null(login) && !is.null(password)),
         msg = "Enter both `login` and `password` or use netrc file."
       )
       assert_that(is.logical(verbose))
       assert_that(is.logical(onStaging))
       assert_that(
         has_internet(),
-        msg = "No internet connection. Please connect to internet and try again."
+        msg = "No internet connection. Connect to internet and try again."
       )
 
       # check if the portal is up
       assert_that(
-        !is.null(nslookup(ifelse(onStaging, STAGING, PRODUCTION), error = FALSE)),
+        !is.null(nslookup(
+          ifelse(onStaging, STAGING, PRODUCTION),
+          error = FALSE
+        )),
         msg = "The portal is currently down. Try again later."
       )
 
       # get primary fields
-      labkey.url.base <- getUrlBase(onStaging)
-      labkey.user.email <- getUserEmail(labkey.url.base, login)
+      labkeyUrlBase <- getUrlBase(onStaging)
+      labkeyUserEmail <- getUserEmail(labkeyUrlBase, login)
 
       # set Curl options
       netrcFile <- getNetrc(login, password, onStaging)
       curlOptions <- setCurlOptions(netrcFile)
+
+      # check netrc file
+      if (!exists("labkey.sessionCookieName")) {
+        checkNetrc(netrcFile, onStaging, verbose = FALSE)
+      }
 
       # check credential
       checkCredential(onStaging, verbose)
@@ -104,8 +120,8 @@ DataSpaceConnection <- R6Class(
       # set primary fields
       private$.config <-
         list(
-          labkey.url.base = labkey.url.base,
-          labkey.user.email = labkey.user.email,
+          labkeyUrlBase = labkeyUrlBase,
+          labkeyUserEmail = labkeyUserEmail,
           curlOptions = curlOptions,
           verbose = verbose,
           packageVersion = packageVersion("DataSpaceR")
@@ -113,51 +129,21 @@ DataSpaceConnection <- R6Class(
 
       # get extra fields if available
       self$refresh()
-
+      
       NULL
     },
     print = function() {
       cat("<DataSpaceConnection>")
-      cat("\n  URL:", private$.config$labkey.url.base)
-      cat("\n  User:", private$.config$labkey.user.email)
+      cat("\n  URL:", private$.config$labkeyUrlBase)
+      cat("\n  User:", private$.config$labkeyUserEmail)
       cat("\n  Available studies:", private$.stats$studies)
       cat("\n    -", private$.stats$subjectlevelstudies, "studies with data")
       cat("\n    -", private$.stats$subjects, "subjects")
-      cat("\n    -", private$.stats$assays, "assays")
       cat("\n    -", private$.stats$datacount, "data points")
       cat("\n  Available groups:", nrow(private$.availableGroups))
       cat("\n")
     },
-    getStudy = function(study, groupId = NULL) {
-      if (!is.null(groupId)) {
-        warning(
-          "`groupId` argument is deprecated. ",
-          "Use `getGroup()` method to retrieve a group.",
-          immediate. = TRUE
-        )
-      }
-
-      assert_that(
-        is.number(groupId) || is.null(groupId),
-        msg = "groupId should be an integer or null."
-      )
-      assert_that(
-        (study == "" && is.null(groupId)) ||
-          (study == "" && is.number(groupId)) ||
-          (study != "" && is.null(groupId)),
-        msg = "Use empty string if you are using a group filter"
-      )
-
-      if (is.number(groupId)) {
-        assert_that(
-          groupId %in% private$.availableGroups$id,
-          msg = paste(groupId, "is not a valid group ID")
-        )
-        group <- private$.availableGroups[.(groupId), label]
-      } else {
-        group <- NULL
-      }
-
+    getStudy = function(study) {
       if (study != "") {
         studyInfo <- as.list(
           private$.availableStudies[.(study)]
@@ -166,7 +152,7 @@ DataSpaceConnection <- R6Class(
         studyInfo <- NULL
       }
 
-      DataSpaceStudy$new(study, private$.config, group, studyInfo)
+      DataSpaceStudy$new(study, private$.config, NULL, studyInfo)
     },
     getGroup = function(groupId) {
       assert_that(
@@ -179,12 +165,12 @@ DataSpaceConnection <- R6Class(
       )
 
       group <- private$.availableGroups[.(groupId), label]
-      names(group) <- private$.availableGroups[.(groupId), originalLabel]
+      names(group) <- private$.availableGroups[.(groupId), original_label]
 
       DataSpaceStudy$new("", private$.config, group, NULL)
     },
     filterMabGrid = function(using, value) {
-      assertColumn(using)
+      assertColumn(using, self)
 
       column <- switchColumn(using)
       gridBase <- ifelse(
@@ -193,22 +179,31 @@ DataSpaceConnection <- R6Class(
         ".mabMetaGridBase"
       )
 
-      assert_that(all(value %in% private[[gridBase]][[column]]))
-
+      if (!all(value %in% private[[gridBase]][[column]])) {
+        missingValue <- unique(value[!value %in% private[[gridBase]][[column]]])
+        value <- unique(value[value %in% private[[gridBase]][[column]]])
+        if (length(missingValue) > 3) {
+          msgText <- paste(c(missingValue[c(1, 2, 3)], "and others"), collapse = ", ")
+        } else {
+          msgText <- paste(missingValue, collapse = ", ")
+        }
+        assert_that(length(value) != 0, msg = paste0(msgText, " set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."))
+        warning(msgText, " set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found.")
+      }
       if (isFromMabGrid(column)) {
         private$.mabGridBase <- private$.mabGridBase[
           get(column) %in% value
         ]
 
         if (column == "mab_mix_name_std") {
-        private$.mabMetaGridBase <- private$.mabMetaGridBase[
-          get(column) %in% value
-        ]
+          private$.mabMetaGridBase <- private$.mabMetaGridBase[
+            get(column) %in% value
+          ]
         }
       } else {
         private$.mabMetaGridBase <- private$.mabMetaGridBase[
           ,
-          valid := any(get(column) == value, na.rm = TRUE),
+          valid := any(get(column) %in% value, na.rm = TRUE),
           by = mab_mix_name_std
         ][valid == TRUE]
         private$.mabGridBase <- private$.mabGridBase[
@@ -221,17 +216,18 @@ DataSpaceConnection <- R6Class(
 
       invisible(self)
     },
-    retrieveMabGridValue = function(using, mAb_mixture = "") {
-      assertColumn(using)
-      assert_that(is.character(mAb_mixture))
+    retrieveMabGridValue = function(using, mab_mixture = "") {
+      assertColumn(using, self)
+      assert_that(is.character(mab_mixture), msg = "Use only character arguments for `mab_mixture`.")
 
       column <- switchColumn(using)
       gridBase <- ifelse(isFromMabGrid(column), ".mabGridBase", ".mabMetaGridBase")
-      if (mAb_mixture == "") {
+      if (mab_mixture == "") {
         unique(private[[gridBase]][[column]])
       } else {
-        assert_that(all(mAb_mixture %in% private$.mabGridBase$mab_mix_name_std))
-        unique(private[[gridBase]][mab_mix_name_std %in% mAb_mixture][[column]])
+        mab <- mab_mixture
+        assert_that(all(mab %in% private$.mabGridBase$mab_mix_name_std), msg = "`mab_mixture` value not found in `mabGrid`")
+        unique(private[[gridBase]][mab_mix_name_std %in% mab][[column]])
       }
     },
     resetMabGrid = function() {
@@ -242,14 +238,26 @@ DataSpaceConnection <- R6Class(
       invisible(self)
     },
     getMab = function() {
-      DataSpaceMab$new(self$mabGrid$mAb_mixture, private$.mabFilters, private$.config)
+      DataSpaceMab$new(self$mabGridSummary$mab_mixture, private$.mabFilters, private$.config)
     },
     refresh = function() {
       tries <- c(
-        class(try(private$.getAvailableStudies(), silent = !private$.config$verbose)),
-        class(try(private$.getStats(), silent = !private$.config$verbose)),
-        class(try(private$.getAvailableGroups(), silent = !private$.config$verbose)),
-        class(try(private$.getMabGrid(), silent = !private$.config$verbose))
+        class(try(
+          private$.getAvailableStudies(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getStats(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getAvailableGroups(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getMabGrid(),
+          silent = !private$.config$verbose
+        ))
       )
 
       invisible(!"try-error" %in% tries)
@@ -265,42 +273,94 @@ DataSpaceConnection <- R6Class(
     availableGroups = function() {
       private$.availableGroups
     },
-    mabGrid = function() {
-      mabGridBase <- private$.mabGridBase
-      mabMetaGridBase <- private$.mabMetaGridBase
-
+    mabGridSummary = function() {
+      mabGridBase <- data.table::copy(private$.mabGridBase)
+      mabMetaGridBase <- data.table::copy(private$.mabMetaGridBase)
       mabGridBase[
         ,
         `:=`(
-          mAb_mixture = mab_mix_name_std,
+          mab_mixture = mab_mix_name_std,
           n_viruses = length(unique(virus)),
           n_clades = length(unique(clade[!is.na(clade)])),
           n_tiers = length(unique(neutralization_tier[!is.na(neutralization_tier)])),
-          geometric_mean_curve_ic50 = exp(mean(log(as.numeric(titer_curve_ic50)))),
+          geometric_mean_curve_ic50 = as.numeric(
+          {
+            if(all(titer_curve_ic50 %in% c(-Inf, Inf))){
+              NA
+            } else {
+              exp(mean(log(as.numeric(titer_curve_ic50[!titer_curve_ic50 %in% c(-Inf, Inf)]))))
+            }
+          }),
           n_studies = length(unique(study))
         ),
         by = mab_mix_name_std
       ]
-      mabGrid <- unique(mabGridBase[, .(mAb_mixture, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)])
-      setkey(mabGrid, mAb_mixture)
+      
+      mabGrid <- unique(mabGridBase[, .(mab_mixture, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)])
+      setkey(mabGrid, mab_mixture)
 
       mabMetaGridBase[
         ,
         `:=`(
-          mAb_mixture = mab_mix_name_std,
-          donor_species = paste(unique(mab_donor_species[!is.na(mab_donor_species)]), collapse = ", "),
-          hxb2_location = paste(unique(mab_hxb2_location[!is.na(mab_hxb2_location)]), collapse = ", "),
-          isotype = paste(unique(mab_isotype[!is.na(mab_isotype)]), collapse = ", ")
+          mab_mixture = mab_mix_name_std,
+          donor_species = paste(sort(unique(mab_donor_species[!is.na(mab_donor_species)])), collapse = ", "),
+          hxb2_location = paste(sort(unique(mab_hxb2_location[!is.na(mab_hxb2_location)])), collapse = ", "),
+          isotype = paste(sort(unique(mab_isotype[!is.na(mab_isotype)])), collapse = ", ")
         ),
         by = mab_mix_name_std
       ]
-      mabMetaGrid <- unique(mabMetaGridBase[, .(mAb_mixture, donor_species, isotype, hxb2_location)])
-      setkey(mabMetaGrid, mAb_mixture)
+      mabMetaGrid <- unique(mabMetaGridBase[, .(mab_mixture, donor_species, isotype, hxb2_location)])
+      setkey(mabMetaGrid, mab_mixture)
 
       # left join mabGrid with mabMetaGrid
       mabGrid <- mabGrid[mabMetaGrid, nomatch = 0]
 
-      mabGrid[, .(mAb_mixture, donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)]
+      mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)]
+    },
+    mabGrid = function() {
+      mabGridBase <- data.table::copy(private$.mabGridBase)
+      mabMetaGridBase <- data.table::copy(private$.mabMetaGridBase)
+
+      mabGridBase <- unique(
+        mabGridBase[
+         ,
+           .(
+             mab_mix_id  = mab_mix_id,
+             mab_mixture = mab_mix_name_std,
+             virus       = virus,
+             clade       = clade,
+             tier        = neutralization_tier,
+             curve_ic50  = titer_curve_ic50,
+             study       = study
+           )
+        ]
+      )
+
+      mabMetaGridBase <- unique(
+        mabMetaGridBase[
+         ,
+           .(
+             mab_mix_id    = mab_mix_id,
+             mab_mixture   = mab_mix_name_std,
+             donor_species = mab_donor_species,
+             hxb2_location = mab_hxb2_location,
+             isotype       = mab_isotype
+           ),
+        ]
+      )
+
+      
+      setkey(mabGridBase, mab_mix_id)
+      setkey(mabMetaGridBase, mab_mix_id)
+
+      # left join mabGrid with mabMetaGrid
+      mabGrid <- merge(
+        mabGridBase,
+        mabMetaGridBase[,.(mab_mix_id, donor_species, hxb2_location, isotype)],
+        allow.cartesian = TRUE
+      )
+
+      mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, virus, clade, tier, curve_ic50, study)]
     }
   ),
   private = list(
@@ -314,11 +374,13 @@ DataSpaceConnection <- R6Class(
     .cache = list(),
 
     .getAvailableStudies = function() {
-      colSelect <- c("study_name", "short_name", "title", "type", "status",
-                     "stage", "species", "start_date", "strategy")
+      colSelect <- c(
+        "study_name", "short_name", "title", "type", "status",
+        "stage", "species", "start_date", "strategy"
+      )
 
       availableStudies <- labkey.selectRows(
-        baseUrl = private$.config$labkey.url.base,
+        baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
         queryName = "study",
@@ -334,7 +396,7 @@ DataSpaceConnection <- R6Class(
     },
     .getStats = function() {
       stats <- labkey.selectRows(
-        baseUrl = private$.config$labkey.url.base,
+        baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
         queryName = "ds_properties",
@@ -348,7 +410,7 @@ DataSpaceConnection <- R6Class(
     },
     .getAvailableGroups = function() {
       participantGroupApi <- paste0(
-        private$.config$labkey.url.base,
+        private$.config$labkeyUrlBase,
         "/participant-group",
         "/CAVD",
         "/browseParticipantGroups.api?",
@@ -359,19 +421,23 @@ DataSpaceConnection <- R6Class(
       )
 
       # execute via Rlabkey's standard GET function
-      response <- Rlabkey:::labkey.get(participantGroupApi)
+      response <- labkey.get(participantGroupApi)
 
-      # parse JSON response via rjson's fromJSON parsing function
-      parsed <- fromJSON(response)
+      # parse JSON response via jsonlite's fromJSON parsing function
+      parsed <- fromJSON(response, simplifyDataFrame = FALSE)
 
       # construct a data.table for each group
       groupsList <- lapply(parsed$groups, function(group) {
         data.table(
           id = group$id,
           label = group$label,
-          originalLabel = group$category$label,
-          description = ifelse(is.null(group$description), NA, group$description),
-          createdBy = group$createdBy$displayValue,
+          original_label = group$category$label,
+          description = ifelse(
+            is.null(group$description),
+            NA,
+            group$description
+          ),
+          created_by = group$createdBy$displayValue,
           shared = group$category$shared,
           n = length(group$category$participantIds),
           studies = list(unique(substr(group$category$participantIds, 1, 6)))
@@ -389,7 +455,7 @@ DataSpaceConnection <- R6Class(
     },
     .getMabGrid = function() {
       mabGridBase <- labkey.selectRows(
-        baseUrl = private$.config$labkey.url.base,
+        baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
         queryName = "mAbGridBase",
@@ -397,7 +463,7 @@ DataSpaceConnection <- R6Class(
         method = "GET"
       )
       mabMetaGridBase <- labkey.selectRows(
-        baseUrl = private$.config$labkey.url.base,
+        baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
         queryName = "mAbMetaGridBase",
@@ -410,6 +476,7 @@ DataSpaceConnection <- R6Class(
 
       private$.mabGridBase <- mabGridBase
       private$.mabMetaGridBase <- mabMetaGridBase
+      private$.mabFilters <- list()
       private$.cache$mabGridBase <- data.table::copy(mabGridBase)
       private$.cache$mabMetaGridBase <- data.table::copy(mabMetaGridBase)
 

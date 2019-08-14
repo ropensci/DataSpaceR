@@ -7,120 +7,127 @@ getUrlBase <- function(onStaging) {
   staging <- paste0("https://", STAGING)
 
   if (exists("labkey.url.base", .GlobalEnv)) {
-    labkey.url.base <- get("labkey.url.base", .GlobalEnv)
-    labkey.url.base <- gsub("/$", "", labkey.url.base)
-    assert_that(labkey.url.base == production || labkey.url.base == staging,
-                msg = paste("labkey.url.base should be either",
-                            production, "or", staging))
+    labkeyUrlBase <- get("labkey.url.base", .GlobalEnv)
+    labkeyUrlBase <- gsub("/$", "", labkeyUrlBase)
+    assert_that(
+      labkeyUrlBase == production || labkeyUrlBase == staging,
+      msg = paste(
+        "labkey.url.base should be either",
+        production, "or", staging
+      )
+    )
   } else {
     if (onStaging) {
-      labkey.url.base <- staging
+      labkeyUrlBase <- staging
     } else {
-      labkey.url.base <- production
+      labkeyUrlBase <- production
     }
   }
 
-  labkey.url.base <- gsub("http:", "https:", labkey.url.base)
-  if (length(grep("^https://", labkey.url.base)) == 0) {
-    labkey.url.base <- paste0("https://", labkey.url.base)
+  labkeyUrlBase <- gsub("http:", "https:", labkeyUrlBase)
+  if (length(grep("^https://", labkeyUrlBase)) == 0) {
+    labkeyUrlBase <- paste0("https://", labkeyUrlBase)
   }
 
-  labkey.url.base
+  labkeyUrlBase
 }
 
-getUserEmail <- function(labkey.url.base, login) {
+getUserEmail <- function(labkeyUrlBase, login) {
   if (exists("labkey.user.email", .GlobalEnv)) {
-    labkey.user.email <- get("labkey.user.email", .GlobalEnv)
+    labkeyUserEmail <- get("labkey.user.email", .GlobalEnv)
   } else if (!is.null(login)) {
-    labkey.user.email <- login
-  } else if (file.exists("~/.netrc") || file.exists("~/_netrc")) {
-    netrcFile <- ifelse(isWindows(), "~/_netrc", "~/.netrc")
+    labkeyUserEmail <- login
+  } else if (file.exists(getNetrcPath())) {
+    netrcFile <- getNetrcPath()
     netrc <- readChar(netrcFile, file.info(netrcFile)$size)
     netrc <- strsplit(netrc, split = "\\s+")[[1]]
 
     if (length(netrc) %% 6 == 0) {
-      url.base <- gsub("https://", "", labkey.url.base)
-      labkey.user.email <- netrc[which(url.base == netrc) + 2]
+      url.base <- gsub("https://", "", labkeyUrlBase)
+      labkeyUserEmail <- netrc[which(url.base == netrc) + 2]
     } else {
-      labkey.user.email <- ""
+      labkeyUserEmail <- ""
     }
   } else {
-    labkey.user.email <- ""
+    labkeyUserEmail <- ""
   }
 
-  labkey.user.email
+  labkeyUserEmail
 }
 
 getUrlPath <- function(study) {
   if (exists("labkey.url.path", .GlobalEnv)) {
     if (is.null(study)) {
-      labkey.url.path <- get("labkey.url.path", .GlobalEnv)
+      labkeyUrlPath <- get("labkey.url.path", .GlobalEnv)
     } else {
-      labkey.url.path <- file.path("", "CAVD", tolower(study))
+      labkeyUrlPath <- file.path("", "CAVD", tolower(study))
     }
   } else {
     if (is.null(study)) {
       stop("'study' cannot be NULL.", call. = FALSE)
     } else if (study == "") {
-      labkey.url.path <- file.path("", "CAVD")
+      labkeyUrlPath <- file.path("", "CAVD")
     } else {
-      labkey.url.path <- file.path("", "CAVD", tolower(study))
+      labkeyUrlPath <- file.path("", "CAVD", tolower(study))
     }
   }
 
-  labkey.url.path
+  labkeyUrlPath
 }
 
-getValidStudies <- function(labkey.url.base) {
-  folders <- lsFolders(getSession(labkey.url.base, folderPath = "CAVD"))
+#' @importFrom Rlabkey getSession lsFolders
+getValidStudies <- function(labkeyUrlBase) {
+  folders <- lsFolders(getSession(labkeyUrlBase, folderPath = "CAVD"))
   validStudies <- grep("\\w+\\d+", basename(folders), value = TRUE)
 
   validStudies
 }
 
-checkStudy <- function(study, labkey.url.base, verbose = FALSE) {
-  validStudies <- getValidStudies(labkey.url.base)
+checkStudy <- function(study, labkeyUrlBase, verbose = FALSE) {
+  validStudies <- getValidStudies(labkeyUrlBase)
   reqStudy <- tolower(study)
 
   if (!reqStudy %in% c("", validStudies)) {
     if (!verbose) {
       stop(paste0("'", reqStudy, "' is not a valid study."), call. = FALSE)
     } else {
-      stop(paste0("'", reqStudy, " is not a valid study.\nValid studies: ",
-                  paste(validStudies, collapse = ", ")), call. = FALSE)
+      stop(paste0(
+        "'", reqStudy, " is not a valid study.\nValid studies: ",
+        paste(validStudies, collapse = ", ")
+      ), call. = FALSE)
     }
   }
 
   invisible(NULL)
 }
 
-fixStudy <- function(study, labkey.url.base, labkey.url.path) {
-  if (is.null(study)) {
-    study <- basename(labkey.url.path)
-  }
+fixStudy <- function(study, labkeyUrlBase, labkeyUrlPath) {
+  if (is.null(study)) study <- basename(labkeyUrlPath)
 
   # check if `study` is an actual study
-  checkStudy(study, labkey.url.base)
+  checkStudy(study, labkeyUrlBase)
 
   study
 }
 
 getNetrc <- function(login, password, onStaging = FALSE) {
   if (!is.null(login) && !is.null(password)) {
-    netrc <- writeNetrc(login, password, onStaging = onStaging)
+    netrc <- writeNetrc(
+      login, password,
+      onStaging = onStaging,
+      netrcFile = tempfile()
+    )
   } else if (exists("labkey.netrc.file", .GlobalEnv)) {
     netrc <- get("labkey.netrc.file", .GlobalEnv)
   } else {
-    netrc <- paste0(
-      Sys.getenv("HOME"),
-      ifelse(isWindows(), "\\_netrc", "/.netrc")
-    )
+    netrc <- getNetrcPath()
   }
 
   netrc
 }
 
 #' @importFrom utils packageVersion
+#' @importFrom Rlabkey labkey.setCurlOptions
 setCurlOptions <- function(netrcFile) {
   useragent <- paste0(
     "R/", R.version$major, ".", R.version$minor,
@@ -148,72 +155,103 @@ checkCredential <- function(onStaging, verbose) {
     "/login-whoami.view"
   )
 
-  res <- GET(
-    url = url,
-    config = Rlabkey:::labkey.getRequestOptions()
-  )
+  res <- GET(url, labkey.getRequestOptions())
 
   if (res$status_code == 200) {
     if (grepl("json", res$headers$`content-type`)) {
       parsed <- content(res)
 
       if (parsed$displayName == "guest") {
-        stop("Invalid credential or deactivated account. Check your account in the portal.", call. = FALSE)
+        stop(
+          "Invalid credential or deactivated account. ",
+          "Check your account in the portal.",
+          call. = FALSE
+        )
       } else {
         return(TRUE)
       }
     } else {
-      stop("Something went wrong. Check the portal and try again.", call. = FALSE)
+      stop(
+        "Something went wrong. Check the portal and try again.",
+        call. = FALSE
+      )
     }
   } else if (res$status_code == 401) {
-    stop("Invalid credential or deactivated account. Check your account in the portal.", call. = FALSE)
+    stop(
+      "Invalid credential or deactivated account. ",
+      "Check your account in the portal.",
+      call. = FALSE
+    )
   } else if (res$status_code == 403) {
-    stop("The portal is in admin-only mode. Please try again later.", call. = FALSE)
+    stop(
+      "The portal is in admin-only mode. ",
+      "Please try again later.",
+      call. = FALSE
+    )
   } else {
-    stop("Something went wrong. Check the portal and try again.", call. = FALSE)
+    stop(
+      "Something went wrong. ",
+      "Check the portal and try again.",
+      call. = FALSE
+    )
   }
 }
 
 makeCountQuery <- function(dataset, group) {
   query <-
-    paste("SELECT",
-            "COUNT(participantid) AS n,",
-            paste0("'", dataset, "' AS Name"),
-          "FROM",
-            dataset)
+    paste(
+      "SELECT",
+      "COUNT(participantid) AS n,",
+      paste0("'", dataset, "' AS Name"),
+      "FROM",
+      dataset
+    )
 
   if (!is.null(group)) {
     query <- paste(
       query,
       "WHERE",
-        paste0("participantid.\"", names(group), "\" = '", group, "'")
+      paste0("participantid.\"", names(group), "\" = '", group, "'")
     )
   }
 
   query
 }
 
-assertColumn <- function(using) {
+assertColumn <- function(using, self) {
   assert_that(
-    using %in% c("mAb_mixture", "donor_species", "isotype", "hxb2_location", "viruses", "clades", "tiers", "curve_ic50", "studies")
+    length(using) == 1,
+    msg = "May only pass one column at a time"
+  )
+  assert_that(
+    using %in% names(self$mabGrid),
+    msg = paste0("\"", using, "\" is not a valid column in the mabGrid.")
   )
 }
 
 switchColumn <- function(using) {
   switch(
     using,
-    "mAb_mixture" = "mab_mix_name_std",
+    "mab_mixture"   = "mab_mix_name_std",
     "donor_species" = "mab_donor_species",
-    "isotype" = "mab_isotype",
+    "isotype"       = "mab_isotype",
     "hxb2_location" = "mab_hxb2_location",
-    "viruses" = "virus",
-    "clades" = "clade",
-    "tiers" = "neutralization_tier",
-    "curve_ic50" = "titer_curve_ic50",
-    "studies" = "study"
+    "virus"         = "virus",
+    "clade"         = "clade",
+    "tier"          = "neutralization_tier",
+    "curve_ic50"    = "titer_curve_ic50",
+    "study"         = "study"
   )
 }
 
 isFromMabGrid <- function(column) {
   column %in% c("mab_mix_name_std", "virus", "clade", "neutralization_tier", "titer_curve_ic50", "study")
 }
+
+#' @importFrom Rlabkey makeFilter
+#' @export
+Rlabkey::makeFilter
+
+#' @importFrom utils getFromNamespace
+labkey.getRequestOptions <- getFromNamespace("labkey.getRequestOptions", "Rlabkey")
+labkey.get <- getFromNamespace("labkey.get", "Rlabkey")

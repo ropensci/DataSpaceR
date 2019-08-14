@@ -1,5 +1,8 @@
 #' The DataSpaceStudy class
 #'
+#'
+#' @return an instance of \code{DataSpaceStudy}
+#'
 #' @section Constructor:
 #' \code{DataSpaceConnection$getStudy()}
 #' \code{DataSpaceConnection$getGroup()}
@@ -22,7 +25,7 @@
 #'   }
 #'   \item{\code{treatmentArm}}{
 #'     A data.table. The table of treatment arm information for the connected
-#'     study. Not available for cross study connection.
+#'     study. Not available for all study connection.
 #'   }
 #'   \item{\code{group}}{
 #'     A character. The group name.
@@ -34,7 +37,8 @@
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{\code{initialize(study = NULL, config = NULL, group = NULL, studyInfo = NULL)}}{
+#'   \item{\code{initialize(study = NULL, config = NULL, group = NULL,
+#'   studyInfo = NULL)}}{
 #'     Initialize \code{DataSpaceStudy} class.
 #'     See \code{\link{DataSpaceConnection}}.
 #'   }
@@ -61,63 +65,74 @@
 #'   \item{\code{clearCache()}}{
 #'     Clear \code{cache}. Remove downloaded datasets.
 #'   }
-#'   \item{\code{getVariableInfo(datasetName)}}{
+#'   \item{\code{getDatasetDescription(datasetName)}}{
 #'     Get variable information.
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
 #'   }
 #'   \item{\code{refresh()}}{
-#'     Refresh \code{DataSpaceStudy} class.
+#'     Refresh the study object to update available datasets and treatment info.
 #'   }
 #' }
+#'
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
+#'
 #' @examples
 #' \dontrun{
 #' # Create a connection (Initiate a DataSpaceConnection object)
 #' con <- connectDS()
-#'
+#' 
 #' # Connect to cvd408 (Initiate a DataSpaceStudy object)
 #' # https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Study/cvd408?q=408
 #' cvd408 <- con$getStudy("cvd408")
 #' cvd408
-#'
+#' 
 #' # Retrieve Neutralizing antibody dataset (NAb) for cvd408 from DataSpace
 #' NAb <- cvd408$getDataset("NAb")
-#'
+#' 
 #' # Get variable information of the NAb dataset
-#' cvd408$getVariableInfo("NAb")
-#'
+#' cvd408$getDatasetDescription("NAb")
+#' 
 #' # Take a look at cvd408's treatment arm information
 #' cvd408$treatmentArm
-#'
+#' 
 #' # Clear cache of a study object
 #' cvd408$clearCache()
-#'
+#' 
 #' # Connect to the NYVAC durability comparison group
 #' # https://dataspace.cavd.org/cds/CAVD/app.view#group/groupsummary/220
 #' nyvac <- con$getGroup(220)
-#'
+#' 
 #' # Connect to all studies
 #' cvd <- con$getStudy("")
-#'
-#' # Refresh a study object
+#' 
+#' # Refresh the study object to update available datasets and treatment info
 #' cvd$refresh()
 #' }
+#' 
 #' @docType class
+#' @format NULL
+#'
 #' @importFrom digest digest
+#' @importFrom Rlabkey labkey.getQueryDetails labkey.executeSql
 DataSpaceStudy <- R6Class(
   classname = "DataSpaceStudy",
   public = list(
-    initialize = function(study = NULL, config = NULL, group = NULL, studyInfo = NULL) {
-      assert_that(length(study) <= 1,
-                  msg = "For multiple studies, create a group in the portal.")
+    initialize = function(study = NULL,
+                              config = NULL,
+                              group = NULL,
+                              studyInfo = NULL) {
+      assert_that(
+        length(study) <= 1,
+        msg = "For multiple studies, create a group in the portal."
+      )
       assert_that(!is.null(config))
 
       # get primary fields
-      config$labkey.url.path <- getUrlPath(study)
+      config$labkeyUrlPath <- getUrlPath(study)
 
       # fix study
-      study <- fixStudy(study, config$labkey.url.base, config$labkey.url.path)
+      study <- fixStudy(study, config$labkeyUrlBase, config$labkeyUrlPath)
 
       # set primary fields
       private$.study <- tolower(study)
@@ -132,8 +147,10 @@ DataSpaceStudy <- R6Class(
     },
     print = function() {
       study <- ifelse(private$.study == "", "CAVD", private$.study)
-      url <- file.path(gsub("/$", "", private$.config$labkey.url.base),
-                       gsub("^/", "", private$.config$labkey.url.path))
+      url <- file.path(
+        gsub("/$", "", private$.config$labkeyUrlBase),
+        gsub("^/", "", private$.config$labkeyUrlPath)
+      )
 
       cat("<DataSpaceStudy>")
       if (is.null(private$.group)) {
@@ -149,17 +166,21 @@ DataSpaceStudy <- R6Class(
       cat("\n")
     },
     getDataset = function(datasetName,
-                          mergeExtra = FALSE,
-                          colFilter = NULL,
-                          reload = FALSE,
-                          ...) {
+                              mergeExtra = FALSE,
+                              colFilter = NULL,
+                              reload = FALSE,
+                              ...) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
-      assert_that(datasetName %in% private$.availableDatasets$name,
-                  msg = paste0(datasetName, " is invalid dataset"))
+      assert_that(
+        datasetName %in% private$.availableDatasets$name,
+        msg = paste0(datasetName, " is invalid dataset")
+      )
       assert_that(is.logical(mergeExtra))
-      assert_that(is.null(colFilter) | is.matrix(colFilter),
-                  msg = "colFilter is not a matrix")
+      assert_that(
+        is.null(colFilter) | is.matrix(colFilter),
+        msg = "colFilter is not a matrix"
+      )
       assert_that(is.logical(reload))
 
       # build a list of arguments to digest and compare
@@ -192,8 +213,8 @@ DataSpaceStudy <- R6Class(
 
       # retrieve dataset
       dataset <- labkey.selectRows(
-        baseUrl = private$.config$labkey.url.base,
-        folderPath = private$.config$labkey.url.path,
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = private$.config$labkeyUrlPath,
         schemaName = "study",
         queryName = datasetName,
         viewName = NULL,
@@ -223,10 +244,13 @@ DataSpaceStudy <- R6Class(
         }
 
         # create arm_id column with demographics and set it as key
-        dataset[, arm_id := paste(study_prot, study_part, study_group, study_arm, sep = "-")]
+        dataset[, arm_id := paste(
+          study_prot, study_part, study_group, study_arm,
+          sep = "-"
+        )]
         setkey(dataset, arm_id)
 
-        dataset[private$.treatmentArm, nomatch= 0]
+        dataset[private$.treatmentArm, nomatch = 0]
         setkey(dataset, NULL)
       }
 
@@ -241,15 +265,17 @@ DataSpaceStudy <- R6Class(
     clearCache = function() {
       private$.cache <- list()
     },
-    getVariableInfo = function(datasetName) {
+    getDatasetDescription = function(datasetName) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
-      assert_that(datasetName %in% private$.availableDatasets$name,
-                  msg = paste0(datasetName, " is not a available dataset"))
+      assert_that(
+        datasetName %in% private$.availableDatasets$name,
+        msg = paste0(datasetName, " is not a available dataset")
+      )
 
       varInfo <- labkey.getQueryDetails(
-        baseUrl = private$.config$labkey.url.base,
-        folderPath = private$.config$labkey.url.path,
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = private$.config$labkeyUrlPath,
         schemaName = "study",
         queryName = datasetName
       )
@@ -258,20 +284,30 @@ DataSpaceStudy <- R6Class(
       setDT(varInfo)
       setkey(varInfo, fieldName)
 
-      extraVars <- c("Created", "CreatedBy", "Modified", "ModifiedBy",
-                     "SequenceNum", "date")
+      extraVars <- c(
+        "Created", "CreatedBy", "Modified", "ModifiedBy",
+        "SequenceNum", "date"
+      )
 
-      varInfo <- varInfo[isHidden == "FALSE" &
-                           isSelectable == "TRUE" &
-                           !fieldName %in% extraVars,
-                         .(fieldName, caption, type, description)]
+      varInfo <- varInfo[
+        isHidden == "FALSE" &
+          isSelectable == "TRUE" &
+          !fieldName %in% extraVars,
+        .(fieldName, caption, type, description)
+      ]
 
       varInfo
     },
     refresh = function() {
       tries <- c(
-        class(try(private$.getAvailableDatasets(), silent = private$.config$verbose)),
-        class(try(private$.getTreatmentArm(), silent = private$.config$verbose))
+        class(try(
+          private$.getAvailableDatasets(),
+          silent = private$.config$verbose
+        )),
+        class(try(
+          private$.getTreatmentArm(),
+          silent = private$.config$verbos
+        ))
       )
 
       invisible(!"try-error" %in% tries)
@@ -311,30 +347,32 @@ DataSpaceStudy <- R6Class(
 
     .getAvailableDatasets = function() {
       datasetQuery <-
-        paste("SELECT",
-                "DataSets.Name as name,",
-                "DataSets.Label as label,",
-                "dataset_n.n",
-              "FROM",
-                "(",
-                  makeCountQuery("ICS", private$.group),
-                  "UNION",
-                  makeCountQuery("BAMA", private$.group),
-                  "UNION",
-                  makeCountQuery("ELISPOT", private$.group),
-                  "UNION",
-                  makeCountQuery("NAb", private$.group),
-                  "UNION",
-                  makeCountQuery("Demographics", private$.group),
-                ") AS dataset_n,",
-                "DataSets",
-              "WHERE",
-                "Datasets.Name = dataset_n.Name AND dataset_n.n > 0")
+        paste(
+          "SELECT",
+          "DataSets.Name as name,",
+          "DataSets.Label as label,",
+          "dataset_n.n",
+          "FROM",
+          "(",
+          makeCountQuery("ICS", private$.group),
+          "UNION",
+          makeCountQuery("BAMA", private$.group),
+          "UNION",
+          makeCountQuery("ELISPOT", private$.group),
+          "UNION",
+          makeCountQuery("NAb", private$.group),
+          "UNION",
+          makeCountQuery("Demographics", private$.group),
+          ") AS dataset_n,",
+          "DataSets",
+          "WHERE",
+          "Datasets.Name = dataset_n.Name AND dataset_n.n > 0"
+        )
 
       availableDatasets <- suppressWarnings(
         labkey.executeSql(
-          baseUrl = private$.config$labkey.url.base,
-          folderPath = private$.config$labkey.url.path,
+          baseUrl = private$.config$labkeyUrlBase,
+          folderPath = private$.config$labkeyUrlPath,
           schemaName = "study",
           sql = datasetQuery,
           colNameOpt = "fieldname"
@@ -347,13 +385,15 @@ DataSpaceStudy <- R6Class(
       private$.availableDatasets <- availableDatasets[order(name)]
     },
     .getTreatmentArm = function() {
-      colSelect <- c("arm_id", "arm_part", "arm_group", "arm_name",
-                     "randomization", "coded_label", "last_day", "description")
+      colSelect <- c(
+        "arm_id", "arm_part", "arm_group", "arm_name",
+        "randomization", "coded_label", "last_day", "description"
+      )
 
       treatmentArm <- suppressWarnings(
         labkey.selectRows(
-          baseUrl = private$.config$labkey.url.base,
-          folderPath = private$.config$labkey.url.path,
+          baseUrl = private$.config$labkeyUrlBase,
+          folderPath = private$.config$labkeyUrlPath,
           schemaName = "CDS",
           queryName = "treatmentarm",
           colSelect = colSelect,

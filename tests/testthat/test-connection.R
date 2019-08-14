@@ -10,12 +10,17 @@ test_that("can connect to DataSpace", {
 if ("DataSpaceConnection" %in% class(con)) {
   con_names <- c(
     ".__enclos_env__",
-    "mAbGrid",
+    "mabGrid",
+    "mabGridSummary",
     "availableGroups",
     "availableStudies",
     "config",
     "clone",
     "refresh",
+    "getMab",
+    "resetMabGrid",
+    "retrieveMabGridValue",
+    "filterMabGrid",
     "getGroup",
     "getStudy",
     "print",
@@ -28,25 +33,24 @@ if ("DataSpaceConnection" %in% class(con)) {
   if (identical(names(con), con_names)) {
     test_that("`print`", {
       cap_output <- capture.output(con$print())
-      expect_length(cap_output, 9)
+      expect_length(cap_output, 8)
 
-      if (length(cap_output) == 9) {
+      if (length(cap_output) == 8) {
         expect_equal(cap_output[1], "<DataSpaceConnection>")
         expect_equal(cap_output[2], "  URL: https://dataspace.cavd.org")
         expect_match(cap_output[3], "  User: \\S+@\\S+")
         expect_match(cap_output[4], "  Available studies: \\d+")
         expect_match(cap_output[5], "  - \\d+ studies with data")
         expect_match(cap_output[6], "  - \\d+ subjects")
-        expect_match(cap_output[7], "  - \\d+ assays")
-        expect_match(cap_output[8], "  - \\d+ data points")
-        expect_match(cap_output[9], "  Available groups: \\d+")
+        expect_match(cap_output[7], "  - \\d+ data points")
+        expect_match(cap_output[8], "  Available groups: \\d+")
       }
     })
 
     test_that("`config`", {
       configs <- c(
-        "labkey.url.base",
-        "labkey.user.email",
+        "labkeyUrlBase",
+        "labkeyUserEmail",
         "curlOptions",
         "verbose",
         "packageVersion"
@@ -70,13 +74,13 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_equal(names(con$config), configs)
 
       if (all.equal(names(con$config), configs)) {
-        expect_equal(con$config$labkey.url.base, "https://dataspace.cavd.org")
-        expect_match(con$config$labkey.user.email, "\\S+@\\S+")
+        expect_equal(con$config$labkeyUrlBase, "https://dataspace.cavd.org")
+        expect_match(con$config$labkeyUserEmail, "\\S+@\\S+")
         expect_false(con$config$verbose)
         expect_equal(con$config$packageVersion, packageVersion("DataSpaceR"))
         expect_is(con$config$curlOptions, "request")
 
-        if (class(con$config$curlOptions) == "request") {
+        if (is(con$config$curlOptions, "request")) {
           expect_equal(names(con$config$curlOptions$options), curlOptions)
 
           if (all.equal(names(con$config$curlOptions$options), curlOptions)) {
@@ -93,17 +97,25 @@ if ("DataSpaceConnection" %in% class(con)) {
 
     test_that("`availableStudies`", {
       expect_is(con$availableStudies, "data.table")
-      expect_equal(names(con$availableStudies),
-                   c("study_name", "short_name", "title", "type", "status",
-                     "stage", "species", "start_date", "strategy"))
+      expect_equal(
+        names(con$availableStudies),
+        c(
+          "study_name", "short_name", "title", "type", "status",
+          "stage", "species", "start_date", "strategy"
+        )
+      )
       expect_gt(nrow(con$availableStudies), 0)
     })
 
     test_that("`availableGroups`", {
       expect_is(con$availableGroups, "data.table")
-      expect_equal(names(con$availableGroups),
-                   c("id", "label", "originalLabel", "description", "createdBy",
-                     "shared", "n", "studies"))
+      expect_equal(
+        names(con$availableGroups),
+        c(
+          "id", "label", "original_label", "description", "created_by",
+          "shared", "n", "studies"
+        )
+      )
       expect_gt(nrow(con$availableGroups), 0)
     })
 
@@ -114,8 +126,6 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_is(cavd, "R6")
 
       expect_error(con$getStudy("cvd0"))
-      expect_error(suppressWarnings(con$getStudy("", 0)))
-      expect_error(suppressWarnings(con$getStudy("cvd208", 208)))
     })
 
     test_that("`refresh`", {
@@ -124,5 +134,104 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_is(refresh, "logical")
       expect_true(refresh)
     })
+
+    test_that("`resetMabGrid`", {
+      oriCnt <- nrow(con$mabGridSummary)
+      con$filterMabGrid("mab_mixture", c("mAb 96"))
+      expect_true(oriCnt > nrow(con$mabGridSummary))
+      con$resetMabGrid()
+      expect_true(oriCnt == nrow(con$mabGridSummary))
+    })
+
+    test_that("Test `filterMab` errors, warnings, and subsetting.", {
+      expect_error(
+        con$filterMabGrid("mab_mixture", "NotAMab"),
+        regexp = "NotAMab set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      expect_error(
+        con$filterMabGrid("mab_mixture", c("NotAMab1", "NotAMab2", "NotAMab3", "NotAMab4")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3, and others set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "NotAMab")),
+        regexp = "NotAMab set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      con$resetMabGrid()
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "NotAMab1", "NotAMab2", "NotAMab3")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3 set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      con$resetMabGrid()
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "NotAMab1", "NotAMab2", "NotAMab3", "NotAMab4")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3, and others set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      con$resetMabGrid()
+      expect_warning(
+        con$filterMabGrid("mab_mixture", c("PGT121", "PGT121", "PGT125", "PGT125", "PGT125", "NotAMab1", "NotAMab2", "NotAMab3", "NotAMab4")),
+        regexp = "NotAMab1, NotAMab2, NotAMab3, and others set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."
+      )
+      expect_true(nrow(con$mabGridSummary) == 2)
+      con$resetMabGrid()
+    })
+
+    test_that("Test `assertColumn`", {
+      expect_error(
+        con$filterMabGrid(c("This", "That"), "A Thing"),
+        regexp = "May only pass one column at a time"
+      )
+      expect_error(
+        con$filterMabGrid("This", "A Thing"),
+        regexp = "\"This\" is not a valid column in the mabGrid."
+      )
+    })
+
+    test_that("Test `retrieveMabGridValue`", {
+      testVal <- 23
+      expect_error(
+        con$retrieveMabGridValue(using = "mab_mixture", mab_mixture = testVal),
+        regexp = "Use only character arguments for"
+      )
+      con$resetMabGrid()
+      expect_true(
+        con$retrieveMabGridValue(using = "donor_species", mab_mixture = "mAb 96") == "human"
+      )
+      expect_error(
+        con$retrieveMabGridValue("viruses", "PGT 121"),
+        regexp = "\"viruses\" is not a valid column in the mabGrid."
+      )
+      expect_error(
+        con$retrieveMabGridValue("virus", "PGT 121"),
+        regexp = "`mab_mixture` value not found in `mabGrid`"
+      )
+    })
+
+    test_that("Test geomean calculation", {
+      con$filterMabGrid("mab_mixture", "mAb 96")
+      mab <- con$getMab()$nabMab
+      expect_equal(all(mab$titer_curve_ic50 %in% c(-Inf, Inf)), is.na(con$mabGridSummary$geometric_mean_curve_ic50))
+      con$resetMabGrid()
+
+      con$filterMabGrid("mab_mixture", "PGDM1400")
+      mab <- con$getMab()$nabMab
+      expect_true(round(con$mabGridSummary$geometric_mean_curve_ic50, 2) == 0.05)
+      con$resetMabGrid()
+    })
+
+    test_that("getMab pulls mAb data when filters are not set.", {
+      con$resetMabGrid()
+      mab <- con$getMab()
+      expect_true(nrow(mab$nabMab) > 0)
+
+      con <- try(connectDS(), silent = TRUE)
+      mab <- con$getMab()
+      expect_true(nrow(mab$nabMab) > 0)
+    })
+
+    test_that("Check for warnings.", {
+      con$filterMabGrid(using = "hxb2_location", value = c("Env", "gp160"))
+      expect_true(length(warnings()) == 0)
+    })
+
   }
 }

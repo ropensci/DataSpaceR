@@ -4,29 +4,43 @@
 \alias{writeNetrc}
 \title{Write a netrc file}
 \usage{
-writeNetrc(login, password, onStaging = FALSE, netrcFile = NULL)
+writeNetrc(login, password, netrcFile = NULL, onStaging = FALSE,
+  overwrite = FALSE)
 }
 \arguments{
 \item{login}{A character. Email address used for logging in on DataSpace.}
 
 \item{password}{A character. Password associated with the login.}
 
+\item{netrcFile}{A character. Credentials will be written into that file.
+If left NULL, netrc will be written into a temporary file.}
+
 \item{onStaging}{A logical. Whether to connect to the staging server instead
 of the production server.}
 
-\item{netrcFile}{A character. Credentials will be written into that file.
-If left NULL, netrc will be written into a temporary file.}
+\item{overwrite}{A logical. Whether to overwrite the existing netrc file.}
 }
 \value{
-A character vector containing the file paths for netrc
+A character vector containing the netrc file path
 }
 \description{
 Write a netrc file that is valid for accessing DataSpace.
 }
-\examples{
-\dontrun{
-writeNetrc("dataspaceuser@email.com", "mypassword")
+\details{
+The database is accessed with the user's credentials.
+A netrc file storing login and password information is required.
+See \href{https://ropensci.github.io/DataSpaceR/}{here}
+for instruction on how to register and set DataSpace credential.
+By default \code{curl} will look for the file in your home directory.
 }
+\examples{
+# First, create an account in the DataSpace App and read the terms of use
+# Next, create a netrc file using writeNetrc()
+writeNetrc(
+  login = "dataspaceuser@email.com",
+  password = "yourSecretPassword"
+)
+# Specify `netrcFile = getNetrcPath()` to write netrc in the default path
 }
 \seealso{
 \code{\link{connectDS}} \code{\link{checkNetrc}}

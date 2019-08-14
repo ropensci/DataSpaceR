@@ -1,3 +1,19 @@
+# DataSpaceR 0.6.3
+
+* Prepare for CRAN submission
+
+# DataSpaceR 0.6.2
+
+* Write the netrc in temporary directory as default in `writeNetrc`. (CRAN requirement)
+
+# DataSpaceR 0.6.1
+
+* Remove LICENSE file for CRAN submission
+
+# DataSpaceR 0.6.0
+
+* rOpenSci submission: https://github.com/ropensci/software-review/issues/261
+
 # DataSpaceR 0.5.2
 
 * Modified `getDataset` method in `DataSpaceStudy` to take `mergeExtra` as an argument in order to merge extra information (demographics and treatment arm). #5
