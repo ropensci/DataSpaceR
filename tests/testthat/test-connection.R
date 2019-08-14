@@ -211,6 +211,5 @@ if ("DataSpaceConnection" %in% class(con)) {
       con$filterMabGrid(using = "hxb2_location", value = c("Env", "gp160"))
       expect_true(length(warnings()) == 0)
     })
-
   }
 }

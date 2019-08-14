@@ -100,9 +100,9 @@ DataSpaceConnection <- R6Class(
   classname = "DataSpaceConnection",
   public = list(
     initialize = function(login = NULL,
-                          password = NULL,
-                          verbose = FALSE,
-                          onStaging = FALSE) {
+                              password = NULL,
+                              verbose = FALSE,
+                              onStaging = FALSE) {
       assert_that(
         (is.null(login) && is.null(password)) ||
           (!is.null(login) && !is.null(password)),
@@ -292,9 +292,8 @@ DataSpaceConnection <- R6Class(
           n_viruses = length(unique(virus)),
           n_clades = length(unique(clade[!is.na(clade)])),
           n_tiers = length(unique(neutralization_tier[!is.na(neutralization_tier)])),
-          geometric_mean_curve_ic50 = as.numeric(
-          {
-            if(all(titer_curve_ic50 %in% c(-Inf, Inf))){
+          geometric_mean_curve_ic50 = as.numeric({
+            if (all(titer_curve_ic50 %in% c(-Inf, Inf))) {
               NA
             } else {
               exp(mean(log(as.numeric(titer_curve_ic50[!titer_curve_ic50 %in% c(-Inf, Inf)]))))
@@ -332,29 +331,29 @@ DataSpaceConnection <- R6Class(
 
       mabGridBase <- unique(
         mabGridBase[
-         ,
-           .(
-             mab_mix_id  = mab_mix_id,
-             mab_mixture = mab_mix_name_std,
-             virus       = virus,
-             clade       = clade,
-             tier        = neutralization_tier,
-             curve_ic50  = titer_curve_ic50,
-             study       = study
-           )
+          ,
+          .(
+            mab_mix_id = mab_mix_id,
+            mab_mixture = mab_mix_name_std,
+            virus = virus,
+            clade = clade,
+            tier = neutralization_tier,
+            curve_ic50 = titer_curve_ic50,
+            study = study
+          )
         ]
       )
 
       mabMetaGridBase <- unique(
         mabMetaGridBase[
-         ,
-           .(
-             mab_mix_id    = mab_mix_id,
-             mab_mixture   = mab_mix_name_std,
-             donor_species = mab_donor_species,
-             hxb2_location = mab_hxb2_location,
-             isotype       = mab_isotype
-           ),
+          ,
+          .(
+            mab_mix_id = mab_mix_id,
+            mab_mixture = mab_mix_name_std,
+            donor_species = mab_donor_species,
+            hxb2_location = mab_hxb2_location,
+            isotype = mab_isotype
+          ),
         ]
       )
 
@@ -365,7 +364,7 @@ DataSpaceConnection <- R6Class(
       # left join mabGrid with mabMetaGrid
       mabGrid <- merge(
         mabGridBase,
-        mabMetaGridBase[,.(mab_mix_id, donor_species, hxb2_location, isotype)],
+        mabMetaGridBase[, .(mab_mix_id, donor_species, hxb2_location, isotype)],
         allow.cartesian = TRUE
       )
 

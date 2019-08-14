@@ -232,15 +232,15 @@ assertColumn <- function(using, self) {
 switchColumn <- function(using) {
   switch(
     using,
-    "mab_mixture"   = "mab_mix_name_std",
+    "mab_mixture" = "mab_mix_name_std",
     "donor_species" = "mab_donor_species",
-    "isotype"       = "mab_isotype",
+    "isotype" = "mab_isotype",
     "hxb2_location" = "mab_hxb2_location",
-    "virus"         = "virus",
-    "clade"         = "clade",
-    "tier"          = "neutralization_tier",
-    "curve_ic50"    = "titer_curve_ic50",
-    "study"         = "study"
+    "virus" = "virus",
+    "clade" = "clade",
+    "tier" = "neutralization_tier",
+    "curve_ic50" = "titer_curve_ic50",
+    "study" = "study"
   )
 }
 

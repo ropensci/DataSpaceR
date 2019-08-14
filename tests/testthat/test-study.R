@@ -211,10 +211,10 @@ test_study(
   groupLabel = c("NYVAC_durability" = "NYVAC durability comparison")
 )
 test_study(
-    study = "",
-    datasets = c("BAMA", "Demographics", "ICS", "NAb"),
-    groupId = 228,
-    groupLabel = c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
+  study = "",
+  datasets = c("BAMA", "Demographics", "ICS", "NAb"),
+  groupId = 228,
+  groupLabel = c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
 )
 
 email <- DataSpaceR:::getUserEmail(DataSpaceR:::PRODUCTION, NULL)

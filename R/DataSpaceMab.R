@@ -82,11 +82,11 @@
 DataSpaceMab <- R6Class(
   classname = "DataSpaceMab",
   public = list(
-    studyAndMabs        = data.table(),
-    mabs                = data.table(),
-    nabMab              = data.table(),
-    studies             = data.table(),
-    assays              = data.table(),
+    studyAndMabs = data.table(),
+    mabs = data.table(),
+    nabMab = data.table(),
+    studies = data.table(),
+    assays = data.table(),
     variableDefinitions = data.table(),
 
     initialize = function(mab_mixture, filters, config) {
@@ -119,7 +119,7 @@ DataSpaceMab <- R6Class(
       setDT(nabMab)
       self$nabMab <- nabMab
 
-      self$studyAndMabs <- unique(copy(nabMab[,.(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)]))
+      self$studyAndMabs <- unique(copy(nabMab[, .(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)]))
 
       mabs <- labkey.executeSql(
         baseUrl = private$.config$labkeyUrlBase,
@@ -163,7 +163,7 @@ DataSpaceMab <- R6Class(
       setDT(studyDocument)
       studies <- merge(studies, studyDocument, by = "prot", all.x = T)
       self$studies <- unique(
-        studies[,.(
+        studies[, .(
           network,
           prot,
           grant_pi_name,
@@ -183,12 +183,14 @@ DataSpaceMab <- R6Class(
         schemaName = "cds",
         queryName = "studyassay",
         colNameOpt = "fieldname",
-        colFilter = makeFilter(c("prot", "IN", paste(unique(nabMab$prot), collapse = ";")),
-                                        c("assay_identifier", "IN", "NAB MAB")),
+        colFilter = makeFilter(
+          c("prot", "IN", paste(unique(nabMab$prot), collapse = ";")),
+          c("assay_identifier", "IN", "NAB MAB")
+        ),
         method = "GET"
       )
       setDT(assays)
-      self$assays <- assays[,container:=NULL]
+      self$assays <- assays[, container := NULL]
 
       varInfo <- labkey.getQueryDetails(
         baseUrl = private$.config$labkeyUrlBase,
@@ -198,8 +200,7 @@ DataSpaceMab <- R6Class(
       )
       setDT(varInfo)
       setnames(varInfo, "fieldName", "field_name")
-      self$variableDefinitions <- varInfo[,.(field_name, caption, description)]
-
+      self$variableDefinitions <- varInfo[, .(field_name, caption, description)]
     },
     print = function() {
       cat("<DataSpaceMab>")
