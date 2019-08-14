@@ -17,6 +17,13 @@
 #'   \item{\code{availableGroups}}{
 #'     A data.table. The table of available groups.
 #'   }
+#'   \item{\code{mabGrid}}{
+#'     A data.table. The filtered mAb grid.
+#'   }
+#'   \item{\code{mabGridSummary}}{
+#'     A data.table. The filtered grid with updated \code{n_} columns and
+#'     \code{geometric_mean_curve_ic50}.
+#'   }
 #' }
 #'
 #' @section Methods:
@@ -41,6 +48,21 @@
 #'   }
 #'   \item{\code{refresh()}}{
 #'     Refresh the connection object to update available studies and groups.
+#'   }
+#'   \item{\code{filterMabGrid(using, value)}}{
+#'     Filter rows in the mAb grid by specifying the values to keep in the
+#'     columns found in the \code{mabGrid} field. It takes the column and the
+#'     values and filters the underlying tables.
+#'
+#'     \code{using}: A character. Name of the column to filter.
+#'
+#'     \code{value}: A character vector. Values to keep in the mAb grid.
+#'   }
+#'   \item{\code{getMab()}}{
+#'     Create a \code{\link{DataSpaceMab}} object.
+#'   }
+#'   \item{\code{resetMabGrid()}}{
+#'     Reset the mAb grid to the unfiltered state.
 #'   }
 #' }
 #'
@@ -129,7 +151,7 @@ DataSpaceConnection <- R6Class(
 
       # get extra fields if available
       self$refresh()
-      
+
       NULL
     },
     print = function() {
@@ -216,20 +238,6 @@ DataSpaceConnection <- R6Class(
 
       invisible(self)
     },
-    retrieveMabGridValue = function(using, mab_mixture = "") {
-      assertColumn(using, self)
-      assert_that(is.character(mab_mixture), msg = "Use only character arguments for `mab_mixture`.")
-
-      column <- switchColumn(using)
-      gridBase <- ifelse(isFromMabGrid(column), ".mabGridBase", ".mabMetaGridBase")
-      if (mab_mixture == "") {
-        unique(private[[gridBase]][[column]])
-      } else {
-        mab <- mab_mixture
-        assert_that(all(mab %in% private$.mabGridBase$mab_mix_name_std), msg = "`mab_mixture` value not found in `mabGrid`")
-        unique(private[[gridBase]][mab_mix_name_std %in% mab][[column]])
-      }
-    },
     resetMabGrid = function() {
       private$.mabGridBase <- private$.cache$mabGridBase
       private$.mabMetaGridBase <- private$.cache$mabMetaGridBase
@@ -295,7 +303,7 @@ DataSpaceConnection <- R6Class(
         ),
         by = mab_mix_name_std
       ]
-      
+
       mabGrid <- unique(mabGridBase[, .(mab_mixture, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)])
       setkey(mabGrid, mab_mixture)
 
@@ -349,7 +357,7 @@ DataSpaceConnection <- R6Class(
         ]
       )
 
-      
+
       setkey(mabGridBase, mab_mix_id)
       setkey(mabMetaGridBase, mab_mix_id)
 

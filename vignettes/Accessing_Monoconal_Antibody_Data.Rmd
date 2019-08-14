@@ -85,24 +85,14 @@ con$
 
 ## Retrieve column values from the mAb grid
 
-You can retrieve values from the grid by `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tier`, `clade`, `virus`, and `studies`, or any variables found in the `mabGrid` field in the connection object.
-
-There are do options of doing so: using the `retrieveMabGrid` method, or using `data.table` operations.
+You can retrieve values from the grid by `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tier`, `clade`, `virus`, and `studies`, or any variables found in the `mabGrid` field in the connection object via `data.table` operations.
 
 ```{r}
-# using `retrieveMabGridValue`
 # retrieve available viruses in the filtered grid
-con$retrieveMabGridValue(using = "virus")
+con$mabGrid[, unique(virus)]
 
 # retrieve available clades for 1H9 mAb mixture in the filtered grid
-con$retrieveMabGridValue(using = "clade", mab_mixture = "1H9")
-
-# using `data.table` operations
-# retrieve first 10 available viruses using mabGrid
-con$mabGrid[,virus]
-
-# retrieve available clades for 1H9 mAb mixture using mabGrid
-con$mabGrid[mab_mixture == "1H9", clade]
+con$mabGrid[mab_mixture == "1H9", unique(clade)]
 ```
 
 
@@ -115,7 +105,7 @@ mab <- con$getMab()
 mab
 ```
 
-There are 7 public fields available in the DataSpaceMab object: `assays`, `mabs`, `metadata`, `nabmab`, `studies`, `studyAndMabs`, and `variableDefinitions`, and they are equivalent to the sheets in the excel file or the csv files you would download from the app via "Export Excel"/"Export CSV". 
+There are 7 public fields available in the DataSpaceMab object: `studyAndMabs`, `mabs`, `nabMab`, `studies`, `assays`, and `variableDefinitions`, and they are equivalent to the sheets in the excel file or the csv files you would download from the app via "Export Excel"/"Export CSV". 
 
 ```{r}
 DT::datatable(mab$nabMab, options = list(autoWidth = TRUE, scrollX = TRUE))

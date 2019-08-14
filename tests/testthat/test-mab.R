@@ -1,4 +1,4 @@
-context("DataSpaceConnection")
+context("DataSpaceMab")
 
 con <- try(connectDS(), silent = TRUE)
 
@@ -20,11 +20,6 @@ test_that("test mab object", {
 
     expect_true(max(nchar(mab$variableDefinitions$description), na.rm = T) > 50)
 
-    metanames <- c("important_info",
-                   "export_date",
-                   "data_summary_level",
-                   "filters_applied")
-
     studnames <- c("network",
                    "prot",
                    "grant_pi_name",
@@ -40,10 +35,9 @@ test_that("test mab object", {
                    "caption",
                    "description")
 
-    cklist <- list(mab$studiesAndMabs,
+    cklist <- list(mab$studyAndMabs,
                    mab$mabs,
                    mab$nabMab,
-                   mab$metadata,
                    mab$studies,
                    mab$assays,
                    mab$variableDefinitions)
@@ -55,9 +49,8 @@ test_that("test mab object", {
     expect_true(all(sapply(cklist, function(i) nrow(i) > 0)))
 
     ## check columns that were set by the package after making making an API call
-    expect_equal(names(cklist[[4]]), metanames)
-    expect_equal(names(cklist[[5]]), studnames)
-    expect_equal(names(cklist[[7]]), varinames)
+    expect_equal(names(cklist[[4]]), studnames)
+    expect_equal(names(cklist[[6]]), varinames)
 
     ## test multiple mab mixtures
     con$resetMabGrid()
@@ -73,16 +66,15 @@ test_that("test mab object results", {
     mab <- con$getMab()
     expect_true(all(sapply(mab$assays,         function(x) !is.na(x))))
     expect_true(all(sapply(mab$mabs,           function(x) !is.na(x))))
-    expect_true(all(sapply(mab$metadata,       function(x) !is.na(x))))
     expect_true(all(sapply(mab$studies,        function(x) !is.na(x))))
-    expect_true(all(sapply(mab$studiesAndMabs, function(x) !is.na(x))))
+    expect_true(all(sapply(mab$studyAndMabs, function(x) !is.na(x))))
     expect_true(all(mab$assays$prot %in% c("cvd409", "cvd425")))
     expect_true(all(mab$nabMab$virus %in% c("MN.3", "PVO.4", "TH023.6", "Ce0682_E4", "SHIV_C3", "SHIV_C4", "SHIV_C5")))
     expect_true(all(mab$studies$species %in% c("Non-Organism Study")))
-    expect_true(all(mab$studiesAndMabs$mab_mix_name_std %in% c("CH27")))
+    expect_true(all(mab$studyAndMabs$mab_mix_name_std %in% c("CH27")))
     expect_true(nrow(mab$variableDefinitions) == 45)
     expect_true(ncol(mab$variableDefinitions) == 3)
     expect_true(length(unique(mab$nabMab$prot)) == nrow(mab$studies))
-    expect_true(length(unique(mab$studiesAndMabs$prot)) == nrow(mab$studies))
+    expect_true(length(unique(mab$studyAndMabs$prot)) == nrow(mab$studies))
 
 })

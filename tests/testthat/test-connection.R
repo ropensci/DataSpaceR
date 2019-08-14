@@ -19,7 +19,6 @@ if ("DataSpaceConnection" %in% class(con)) {
     "refresh",
     "getMab",
     "resetMabGrid",
-    "retrieveMabGridValue",
     "filterMabGrid",
     "getGroup",
     "getStudy",
@@ -183,26 +182,6 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_error(
         con$filterMabGrid("This", "A Thing"),
         regexp = "\"This\" is not a valid column in the mabGrid."
-      )
-    })
-
-    test_that("Test `retrieveMabGridValue`", {
-      testVal <- 23
-      expect_error(
-        con$retrieveMabGridValue(using = "mab_mixture", mab_mixture = testVal),
-        regexp = "Use only character arguments for"
-      )
-      con$resetMabGrid()
-      expect_true(
-        con$retrieveMabGridValue(using = "donor_species", mab_mixture = "mAb 96") == "human"
-      )
-      expect_error(
-        con$retrieveMabGridValue("viruses", "PGT 121"),
-        regexp = "\"viruses\" is not a valid column in the mabGrid."
-      )
-      expect_error(
-        con$retrieveMabGridValue("virus", "PGT 121"),
-        regexp = "`mab_mixture` value not found in `mabGrid`"
       )
     })
 

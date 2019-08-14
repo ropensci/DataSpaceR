@@ -8,6 +8,9 @@
 \usage{
 DataSpaceMab
 }
+\value{
+an instance of \code{DataSpaceMab}
+}
 \description{
 The DataSpaceMab class
 }
@@ -19,12 +22,42 @@ The DataSpaceMab class
 \section{Fields}{
 
 \describe{
+  \item{\code{config}}{
+    A list. Stores configuration of the connection object such as
+    URL, path and username.
+  }
+  \item{\code{studyAndMabs}}{
+    A data.table. The table of available mAbs by study.
+  }
+  \item{\code{mabs}}{
+    A data.table. The table of available mAbs and their attributes.
+  }
+  \item{\code{nabMab}}{
+    A data.table. The table of mAbs and their neutralizing measurements
+    against viruses.
+  }
+  \item{\code{studies}}{
+    A data.table. The table of available studies.
+  }
+  \item{\code{assays}}{
+    A data.table. The table of assay status by study.
+  }
+  \item{\code{variableDefinitions}}{
+    A data.table. The table of variable definitions.
+  }
 }
 }
 
 \section{Methods}{
 
 \describe{
+  \item{\code{initialize()}}{
+    Initialize \code{DataSpaceMab} object.
+    See \code{\link{DataSpaceConnection}}.
+  }
+  \item{\code{print()}}{
+    Print \code{DataSpaceMab} object summary.
+  }
 }
 }
 

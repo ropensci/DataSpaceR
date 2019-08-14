@@ -1,16 +1,49 @@
 #' The DataSpaceMab class
 #'
+#' @return an instance of \code{DataSpaceMab}
+#'
 #' @section Constructor:
 #' \code{DataSpaceConnection$getMab()}
 #'
 #' @section Fields:
 #' \describe{
+#'   \item{\code{config}}{
+#'     A list. Stores configuration of the connection object such as
+#'     URL, path and username.
+#'   }
+#'   \item{\code{studyAndMabs}}{
+#'     A data.table. The table of available mAbs by study.
+#'   }
+#'   \item{\code{mabs}}{
+#'     A data.table. The table of available mAbs and their attributes.
+#'   }
+#'   \item{\code{nabMab}}{
+#'     A data.table. The table of mAbs and their neutralizing measurements
+#'     against viruses.
+#'   }
+#'   \item{\code{studies}}{
+#'     A data.table. The table of available studies.
+#'   }
+#'   \item{\code{assays}}{
+#'     A data.table. The table of assay status by study.
+#'   }
+#'   \item{\code{variableDefinitions}}{
+#'     A data.table. The table of variable definitions.
+#'   }
 #' }
 #'
 #' @section Methods:
 #' \describe{
+#'   \item{\code{initialize()}}{
+#'     Initialize \code{DataSpaceMab} object.
+#'     See \code{\link{DataSpaceConnection}}.
+#'   }
+#'   \item{\code{print()}}{
+#'     Print \code{DataSpaceMab} object summary.
+#'   }
 #' }
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
+#'
 #' @examples
 #' \dontrun{
 #' }
@@ -18,10 +51,9 @@
 DataSpaceMab <- R6Class(
   classname = "DataSpaceMab",
   public = list(
-    studiesAndMabs      = data.table(),
+    studyAndMabs        = data.table(),
     mabs                = data.table(),
     nabMab              = data.table(),
-    metadata            = data.table(),
     studies             = data.table(),
     assays              = data.table(),
     variableDefinitions = data.table(),
@@ -43,7 +75,7 @@ DataSpaceMab <- R6Class(
       } else {
         mabFilters <- NULL
       }
-      
+
       nabMab <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
@@ -56,7 +88,7 @@ DataSpaceMab <- R6Class(
       setDT(nabMab)
       self$nabMab <- nabMab
 
-      self$studiesAndMabs <- unique(data.table::copy(nabMab[,.(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)]))
+      self$studyAndMabs <- unique(data.table::copy(nabMab[,.(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)]))
 
       mabs <- labkey.executeSql(
         baseUrl = private$.config$labkeyUrlBase,
@@ -76,13 +108,6 @@ DataSpaceMab <- R6Class(
       )
       setDT(mabs)
       self$mabs <- mabs
-      
-      self$metadata <- data.table(
-        important_info = "By exporting data from the CAVD DataSpace, you agree to be bound by the Terms of Use available on the CAVD DataSpace sign-in page at https://dataspace.cavd.org/cds/CAVD/app.view?  nData included may have additional sharing restrictions; please refer to the Studies tab for details. Please notify the DataSpace team of any presentations or publications resulting from this data and remember to cite the CAVD DataSpace, as well as the grant and study investigators. Thank you!",
-        export_date = Sys.time(),
-        data_summary_level = "Neutralization curve details and titers by virus and mAb concentration.",
-        filters_applied = list(list(mabFilters))
-      )
 
       studies <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -133,7 +158,7 @@ DataSpaceMab <- R6Class(
       )
       setDT(assays)
       self$assays <- assays[,container:=NULL]
-      
+
       varInfo <- labkey.getQueryDetails(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
@@ -143,7 +168,7 @@ DataSpaceMab <- R6Class(
       setDT(varInfo)
       data.table::setnames(varInfo, "fieldName", "field_name")
       self$variableDefinitions <- varInfo[,.(field_name, caption, description)]
-      
+
     },
     print = function() {
       cat("<DataSpaceMab>")
