@@ -106,7 +106,7 @@
       <h1>Introduction to DataSpaceR</h1>
                         <h4 class="author">Ju Yeong Kim</h4>
             
-            <h4 class="date">2019-08-14</h4>
+            <h4 class="date">2019-08-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/DataSpaceR/blob/master/vignettes/Intro_to_DataSpaceR.Rmd"><code>vignettes/Intro_to_DataSpaceR.Rmd</code></a></small>
       <div class="hidden name"><code>Intro_to_DataSpaceR.Rmd</code></div>
@@ -181,6 +181,8 @@ password supersecretpassword</code></pre>
 <th align="left">species</th>
 <th align="left">start_date</th>
 <th align="left">strategy</th>
+<th align="left">network</th>
+<th align="left">data_availability</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -193,6 +195,8 @@ password supersecretpassword</code></pre>
 <td align="left">Rhesus macaque</td>
 <td align="left">2009-11-24</td>
 <td align="left">Vector vaccines (viral or bacterial)</td>
+<td align="left">CAVD</td>
+<td align="left">NA</td>
 </tr>
 <tr class="even">
 <td align="left">cvd234</td>
@@ -204,6 +208,8 @@ password supersecretpassword</code></pre>
 <td align="left">Non-Organism Study</td>
 <td align="left">2009-02-03</td>
 <td align="left">Prophylactic neutralizing Ab</td>
+<td align="left">CAVD</td>
+<td align="left">NA</td>
 </tr>
 <tr class="odd">
 <td align="left">cvd235</td>
@@ -215,6 +221,8 @@ password supersecretpassword</code></pre>
 <td align="left">Non-Organism Study</td>
 <td align="left">2008-08-21</td>
 <td align="left">Prophylactic neutralizing Ab</td>
+<td align="left">CAVD</td>
+<td align="left">NA</td>
 </tr>
 <tr class="even">
 <td align="left">cvd236</td>
@@ -226,6 +234,8 @@ password supersecretpassword</code></pre>
 <td align="left">Non-Organism Study</td>
 <td align="left">2009-02-03</td>
 <td align="left">Prophylactic neutralizing Ab</td>
+<td align="left">CAVD</td>
+<td align="left">NA</td>
 </tr>
 <tr class="odd">
 <td align="left">cvd238</td>
@@ -237,6 +247,8 @@ password supersecretpassword</code></pre>
 <td align="left">Non-Organism Study</td>
 <td align="left">2009-01-08</td>
 <td align="left">Prophylactic neutralizing Ab</td>
+<td align="left">CAVD</td>
+<td align="left">NA</td>
 </tr>
 <tr class="even">
 <td align="left">cvd239</td>
@@ -248,6 +260,8 @@ password supersecretpassword</code></pre>
 <td align="left">Rhesus macaque</td>
 <td align="left">2009-01-08</td>
 <td align="left">Protein and peptide vaccines</td>
+<td align="left">CAVD</td>
+<td align="left">This study has assay data (NAB) in the DataSpace.</td>
 </tr>
 </tbody>
 </table>
@@ -726,6 +740,10 @@ password supersecretpassword</code></pre>
 <a href="#dataspaceconnection" class="anchor"></a><code>DataSpaceConnection</code>
 </h3>
 <table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <thead><tr class="header">
 <th>Name</th>
 <th>Description</th>
@@ -740,10 +758,30 @@ password supersecretpassword</code></pre>
 <td>The table of available groups.</td>
 </tr>
 <tr class="odd">
+<td><code>mabGrid</code></td>
+<td>The filtered mAb grid.</td>
+</tr>
+<tr class="even">
+<td><code>mabGridSummary</code></td>
+<td>The summarized mAb grid with updated <code>n_</code> columns and <code>geometric_mean_curve_ic50</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>filterMabGrid</code></td>
+<td>Filter rows in the mAb grid by specifying the values to keep in the columns found in the <code>mabGrid</code> field.</td>
+</tr>
+<tr class="even">
+<td><code>resetMabGrid</code></td>
+<td>Reset the mAb grid to the unfiltered state.</td>
+</tr>
+<tr class="odd">
+<td><code>getMab</code></td>
+<td>Create a <code>DataSpaceMab</code> object by filtered <code>mabGrid</code>.</td>
+</tr>
+<tr class="even">
 <td><code>getStudy</code></td>
 <td>Create a <code>DataSpaceStudy</code> object by study.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>getGroup</code></td>
 <td>Create a <code>DataSpaceStudy</code> object by group.</td>
 </tr>
@@ -795,6 +833,47 @@ password supersecretpassword</code></pre>
 </tbody>
 </table>
 </div>
+<div id="dataspacemab" class="section level3">
+<h3 class="hasAnchor">
+<a href="#dataspacemab" class="anchor"></a><code>DataSpaceMab</code>
+</h3>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>studyAndMabs</code></td>
+<td>The table of available mAbs by study.</td>
+</tr>
+<tr class="even">
+<td><code>mabs</code></td>
+<td>The table of available mAbs and their attributes.</td>
+</tr>
+<tr class="odd">
+<td><code>nabMab</code></td>
+<td>The table of mAbs and their neutralizing measurements against viruses.</td>
+</tr>
+<tr class="even">
+<td><code>studies</code></td>
+<td>The table of available studies.</td>
+</tr>
+<tr class="odd">
+<td><code>assays</code></td>
+<td>The table of assay status by study.</td>
+</tr>
+<tr class="even">
+<td><code>variableDefinitions</code></td>
+<td>The table of variable definitions.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
@@ -820,7 +899,7 @@ password supersecretpassword</code></pre>
 <a class="sourceLine" id="cb18-19" data-line-number="19"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
 <a class="sourceLine" id="cb18-20" data-line-number="20"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb18-21" data-line-number="21"><span class="co">#&gt; other attached packages:</span></a>
-<a class="sourceLine" id="cb18-22" data-line-number="22"><span class="co">#&gt; [1] DataSpaceR_0.6.3</span></a>
+<a class="sourceLine" id="cb18-22" data-line-number="22"><span class="co">#&gt; [1] DataSpaceR_0.7.0</span></a>
 <a class="sourceLine" id="cb18-23" data-line-number="23"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb18-24" data-line-number="24"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
 <a class="sourceLine" id="cb18-25" data-line-number="25"><span class="co">#&gt;  [1] Rcpp_1.0.2        Rlabkey_2.3.1     rstudioapi_0.10  </span></a>
