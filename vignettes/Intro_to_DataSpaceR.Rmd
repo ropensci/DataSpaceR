@@ -200,6 +200,11 @@ The followings are the tables of all fields and methods that work on `DataSpaceC
 | --- | --- |
 | `availableStudies` | The table of available studies. |
 | `availableGroups` | The table of available groups. |
+| `mabGrid` | The filtered mAb grid. |
+| `mabGridSummary` | The summarized mAb grid with updated `n_` columns and `geometric_mean_curve_ic50`. |
+| `filterMabGrid` | Filter rows in the mAb grid by specifying the values to keep in the columns found in the `mabGrid` field. |
+| `resetMabGrid` | Reset the mAb grid to the unfiltered state. |
+| `getMab` | Create a `DataSpaceMab` object by filtered `mabGrid`. |
 | `getStudy` | Create a `DataSpaceStudy` object by study. |
 | `getGroup` | Create a `DataSpaceStudy` object by group. |
 
@@ -214,6 +219,17 @@ The followings are the tables of all fields and methods that work on `DataSpaceC
 | `studyInfo` | Stores the information about the study. |
 | `getDataset` | Get a dataset from the connection. |
 | `getDatasetDescription` | Get variable information. |
+
+### `DataSpaceMab`
+
+| Name | Description |
+| --- | --- |
+| `studyAndMabs` | The table of available mAbs by study. |
+| `mabs` | The table of available mAbs and their attributes. |
+| `nabMab` | The table of mAbs and their neutralizing measurements against viruses. |
+| `studies` | The table of available studies. |
+| `assays` | The table of assay status by study. |
+| `variableDefinitions` | The table of variable definitions. |
 
 
 ## Session information
