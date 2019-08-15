@@ -50,12 +50,15 @@ The DataSpaceMab class
 \section{Methods}{
 
 \describe{
-  \item{\code{initialize()}}{
+  \item{\code{initialize(mabMixture, filters, config)}}{
     Initialize \code{DataSpaceMab} object.
     See \code{\link{DataSpaceConnection}}.
   }
   \item{\code{print()}}{
     Print \code{DataSpaceMab} object summary.
+  }
+  \item{\code{refresh()}}{
+    Refresh the mab object to update datasets.
   }
 }
 }

@@ -34,12 +34,15 @@
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{\code{initialize()}}{
+#'   \item{\code{initialize(mabMixture, filters, config)}}{
 #'     Initialize \code{DataSpaceMab} object.
 #'     See \code{\link{DataSpaceConnection}}.
 #'   }
 #'   \item{\code{print()}}{
 #'     Print \code{DataSpaceMab} object summary.
+#'   }
+#'   \item{\code{refresh()}}{
+#'     Refresh the mab object to update datasets.
 #'   }
 #' }
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
@@ -82,24 +85,107 @@
 DataSpaceMab <- R6Class(
   classname = "DataSpaceMab",
   public = list(
-    studyAndMabs = data.table(),
-    mabs = data.table(),
-    nabMab = data.table(),
-    studies = data.table(),
-    assays = data.table(),
-    variableDefinitions = data.table(),
+    initialize = function(mabMixture, filters, config) {
+      assert_that(!is.null(config))
 
-    initialize = function(mab_mixture, filters, config) {
+      # set primary fields
       private$.config <- config
       private$.filters <- filters
+      private$.mabMixture <- mabMixture
 
+      # get extra fields if available
+      self$refresh()
+
+      NULL
+    },
+    print = function() {
+      cat("<DataSpaceMab>")
+      cat("\n  URL:", private$.config$labkeyUrlBase)
+      cat("\n  User:", private$.config$labkeyUserEmail)
+      cat("\n  Summary:")
+      cat("\n    -", length(unique(private$.nabMab$prot)), "studies")
+      cat("\n    -", length(unique(private$.nabMab$mab_mix_name_std)), "mAb mixtures")
+      cat("\n    -", length(unique(private$.nabMab$neutralization_tier)), "neutralization tiers")
+      cat("\n    -", length(unique(private$.nabMab$clade)), "clades")
+      cat("\n  Filters:")
+      if (length(private$.filters) > 0) {
+        lapply(names(private$.filters), function(x) {
+          cat("\n    - ", x, ": ", paste(private$.filters[[x]], collapse = ", "), sep = "")
+        })
+      } else {
+        cat(" NA")
+      }
+      cat(" \n")
+    },
+    refresh = function() {
+      tries <- c(
+        class(try(
+          private$.getNabMabs(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getMabs(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getStudies(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getAssays(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getVariableDefinitions(),
+          silent = !private$.config$verbose
+        ))
+      )
+
+      invisible(!"try-error" %in% tries)
+    }
+  ),
+  active = list(
+    config = function() {
+      private$.config
+    },
+    studyAndMabs = function() {
+      unique(private$.nabMab[, .(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)])
+    },
+    mabs = function() {
+      private$.mabs
+    },
+    nabMab = function() {
+      private$.nabMab
+    },
+    studies = function() {
+      private$.studies
+    },
+    assays = function() {
+      private$.assays
+    },
+    variableDefinitions = function() {
+      private$.variableDefinitions
+    }
+  ),
+  private = list(
+    .config = list(),
+    .filters = list(),
+    .mabMixture = character(),
+    .mabs = data.table(),
+    .nabMab = data.table(),
+    .studies = data.table(),
+    .assays = data.table(),
+    .variableDefinitions = data.table(),
+
+    .getNabMabs = function() {
+      filters <- private$.filters
       if (length(filters) > 0) {
         filters <- lapply(names(filters), function(x) {
           makeFilter(c(x, "IN", paste(unique(unlist(lapply(filters[[x]], URLencode, reserved = TRUE))), collapse = ";")))
         })
         mabFilters <- unique(
           rbind(
-            makeFilter(c("mab_mix_name_std", "IN", paste(unlist(lapply(mab_mixture, URLencode, reserved = TRUE)), collapse = ";"))),
+            makeFilter(c("mab_mix_name_std", "IN", paste(unlist(lapply(private$.mabMixture, URLencode, reserved = TRUE)), collapse = ";"))),
             do.call(rbind, filters)
           )
         )
@@ -117,10 +203,10 @@ DataSpaceMab <- R6Class(
         method = "GET"
       )
       setDT(nabMab)
-      self$nabMab <- nabMab
 
-      self$studyAndMabs <- unique(copy(nabMab[, .(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)]))
-
+      private$.nabMab <- nabMab
+    },
+    .getMabs = function() {
       mabs <- labkey.executeSql(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
@@ -133,36 +219,41 @@ DataSpaceMab <- R6Class(
           "FROM mabmetadata ",
           "INNER JOIN mabmix ON mabmetadata.mab_id = mabmix.mab_id ",
           "INNER JOIN mabmixmetadata on mabmix.mab_mix_id = mabmixmetadata.mab_mix_id ",
-          "WHERE mab_mix_name_std IN('", paste0(unique(nabMab$mab_mix_name_std), collapse = "', '"), "') "
+          "WHERE mab_mix_name_std IN('", paste0(unique(private$.nabMab$mab_mix_name_std), collapse = "', '"), "') "
         ),
         colNameOpt = "fieldname"
       )
       setDT(mabs)
-      self$mabs <- mabs
 
+      private$.mabs <- mabs
+    },
+    .getStudies = function() {
       studies <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "cds",
         queryName = "study",
         colNameOpt = "fieldname",
-        colFilter = makeFilter(c("study_name", "IN", paste(unique(nabMab$prot), collapse = ";"))),
+        colFilter = makeFilter(c("study_name", "IN", paste(unique(private$.nabMab$prot), collapse = ";"))),
         method = "GET"
       )
       setDT(studies)
       setnames(studies, "study_name", "prot")
+
       studyDocument <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "cds",
         queryName = "studydocument",
         colNameOpt = "fieldname",
-        colFilter = makeFilter(c("prot", "IN", paste(unique(nabMab$prot), collapse = ";"))),
+        colFilter = makeFilter(c("prot", "IN", paste(unique(private$.nabMab$prot), collapse = ";"))),
         method = "GET"
       )
       setDT(studyDocument)
-      studies <- merge(studies, studyDocument, by = "prot", all.x = T)
-      self$studies <- unique(
+
+      studies <- merge(studies, studyDocument, by = "prot", all.x = TRUE)
+
+      private$.studies <- unique(
         studies[, .(
           network,
           prot,
@@ -176,7 +267,8 @@ DataSpaceMab <- R6Class(
           access_level
         )]
       )
-
+    },
+    .getAssays = function() {
       assays <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
@@ -184,14 +276,16 @@ DataSpaceMab <- R6Class(
         queryName = "studyassay",
         colNameOpt = "fieldname",
         colFilter = makeFilter(
-          c("prot", "IN", paste(unique(nabMab$prot), collapse = ";")),
+          c("prot", "IN", paste(unique(private$.nabMab$prot), collapse = ";")),
           c("assay_identifier", "IN", "NAB MAB")
         ),
         method = "GET"
       )
       setDT(assays)
-      self$assays <- assays[, container := NULL]
 
+      private$.assays <- assays[, container := NULL]
+    },
+    .getVariableDefinitions = function() {
       varInfo <- labkey.getQueryDetails(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
@@ -200,31 +294,8 @@ DataSpaceMab <- R6Class(
       )
       setDT(varInfo)
       setnames(varInfo, "fieldName", "field_name")
-      self$variableDefinitions <- varInfo[, .(field_name, caption, description)]
-    },
-    print = function() {
-      cat("<DataSpaceMab>")
-      cat("\n  URL:", private$.config$labkeyUrlBase)
-      cat("\n  User:", private$.config$labkeyUserEmail)
-      cat("\n  Summary:")
-      cat("\n    -", length(unique(self$nabMab$prot)), "studies")
-      cat("\n    -", length(unique(self$nabMab$mab_mix_name_std)), "mAb mixtures")
-      cat("\n    -", length(unique(self$nabMab$neutralization_tier)), "neutralization tiers")
-      cat("\n    -", length(unique(self$nabMab$clade)), "clades")
-      cat("\n  Filters:")
-      if (length(private$.filters) > 0) {
-        lapply(names(private$.filters), function(x) {
-          cat("\n    - ", x, ": ", paste(private$.filters[[x]], collapse = ", "), sep = "")
-        })
-      } else {
-        cat(" NA")
-      }
-      cat(" \n")
+
+      private$.variableDefinitions <- varInfo[, .(field_name, caption, description)]
     }
-  ),
-  active = list(),
-  private = list(
-    .config = list(),
-    .filters = list()
   )
 )
