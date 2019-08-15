@@ -10,20 +10,25 @@
   "codeRepository": "https://github.com/ropensci/DataSpaceR",
   "issueTracker": "https://github.com/ropensci/DataSpaceR/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.2",
+    "version": "3.6.0",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.2 (2018-12-20)",
+  "runtimePlatform": "R version 3.6.0 (2019-04-26)",
   "author": [
     {
       "@type": "Person",
       "givenName": "Ju Yeong",
       "familyName": "Kim",
       "email": "jkim2345@fredhutch.org"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Jason",
+      "familyName": "Taylor"
     }
   ],
   "copyrightHolder": [
@@ -90,6 +95,30 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=pryr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rmarkdown",
+      "name": "rmarkdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "DT",
+      "name": "DT",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=DT"
     }
   ],
   "softwareRequirements": [
@@ -196,8 +225,8 @@
       "sameAs": "https://CRAN.R-project.org/package=data.table"
     }
   ],
-  "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
-  "fileSize": "41.342KB",
+  "releaseNotes": "https://github.com/CAVDDataSpace/DataSpaceR/blob/master/NEWS.md",
+  "fileSize": "48.632KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/DataSpaceR",
     "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master",
@@ -212,10 +241,18 @@
     "vaccine",
     "r-package",
     "rstats",
-    "hvtn"
+    "hvtn",
+    "immunology"
   ],
   "developmentStatus": "https://www.repostatus.org/#active",
   "contributor": {},
   "funder": {},
-  "readme": "https://github.com/ropensci/DataSpaceR/blob/master/README.md"
+  "readme": "https://github.com/ropensci/DataSpaceR/blob/master/README.md",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
+  "relatedLink": "https://CRAN.R-project.org/package=DataSpaceR"
 }
