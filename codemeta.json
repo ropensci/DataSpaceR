@@ -226,7 +226,7 @@
     }
   ],
   "releaseNotes": "https://github.com/CAVDDataSpace/DataSpaceR/blob/master/NEWS.md",
-  "fileSize": "48.625KB",
+  "fileSize": "48.628KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/DataSpaceR",
     "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master",
