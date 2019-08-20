@@ -227,16 +227,22 @@ DataSpaceStudy <- R6Class(
       # convert to data.table
       setDT(dataset)
 
+      # update non-standard names from API
+      setnames(dataset,
+               c("ParticipantId", "ParticipantVisit/Visit", "SubjectId", "SubjectVisit/Visit"),
+               c("participant_id", "participant_visit", "subject_id", "subject_visit"),
+               skip_absent = TRUE)
+
       # merge extra information
       if (args$mergeExtra) {
         if (!identical(datasetName, "Demographics")) {
           dem <- self$getDataset("Demographics")
 
-          subj <- ifelse(private$.study == "", "Subject", "Participant")
-          cols <- c(paste0(subj, "Visit/Visit"), "study_prot")
+          subj <- ifelse(private$.study == "", "subject", "participant")
+          cols <- c(paste0(subj, "_visit"), "study_prot")
           dem <- dem[, -cols, with = FALSE]
 
-          key <- paste0(subj, "Id")
+          key <- paste0(subj, "_id")
           setkeyv(dem, key)
           setkeyv(dataset, key)
 
@@ -282,7 +288,8 @@ DataSpaceStudy <- R6Class(
 
       # convert to data.table and set key
       setDT(varInfo)
-      setkey(varInfo, fieldName)
+      setnames(varInfo, "fieldName", "field_name")
+      setkey(varInfo, field_name)
 
       extraVars <- c(
         "Created", "CreatedBy", "Modified", "ModifiedBy",
@@ -292,8 +299,8 @@ DataSpaceStudy <- R6Class(
       varInfo <- varInfo[
         isHidden == "FALSE" &
           isSelectable == "TRUE" &
-          !fieldName %in% extraVars,
-        .(fieldName, caption, type, description)
+          !field_name %in% extraVars,
+        .(field_name, caption, type, description)
       ]
 
       varInfo
