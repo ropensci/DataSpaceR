@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/DataSpaceR",
   "issueTracker": "https://github.com/ropensci/DataSpaceR/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -226,7 +226,7 @@
     }
   ],
   "releaseNotes": "https://github.com/CAVDDataSpace/DataSpaceR/blob/master/NEWS.md",
-  "fileSize": "48.631KB",
+  "fileSize": "48.637KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/DataSpaceR",
     "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master",

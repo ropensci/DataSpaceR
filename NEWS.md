@@ -1,3 +1,7 @@
+# DataSpaceR 0.7.2
+
+* Fix broken and invalid URLs for CRAN submission
+
 # DataSpaceR 0.7.1
 
 * Fix broken and invalid URLs for CRAN submission
