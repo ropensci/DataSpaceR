@@ -63,7 +63,7 @@ One can also access the unsummarized data from the mAb grid by calling `con$mabG
 
 ## Filter the mAb grid
 
-You can filter rows in the grid by specifying the values to keep in the columns found in the field `con$mabGrid`: `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`. `filterMabGrid` takes the column and the values and filters the underlying tables (private fields), and when you call the `mabGridSummary` or (which is actually an [active binding](https://cloud.r-project.org/web/packages/R6/vignettes/Introduction.html#active-bindings)), it returns the filtered grid with updated `n_` columns and `geometric_mean_curve_ic50`.
+You can filter rows in the grid by specifying the values to keep in the columns found in the field `con$mabGrid`: `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`. `filterMabGrid` takes the column and the values and filters the underlying tables (private fields), and when you call the `mabGridSummary` or (which is actually an [active binding](https://r6.r-lib.org/articles/Introduction.html#active-bindings)), it returns the filtered grid with updated `n_` columns and `geometric_mean_curve_ic50`.
 
 ```{r}
 # filter the grid by viruses

@@ -1,3 +1,7 @@
+# DataSpaceR 0.7.1
+
+* Fix broken and invalid URLs for CRAN submission
+
 # DataSpaceR 0.7.0
 
 * Added `DataSpaceMab` class and several methods and fields in `DataSpaceConnection` to allow access to monoclonal antibody data (thanks @jmtaylor-fhcrc #14, #19, #21)

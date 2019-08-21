@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 
 The package is intended for use by immunologists, bioinformaticians, and statisticians in HIV vaccine research, or anyone interested in the analysis of HIV immunological data across assays, studies, and time.
 
-This package simplifies access to the database by taking advantage of the standardization of the database to hide all the [Rlabkey](https://cran.r-project.org/web/packages/Rlabkey/index.html) specific code away from the user, and it allows the users to access the study-specific datasets via [an object-oriented paradigm](https://cran.r-project.org/web/packages/R6/readme/README.html).
+This package simplifies access to the database by taking advantage of the standardization of the database to hide all the [Rlabkey](https://cran.r-project.org/package=Rlabkey) specific code away from the user, and it allows the users to access the study-specific datasets via [an object-oriented paradigm](https://cran.r-project.org/package=R6/readme/README.html).
 
 
 ## Installation
@@ -40,7 +40,7 @@ Install from CRAN:
 install.packages("DataSpaceR")
 ```
 
-You can install the latest development version from [GitHub](https://github.com/ropensci/DataSpaceR) with [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
+You can install the latest development version from [GitHub](https://github.com/ropensci/DataSpaceR) with [devtools](https://cran.r-project.org/package=devtools):
 
 ```{r, eval=FALSE}
 # install.packages("devtools")
@@ -153,7 +153,7 @@ colnames(NAb)
 
 Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
 
-***Note***: The package uses a [R6](https://cran.r-project.org/web/packages/R6/index.html) class to represent the connection to a study and get around some of R's copy-on-change behavior.
+***Note***: The package uses a [R6](https://cran.r-project.org/package=R6) class to represent the connection to a study and get around some of R's copy-on-change behavior.
 
 
 ## Examples & Documentation

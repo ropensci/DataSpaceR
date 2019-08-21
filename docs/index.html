@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">DataSpaceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.1</span>
       </span>
     </div>
 
@@ -115,13 +115,13 @@
 
 <p><code>DataSpaceR</code> is an R interface to <a href="https://dataspace.cavd.org">the CAVD DataSpace</a>, a data sharing and discovery tool that facilitates exploration of HIV immunological data from pre-clinical and clinical HIV vaccine studies.</p>
 <p>The package is intended for use by immunologists, bioinformaticians, and statisticians in HIV vaccine research, or anyone interested in the analysis of HIV immunological data across assays, studies, and time.</p>
-<p>This package simplifies access to the database by taking advantage of the standardization of the database to hide all the <a href="https://cran.r-project.org/web/packages/Rlabkey/index.html">Rlabkey</a> specific code away from the user, and it allows the users to access the study-specific datasets via <a href="https://cran.r-project.org/web/packages/R6/readme/README.html">an object-oriented paradigm</a>.</p>
+<p>This package simplifies access to the database by taking advantage of the standardization of the database to hide all the <a href="https://cran.r-project.org/package=Rlabkey">Rlabkey</a> specific code away from the user, and it allows the users to access the study-specific datasets via <a href="https://cran.r-project.org/package=R6/readme/README.html">an object-oriented paradigm</a>.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"DataSpaceR"</span>)</a></code></pre></div>
-<p>You can install the latest development version from <a href="https://github.com/ropensci/DataSpaceR">GitHub</a> with <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>:</p>
+<p>You can install the latest development version from <a href="https://github.com/ropensci/DataSpaceR">GitHub</a> with <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/DataSpaceR"</span>)</a></code></pre></div>
 </div>
@@ -444,7 +444,7 @@ password supersecretpassword</code></pre>
 <a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt; [27] "slope"                  "vaccine_matched"       </span></a>
 <a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt; [29] "study_prot"</span></a></code></pre></div>
 <p>Check out <a href="https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html">the reference page</a> of <code>DataSpaceStudy</code> for all available fields and methods.</p>
-<p><strong><em>Note</em></strong>: The package uses a <a href="https://cran.r-project.org/web/packages/R6/index.html">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behavior.</p>
+<p><strong><em>Note</em></strong>: The package uses a <a href="https://cran.r-project.org/package=R6">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behavior.</p>
 </div>
 </div>
 <div id="examples-documentation" class="section level2">
