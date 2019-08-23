@@ -181,7 +181,7 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
           expect_gt(nrow(dataset), 0)
           expect_equal(
             names(dataset),
-            c("fieldName", "caption", "type", "description")
+            c("field_name", "caption", "type", "description")
           )
         }
       })
@@ -191,6 +191,17 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
 
         expect_is(refresh, "logical")
         expect_true(refresh)
+      })
+
+      test_that("`test study col names casing`", {
+        for (datasetName in cavd$availableDatasets$name) {
+          dataset <- try(
+            cavd$getDatasetDescription(datasetName = datasetName),
+            silent = TRUE
+          )
+          expect_true(all(names(dataset) == tolower(names(dataset))), info = paste(names(dataset), collapse = ", "))
+          expect_true(all(names(dataset) == gsub("[/\\+\\. ]", "", names(dataset))), info = paste(names(dataset), collapse = ", "))
+        }
       })
     }
   }
