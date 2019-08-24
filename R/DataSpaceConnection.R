@@ -138,7 +138,7 @@ DataSpaceConnection <- R6Class(
       }
 
       # check credential
-      checkCredential(onStaging, verbose)
+      checkCredential(labkeyUrlBase, verbose)
 
       # set primary fields
       private$.config <-

@@ -146,14 +146,10 @@ setCurlOptions <- function(netrcFile) {
 
 
 #' @importFrom httr GET content
-checkCredential <- function(onStaging, verbose) {
-  if (verbose) message("Checking credential...")
+checkCredential <- function(labkeyUrlBase, verbose) {
+  url <- file.path(labkeyUrlBase, "/login-whoami.view")
 
-  url <- paste0(
-    "https://",
-    ifelse(onStaging, STAGING, PRODUCTION),
-    "/login-whoami.view"
-  )
+  if (verbose) message("Checking credential at ", labkeyUrlBase, " ...")
 
   res <- GET(url, labkey.getRequestOptions())
 
