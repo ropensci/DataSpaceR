@@ -163,7 +163,10 @@ DataSpaceStudy <- R6Class(
       if (nrow(private$.availableDatasets) > 0) {
         cat(paste0("\n    - ", private$.availableDatasets$name), sep = "")
       }
-      cat("\n")
+      cat("\n  Available non-integrated datasets:")
+      if (nrow(private$.availableNIDatasets) > 0) {
+        cat(paste0("\n    - ", private$.availableNIDatasets$name), sep ="")
+      }
     },
     getDataset = function(datasetName,
                               mergeExtra = FALSE,
@@ -305,8 +308,12 @@ DataSpaceStudy <- R6Class(
           silent = private$.config$verbose
         )),
         class(try(
+          private$.getAvailableNIDatasets(),
+          silent = private$.config$verbose
+        )),
+        class(try(
           private$.getTreatmentArm(),
-          silent = private$.config$verbos
+          silent = private$.config$verbose
         ))
       )
 
@@ -321,7 +328,16 @@ DataSpaceStudy <- R6Class(
       private$.config
     },
     availableDatasets = function() {
-      private$.availableDatasets
+      rbind(
+        private$.availableDatasets[, .(name,
+                                       label,
+                                       n,
+                                       integrated = rep(FALSE, nrow(private$.availableDatasets)))],
+        private$.availableNIDatasets[, .(name,
+                                         label,
+                                         n = rep(NA, nrow(private$.availableNIDatasets)),
+                                         integrated = rep(TRUE, nrow(private$.availableNIDatasets)))]
+      )
     },
     cache = function() {
       private$.cache
@@ -340,6 +356,7 @@ DataSpaceStudy <- R6Class(
     .study = character(),
     .config = list(),
     .availableDatasets = data.table(),
+    .availableNIDatasets = data.table(),
     .cache = list(),
     .treatmentArm = data.table(),
     .group = character(),
@@ -383,6 +400,36 @@ DataSpaceStudy <- R6Class(
       setDT(availableDatasets)
 
       private$.availableDatasets <- availableDatasets[order(name)]
+    },
+    .getAvailableNIDatasets = function() {
+      document <- labkey.selectRows(
+        private$.config$labkeyUrlBase,
+        folderPath = private$.config$labkeyUrlPath,
+        schemaName = "CDS",
+        queryName = "document",
+        colNameOpt = "fieldname",
+        colSelect = c("document_id", "label", "filename", "document_type", "assay_identifier")
+      )
+      studydocument <- labkey.selectRows(
+        private$.config$labkeyUrlBase,
+        folderPath = private$.config$labkeyUrlPath,
+        schemaName = "CDS",
+        queryName = "studydocument",
+        colNameOpt = "fieldname",
+        colSelect = c("document_id", "prot")
+      )
+      niDatasets <- merge(document, studydocument, by = "document_id")
+
+      # convert to data.table
+      setDT(niDatasets)
+
+        # need to subset by study because document tables don't use study filters
+        niDatasets <- niDatasets[document_type == "Non-Integrated Assay" & prot == private$.study,
+                                 .(name = assay_identifier,
+                                   label,
+                                   remotePath = filename,
+                                   localPath = NA)]
+      private$.availableNIDatasets <- niDatasets
     },
     .getTreatmentArm = function() {
       colSelect <- c(

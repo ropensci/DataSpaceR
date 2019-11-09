@@ -2,7 +2,7 @@ library(testthat)
 
 con <- connectDS()
 
-test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
+test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupLabel = NULL) {
   datasets <- sort(datasets)
   target <- ifelse(
     study != "",
@@ -58,9 +58,11 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
             paste0("  Study: ", ifelse(study == "", "CAVD", study)),
             paste0("  Group: ", groupLabel)
           ),
-          paste0("  URL: https://dataspace.cavd.org/CAVD", path),
+          paste0("  URL: https://dataspace-staging.cavd.org/CAVD", path),
           "  Available datasets:",
-          strwrap(datasets, prefix = "    - ")
+          strwrap(datasets, prefix = "    - "),
+          "  Available non-integrated datasets:",
+          strwrap(niDatasets, prefix = "    - ")
         )
         cap_output <- capture.output(cavd$print())
         expect_equal(cap_output, con_output)
@@ -84,7 +86,7 @@ test_study <- function(study, datasets, groupId = NULL, groupLabel = NULL) {
         expect_is(cavd$availableDatasets, "data.table")
         expect_equal(
           names(cavd$availableDatasets),
-          c("name", "label", "n")
+          c("name", "label", "n", "integrated")
         )
         expect_equal(
           cavd$availableDatasets$name,
