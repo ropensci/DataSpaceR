@@ -60,7 +60,7 @@ The DataSpaceStudy class
   \item{\code{print()}}{
     Print \code{DataSpaceStudy} class.
   }
-  \item{\code{getDataset(datasetName, colFilter = NULL,
+  \item{\code{getDataset(datasetName, mergeExtra = FALSE, colFilter = NULL,
   reload = FALSE, ...)}}{
     Get a dataset from the connection.
 

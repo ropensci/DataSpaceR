@@ -45,7 +45,7 @@
 #'   \item{\code{print()}}{
 #'     Print \code{DataSpaceStudy} class.
 #'   }
-#'   \item{\code{getDataset(datasetName, colFilter = NULL,
+#'   \item{\code{getDataset(datasetName, mergeExtra = FALSE, colFilter = NULL,
 #'   reload = FALSE, ...)}}{
 #'     Get a dataset from the connection.
 #'
@@ -114,7 +114,7 @@
 #' @format NULL
 #'
 #' @importFrom digest digest
-#' @importFrom Rlabkey labkey.getQueryDetails labkey.executeSql
+#' @importFrom Rlabkey labkey.getQueryDetails labkey.executeSql labkey.webdav.get
 DataSpaceStudy <- R6Class(
   classname = "DataSpaceStudy",
   public = list(
@@ -318,8 +318,22 @@ DataSpaceStudy <- R6Class(
       )
 
       invisible(!"try-error" %in% tries)
+    },
+    setDataDir = function(dataDir) {
+      if (length(dataDir) == 0) {
+        private$.dataDir <- character()
+      } else {
+        assert_that(file.exists(dataDir))
+        assert_that(dir.exists(dataDir))
+
+        private$.dataDir <- normalizePath(dataDir)
+      }
+
+      invisible(self)
+
     }
   ),
+
   active = list(
     study = function() {
       private$.study
@@ -342,6 +356,9 @@ DataSpaceStudy <- R6Class(
     cache = function() {
       private$.cache
     },
+    dataDir = function() {
+      private$.dataDir
+    },
     treatmentArm = function() {
       private$.treatmentArm
     },
@@ -358,6 +375,7 @@ DataSpaceStudy <- R6Class(
     .availableDatasets = data.table(),
     .availableNIDatasets = data.table(),
     .cache = list(),
+    .dataDir = character(),
     .treatmentArm = data.table(),
     .group = character(),
     .studyInfo = list(),
@@ -428,7 +446,7 @@ DataSpaceStudy <- R6Class(
                                  .(name = assay_identifier,
                                    label,
                                    remotePath = filename,
-                                   localPath = NA)]
+                                   localPath = as.character(NA))]
       private$.availableNIDatasets <- niDatasets
     },
     .getTreatmentArm = function() {
@@ -457,6 +475,43 @@ DataSpaceStudy <- R6Class(
       setkey(treatmentArm, arm_id)
 
       private$.treatmentArm <- treatmentArm
+    },
+    .downloadNIDataset = function(assayName, outputDir = NULL) {
+      remotePath <- private$.availableNIDatasets[name == assayName]$remotePath
+      outputDir <- private$.getOutputDir(outputDir)
+
+      fileName <- strsplit(remotePath, "/")[[1]][2]
+      localZipPath <- file.path(outputDir, fileName)
+      fullOutputDir <- file.path(outputDir, gsub(".zip", "", fileName))
+
+      success <- labkey.webdav.get(
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = "/CAVD Files",
+        remoteFilePath = remotePath,
+        localFilePath = localZipPath
+      )
+      if (success) {
+        unzip(localZipPath, exdir = fullOutputDir)
+      } else {
+        stop(paste0("Could not create ", fullOutputDir))
+      }
+
+      private$.availableNIDatasets[name == assayName, localPath := fullOutputDir]
+
+      return(fullOutputDir)
+    },
+    .getOutputDir = function(outputDir = NULL) {
+      if (!is.null(outputDir)) {
+        if (dir.exists(outputDir)) {
+          return(normalizePath(outputDir))
+        } else {
+          stop(paste0(outputDir, " is not a directory."))
+        }
+      } else if (length(private$.dataDir) == 1) {
+        return(private$.dataDir)
+      } else {
+        return(tempdir())
+      }
     }
   )
 )

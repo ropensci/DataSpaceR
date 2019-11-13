@@ -1,9 +1,11 @@
 library(testthat)
+onStaging <- TRUE
 
-con <- connectDS()
+con <- connectDS(onStaging = onStaging)
 
 test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupLabel = NULL) {
   datasets <- sort(datasets)
+  niDatasets <- sort(niDatasets)
   target <- ifelse(
     study != "",
     study,
@@ -33,11 +35,13 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
       "studyInfo",
       "group",
       "treatmentArm",
+      "dataDir",
       "cache",
       "availableDatasets",
       "config",
       "study",
       "clone",
+      "setDataDir",
       "refresh",
       "getDatasetDescription",
       "clearCache",
@@ -90,7 +94,7 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         )
         expect_equal(
           cavd$availableDatasets$name,
-          datasets
+          c(datasets, niDatasets)
         )
       })
 
@@ -129,8 +133,55 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         }
       })
 
+      test_that("`setDataDir`, `getOutputDir`", {
+        getOutputDir <- cavd$.__enclos_env__$private$.getOutputDir
+        expect_equal(getOutputDir(), tempdir())
+        expect_equal(getOutputDir("."), getwd())
+
+        cavd$setDataDir(".")
+        expect_equal(cavd$dataDir, getwd())
+        expect_equal(getOutputDir(), getwd())
+        expect_equal(getOutputDir(tempdir()), tempdir())
+
+        cavd$setDataDir(NULL)
+        expect_equal(getOutputDir(), tempdir())
+
+      })
+
+      test_that("`.downloadNIDataset`", {
+        niDatasets <- cavd$.__enclos_env__$private$.availableNIDatasets
+        downloadNIDataset <- cavd$.__enclos_env__$private$.downloadNIDataset
+        if (nrow(niDatasets) > 0) {
+          for (datasetName in niDatasets$name) {
+            path <- downloadNIDataset(datasetName)
+            expect_equal(path, niDatasets[name == datasetName]$localPath)
+            expect_equal(cavd$.__enclos_env__$private$.getOutputDir(), dirname(path))
+            expect_true(dir.exists(path))
+            expect_gt(length(list.files(path)), 0)
+
+            path <- downloadNIDataset(datasetName, outputDir = ".")
+            expect_equal(getwd(), dirname(path))
+            expect_equal(path, niDatasets[name == datasetName]$localPath)
+            expect_true(dir.exists(path))
+            expect_gt(length(list.files(path)), 0)
+            unlink(path, recursive = TRUE)
+
+            cavd$setDataDir(".")
+            path <- downloadNIDataset(datasetName)
+            expect_equal(getwd(), dirname(path))
+            expect_equal(cavd$dataDir, dirname(path))
+            expect_equal(cavd$.__enclos_env__$private$.getOutputDir(), dirname(path))
+            expect_equal(niDatasets[name == datasetName]$localPath, path)
+            expect_true(dir.exists(path))
+            expect_gt(length(list.files(path)), 0)
+            unlink(path, recursive = TRUE)
+
+          }
+        }
+      })
+
       test_that("`getDataset`", {
-        for (datasetName in cavd$availableDatasets$name) {
+        for (datasetName in cavd$availableDatasets[integrated == FALSE]$name) {
           dataset <- try(cavd$getDataset(datasetName), silent = TRUE)
           expect_is(dataset, "data.table", info = datasetName)
           expect_gt(nrow(dataset), 0)
@@ -194,6 +245,10 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         expect_is(refresh, "logical")
         expect_true(refresh)
       })
+
+
+
+
     }
   }
 }
@@ -207,6 +262,11 @@ test_study(
   datasets = c("BAMA", "ICS", "Demographics", "NAb")
 )
 test_study(
+  study = "vtn505",
+  datasets = c("BAMA", "Demographics", "ICS", "NAb"),
+  niDatasets = c("ADCP", "DEM SUPP", "Fc Array")
+)
+test_study(
   study = "",
   datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"),
   groupId = 220,
@@ -215,7 +275,7 @@ test_study(
 test_study(
   study = "",
   datasets = c("BAMA", "Demographics", "ICS", "NAb"),
-  groupId = 228,
+  groupId = ifelse(onStaging, 226, 228),
   groupLabel = c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
 )
 
