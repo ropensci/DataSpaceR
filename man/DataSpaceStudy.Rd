@@ -46,6 +46,10 @@ The DataSpaceStudy class
   \item{\code{studyInfo}}{
     A list. Stores the information about the study.
   }
+  \item{\code{dataDir}}{
+    A character. Default directory for storing nonstandard datasets. Set with
+    \code{setDataDir(dataDir)}.
+  }
 }
 }
 
@@ -61,7 +65,7 @@ The DataSpaceStudy class
     Print \code{DataSpaceStudy} class.
   }
   \item{\code{getDataset(datasetName, mergeExtra = FALSE, colFilter = NULL,
-  reload = FALSE, ...)}}{
+  reload = FALSE, outputDir = NULL, ...)}}{
     Get a dataset from the connection.
 
     \code{datasetName}: A character. Name of the dataset to retrieve.
@@ -74,6 +78,11 @@ The DataSpaceStudy class
     \code{reload}: A logical. If set to TRUE, download the dataset, whether
     a cached version exist or not.
 
+    \code{outputDir}: A character. Optional, specifies directory to download
+    nonstandard datasets. If \code{NULL}, data will be downloaded to \code{dataDir},
+    set with \code{setDataDir(dataDir)}. If \code{dataDir} is not set, and
+    \code{outputDir} is \code{NULL}, a tmp directory will be used.
+
     \code{...}: Extra arguments to be passed to
     \code{\link[Rlabkey]{labkey.selectRows}}
   }
@@ -84,6 +93,13 @@ The DataSpaceStudy class
     Get variable information.
 
     \code{datasetName}: A character. Name of the dataset to retrieve.
+  }
+  \item{\code{setDataDir(dataDir)}}{
+    Set default directory to download non-integrated datasets. If no
+    dataDir is set, a tmp directory will be used.
+
+    \code{dataDir}: A character. Directory path.
+
   }
   \item{\code{refresh()}}{
     Refresh the study object to update available datasets and treatment info.

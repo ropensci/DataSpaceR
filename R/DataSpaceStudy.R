@@ -33,6 +33,10 @@
 #'   \item{\code{studyInfo}}{
 #'     A list. Stores the information about the study.
 #'   }
+#'   \item{\code{dataDir}}{
+#'     A character. Default directory for storing nonstandard datasets. Set with
+#'     \code{setDataDir(dataDir)}.
+#'   }
 #' }
 #'
 #' @section Methods:
@@ -46,7 +50,7 @@
 #'     Print \code{DataSpaceStudy} class.
 #'   }
 #'   \item{\code{getDataset(datasetName, mergeExtra = FALSE, colFilter = NULL,
-#'   reload = FALSE, ...)}}{
+#'   reload = FALSE, outputDir = NULL, ...)}}{
 #'     Get a dataset from the connection.
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
@@ -59,6 +63,11 @@
 #'     \code{reload}: A logical. If set to TRUE, download the dataset, whether
 #'     a cached version exist or not.
 #'
+#'     \code{outputDir}: A character. Optional, specifies directory to download
+#'     nonstandard datasets. If \code{NULL}, data will be downloaded to \code{dataDir},
+#'     set with \code{setDataDir(dataDir)}. If \code{dataDir} is not set, and
+#'     \code{outputDir} is \code{NULL}, a tmp directory will be used.
+#'
 #'     \code{...}: Extra arguments to be passed to
 #'     \code{\link[Rlabkey]{labkey.selectRows}}
 #'   }
@@ -69,6 +78,13 @@
 #'     Get variable information.
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
+#'   }
+#'   \item{\code{setDataDir(dataDir)}}{
+#'     Set default directory to download non-integrated datasets. If no
+#'     dataDir is set, a tmp directory will be used.
+#'
+#'     \code{dataDir}: A character. Directory path.
+#'
 #'   }
 #'   \item{\code{refresh()}}{
 #'     Refresh the study object to update available datasets and treatment info.
@@ -206,25 +222,7 @@ DataSpaceStudy <- R6Class(
 
 
       # Retrieve dataset
-      if (!self$availableDatasets[name == datasetName]$integrated){
-
-        datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
-        if ( is.na(datasetDir) ||
-             !dir.exists(datasetDir) ||
-             dirname(datasetDir) != private$.getOutputDir(outputDir) ||
-             reload ) {
-          datasetDir <- private$.downloadNIDataset(datasetName, outputDir)
-        }
-        files <- list.files(datasetDir)
-        datacsv <- grep(".csv", files, value = TRUE)
-
-        dataset <- fread(file.path(datasetDir, datacsv))
-
-        # change "subject_id" to "ParticipantId" to be consistent with other datasets
-        setnames(dataset, c("subject_id", "prot"), c("ParticipantId", "study_prot"))
-
-      } else {
-
+      if (self$availableDatasets[name == datasetName]$integrated){
         # build a colFilter for group
         if (!is.null(private$.group)) {
           colFilter <- rbind(
@@ -252,6 +250,36 @@ DataSpaceStudy <- R6Class(
 
         # convert to data.table
         setDT(dataset)
+
+      } else {
+
+        datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
+
+        # First check to see if it already exists
+        if ( !reload ) {
+
+          if (is.na(datasetDir)) {
+            remotePath <- private$.availableNIDatasets[name == assayName]$remotePath
+            datasetDir <- file.path(private$.getOutputDir(outputDir), gsub(".zip", "", basename(remotePath)))
+          }
+
+          dataset <- try({
+            files <- list.files(datasetDir)
+            datacsv <- grep(".csv", files, value = TRUE)
+            fread(file.path(datasetDir, datacsv))
+          }, silent = TRUE)
+        }
+
+        # if loading fails, commence to download.
+        if (reload || !"data.table" %in% class(dataset)) {
+          datasetDir <- private$.downloadNIDataset(datasetName, outputDir)
+          files <- list.files(datasetDir)
+          datacsv <- grep(".csv", files, value = TRUE)
+          dataset <- fread(file.path(datasetDir, datacsv))
+        }
+
+        # change "subject_id" to "ParticipantId" to be consistent with other datasets
+        setnames(dataset, c("subject_id", "prot"), c("ParticipantId", "study_prot"))
 
       }
 
@@ -333,18 +361,38 @@ DataSpaceStudy <- R6Class(
 
         # Download and unzip dataset if not already downloaded
         datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
-        if ( is.na(datasetDir) ||
-             !dir.exists(datasetDir) ||
-             dirname(datasetDir) != private$.getOutputDir(outputDir)
-        ) {
-          datasetDir <- private$.downloadNIDataset(datasetName, outputDir)
+
+        if (is.na(datasetDir)) {
+          remotePath <- private$.availableNIDatasets[name == assayName]$remotePath
+          datasetDir <- file.path(private$.getOutputDir(outputDir), gsub(".zip", "", basename(remotePath)))
         }
+
+        # Check to see if it already exists
         files <- list.files(datasetDir)
         fileFormatPdf <- grep("file_format.pdf", files, value = TRUE)
+        if (length(fileFormatPdf) == 0) {
+          datasetDir <- private$.downloadNIDataset(datasetName, outputDir)
+          files <- list.files(datasetDir)
+          fileFormatPdf <- grep("file_format.pdf", files, value = TRUE)
+        }
 
-        viewer <- getOption("viewer")
-        viewer(file.path(datasetDir, fileFormatPdf))
-
+        # View pdf, using method borrowed from Biobase::openPDF
+        # https://github.com/Bioconductor/Biobase/blob/6017663b35b7380c7d8b09e6ec8a1c1087a7bd62/R/tools.R#L39
+        OST <- .Platform$OS.type
+        if (OST == "windows")
+          shell.exec(file.path(datasetDir, fileFormatPdf))
+        else if (OST == "unix") {
+          pdf <- getOption("pdfviewer")
+          msg <- NULL
+          if (is.null(pdf))
+            msg <- "getOption('pdfviewer') is NULL"
+          else if (length(pdf) == 1 && nchar(pdf[[1]]) == 0)
+            msg <- "getOption('pdfviewer') is ''"
+          if (!is.null(msg))
+            stop(msg, "; please use 'options(pdfviewer=...)'")
+          cmd <- paste(pdf, file.path(datasetDir, fileFormatPdf))
+          system(cmd)
+        }
       }
 
     },
