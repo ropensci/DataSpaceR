@@ -113,6 +113,7 @@
 #' @docType class
 #' @format NULL
 #'
+#' @importFrom data.table fread
 #' @importFrom digest digest
 #' @importFrom Rlabkey labkey.getQueryDetails labkey.executeSql labkey.webdav.get
 DataSpaceStudy <- R6Class(
@@ -169,14 +170,15 @@ DataSpaceStudy <- R6Class(
       }
     },
     getDataset = function(datasetName,
-                              mergeExtra = FALSE,
-                              colFilter = NULL,
-                              reload = FALSE,
-                              ...) {
+                          mergeExtra = FALSE,
+                          colFilter = NULL,
+                          reload = FALSE,
+                          outputDir = NULL,
+                          ...) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
       assert_that(
-        datasetName %in% private$.availableDatasets$name,
+        datasetName %in% self$availableDatasets$name,
         msg = paste0(datasetName, " is invalid dataset")
       )
       assert_that(is.logical(mergeExtra))
@@ -202,33 +204,56 @@ DataSpaceStudy <- R6Class(
         }
       }
 
-      # build a colFilter for group
-      if (!is.null(private$.group)) {
-        colFilter <- rbind(
-          colFilter,
-          makeFilter(c(
-            paste0("SubjectId/", names(private$.group)),
-            "EQUAL",
-            private$.group
-          ))
+
+      # Retrieve dataset
+      if (!self$availableDatasets[name == datasetName]$integrated){
+
+        datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
+        if ( is.na(datasetDir) ||
+             !dir.exists(datasetDir) ||
+             datasetDir != private$.getOutputDir(outputDir) ||
+             reload ) {
+          datasetDir <- private$.downloadNIDataset(datasetName, outputDir)
+        }
+        files <- list.files(datasetDir)
+        datacsv <- grep(".csv", files, value = TRUE)
+
+        dataset <- fread(file.path(datasetDir, datacsv))
+
+        # change "subject_id" to "ParticipantId" to be consistent with other datasets
+        setnames(dataset, c("subject_id", "prot"), c("ParticipantId", "study_prot"))
+
+      } else {
+
+        # build a colFilter for group
+        if (!is.null(private$.group)) {
+          colFilter <- rbind(
+            colFilter,
+            makeFilter(c(
+              paste0("SubjectId/", names(private$.group)),
+              "EQUAL",
+              private$.group
+            ))
+          )
+        }
+
+        # retrieve dataset
+        dataset <- labkey.selectRows(
+          baseUrl = private$.config$labkeyUrlBase,
+          folderPath = private$.config$labkeyUrlPath,
+          schemaName = "study",
+          queryName = datasetName,
+          viewName = NULL,
+          colNameOpt = "fieldname",
+          colFilter = colFilter,
+          method = "GET",
+          ...
         )
+
+        # convert to data.table
+        setDT(dataset)
+
       }
-
-      # retrieve dataset
-      dataset <- labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = private$.config$labkeyUrlPath,
-        schemaName = "study",
-        queryName = datasetName,
-        viewName = NULL,
-        colNameOpt = "fieldname",
-        colFilter = colFilter,
-        method = "GET",
-        ...
-      )
-
-      # convert to data.table
-      setDT(dataset)
 
       # merge extra information
       if (args$mergeExtra) {
@@ -346,11 +371,11 @@ DataSpaceStudy <- R6Class(
         private$.availableDatasets[, .(name,
                                        label,
                                        n,
-                                       integrated = rep(FALSE, nrow(private$.availableDatasets)))],
+                                       integrated = rep(TRUE, nrow(private$.availableDatasets)))],
         private$.availableNIDatasets[, .(name,
                                          label,
                                          n = rep(NA, nrow(private$.availableNIDatasets)),
-                                         integrated = rep(TRUE, nrow(private$.availableNIDatasets)))]
+                                         integrated = rep(FALSE, nrow(private$.availableNIDatasets)))]
       )
     },
     cache = function() {
@@ -492,6 +517,7 @@ DataSpaceStudy <- R6Class(
       )
       if (success) {
         unzip(localZipPath, exdir = fullOutputDir)
+        unlink(localZipPath)
       } else {
         stop(paste0("Could not create ", fullOutputDir))
       }
