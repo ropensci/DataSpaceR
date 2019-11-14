@@ -120,9 +120,9 @@ DataSpaceStudy <- R6Class(
   classname = "DataSpaceStudy",
   public = list(
     initialize = function(study = NULL,
-                              config = NULL,
-                              group = NULL,
-                              studyInfo = NULL) {
+                          config = NULL,
+                          group = NULL,
+                          studyInfo = NULL) {
       assert_that(
         length(study) <= 1,
         msg = "For multiple studies, create a group in the portal."
@@ -211,7 +211,7 @@ DataSpaceStudy <- R6Class(
         datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
         if ( is.na(datasetDir) ||
              !dir.exists(datasetDir) ||
-             datasetDir != private$.getOutputDir(outputDir) ||
+             dirname(datasetDir) != private$.getOutputDir(outputDir) ||
              reload ) {
           datasetDir <- private$.downloadNIDataset(datasetName, outputDir)
         }
@@ -293,38 +293,60 @@ DataSpaceStudy <- R6Class(
     clearCache = function() {
       private$.cache <- list()
     },
-    getDatasetDescription = function(datasetName) {
+    getDatasetDescription = function(datasetName, outputDir = NULL) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
       assert_that(
-        datasetName %in% private$.availableDatasets$name,
+        datasetName %in% self$availableDatasets$name,
         msg = paste0(datasetName, " is not a available dataset")
       )
 
-      varInfo <- labkey.getQueryDetails(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = private$.config$labkeyUrlPath,
-        schemaName = "study",
-        queryName = datasetName
-      )
 
-      # convert to data.table and set key
-      setDT(varInfo)
-      setkey(varInfo, fieldName)
+      if (self$availableDatasets[name == datasetName]$integrated) {
 
-      extraVars <- c(
-        "Created", "CreatedBy", "Modified", "ModifiedBy",
-        "SequenceNum", "date"
-      )
+        varInfo <- labkey.getQueryDetails(
+          baseUrl = private$.config$labkeyUrlBase,
+          folderPath = private$.config$labkeyUrlPath,
+          schemaName = "study",
+          queryName = datasetName
+        )
 
-      varInfo <- varInfo[
-        isHidden == "FALSE" &
-          isSelectable == "TRUE" &
-          !fieldName %in% extraVars,
-        .(fieldName, caption, type, description)
-      ]
+        # convert to data.table and set key
+        setDT(varInfo)
+        setkey(varInfo, fieldName)
 
-      varInfo
+        extraVars <- c(
+          "Created", "CreatedBy", "Modified", "ModifiedBy",
+          "SequenceNum", "date"
+        )
+
+        varInfo <- varInfo[
+          isHidden == "FALSE" &
+            isSelectable == "TRUE" &
+            !fieldName %in% extraVars,
+          .(fieldName, caption, type, description)
+          ]
+
+        return(varInfo)
+
+      } else {
+
+        # Download and unzip dataset if not already downloaded
+        datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
+        if ( is.na(datasetDir) ||
+             !dir.exists(datasetDir) ||
+             dirname(datasetDir) != private$.getOutputDir(outputDir)
+        ) {
+          datasetDir <- private$.downloadNIDataset(datasetName, outputDir)
+        }
+        files <- list.files(datasetDir)
+        fileFormatPdf <- grep("file_format.pdf", files, value = TRUE)
+
+        viewer <- getOption("viewer")
+        viewer(file.path(datasetDir, fileFormatPdf))
+
+      }
+
     },
     refresh = function() {
       tries <- c(
@@ -505,9 +527,11 @@ DataSpaceStudy <- R6Class(
       remotePath <- private$.availableNIDatasets[name == assayName]$remotePath
       outputDir <- private$.getOutputDir(outputDir)
 
-      fileName <- strsplit(remotePath, "/")[[1]][2]
+      fileName <- basename(remotePath)
       localZipPath <- file.path(outputDir, fileName)
       fullOutputDir <- file.path(outputDir, gsub(".zip", "", fileName))
+
+      message("downloading ", fileName, " to ", outputDir, "...")
 
       success <- labkey.webdav.get(
         baseUrl = private$.config$labkeyUrlBase,
@@ -516,6 +540,7 @@ DataSpaceStudy <- R6Class(
         localFilePath = localZipPath
       )
       if (success) {
+        message("unzipping ", fileName, " to ", fullOutputDir)
         unzip(localZipPath, exdir = fullOutputDir)
         unlink(localZipPath)
       } else {

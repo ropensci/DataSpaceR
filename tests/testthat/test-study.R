@@ -1,6 +1,12 @@
 library(testthat)
-onStaging <- TRUE
-dir.create("tmp_test")
+
+setup({
+  dir.create("tmp_test")
+})
+teardown({
+  unlink("tmp_test")
+})
+
 con <- connectDS(onStaging = onStaging)
 
 test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupLabel = NULL) {
@@ -62,7 +68,7 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
             paste0("  Study: ", ifelse(study == "", "CAVD", study)),
             paste0("  Group: ", groupLabel)
           ),
-          paste0("  URL: https://dataspace-staging.cavd.org/CAVD", path),
+          paste0("  URL: ", baseUrl, "/CAVD", path),
           "  Available datasets:",
           strwrap(datasets, prefix = "    - "),
           "  Available non-integrated datasets:",
@@ -292,7 +298,7 @@ test_study(
                       c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
 )
 
-email <- DataSpaceR:::getUserEmail(DataSpaceR:::PRODUCTION, NULL)
+email <- DataSpaceR:::getUserEmail(baseUrl, NULL)
 if (identical(email, "jkim2345@scharp.org")) {
   test_study(
     study = "",

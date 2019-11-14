@@ -13,6 +13,8 @@ vignette: >
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
+labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
