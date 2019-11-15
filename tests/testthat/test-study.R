@@ -270,14 +270,14 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
   }
 }
 
-# test_study(
-#   study = "",
-#   datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb")
-# )
-# test_study(
-#   study = "cvd408",
-#   datasets = c("BAMA", "ICS", "Demographics", "NAb")
-# )
+test_study(
+  study = "",
+  datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb")
+)
+test_study(
+  study = "cvd408",
+  datasets = c("BAMA", "ICS", "Demographics", "NAb")
+)
 test_study(
   study = "vtn505",
   datasets = c("BAMA", "Demographics", "ICS", "NAb"),

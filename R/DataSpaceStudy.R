@@ -156,6 +156,7 @@ DataSpaceStudy <- R6Class(
       private$.config <- config
       private$.group <- group
       private$.studyInfo <- studyInfo
+      private$.dataDir <- tempdir()
 
       # get extra fields if available
       self$refresh()
@@ -254,19 +255,21 @@ DataSpaceStudy <- R6Class(
       } else {
 
         datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
+        dataset <- NULL
 
         # First check to see if it already exists
         if ( !reload ) {
 
           if (is.na(datasetDir)) {
-            remotePath <- private$.availableNIDatasets[name == assayName]$remotePath
+            remotePath <- private$.availableNIDatasets[name == datasetName]$remotePath
             datasetDir <- file.path(private$.getOutputDir(outputDir), gsub(".zip", "", basename(remotePath)))
           }
 
-          dataset <- try({
+          try({
             files <- list.files(datasetDir)
             datacsv <- grep(".csv", files, value = TRUE)
-            fread(file.path(datasetDir, datacsv))
+            dataset <- fread(file.path(datasetDir, datacsv))
+            private$.availableNIDatasets[name == datasetName]$localPath <- datasetDir
           }, silent = TRUE)
         }
 
@@ -363,14 +366,16 @@ DataSpaceStudy <- R6Class(
         datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
 
         if (is.na(datasetDir)) {
-          remotePath <- private$.availableNIDatasets[name == assayName]$remotePath
+          remotePath <- private$.availableNIDatasets[name == datasetName]$remotePath
           datasetDir <- file.path(private$.getOutputDir(outputDir), gsub(".zip", "", basename(remotePath)))
         }
 
         # Check to see if it already exists
         files <- list.files(datasetDir)
         fileFormatPdf <- grep("file_format.pdf", files, value = TRUE)
-        if (length(fileFormatPdf) == 0) {
+        if (length(fileFormatPdf) == 1) {
+          private$.availableNIDatasets[name == datasetName]$localPath <- datasetDir
+        } else {
           datasetDir <- private$.downloadNIDataset(datasetName, outputDir)
           files <- list.files(datasetDir)
           fileFormatPdf <- grep("file_format.pdf", files, value = TRUE)
@@ -571,8 +576,8 @@ DataSpaceStudy <- R6Class(
 
       private$.treatmentArm <- treatmentArm
     },
-    .downloadNIDataset = function(assayName, outputDir = NULL) {
-      remotePath <- private$.availableNIDatasets[name == assayName]$remotePath
+    .downloadNIDataset = function(datasetName, outputDir = NULL) {
+      remotePath <- private$.availableNIDatasets[name == datasetName]$remotePath
       outputDir <- private$.getOutputDir(outputDir)
 
       fileName <- basename(remotePath)
@@ -595,7 +600,7 @@ DataSpaceStudy <- R6Class(
         stop(paste0("Could not create ", fullOutputDir))
       }
 
-      private$.availableNIDatasets[name == assayName, localPath := fullOutputDir]
+      private$.availableNIDatasets[name == datasetName, localPath := fullOutputDir]
 
       return(fullOutputDir)
     },
