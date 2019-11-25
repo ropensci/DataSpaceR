@@ -248,6 +248,25 @@ isFromMabGrid <- function(column) {
   column %in% c("mab_mix_name_std", "virus", "clade", "neutralization_tier", "titer_curve_ic50", "study")
 }
 
+mapServerName <- function(location) {
+
+  mapnames <- c("ParticipantId"          = "participant_id",
+                "ParticipantVisit/Visit" = "participant_visit",
+                "SubjectId"              = "subject_id",
+                "SubjectVisit/Visit"     = "subject_visit")
+
+  if( location == "server" ){
+    return(names(mapnames))
+  }
+  else if( location == "object" ){
+    return(mapnames)
+  }
+  else{
+    stop("invalid location for mapServerNames")
+  }
+}
+
+
 #' @importFrom Rlabkey makeFilter
 #' @export
 Rlabkey::makeFilter

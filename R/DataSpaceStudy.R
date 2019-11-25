@@ -166,10 +166,10 @@ DataSpaceStudy <- R6Class(
       cat("\n")
     },
     getDataset = function(datasetName,
-                              mergeExtra = FALSE,
-                              colFilter = NULL,
-                              reload = FALSE,
-                              ...) {
+                          mergeExtra = FALSE,
+                          colFilter = NULL,
+                          reload = FALSE,
+                          ...) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
       assert_that(
@@ -184,6 +184,9 @@ DataSpaceStudy <- R6Class(
       assert_that(is.logical(reload))
 
       # build a list of arguments to digest and compare
+      if(!is.null(colFilter)){
+          Map(function(x, y){colFilter <<- gsub(x, y, colFilter)}, mapServerName("object"), mapServerName("server"))
+      }
       args <- list(
         datasetName = datasetName,
         mergeExtra = mergeExtra,
@@ -228,10 +231,12 @@ DataSpaceStudy <- R6Class(
       setDT(dataset)
 
       # update non-standard names from API
-      setnames(dataset,
-               c("ParticipantId", "ParticipantVisit/Visit", "SubjectId", "SubjectVisit/Visit"),
-               c("participant_id", "participant_visit", "subject_id", "subject_visit"),
-               skip_absent = TRUE)
+      setnames(
+          dataset,
+          mapServerName("server"),
+          mapServerName("object"),
+          skip_absent = TRUE
+      )
 
       # merge extra information
       if (args$mergeExtra) {
