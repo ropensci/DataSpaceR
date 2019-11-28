@@ -269,7 +269,8 @@ DataSpaceStudy <- R6Class(
             files <- list.files(datasetDir)
             datacsv <- grep(".csv", files, value = TRUE)
             dataset <- fread(file.path(datasetDir, datacsv))
-            private$.availableNIDatasets[name == datasetName]$localPath <- datasetDir
+            private$.availableNIDatasets[name == datasetName, localPath := datasetDir]
+
           }, silent = TRUE)
         }
 
@@ -280,6 +281,9 @@ DataSpaceStudy <- R6Class(
           datacsv <- grep(".csv", files, value = TRUE)
           dataset <- fread(file.path(datasetDir, datacsv))
         }
+
+        # update 'n'
+        private$.availableNIDatasets[name == datasetName, n := nrow(dataset)]
 
         # change "subject_id" to "ParticipantId" to be consistent with other datasets
         setnames(dataset, c("subject_id", "prot"), c("ParticipantId", "study_prot"))
@@ -449,7 +453,7 @@ DataSpaceStudy <- R6Class(
                                        integrated = rep(TRUE, nrow(private$.availableDatasets)))],
         private$.availableNIDatasets[, .(name,
                                          label,
-                                         n = rep(NA, nrow(private$.availableNIDatasets)),
+                                         n,
                                          integrated = rep(FALSE, nrow(private$.availableNIDatasets)))]
       )
     },
@@ -541,12 +545,14 @@ DataSpaceStudy <- R6Class(
       # convert to data.table
       setDT(niDatasets)
 
-        # need to subset by study because document tables don't use study filters
-        niDatasets <- niDatasets[document_type == "Non-Integrated Assay" & prot == private$.study,
-                                 .(name = assay_identifier,
-                                   label,
-                                   remotePath = filename,
-                                   localPath = as.character(NA))]
+      # need to subset by study because document tables don't use study filters
+      niDatasets <- niDatasets[document_type == "Non-Integrated Assay" & prot == private$.study,
+                               .(name = assay_identifier,
+                                 label,
+                                 remotePath = filename,
+                                 localPath = as.character(NA),
+                                 n = as.integer(NA),
+                                 document_id)]
       private$.availableNIDatasets <- niDatasets
     },
     .getTreatmentArm = function() {
@@ -585,13 +591,27 @@ DataSpaceStudy <- R6Class(
       fullOutputDir <- file.path(outputDir, gsub(".zip", "", fileName))
 
       message("downloading ", fileName, " to ", outputDir, "...")
+      # use getStudyDocument.view
+      # https://dataspace.cavd.org/cds/CAVD/getStudyDocument.view?
+      # study=vtn505&documentId=916&filename=study_documents%2Fvtn505_adcp.zip
 
-      success <- labkey.webdav.get(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = "/CAVD Files",
-        remoteFilePath = remotePath,
-        localFilePath = localZipPath
+      # Use getStudyDocumentUrl.view to download
+      getStudyDocumentUrl <- paste0(
+        private$.config$labkeyUrlBase,
+        "/cds/CAVD/getStudyDocument.view?",
+        "study=", private$.study,
+        "&documentId=", private$.availableNIDatasets[name == datasetName]$document_id,
+        "&filename=", gsub("/", "%2F", private$.availableNIDatasets[name == datasetName]$remotePath)
       )
+
+      # Use labkey.webdav.getByUrl which includes filesystem and permissions checks
+      ret <- Rlabkey:::labkey.webdav.getByUrl(getStudyDocumentUrl, localFilePath = localZipPath, overwrite = TRUE)
+      if (!is.null(ret) && !is.na(ret) && ret == FALSE) {
+        success <- FALSE
+      } else {
+        success <- file.exists(localZipPath)
+      }
+
       if (success) {
         message("unzipping ", fileName, " to ", fullOutputDir)
         unzip(localZipPath, exdir = fullOutputDir)
