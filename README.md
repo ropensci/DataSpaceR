@@ -165,7 +165,7 @@ created in [the DataSpace
 App](https://dataspace.cavd.org/cds/CAVD/app.view).
 
 Check out [the reference
-page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceConnection.html)
+page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html)
 of `DataSpaceConnection` for all available fields and methods.
 
 ### create an instance of `cvd408`
@@ -225,7 +225,7 @@ colnames(NAb)
 ```
 
 Check out [the reference
-page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html)
+page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceStudy.html)
 of `DataSpaceStudy` for all available fields and methods.
 
 ***Note***: The package uses a
@@ -237,8 +237,8 @@ behavior.
 
 For more detailed examples and detailed documentation, see [the
 introductory
-vignette](https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html)
-and [the pkgdown site](https://ropensci.github.io/DataSpaceR/).
+vignette](https://docs.ropensci.org/DataSpaceR/articles/Intro_to_DataSpaceR.html)
+and [the pkgdown site](https://docs.ropensci.org/DataSpaceR/).
 
 ## Meta
 

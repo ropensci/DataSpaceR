@@ -122,7 +122,7 @@ knitr::kable(con$availableGroups)
 
 ***Note***: A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
 
-Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
+Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
 
 
 ### create an instance of `cvd408`
@@ -151,14 +151,14 @@ dim(NAb)
 colnames(NAb)
 ```
 
-Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
+Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
 
 ***Note***: The package uses a [R6](https://cran.r-project.org/package=R6) class to represent the connection to a study and get around some of R's copy-on-change behavior.
 
 
 ## Examples & Documentation
 
-For more detailed examples and detailed documentation, see [the introductory vignette](https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html) and [the pkgdown site](https://ropensci.github.io/DataSpaceR/).
+For more detailed examples and detailed documentation, see [the introductory vignette](https://docs.ropensci.org/DataSpaceR/articles/Intro_to_DataSpaceR.html) and [the pkgdown site](https://docs.ropensci.org/DataSpaceR/).
 
 
 ## Meta

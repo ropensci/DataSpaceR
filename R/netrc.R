@@ -5,7 +5,7 @@
 #' @details
 #' The database is accessed with the user's credentials.
 #' A netrc file storing login and password information is required.
-#' See \href{https://ropensci.github.io/DataSpaceR/}{here}
+#' See \href{https://docs.ropensci.org/DataSpaceR/}{here}
 #' for instruction on how to register and set DataSpace credential.
 #' By default \code{curl} will look for the file in your home directory.
 #'
