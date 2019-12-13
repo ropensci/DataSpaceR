@@ -135,7 +135,7 @@ DataSpaceStudy <- R6Class(
       study <- fixStudy(study, config$labkeyUrlBase, config$labkeyUrlPath)
 
       # set primary fields
-      private$.study <- tolower(study)
+      private$.study <- study
       private$.config <- config
       private$.group <- group
       private$.studyInfo <- studyInfo

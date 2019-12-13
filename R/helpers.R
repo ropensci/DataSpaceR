@@ -85,7 +85,7 @@ getValidStudies <- function(labkeyUrlBase) {
 
 checkStudy <- function(study, labkeyUrlBase, verbose = FALSE) {
   validStudies <- getValidStudies(labkeyUrlBase)
-  reqStudy <- tolower(study)
+  reqStudy <- study
 
   if (!reqStudy %in% c("", validStudies)) {
     if (!verbose) {
