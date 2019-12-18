@@ -183,10 +183,16 @@ DataSpaceStudy <- R6Class(
       )
       assert_that(is.logical(reload))
 
-      # build a list of arguments to digest and compare
-      if(!is.null(colFilter)){
-          Map(function(x, y){colFilter <<- gsub(x, y, colFilter)}, mapServerName("object"), mapServerName("server"))
+      # change user built colFilter matrix from DSR variable names to LabKey variable names
+      if (!is.null(colFilter)) {
+        Map(
+          function(obj, srv) colFilter <<- gsub(obj, srv, colFilter),
+          mapServerName("object"),
+          mapServerName("server")
+        )
       }
+
+      # build a list of arguments to digest and compare
       args <- list(
         datasetName = datasetName,
         mergeExtra = mergeExtra,

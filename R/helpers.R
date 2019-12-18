@@ -250,10 +250,14 @@ isFromMabGrid <- function(column) {
 
 mapServerName <- function(location) {
 
-  mapnames <- c("ParticipantId"          = "participant_id",
-                "ParticipantVisit/Visit" = "participant_visit",
-                "SubjectId"              = "subject_id",
-                "SubjectVisit/Visit"     = "subject_visit")
+  # add to this named vector for future mappings
+  # left side is server names, right side is object names
+  mapnames <- c(
+    "ParticipantId"          = "participant_id",
+    "ParticipantVisit/Visit" = "participant_visit",
+    "SubjectId"              = "subject_id",
+    "SubjectVisit/Visit"     = "subject_visit"
+  )
 
   if( location == "server" ){
     return(names(mapnames))
