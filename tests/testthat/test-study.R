@@ -217,6 +217,11 @@ test_study(
   groupLabel = c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
 )
 
+test_that("`check that mixed case study returns study object`", {
+  expect_error(con$getStudy("vtn073E"), NA)
+  expect_error(con$getStudy("vtn073e"))
+})
+
 email <- DataSpaceR:::getUserEmail(DataSpaceR:::PRODUCTION, NULL)
 if (identical(email, "jkim2345@scharp.org")) {
   test_study(
