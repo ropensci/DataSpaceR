@@ -228,6 +228,27 @@ test_study(
   groupLabel = c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
 )
 
+test_that("`test colFilter variable mapping to and from server`", {
+  # check groups and study for querying using revised names
+  cfs <- Rlabkey::makeFilter(c("participant_id", "EQUAL", "vtn105 006"))
+  stu <- con$getStudy("vtn105")
+  bst <- stu$getDataset("BAMA", colFilter = cfs)
+  expect_true(length(unique(bst$participant_id)) == 1 & all(unique(bst$participant_id) == "vtn105 006"))
+
+  cfg <- Rlabkey::makeFilter(c("subject_id", "EQUALS", "vtn505 0003"))
+  grp <- con$getGroup(230)
+  bgp <- grp$getDataset("BAMA", colFilter = cfg)
+  expect_true(length(unique(bgp$subject_id)) == 1 & all(unique(bgp$subject_id) == "vtn505 0003"))
+
+  # check that names coming from server are all lower cased
+  expect_true(all(c(all(names(bst) == tolower(names(bst))), all(names(bgp) == tolower(names(bgp))))))
+
+  # check combination of filters
+  com <- Rlabkey::makeFilter(c("participant_id", "EQUAL", "vtn105 006"), c("participant_id", "EQUAL", "vtn105 007"))
+  bst <- suppressWarnings(stu$getDataset("BAMA", colFilter = com))
+  expect_true(nrow(bst) == 0)
+})
+
 email <- DataSpaceR:::getUserEmail(DataSpaceR:::PRODUCTION, NULL)
 if (identical(email, "jkim2345@scharp.org")) {
   test_study(
