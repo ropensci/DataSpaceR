@@ -1,0 +1,76 @@
+---
+title: "Accessing Non-Integrated Datastes"
+author: "Helen Miller"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Accessing Non-Integrated Datasets}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
+labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  purl = NOT_CRAN,
+  eval = NOT_CRAN
+)
+```
+
+Many studies include data from assays which have not been integrated into the DataSpace. Some of these are available as "Non-Integrated Datasets," which can be downloaded from the app as a zip file. `DataSpaceR` provides an interface for accessing non-integrated data from studies where it is available. 
+
+## Viewing available non-integrated data
+
+Methods on the DataSpace Study object allow you to see what non-integrated data may be available before downloading it. We will be using HVTN 505 as an example. 
+
+```{r getStudy}
+library(DataSpaceR)
+con <- connectDS()
+vtn505 <- con$getStudy("vtn505")
+vtn505
+```
+
+The print method on the study object will list available non-integrated datasets. The `availableDatasets` property shows some more info about available datasets, with the `integrated` field indicating whether the data is integrated. The value for `n` will be `NA` for non-integrated data until the dataset has been loaded. 
+
+```{r availableStudies}
+knitr::kable(vtn505$availableDatasets)
+```
+
+## Loading non-integrated data
+
+Non-Integrated datasets can be loaded with `getDataset` like integrated data. This will unzip the non-integrated data to a temp directory and load it into the environment. 
+
+```{r getDataset}
+adcp <- vtn505$getDataset("ADCP")
+dim(adcp)
+colnames(adcp)
+```
+
+You can also view the file format info using `getDatasetDescription`. For non-integrated data, this will open a pdf into your computer's default pdf viewer. 
+
+```{r getDatasetDescription, eval = FALSE}
+vtn505$getDatasetDescription("ADCP")
+```
+
+Non-integrated data is downloaded to a temp directory by default. There are a couple of ways to override this if desired. One is to specify `outputDir` when calling `getDataset` or `getDatasetDescription`.
+
+If you will be accessing the data at another time and don't want to have to re-download it, you can change the default directory for the whole study object with `setDataDir`. 
+
+```{r setDataDir}
+vtn505$dataDir
+vtn505$setDataDir(".")
+vtn505$dataDir
+```
+
+If the dataset already exists in the specified `dataDir` or `outputDir`, it will be not be downloaded. This can be overridden with `reload=TRUE`, which forces a re-download. 
+
+
+## Session information
+
+```{r session-info}
+sessionInfo()
+```

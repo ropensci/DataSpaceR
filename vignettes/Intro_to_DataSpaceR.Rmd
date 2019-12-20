@@ -218,9 +218,11 @@ The followings are the tables of all fields and methods that work on `DataSpaceC
 | `group` | The group name. |
 | `availableDatasets` | The table of datasets available in the study object. |
 | `treatmentArm` | The table of treatment arm information for the connected study. Not available for all study connection. |
+| `dataDir` | The default target directory for downloading non-integrated datasets. |
 | `studyInfo` | Stores the information about the study. |
 | `getDataset` | Get a dataset from the connection. |
 | `getDatasetDescription` | Get variable information. |
+| `setDataDir` | Set default target directory for downloading non-integrated datasets. |
 
 ### `DataSpaceMab`
 
