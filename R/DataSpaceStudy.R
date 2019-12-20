@@ -33,6 +33,10 @@
 #'   \item{\code{studyInfo}}{
 #'     A list. Stores the information about the study.
 #'   }
+#'   \item{\code{dataDir}}{
+#'     A character. Default directory for storing nonstandard datasets. Set with
+#'     \code{setDataDir(dataDir)}.
+#'   }
 #' }
 #'
 #' @section Methods:
@@ -45,8 +49,8 @@
 #'   \item{\code{print()}}{
 #'     Print \code{DataSpaceStudy} class.
 #'   }
-#'   \item{\code{getDataset(datasetName, colFilter = NULL,
-#'   reload = FALSE, ...)}}{
+#'   \item{\code{getDataset(datasetName, mergeExtra = FALSE, colFilter = NULL,
+#'   reload = FALSE, outputDir = NULL, ...)}}{
 #'     Get a dataset from the connection.
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
@@ -59,6 +63,11 @@
 #'     \code{reload}: A logical. If set to TRUE, download the dataset, whether
 #'     a cached version exist or not.
 #'
+#'     \code{outputDir}: A character. Optional, specifies directory to download
+#'     nonstandard datasets. If \code{NULL}, data will be downloaded to \code{dataDir},
+#'     set with \code{setDataDir(dataDir)}. If \code{dataDir} is not set, and
+#'     \code{outputDir} is \code{NULL}, a tmp directory will be used.
+#'
 #'     \code{...}: Extra arguments to be passed to
 #'     \code{\link[Rlabkey]{labkey.selectRows}}
 #'   }
@@ -69,6 +78,13 @@
 #'     Get variable information.
 #'
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
+#'   }
+#'   \item{\code{setDataDir(dataDir)}}{
+#'     Set default directory to download non-integrated datasets. If no
+#'     dataDir is set, a tmp directory will be used.
+#'
+#'     \code{dataDir}: A character. Directory path.
+#'
 #'   }
 #'   \item{\code{refresh()}}{
 #'     Refresh the study object to update available datasets and treatment info.
@@ -113,15 +129,16 @@
 #' @docType class
 #' @format NULL
 #'
+#' @importFrom data.table fread
 #' @importFrom digest digest
-#' @importFrom Rlabkey labkey.getQueryDetails labkey.executeSql
+#' @importFrom Rlabkey labkey.getQueryDetails labkey.executeSql labkey.webdav.get
 DataSpaceStudy <- R6Class(
   classname = "DataSpaceStudy",
   public = list(
     initialize = function(study = NULL,
-                              config = NULL,
-                              group = NULL,
-                              studyInfo = NULL) {
+                          config = NULL,
+                          group = NULL,
+                          studyInfo = NULL) {
       assert_that(
         length(study) <= 1,
         msg = "For multiple studies, create a group in the portal."
@@ -139,6 +156,7 @@ DataSpaceStudy <- R6Class(
       private$.config <- config
       private$.group <- group
       private$.studyInfo <- studyInfo
+      private$.dataDir <- tempdir()
 
       # get extra fields if available
       self$refresh()
@@ -163,17 +181,21 @@ DataSpaceStudy <- R6Class(
       if (nrow(private$.availableDatasets) > 0) {
         cat(paste0("\n    - ", private$.availableDatasets$name), sep = "")
       }
-      cat("\n")
+      cat("\n  Available non-integrated datasets:")
+      if (nrow(private$.availableNIDatasets) > 0) {
+        cat(paste0("\n    - ", private$.availableNIDatasets$name), sep ="")
+      }
     },
     getDataset = function(datasetName,
-                              mergeExtra = FALSE,
-                              colFilter = NULL,
-                              reload = FALSE,
-                              ...) {
+                          mergeExtra = FALSE,
+                          colFilter = NULL,
+                          reload = FALSE,
+                          outputDir = NULL,
+                          ...) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
       assert_that(
-        datasetName %in% private$.availableDatasets$name,
+        datasetName %in% self$availableDatasets$name,
         msg = paste0(datasetName, " is invalid dataset")
       )
       assert_that(is.logical(mergeExtra))
@@ -199,33 +221,74 @@ DataSpaceStudy <- R6Class(
         }
       }
 
-      # build a colFilter for group
-      if (!is.null(private$.group)) {
-        colFilter <- rbind(
-          colFilter,
-          makeFilter(c(
-            paste0("SubjectId/", names(private$.group)),
-            "EQUAL",
-            private$.group
-          ))
+
+      # Retrieve dataset
+      if (self$availableDatasets[name == datasetName]$integrated){
+        # build a colFilter for group
+        if (!is.null(private$.group)) {
+          colFilter <- rbind(
+            colFilter,
+            makeFilter(c(
+              paste0("SubjectId/", names(private$.group)),
+              "EQUAL",
+              private$.group
+            ))
+          )
+        }
+
+        # retrieve dataset
+        dataset <- labkey.selectRows(
+          baseUrl = private$.config$labkeyUrlBase,
+          folderPath = private$.config$labkeyUrlPath,
+          schemaName = "study",
+          queryName = datasetName,
+          viewName = NULL,
+          colNameOpt = "fieldname",
+          colFilter = colFilter,
+          method = "GET",
+          ...
         )
+
+        # convert to data.table
+        setDT(dataset)
+
+      } else {
+
+        datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
+        dataset <- NULL
+
+        # First check to see if it already exists
+        if ( !reload ) {
+
+          if (is.na(datasetDir)) {
+            remotePath <- private$.availableNIDatasets[name == datasetName]$remotePath
+            datasetDir <- file.path(private$.getOutputDir(outputDir), gsub(".zip", "", basename(remotePath)))
+          }
+
+          try({
+            files <- list.files(datasetDir)
+            datacsv <- grep(".csv", files, value = TRUE)
+            dataset <- fread(file.path(datasetDir, datacsv))
+            private$.availableNIDatasets[name == datasetName, localPath := datasetDir]
+
+          }, silent = TRUE)
+        }
+
+        # if loading fails, commence to download.
+        if (reload || !"data.table" %in% class(dataset)) {
+          datasetDir <- private$.downloadNIDataset(datasetName, outputDir)
+          files <- list.files(datasetDir)
+          datacsv <- grep(".csv", files, value = TRUE)
+          dataset <- fread(file.path(datasetDir, datacsv))
+        }
+
+        # update 'n'
+        private$.availableNIDatasets[name == datasetName, n := nrow(dataset)]
+
+        # change "subject_id" to "ParticipantId" to be consistent with other datasets
+        setnames(dataset, c("subject_id", "prot"), c("ParticipantId", "study_prot"))
+
       }
-
-      # retrieve dataset
-      dataset <- labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = private$.config$labkeyUrlPath,
-        schemaName = "study",
-        queryName = datasetName,
-        viewName = NULL,
-        colNameOpt = "fieldname",
-        colFilter = colFilter,
-        method = "GET",
-        ...
-      )
-
-      # convert to data.table
-      setDT(dataset)
 
       # merge extra information
       if (args$mergeExtra) {
@@ -265,38 +328,82 @@ DataSpaceStudy <- R6Class(
     clearCache = function() {
       private$.cache <- list()
     },
-    getDatasetDescription = function(datasetName) {
+    getDatasetDescription = function(datasetName, outputDir = NULL) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
       assert_that(
-        datasetName %in% private$.availableDatasets$name,
+        datasetName %in% self$availableDatasets$name,
         msg = paste0(datasetName, " is not a available dataset")
       )
 
-      varInfo <- labkey.getQueryDetails(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = private$.config$labkeyUrlPath,
-        schemaName = "study",
-        queryName = datasetName
-      )
 
-      # convert to data.table and set key
-      setDT(varInfo)
-      setkey(varInfo, fieldName)
+      if (self$availableDatasets[name == datasetName]$integrated) {
 
-      extraVars <- c(
-        "Created", "CreatedBy", "Modified", "ModifiedBy",
-        "SequenceNum", "date"
-      )
+        varInfo <- labkey.getQueryDetails(
+          baseUrl = private$.config$labkeyUrlBase,
+          folderPath = private$.config$labkeyUrlPath,
+          schemaName = "study",
+          queryName = datasetName
+        )
 
-      varInfo <- varInfo[
-        isHidden == "FALSE" &
-          isSelectable == "TRUE" &
-          !fieldName %in% extraVars,
-        .(fieldName, caption, type, description)
-      ]
+        # convert to data.table and set key
+        setDT(varInfo)
+        setkey(varInfo, fieldName)
 
-      varInfo
+        extraVars <- c(
+          "Created", "CreatedBy", "Modified", "ModifiedBy",
+          "SequenceNum", "date"
+        )
+
+        varInfo <- varInfo[
+          isHidden == "FALSE" &
+            isSelectable == "TRUE" &
+            !fieldName %in% extraVars,
+          .(fieldName, caption, type, description)
+          ]
+
+        return(varInfo)
+
+      } else {
+
+        # Download and unzip dataset if not already downloaded
+        datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
+
+        if (is.na(datasetDir)) {
+          remotePath <- private$.availableNIDatasets[name == datasetName]$remotePath
+          datasetDir <- file.path(private$.getOutputDir(outputDir), gsub(".zip", "", basename(remotePath)))
+        }
+
+        # Check to see if it already exists
+        files <- list.files(datasetDir)
+        fileFormatPdf <- grep("file_format.pdf", files, value = TRUE)
+        if (length(fileFormatPdf) == 1) {
+          private$.availableNIDatasets[name == datasetName]$localPath <- datasetDir
+        } else {
+          datasetDir <- private$.downloadNIDataset(datasetName, outputDir)
+          files <- list.files(datasetDir)
+          fileFormatPdf <- grep("file_format.pdf", files, value = TRUE)
+        }
+
+        # View pdf, using method borrowed from Biobase::openPDF
+        # https://github.com/Bioconductor/Biobase/blob/6017663b35b7380c7d8b09e6ec8a1c1087a7bd62/R/tools.R#L39
+        OST <- .Platform$OS.type
+        if (OST == "windows")
+          shell.exec(file.path(datasetDir, fileFormatPdf))
+        else if (OST == "unix") {
+          pdf <- getOption("pdfviewer")
+          msg <- NULL
+          if (is.null(pdf))
+            msg <- "getOption('pdfviewer') is NULL"
+          else if (length(pdf) == 1 && nchar(pdf[[1]]) == 0)
+            msg <- "getOption('pdfviewer') is ''"
+          if (!is.null(msg))
+            stop(msg, "; please use 'options(pdfviewer=...)'")
+          cmd <- paste(pdf, file.path(datasetDir, fileFormatPdf))
+          system(cmd)
+        }
+      }
+
     },
     refresh = function() {
       tries <- c(
@@ -305,14 +412,32 @@ DataSpaceStudy <- R6Class(
           silent = private$.config$verbose
         )),
         class(try(
+          private$.getAvailableNIDatasets(),
+          silent = private$.config$verbose
+        )),
+        class(try(
           private$.getTreatmentArm(),
-          silent = private$.config$verbos
+          silent = private$.config$verbose
         ))
       )
 
       invisible(!"try-error" %in% tries)
+    },
+    setDataDir = function(dataDir) {
+      if (length(dataDir) == 0) {
+        private$.dataDir <- character()
+      } else {
+        assert_that(file.exists(dataDir))
+        assert_that(dir.exists(dataDir))
+
+        private$.dataDir <- normalizePath(dataDir)
+      }
+
+      invisible(self)
+
     }
   ),
+
   active = list(
     study = function() {
       private$.study
@@ -321,10 +446,22 @@ DataSpaceStudy <- R6Class(
       private$.config
     },
     availableDatasets = function() {
-      private$.availableDatasets
+      rbind(
+        private$.availableDatasets[, .(name,
+                                       label,
+                                       n,
+                                       integrated = rep(TRUE, nrow(private$.availableDatasets)))],
+        private$.availableNIDatasets[, .(name,
+                                         label,
+                                         n,
+                                         integrated = rep(FALSE, nrow(private$.availableNIDatasets)))]
+      )
     },
     cache = function() {
       private$.cache
+    },
+    dataDir = function() {
+      private$.dataDir
     },
     treatmentArm = function() {
       private$.treatmentArm
@@ -340,7 +477,9 @@ DataSpaceStudy <- R6Class(
     .study = character(),
     .config = list(),
     .availableDatasets = data.table(),
+    .availableNIDatasets = data.table(),
     .cache = list(),
+    .dataDir = character(),
     .treatmentArm = data.table(),
     .group = character(),
     .studyInfo = list(),
@@ -384,6 +523,38 @@ DataSpaceStudy <- R6Class(
 
       private$.availableDatasets <- availableDatasets[order(name)]
     },
+    .getAvailableNIDatasets = function() {
+      document <- labkey.selectRows(
+        private$.config$labkeyUrlBase,
+        folderPath = private$.config$labkeyUrlPath,
+        schemaName = "CDS",
+        queryName = "document",
+        colNameOpt = "fieldname",
+        colSelect = c("document_id", "label", "filename", "document_type", "assay_identifier")
+      )
+      studydocument <- labkey.selectRows(
+        private$.config$labkeyUrlBase,
+        folderPath = private$.config$labkeyUrlPath,
+        schemaName = "CDS",
+        queryName = "studydocument",
+        colNameOpt = "fieldname",
+        colSelect = c("document_id", "prot")
+      )
+      niDatasets <- merge(document, studydocument, by = "document_id")
+
+      # convert to data.table
+      setDT(niDatasets)
+
+      # need to subset by study because document tables don't use study filters
+      niDatasets <- niDatasets[document_type == "Non-Integrated Assay" & prot == private$.study,
+                               .(name = assay_identifier,
+                                 label,
+                                 remotePath = filename,
+                                 localPath = as.character(NA),
+                                 n = as.integer(NA),
+                                 document_id)]
+      private$.availableNIDatasets <- niDatasets
+    },
     .getTreatmentArm = function() {
       colSelect <- c(
         "arm_id", "arm_part", "arm_group", "arm_name",
@@ -410,6 +581,61 @@ DataSpaceStudy <- R6Class(
       setkey(treatmentArm, arm_id)
 
       private$.treatmentArm <- treatmentArm
+    },
+    .downloadNIDataset = function(datasetName, outputDir = NULL) {
+      remotePath <- private$.availableNIDatasets[name == datasetName]$remotePath
+      outputDir <- private$.getOutputDir(outputDir)
+
+      fileName <- basename(remotePath)
+      localZipPath <- file.path(outputDir, fileName)
+      fullOutputDir <- file.path(outputDir, gsub(".zip", "", fileName))
+
+      message("downloading ", fileName, " to ", outputDir, "...")
+      # use getStudyDocument.view
+      # https://dataspace.cavd.org/cds/CAVD/getStudyDocument.view?
+      # study=vtn505&documentId=916&filename=study_documents%2Fvtn505_adcp.zip
+
+      # Use getStudyDocumentUrl.view to download
+      getStudyDocumentUrl <- paste0(
+        private$.config$labkeyUrlBase,
+        "/cds/CAVD/getStudyDocument.view?",
+        "study=", private$.study,
+        "&documentId=", private$.availableNIDatasets[name == datasetName]$document_id,
+        "&filename=", gsub("/", "%2F", private$.availableNIDatasets[name == datasetName]$remotePath)
+      )
+
+      # Use labkey.webdav.getByUrl which includes filesystem and permissions checks
+      ret <- Rlabkey:::labkey.webdav.getByUrl(getStudyDocumentUrl, localFilePath = localZipPath, overwrite = TRUE)
+      if (!is.null(ret) && !is.na(ret) && ret == FALSE) {
+        success <- FALSE
+      } else {
+        success <- file.exists(localZipPath)
+      }
+
+      if (success) {
+        message("unzipping ", fileName, " to ", fullOutputDir)
+        unzip(localZipPath, exdir = fullOutputDir)
+        unlink(localZipPath)
+      } else {
+        stop(paste0("Could not create ", fullOutputDir))
+      }
+
+      private$.availableNIDatasets[name == datasetName, localPath := fullOutputDir]
+
+      return(fullOutputDir)
+    },
+    .getOutputDir = function(outputDir = NULL) {
+      if (!is.null(outputDir)) {
+        if (dir.exists(outputDir)) {
+          return(normalizePath(outputDir))
+        } else {
+          stop(paste0(outputDir, " is not a directory."))
+        }
+      } else if (length(private$.dataDir) == 1) {
+        return(private$.dataDir)
+      } else {
+        return(tempdir())
+      }
     }
   )
 )

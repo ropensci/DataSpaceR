@@ -5,14 +5,21 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interface to 'the CAVD DataSpace' • DataSpaceR</title>
+<title>Interface to the CAVD DataSpace • DataSpaceR</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
-<meta property="og:title" content="Interface to 'the CAVD DataSpace'">
+<meta property="og:title" content="Interface to the CAVD DataSpace">
 <meta property="og:description" content="Provides a convenient API interface to access immunological data
-    within 'the CAVD DataSpace'(&lt;https://dataspace.cavd.org&gt;), a data sharing 
+    within the CAVD DataSpace(&lt;https://dataspace.cavd.org&gt;), a data sharing 
     and discovery tool that facilitates exploration of HIV immunological data 
     from pre-clinical and clinical HIV vaccine studies.">
 <meta property="og:image" content="/logo.png">
@@ -29,7 +36,7 @@
 </script>
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -49,9 +56,12 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
+</li>
+<li>
+  <a href="articles/DataSpaceR.html">Get started</a>
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
@@ -67,7 +77,7 @@
       <a href="articles/Accessing_Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
     </li>
     <li>
-      <a href="articles/Intro_to_DataSpaceR.html">Introduction to DataSpaceR</a>
+      <a href="articles/Non_Integrated_Datasets.html">Accessing Non-Integrated Datastes</a>
     </li>
   </ul>
 </li>
@@ -103,38 +113,39 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    
 
-    
-    
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+      </header><div class="row">
+  <div class="contents col-md-9">
 <div id="dataspacer" class="section level1">
 
 
 <p><code>DataSpaceR</code> is an R interface to <a href="https://dataspace.cavd.org">the CAVD DataSpace</a>, a data sharing and discovery tool that facilitates exploration of HIV immunological data from pre-clinical and clinical HIV vaccine studies.</p>
 <p>The package is intended for use by immunologists, bioinformaticians, and statisticians in HIV vaccine research, or anyone interested in the analysis of HIV immunological data across assays, studies, and time.</p>
 <p>This package simplifies access to the database by taking advantage of the standardization of the database to hide all the <a href="https://cran.r-project.org/package=Rlabkey">Rlabkey</a> specific code away from the user, and it allows the users to access the study-specific datasets via <a href="https://cran.r-project.org/package=R6/readme/README.html">an object-oriented paradigm</a>.</p>
+<div id="examples-documentation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#examples-documentation" class="anchor"></a>Examples &amp; Documentation</h2>
+<p>For more detailed examples and detailed documentation, see <a href="https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html">the introductory vignette</a> and <a href="https://ropensci.github.io/DataSpaceR/">the pkgdown site</a>.</p>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install from CRAN:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"DataSpaceR"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"DataSpaceR"</span>)</a></code></pre></div>
 <p>You can install the latest development version from <a href="https://github.com/ropensci/DataSpaceR">GitHub</a> with <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/DataSpaceR"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/reexports.html">install_github</a></span>(<span class="st">"ropensci/DataSpaceR"</span>)</a></code></pre></div>
 </div>
 <div id="register-and-set-dataspace-credential" class="section level2">
 <h2 class="hasAnchor">
 <a href="#register-and-set-dataspace-credential" class="anchor"></a>Register and set DataSpace credential</h2>
 <p>The database is accessed with the user’s credentials. A netrc file storing login and password information is <strong><em>required</em></strong>.</p>
-<ol style="list-style-type: decimal">
+<ol>
 <li>
 <a href="https://dataspace.cavd.org/">Create an account</a> and read the terms of use</li>
 <li>On your R console, create a netrc file using a function from <code>DataSpaceR</code>:</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DataSpaceR)</a>
+<!-- end list --><div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DataSpaceR)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/writeNetrc.html">writeNetrc</a></span>(</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">login =</span> <span class="st">"yourEmail@address.com"</span>, </a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">password =</span> <span class="st">"yourSecretPassword"</span>,</a>
@@ -148,19 +159,19 @@
 <li>On UNIX, it should be named <code>.netrc</code>
 </li>
 <li>The file should be located in the user’s home directory, and the permissions on the file should be unreadable for everybody except the owner</li>
-<li>To determine home directory, run <code><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv("HOME")</a></code> in R</li>
+<li>To determine home directory, run <code><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv("HOME")</a></code> in R</li>
 </ul>
 <p>The following three lines must be included in the <code>.netrc</code> or <code>_netrc</code> file either separated by white space (spaces, tabs, or newlines) or commas. Multiple such blocks can exist in one file.</p>
-<pre><code>machine dataspace.cavd.org
-login myuser@domain.com
-password supersecretpassword</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">machine dataspace.cavd.org</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">login myuser<span class="op">@</span>domain.com</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">password supersecretpassword</a></code></pre></div>
 <p>See <a href="https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc">here</a> for more information about <code>netrc</code>.</p>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>The general idea is that the user:</p>
-<ol style="list-style-type: decimal">
+<ol>
 <li>creates an instance of <code>DataSpaceConnection</code> class via <code>connectDS</code>
 </li>
 <li>browses available studies and groups in the instance via <code>availableStudies</code> and <code>availableGroups</code>
@@ -173,26 +184,39 @@ password supersecretpassword</code></pre>
 <div id="for-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#for-example" class="anchor"></a>for example:</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DataSpaceR)</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DataSpaceR)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; By exporting data from the CAVD DataSpace, you agree to be bound by the Terms of Use available on the CAVD DataSpace sign-in page at https://dataspace.cavd.org</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">con &lt;-<span class="st"> </span><span class="kw"><a href="reference/connectDS.html">connectDS</a></span>()</a>
 <a class="sourceLine" id="cb5-5" data-line-number="5">con</a>
 <a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; &lt;DataSpaceConnection&gt;</span></a>
 <a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;   URL: https://dataspace.cavd.org</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;   User: jkim2345@scharp.org</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;   Available studies: 253</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;     - 70 studies with data</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;     - 4815 subjects</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;     - 407558 data points</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;   Available groups: 6</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;   User: hmiller@fredhutch.org</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;   Available studies: 345</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;     - 73 studies with data</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;     - 4896 subjects</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;     - 424194 data points</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;   Available groups: 3</span></a></code></pre></div>
 <p><code><a href="reference/connectDS.html">connectDS()</a></code> will create a connection to DataSpace.</p>
 </div>
 <div id="available-studies-can-be-listed-by-availablestudies-field" class="section level3">
 <h3 class="hasAnchor">
 <a href="#available-studies-can-be-listed-by-availablestudies-field" class="anchor"></a>available studies can be listed by <code>availableStudies</code> field</h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(con<span class="op">$</span>availableStudies))</a></code></pre></div>
-<table class="table table">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(con<span class="op">$</span>availableStudies))</a></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="3%">
+<col width="10%">
+<col width="30%">
+<col width="6%">
+<col width="2%">
+<col width="5%">
+<col width="6%">
+<col width="3%">
+<col width="12%">
+<col width="2%">
+<col width="16%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">study_name</th>
 <th align="left">short_name</th>
@@ -291,8 +315,18 @@ password supersecretpassword</code></pre>
 <div id="available-groups-can-be-listed-by-availablegroups-field" class="section level3">
 <h3 class="hasAnchor">
 <a href="#available-groups-can-be-listed-by-availablegroups-field" class="anchor"></a>available groups can be listed by <code>availableGroups</code> field</h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(con<span class="op">$</span>availableGroups)</a></code></pre></div>
-<table class="table table">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(con<span class="op">$</span>availableGroups)</a></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="1%">
+<col width="13%">
+<col width="13%">
+<col width="47%">
+<col width="4%">
+<col width="2%">
+<col width="1%">
+<col width="16%">
+</colgroup>
 <thead><tr class="header">
 <th align="right">id</th>
 <th align="left">label</th>
@@ -305,26 +339,6 @@ password supersecretpassword</code></pre>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">216</td>
-<td align="left">mice</td>
-<td align="left">mice</td>
-<td align="left">NA</td>
-<td align="left">readjk</td>
-<td align="left">FALSE</td>
-<td align="right">75</td>
-<td align="left">c(“cvd468”, “cvd483”, “cvd316”, “cvd331”)</td>
-</tr>
-<tr class="even">
-<td align="right">217</td>
-<td align="left">CAVD 242</td>
-<td align="left">CAVD 242</td>
-<td align="left">This is a fake group for CAVD 242</td>
-<td align="left">readjk</td>
-<td align="left">FALSE</td>
-<td align="right">30</td>
-<td align="left">cvd242</td>
-</tr>
-<tr class="odd">
 <td align="right">220</td>
 <td align="left">NYVAC durability comparison</td>
 <td align="left">NYVAC_durability</td>
@@ -335,16 +349,6 @@ password supersecretpassword</code></pre>
 <td align="left">c(“cvd281”, “cvd434”, “cvd259”, “cvd277”)</td>
 </tr>
 <tr class="even">
-<td align="right">224</td>
-<td align="left">cvd338</td>
-<td align="left">cvd338</td>
-<td align="left">NA</td>
-<td align="left">readjk</td>
-<td align="left">FALSE</td>
-<td align="right">36</td>
-<td align="left">cvd338</td>
-</tr>
-<tr class="odd">
 <td align="right">228</td>
 <td align="left">HVTN 505 case control subjects</td>
 <td align="left">HVTN 505 case control subjects</td>
@@ -354,7 +358,7 @@ password supersecretpassword</code></pre>
 <td align="right">189</td>
 <td align="left">vtn505</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right">230</td>
 <td align="left">HVTN 505 polyfunctionality vs BAMA</td>
 <td align="left">HVTN 505 polyfunctionality vs BAMA</td>
@@ -383,39 +387,45 @@ password supersecretpassword</code></pre>
 <a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt;     - Demographics</span></a>
 <a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt;     - ICS</span></a>
 <a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt;     - NAb</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(cvd408)</a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; [1] "DataSpaceStudy" "R6"</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt;   Available non-integrated datasets:</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(cvd408)</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; [1] "DataSpaceStudy" "R6"</span></a></code></pre></div>
 </div>
 <div id="available-datasets-can-be-listed-by-availabledatasets-field" class="section level3">
 <h3 class="hasAnchor">
 <a href="#available-datasets-can-be-listed-by-availabledatasets-field" class="anchor"></a>available datasets can be listed by <code>availableDatasets</code> field</h3>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(cvd408<span class="op">$</span>availableDatasets)</a></code></pre></div>
-<table class="table table">
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(cvd408<span class="op">$</span>availableDatasets)</a></code></pre></div>
+<table class="table">
 <thead><tr class="header">
 <th align="left">name</th>
 <th align="left">label</th>
 <th align="right">n</th>
+<th align="left">integrated</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">BAMA</td>
 <td align="left">Binding Ab multiplex assay</td>
 <td align="right">1080</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">Demographics</td>
 <td align="left">Demographics</td>
 <td align="right">20</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">ICS</td>
 <td align="left">Intracellular Cytokine Staining</td>
 <td align="right">3720</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">NAb</td>
 <td align="left">Neutralizing antibody</td>
 <td align="right">540</td>
+<td align="left">TRUE</td>
 </tr>
 </tbody>
 </table>
@@ -425,9 +435,9 @@ password supersecretpassword</code></pre>
 <h3 class="hasAnchor">
 <a href="#neutralizing-antibody-dataset-nab-can-be-retrieved-by" class="anchor"></a>Neutralizing Antibody dataset (<code>NAb</code>) can be retrieved by:</h3>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">NAb &lt;-<span class="st"> </span>cvd408<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"NAb"</span>)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(NAb)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(NAb)</a>
 <a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] 540  29</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(NAb)</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(NAb)</a>
 <a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  [1] "ParticipantId"          "ParticipantVisit/Visit"</span></a>
 <a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  [3] "visit_day"              "assay_identifier"      </span></a>
 <a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  [5] "summary_level"          "specimen_type"         </span></a>
@@ -447,18 +457,13 @@ password supersecretpassword</code></pre>
 <p><strong><em>Note</em></strong>: The package uses a <a href="https://cran.r-project.org/package=R6">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behavior.</p>
 </div>
 </div>
-<div id="examples-documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples-documentation" class="anchor"></a>Examples &amp; Documentation</h2>
-<p>For more detailed examples and detailed documentation, see <a href="https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html">the introductory vignette</a> and <a href="https://ropensci.github.io/DataSpaceR/">the pkgdown site</a>.</p>
-</div>
 <div id="meta" class="section level2">
 <h2 class="hasAnchor">
 <a href="#meta" class="anchor"></a>Meta</h2>
 <ul>
 <li>Please <a href="https://github.com/ropensci/DataSpaceR/issues">report any issues or bugs</a>.</li>
 <li>License: GPL-3</li>
-<li>Get citation information for <code>DataSpaceR</code> in R doing <code><a href="https://www.rdocumentation.org/packages/utils/topics/citation">citation(package = 'DataSpaceR')</a></code>
+<li>Get citation information for <code>DataSpaceR</code> in R doing <code><a href="https://rdrr.io/r/utils/citation.html">citation(package = 'DataSpaceR')</a></code>
 </li>
 <li>Please note that this project is released with a <a href="https://github.com/ropensci/DataSpaceR/blob/master/CONDUCT.md">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</li>
 </ul>
@@ -485,6 +490,12 @@ password supersecretpassword</code></pre>
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
 </ul>
 </div>
+<div class="community">
+<h2>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+</ul>
+</div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
@@ -494,7 +505,7 @@ password supersecretpassword</code></pre>
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/ropensci/DataSpaceR"><img src="https://travis-ci.org/ropensci/DataSpaceR.svg?branch=master" alt="Build Status"></a></li>
@@ -509,7 +520,6 @@ password supersecretpassword</code></pre>
 </ul>
 </div>
 </div>
-
 </div>
 
 
@@ -518,12 +528,14 @@ password supersecretpassword</code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
