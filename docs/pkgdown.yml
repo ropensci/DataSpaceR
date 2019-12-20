@@ -1,7 +1,8 @@
 pandoc: 2.3.1
-pkgdown: 1.3.0
+pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
   Accessing_Monoconal_Antibody_Data: Accessing_Monoconal_Antibody_Data.html
-  Intro_to_DataSpaceR: Intro_to_DataSpaceR.html
+  DataSpaceR: DataSpaceR.html
+  Non_Integrated_Datasets: Non_Integrated_Datasets.html
 

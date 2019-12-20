@@ -35,6 +35,13 @@ from the user, and it allows the users to access the study-specific
 datasets via [an object-oriented
 paradigm](https://cran.r-project.org/package=R6/readme/README.html).
 
+## Examples & Documentation
+
+For more detailed examples and detailed documentation, see [the
+introductory
+vignette](https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html)
+and [the pkgdown site](https://ropensci.github.io/DataSpaceR/).
+
 ## Installation
 
 Install from CRAN:
@@ -118,12 +125,12 @@ con <- connectDS()
 con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
-#>   User: jkim2345@scharp.org
-#>   Available studies: 253
-#>     - 70 studies with data
-#>     - 4815 subjects
-#>     - 407558 data points
-#>   Available groups: 6
+#>   User: hmiller@fredhutch.org
+#>   Available studies: 345
+#>     - 73 studies with data
+#>     - 4896 subjects
+#>     - 424194 data points
+#>   Available groups: 3
 ```
 
 `connectDS()` will create a connection to
@@ -152,10 +159,7 @@ knitr::kable(con$availableGroups)
 
 |  id | label                              | original\_label                    | description                                                                                                               | created\_by | shared |   n | studies                                   |
 | --: | :--------------------------------- | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :---------- | :----- | --: | :---------------------------------------- |
-| 216 | mice                               | mice                               | NA                                                                                                                        | readjk      | FALSE  |  75 | c(“cvd468”, “cvd483”, “cvd316”, “cvd331”) |
-| 217 | CAVD 242                           | CAVD 242                           | This is a fake group for CAVD 242                                                                                         | readjk      | FALSE  |  30 | cvd242                                    |
 | 220 | NYVAC durability comparison        | NYVAC\_durability                  | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products.                            | ehenrich    | TRUE   |  78 | c(“cvd281”, “cvd434”, “cvd259”, “cvd277”) |
-| 224 | cvd338                             | cvd338                             | NA                                                                                                                        | readjk      | FALSE  |  36 | cvd338                                    |
 | 228 | HVTN 505 case control subjects     | HVTN 505 case control subjects     | Participants from HVTN 505 included in the case-control analysis                                                          | drienna     | TRUE   | 189 | vtn505                                    |
 | 230 | HVTN 505 polyfunctionality vs BAMA | HVTN 505 polyfunctionality vs BAMA | Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort | drienna     | TRUE   | 170 | vtn505                                    |
 
@@ -181,6 +185,7 @@ cvd408
 #>     - Demographics
 #>     - ICS
 #>     - NAb
+#>   Available non-integrated datasets:
 class(cvd408)
 #> [1] "DataSpaceStudy" "R6"
 ```
@@ -191,12 +196,12 @@ class(cvd408)
 knitr::kable(cvd408$availableDatasets)
 ```
 
-| name         | label                           |    n |
-| :----------- | :------------------------------ | ---: |
-| BAMA         | Binding Ab multiplex assay      | 1080 |
-| Demographics | Demographics                    |   20 |
-| ICS          | Intracellular Cytokine Staining | 3720 |
-| NAb          | Neutralizing antibody           |  540 |
+| name         | label                           |    n | integrated |
+| :----------- | :------------------------------ | ---: | :--------- |
+| BAMA         | Binding Ab multiplex assay      | 1080 | TRUE       |
+| Demographics | Demographics                    |   20 | TRUE       |
+| ICS          | Intracellular Cytokine Staining | 3720 | TRUE       |
+| NAb          | Neutralizing antibody           |  540 | TRUE       |
 
 which will print names of available datasets.
 
@@ -232,13 +237,6 @@ of `DataSpaceStudy` for all available fields and methods.
 [R6](https://cran.r-project.org/package=R6) class to represent the
 connection to a study and get around some of R’s copy-on-change
 behavior.
-
-## Examples & Documentation
-
-For more detailed examples and detailed documentation, see [the
-introductory
-vignette](https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html)
-and [the pkgdown site](https://ropensci.github.io/DataSpaceR/).
 
 ## Meta
 

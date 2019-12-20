@@ -25,11 +25,17 @@ knitr::opts_chunk$set(
 [![](https://badges.ropensci.org/261_status.svg)](https://github.com/ropensci/software-review/issues/261)
 
 
+
 `DataSpaceR` is an R interface to [the CAVD DataSpace](https://dataspace.cavd.org), a data sharing and discovery tool that facilitates exploration of HIV immunological data from pre-clinical and clinical HIV vaccine studies.
 
 The package is intended for use by immunologists, bioinformaticians, and statisticians in HIV vaccine research, or anyone interested in the analysis of HIV immunological data across assays, studies, and time.
 
 This package simplifies access to the database by taking advantage of the standardization of the database to hide all the [Rlabkey](https://cran.r-project.org/package=Rlabkey) specific code away from the user, and it allows the users to access the study-specific datasets via [an object-oriented paradigm](https://cran.r-project.org/package=R6/readme/README.html).
+
+
+## Examples & Documentation
+
+For more detailed examples and detailed documentation, see [the introductory vignette](https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html) and [the pkgdown site](https://ropensci.github.io/DataSpaceR/).
 
 
 ## Installation
@@ -154,11 +160,6 @@ colnames(NAb)
 Check out [the reference page](https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
 
 ***Note***: The package uses a [R6](https://cran.r-project.org/package=R6) class to represent the connection to a study and get around some of R's copy-on-change behavior.
-
-
-## Examples & Documentation
-
-For more detailed examples and detailed documentation, see [the introductory vignette](https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html) and [the pkgdown site](https://ropensci.github.io/DataSpaceR/).
 
 
 ## Meta
