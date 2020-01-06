@@ -1,8 +1,0 @@
-pandoc: 2.3.1
-pkgdown: 1.4.1
-pkgdown_sha: ~
-articles:
-  DataSpaceR: DataSpaceR.html
-  Monoconal_Antibody_Data: Monoconal_Antibody_Data.html
-  Non_Integrated_Datasets: Non_Integrated_Datasets.html
-
