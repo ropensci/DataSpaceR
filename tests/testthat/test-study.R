@@ -126,9 +126,10 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
       })
 
       test_that("`group`", {
+        print(cavd$group)
+        print(groupLabel)
         expect_equal(cavd$group, groupLabel)
       })
-
 
       test_that("`studyInfo`", {
         if (study == "") {
@@ -147,14 +148,11 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         cavd$setDataDir(".")
         expect_equal(cavd$dataDir, getwd())
         expect_equal(getOutputDir(), getwd())
-        expect_equal(getOutputDir(tempdir()), tempdir())
+        expect_equal(getOutputDir(tempdir()), normalizePath(tempdir()))
 
         cavd$setDataDir(NULL)
         expect_equal(getOutputDir(), tempdir())
-
       })
-
-
 
       test_that("`.downloadNIDataset`", {
         availableNIDatasets <- cavd$.__enclos_env__$private$.availableNIDatasets
@@ -262,10 +260,6 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         expect_is(refresh, "logical")
         expect_true(refresh)
       })
-
-
-
-
     }
   }
 }
@@ -293,9 +287,13 @@ test_study(
   study = "",
   datasets = c("BAMA", "Demographics", "ICS", "NAb"),
   groupId = ifelse(onStaging, 226, 228),
-  groupLabel = if(onStaging)
-                      c("HVTN 505 case control polyfunctionality and BAMA" = "HVTN 505 case control polyfunctionality and BAMA") else
-                      c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
+  groupLabel = {
+    if (onStaging) {
+      c("HVTN 505 case control polyfunctionality and BAMA" = "HVTN 505 case control polyfunctionality and BAMA")
+    } else {
+      c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
+    }
+  }
 )
 
 email <- DataSpaceR:::getUserEmail(baseUrl, NULL)
