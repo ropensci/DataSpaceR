@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">DataSpaceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3</span>
       </span>
     </div>
 
@@ -74,7 +74,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/Accessing_Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
+      <a href="articles/Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
     </li>
     <li>
       <a href="articles/Non_Integrated_Datasets.html">Accessing Non-Integrated Datastes</a>
@@ -125,7 +125,7 @@
 <div id="examples-documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples-documentation" class="anchor"></a>Examples &amp; Documentation</h2>
-<p>For more detailed examples and detailed documentation, see <a href="https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html">the introductory vignette</a> and <a href="https://ropensci.github.io/DataSpaceR/">the pkgdown site</a>.</p>
+<p>For more detailed examples and detailed documentation, see <a href="https://docs.ropensci.org/DataSpaceR/articles/DataSpaceR.html">the introductory vignette</a> and <a href="https://docs.ropensci.org/DataSpaceR/">the pkgdown site</a>.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -134,7 +134,7 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"DataSpaceR"</span>)</a></code></pre></div>
 <p>You can install the latest development version from <a href="https://github.com/ropensci/DataSpaceR">GitHub</a> with <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/reexports.html">install_github</a></span>(<span class="st">"ropensci/DataSpaceR"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"ropensci/DataSpaceR"</span>)</a></code></pre></div>
 </div>
 <div id="register-and-set-dataspace-credential" class="section level2">
 <h2 class="hasAnchor">
@@ -191,12 +191,12 @@
 <a class="sourceLine" id="cb5-5" data-line-number="5">con</a>
 <a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; &lt;DataSpaceConnection&gt;</span></a>
 <a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;   URL: https://dataspace.cavd.org</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;   User: hmiller@fredhutch.org</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;   Available studies: 345</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;     - 73 studies with data</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;     - 4896 subjects</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;     - 424194 data points</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;   Available groups: 3</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;   User: jkim2345@scharp.org</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;   Available studies: 254</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;     - 72 studies with data</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;     - 4872 subjects</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;     - 407558 data points</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;   Available groups: 6</span></a></code></pre></div>
 <p><code><a href="reference/connectDS.html">connectDS()</a></code> will create a connection to DataSpace.</p>
 </div>
 <div id="available-studies-can-be-listed-by-availablestudies-field" class="section level3">
@@ -234,7 +234,7 @@
 <tr class="odd">
 <td align="left">cvd232</td>
 <td align="left">Parks_RV_232</td>
-<td align="left">​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.</td>
+<td align="left">Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.</td>
 <td align="left">Pre-Clinical NHP</td>
 <td align="left">Inactive</td>
 <td align="left">Assays Completed</td>
@@ -339,6 +339,26 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="right">216</td>
+<td align="left">mice</td>
+<td align="left">mice</td>
+<td align="left">NA</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">75</td>
+<td align="left">c(“cvd468”, “cvd483”, “cvd316”, “cvd331”)</td>
+</tr>
+<tr class="even">
+<td align="right">217</td>
+<td align="left">CAVD 242</td>
+<td align="left">CAVD 242</td>
+<td align="left">This is a fake group for CAVD 242</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">30</td>
+<td align="left">cvd242</td>
+</tr>
+<tr class="odd">
 <td align="right">220</td>
 <td align="left">NYVAC durability comparison</td>
 <td align="left">NYVAC_durability</td>
@@ -349,6 +369,16 @@
 <td align="left">c(“cvd281”, “cvd434”, “cvd259”, “cvd277”)</td>
 </tr>
 <tr class="even">
+<td align="right">224</td>
+<td align="left">cvd338</td>
+<td align="left">cvd338</td>
+<td align="left">NA</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">36</td>
+<td align="left">cvd338</td>
+</tr>
+<tr class="odd">
 <td align="right">228</td>
 <td align="left">HVTN 505 case control subjects</td>
 <td align="left">HVTN 505 case control subjects</td>
@@ -358,7 +388,7 @@
 <td align="right">189</td>
 <td align="left">vtn505</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right">230</td>
 <td align="left">HVTN 505 polyfunctionality vs BAMA</td>
 <td align="left">HVTN 505 polyfunctionality vs BAMA</td>
@@ -371,7 +401,7 @@
 </tbody>
 </table>
 <p><strong><em>Note</em></strong>: A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in <a href="https://dataspace.cavd.org/cds/CAVD/app.view">the DataSpace App</a>.</p>
-<p>Check out <a href="https://ropensci.github.io/DataSpaceR/reference/DataSpaceConnection.html">the reference page</a> of <code>DataSpaceConnection</code> for all available fields and methods.</p>
+<p>Check out <a href="https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html">the reference page</a> of <code>DataSpaceConnection</code> for all available fields and methods.</p>
 </div>
 <div id="create-an-instance-of-cvd408" class="section level3">
 <h3 class="hasAnchor">
@@ -438,22 +468,17 @@
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(NAb)</a>
 <a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] 540  29</span></a>
 <a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(NAb)</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  [1] "ParticipantId"          "ParticipantVisit/Visit"</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  [3] "visit_day"              "assay_identifier"      </span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  [5] "summary_level"          "specimen_type"         </span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  [7] "antigen"                "antigen_type"          </span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  [9] "virus"                  "virus_type"            </span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; [11] "virus_insert_name"      "clade"                 </span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; [13] "neutralization_tier"    "tier_clade_virus"      </span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt; [15] "target_cell"            "initial_dilution"      </span></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt; [17] "titer_ic50"             "titer_ic80"            </span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; [19] "response_call"          "nab_lab_source_key"    </span></a>
-<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; [21] "lab_code"               "exp_assayid"           </span></a>
-<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt; [23] "titer_ID50"             "titer_ID80"            </span></a>
-<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt; [25] "nab_response_ID50"      "nab_response_ID80"     </span></a>
-<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt; [27] "slope"                  "vaccine_matched"       </span></a>
-<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt; [29] "study_prot"</span></a></code></pre></div>
-<p>Check out <a href="https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html">the reference page</a> of <code>DataSpaceStudy</code> for all available fields and methods.</p>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  [1] "ParticipantId"          "ParticipantVisit/Visit" "visit_day"             </span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  [4] "assay_identifier"       "summary_level"          "specimen_type"         </span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  [7] "antigen"                "antigen_type"           "virus"                 </span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt; [10] "virus_type"             "virus_insert_name"      "clade"                 </span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; [13] "neutralization_tier"    "tier_clade_virus"       "target_cell"           </span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; [16] "initial_dilution"       "titer_ic50"             "titer_ic80"            </span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; [19] "response_call"          "nab_lab_source_key"     "lab_code"              </span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt; [22] "exp_assayid"            "titer_ID50"             "titer_ID80"            </span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt; [25] "nab_response_ID50"      "nab_response_ID80"      "slope"                 </span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; [28] "vaccine_matched"        "study_prot"</span></a></code></pre></div>
+<p>Check out <a href="https://docs.ropensci.org/DataSpaceR/reference/DataSpaceStudy.html">the reference page</a> of <code>DataSpaceStudy</code> for all available fields and methods.</p>
 <p><strong><em>Note</em></strong>: The package uses a <a href="https://cran.r-project.org/package=R6">R6</a> class to represent the connection to a study and get around some of R’s copy-on-change behavior.</p>
 </div>
 </div>
@@ -501,6 +526,7 @@
 <ul class="list-unstyled">
 <li>Ju Yeong Kim <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
 <li>Jason Taylor <br><small class="roles"> Author </small>  </li>
+<li>Helen Miller <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
@@ -524,7 +550,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Ju Yeong Kim, Jason Taylor.</p>
+  <p>Developed by Ju Yeong Kim, Jason Taylor, Helen Miller.</p>
 </div>
 
 <div class="pkgdown">

@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -41,12 +43,13 @@
 
   <link href="../extra.css" rel="stylesheet">
   
+
 <meta property="og:title" content="The DataSpaceConnection class — DataSpaceConnection" />
-
-<meta property="og:description" content="The DataSpaceConnection class" />
-
+<meta property="og:description" content="The DataSpaceConnection class
+The DataSpaceConnection class" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -87,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DataSpaceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3</span>
       </span>
     </div>
 
@@ -113,7 +116,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Accessing_Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
+      <a href="../articles/Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
     </li>
     <li>
       <a href="../articles/Non_Integrated_Datasets.html">Accessing Non-Integrated Datastes</a>
@@ -124,7 +127,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://dataspace.cavd.org">
@@ -163,23 +165,20 @@
     </div>
 
     <div class="ref-description">
-    
     <p>The DataSpaceConnection class</p>
-    
+<p>The DataSpaceConnection class</p>
     </div>
 
-    <pre class="usage"><span class='no'>DataSpaceConnection</span></pre>
-        
+
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an instance of <code>DataSpaceConnection</code></p>
-    
     <h2 class="hasAnchor" id="constructor"><a class="anchor" href="#constructor"></a>Constructor</h2>
 
     
 
 <p><code><a href='connectDS.html'>connectDS</a></code></p>
-    
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
@@ -195,7 +194,6 @@
 
 </dl>
 
-    
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
@@ -216,11 +214,90 @@
 
 </dl>
 
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='connectDS.html'>connectDS</a></code> <code><a href='DataSpaceR-package.html'>DataSpaceR-package</a></code></p></div>
+    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+
     
+<h3>Public methods</h3>
+
+<ul>
+<li><p><a href='#method-new'><code>DataSpaceConnection$new()</code></a></p></li>
+<li><p><a href='#method-print'><code>DataSpaceConnection$print()</code></a></p></li>
+<li><p><a href='#method-getStudy'><code>DataSpaceConnection$getStudy()</code></a></p></li>
+<li><p><a href='#method-getGroup'><code>DataSpaceConnection$getGroup()</code></a></p></li>
+<li><p><a href='#method-filterMabGrid'><code>DataSpaceConnection$filterMabGrid()</code></a></p></li>
+<li><p><a href='#method-resetMabGrid'><code>DataSpaceConnection$resetMabGrid()</code></a></p></li>
+<li><p><a href='#method-getMab'><code>DataSpaceConnection$getMab()</code></a></p></li>
+<li><p><a href='#method-refresh'><code>DataSpaceConnection$refresh()</code></a></p></li>
+<li><p><a href='#method-clone'><code>DataSpaceConnection$clone()</code></a></p></li>
+</ul>
+<p><hr>
+<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>DataSpaceConnection$new(
+  login = NULL,
+  password = NULL,
+  verbose = FALSE,
+  onStaging = FALSE
+)</pre><p></div></p>
+
+<p><hr>
+<a id="method-print"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>DataSpaceConnection$print()</pre><p></div></p>
+
+<p><hr>
+<a id="method-getStudy"></a></p><h3>Method <code>getStudy()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>DataSpaceConnection$getStudy(study)</pre><p></div></p>
+
+<p><hr>
+<a id="method-getGroup"></a></p><h3>Method <code>getGroup()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>DataSpaceConnection$getGroup(groupId)</pre><p></div></p>
+
+<p><hr>
+<a id="method-filterMabGrid"></a></p><h3>Method <code>filterMabGrid()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>DataSpaceConnection$filterMabGrid(using, value)</pre><p></div></p>
+
+<p><hr>
+<a id="method-resetMabGrid"></a></p><h3>Method <code>resetMabGrid()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>DataSpaceConnection$resetMabGrid()</pre><p></div></p>
+
+<p><hr>
+<a id="method-getMab"></a></p><h3>Method <code>getMab()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>DataSpaceConnection$getMab()</pre><p></div></p>
+
+<p><hr>
+<a id="method-refresh"></a></p><h3>Method <code>refresh()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>DataSpaceConnection$refresh()</pre><p></div></p>
+
+<p><hr>
+<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>DataSpaceConnection$clone(deep = FALSE)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
+
+</dl><p></div></p>
+
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
@@ -246,17 +323,12 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#constructor">Constructor</a></li>
-
       <li><a href="#fields">Fields</a></li>
-
       <li><a href="#methods">Methods</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
+      <li><a href="#methods">Methods</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -266,7 +338,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Ju Yeong Kim, Jason Taylor.</p>
+  <p>Developed by Ju Yeong Kim, Jason Taylor, Helen Miller.</p>
 </div>
 
 <div class="pkgdown">

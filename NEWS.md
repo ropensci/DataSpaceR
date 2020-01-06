@@ -1,3 +1,8 @@
+# DataSpaceR 0.7.3
+
+* Remove `tolower` in functions that check study names. (thanks @jmtaylor-fhcrc #23)
+* Update DataSpaceStudy methods for non-integrated datasets. (thanks @helenmiller16 #24)
+
 # DataSpaceR 0.7.2
 
 * Fix broken and invalid URLs for CRAN submission

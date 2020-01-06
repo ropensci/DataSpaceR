@@ -39,8 +39,8 @@ paradigm](https://cran.r-project.org/package=R6/readme/README.html).
 
 For more detailed examples and detailed documentation, see [the
 introductory
-vignette](https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html)
-and [the pkgdown site](https://ropensci.github.io/DataSpaceR/).
+vignette](https://docs.ropensci.org/DataSpaceR/articles/DataSpaceR.html)
+and [the pkgdown site](https://docs.ropensci.org/DataSpaceR/).
 
 ## Installation
 
@@ -125,12 +125,12 @@ con <- connectDS()
 con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
-#>   User: hmiller@fredhutch.org
-#>   Available studies: 345
-#>     - 73 studies with data
-#>     - 4896 subjects
-#>     - 424194 data points
-#>   Available groups: 3
+#>   User: jkim2345@scharp.org
+#>   Available studies: 254
+#>     - 72 studies with data
+#>     - 4872 subjects
+#>     - 407558 data points
+#>   Available groups: 6
 ```
 
 `connectDS()` will create a connection to
@@ -142,14 +142,14 @@ DataSpace.
 knitr::kable(head(con$availableStudies))
 ```
 
-| study\_name | short\_name                    | title                                                                                      | type               | status   | stage            | species            | start\_date | strategy                             | network | data\_availability                                |
-| :---------- | :----------------------------- | :----------------------------------------------------------------------------------------- | :----------------- | :------- | :--------------- | :----------------- | :---------- | :----------------------------------- | :------ | :------------------------------------------------ |
-| cvd232      | Parks\_RV\_232                 | ​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques. | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-11-24  | Vector vaccines (viral or bacterial) | CAVD    | NA                                                |
-| cvd234      | Zolla-Pazner\_Mab\_test1 Study | Zolla-Pazner\_Mab\_Test1                                                                   | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
-| cvd235      | mAbs potency                   | Weiss mAbs potency                                                                         | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2008-08-21  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
-| cvd236      | neutralization assays          | neutralization assays                                                                      | Antibody Screening | Active   | In Progress      | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
-| cvd238      | Gallo\_PA\_238                 | HIV-1 neutralization responses in chronically infected individuals                         | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-01-08  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
-| cvd239      | CAVIMC-015                     | Lehner\_Thorstensson\_Allovac                                                              | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-01-08  | Protein and peptide vaccines         | CAVD    | This study has assay data (NAB) in the DataSpace. |
+| study\_name | short\_name                    | title                                                                                     | type               | status   | stage            | species            | start\_date | strategy                             | network | data\_availability                                |
+| :---------- | :----------------------------- | :---------------------------------------------------------------------------------------- | :----------------- | :------- | :--------------- | :----------------- | :---------- | :----------------------------------- | :------ | :------------------------------------------------ |
+| cvd232      | Parks\_RV\_232                 | Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques. | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-11-24  | Vector vaccines (viral or bacterial) | CAVD    | NA                                                |
+| cvd234      | Zolla-Pazner\_Mab\_test1 Study | Zolla-Pazner\_Mab\_Test1                                                                  | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
+| cvd235      | mAbs potency                   | Weiss mAbs potency                                                                        | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2008-08-21  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
+| cvd236      | neutralization assays          | neutralization assays                                                                     | Antibody Screening | Active   | In Progress      | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
+| cvd238      | Gallo\_PA\_238                 | HIV-1 neutralization responses in chronically infected individuals                        | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-01-08  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
+| cvd239      | CAVIMC-015                     | Lehner\_Thorstensson\_Allovac                                                             | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-01-08  | Protein and peptide vaccines         | CAVD    | This study has assay data (NAB) in the DataSpace. |
 
 ### available groups can be listed by `availableGroups` field
 
@@ -159,7 +159,10 @@ knitr::kable(con$availableGroups)
 
 |  id | label                              | original\_label                    | description                                                                                                               | created\_by | shared |   n | studies                                   |
 | --: | :--------------------------------- | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :---------- | :----- | --: | :---------------------------------------- |
+| 216 | mice                               | mice                               | NA                                                                                                                        | readjk      | FALSE  |  75 | c(“cvd468”, “cvd483”, “cvd316”, “cvd331”) |
+| 217 | CAVD 242                           | CAVD 242                           | This is a fake group for CAVD 242                                                                                         | readjk      | FALSE  |  30 | cvd242                                    |
 | 220 | NYVAC durability comparison        | NYVAC\_durability                  | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products.                            | ehenrich    | TRUE   |  78 | c(“cvd281”, “cvd434”, “cvd259”, “cvd277”) |
+| 224 | cvd338                             | cvd338                             | NA                                                                                                                        | readjk      | FALSE  |  36 | cvd338                                    |
 | 228 | HVTN 505 case control subjects     | HVTN 505 case control subjects     | Participants from HVTN 505 included in the case-control analysis                                                          | drienna     | TRUE   | 189 | vtn505                                    |
 | 230 | HVTN 505 polyfunctionality vs BAMA | HVTN 505 polyfunctionality vs BAMA | Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort | drienna     | TRUE   | 170 | vtn505                                    |
 
@@ -212,21 +215,16 @@ NAb <- cvd408$getDataset("NAb")
 dim(NAb)
 #> [1] 540  29
 colnames(NAb)
-#>  [1] "ParticipantId"          "ParticipantVisit/Visit"
-#>  [3] "visit_day"              "assay_identifier"      
-#>  [5] "summary_level"          "specimen_type"         
-#>  [7] "antigen"                "antigen_type"          
-#>  [9] "virus"                  "virus_type"            
-#> [11] "virus_insert_name"      "clade"                 
-#> [13] "neutralization_tier"    "tier_clade_virus"      
-#> [15] "target_cell"            "initial_dilution"      
-#> [17] "titer_ic50"             "titer_ic80"            
-#> [19] "response_call"          "nab_lab_source_key"    
-#> [21] "lab_code"               "exp_assayid"           
-#> [23] "titer_ID50"             "titer_ID80"            
-#> [25] "nab_response_ID50"      "nab_response_ID80"     
-#> [27] "slope"                  "vaccine_matched"       
-#> [29] "study_prot"
+#>  [1] "ParticipantId"          "ParticipantVisit/Visit" "visit_day"             
+#>  [4] "assay_identifier"       "summary_level"          "specimen_type"         
+#>  [7] "antigen"                "antigen_type"           "virus"                 
+#> [10] "virus_type"             "virus_insert_name"      "clade"                 
+#> [13] "neutralization_tier"    "tier_clade_virus"       "target_cell"           
+#> [16] "initial_dilution"       "titer_ic50"             "titer_ic80"            
+#> [19] "response_call"          "nab_lab_source_key"     "lab_code"              
+#> [22] "exp_assayid"            "titer_ID50"             "titer_ID80"            
+#> [25] "nab_response_ID50"      "nab_response_ID80"      "slope"                 
+#> [28] "vaccine_matched"        "study_prot"
 ```
 
 Check out [the reference

@@ -183,7 +183,7 @@ DataSpaceStudy <- R6Class(
       }
       cat("\n  Available non-integrated datasets:")
       if (nrow(private$.availableNIDatasets) > 0) {
-        cat(paste0("\n    - ", private$.availableNIDatasets$name), sep ="")
+        cat(paste0("\n    - ", private$.availableNIDatasets$name), sep = "")
       }
     },
     getDataset = function(datasetName,
@@ -223,7 +223,7 @@ DataSpaceStudy <- R6Class(
 
 
       # Retrieve dataset
-      if (self$availableDatasets[name == datasetName]$integrated){
+      if (self$availableDatasets[name == datasetName]$integrated) {
         # build a colFilter for group
         if (!is.null(private$.group)) {
           colFilter <- rbind(
@@ -251,27 +251,26 @@ DataSpaceStudy <- R6Class(
 
         # convert to data.table
         setDT(dataset)
-
       } else {
-
         datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
         dataset <- NULL
 
         # First check to see if it already exists
-        if ( !reload ) {
-
+        if (!reload) {
           if (is.na(datasetDir)) {
             remotePath <- private$.availableNIDatasets[name == datasetName]$remotePath
             datasetDir <- file.path(private$.getOutputDir(outputDir), gsub(".zip", "", basename(remotePath)))
           }
 
-          try({
-            files <- list.files(datasetDir)
-            datacsv <- grep(".csv", files, value = TRUE)
-            dataset <- fread(file.path(datasetDir, datacsv))
-            private$.availableNIDatasets[name == datasetName, localPath := datasetDir]
-
-          }, silent = TRUE)
+          try(
+            {
+              files <- list.files(datasetDir)
+              datacsv <- grep(".csv", files, value = TRUE)
+              dataset <- fread(file.path(datasetDir, datacsv))
+              private$.availableNIDatasets[name == datasetName, localPath := datasetDir]
+            },
+            silent = TRUE
+          )
         }
 
         # if loading fails, commence to download.
@@ -287,7 +286,6 @@ DataSpaceStudy <- R6Class(
 
         # change "subject_id" to "ParticipantId" to be consistent with other datasets
         setnames(dataset, c("subject_id", "prot"), c("ParticipantId", "study_prot"))
-
       }
 
       # merge extra information
@@ -338,7 +336,6 @@ DataSpaceStudy <- R6Class(
 
 
       if (self$availableDatasets[name == datasetName]$integrated) {
-
         varInfo <- labkey.getQueryDetails(
           baseUrl = private$.config$labkeyUrlBase,
           folderPath = private$.config$labkeyUrlPath,
@@ -360,10 +357,9 @@ DataSpaceStudy <- R6Class(
             isSelectable == "TRUE" &
             !fieldName %in% extraVars,
           .(fieldName, caption, type, description)
-          ]
+        ]
 
         return(varInfo)
-
       } else {
 
         # Download and unzip dataset if not already downloaded
@@ -387,23 +383,23 @@ DataSpaceStudy <- R6Class(
 
         # View pdf, using method borrowed from Biobase::openPDF
         # https://github.com/Bioconductor/Biobase/blob/6017663b35b7380c7d8b09e6ec8a1c1087a7bd62/R/tools.R#L39
-        OST <- .Platform$OS.type
-        if (OST == "windows")
+        if (isWindows()) {
           shell.exec(file.path(datasetDir, fileFormatPdf))
-        else if (OST == "unix") {
+        } else  {
           pdf <- getOption("pdfviewer")
           msg <- NULL
-          if (is.null(pdf))
+          if (is.null(pdf)) {
             msg <- "getOption('pdfviewer') is NULL"
-          else if (length(pdf) == 1 && nchar(pdf[[1]]) == 0)
+          } else if (length(pdf) == 1 && nchar(pdf[[1]]) == 0) {
             msg <- "getOption('pdfviewer') is ''"
-          if (!is.null(msg))
+          }
+          if (!is.null(msg)) {
             stop(msg, "; please use 'options(pdfviewer=...)'")
+          }
           cmd <- paste(pdf, file.path(datasetDir, fileFormatPdf))
           system(cmd)
         }
       }
-
     },
     refresh = function() {
       tries <- c(
@@ -434,7 +430,6 @@ DataSpaceStudy <- R6Class(
       }
 
       invisible(self)
-
     }
   ),
 
@@ -448,13 +443,15 @@ DataSpaceStudy <- R6Class(
     availableDatasets = function() {
       rbind(
         private$.availableDatasets[, .(name,
-                                       label,
-                                       n,
-                                       integrated = rep(TRUE, nrow(private$.availableDatasets)))],
+          label,
+          n,
+          integrated = rep(TRUE, nrow(private$.availableDatasets))
+        )],
         private$.availableNIDatasets[, .(name,
-                                         label,
-                                         n,
-                                         integrated = rep(FALSE, nrow(private$.availableNIDatasets)))]
+          label,
+          n,
+          integrated = rep(FALSE, nrow(private$.availableNIDatasets))
+        )]
       )
     },
     cache = function() {
@@ -546,13 +543,17 @@ DataSpaceStudy <- R6Class(
       setDT(niDatasets)
 
       # need to subset by study because document tables don't use study filters
-      niDatasets <- niDatasets[document_type == "Non-Integrated Assay" & prot == private$.study,
-                               .(name = assay_identifier,
-                                 label,
-                                 remotePath = filename,
-                                 localPath = as.character(NA),
-                                 n = as.integer(NA),
-                                 document_id)]
+      niDatasets <- niDatasets[
+        document_type == "Non-Integrated Assay" & prot == private$.study,
+        .(
+          name = assay_identifier,
+          label,
+          remotePath = filename,
+          localPath = as.character(NA),
+          n = as.integer(NA),
+          document_id
+        )
+      ]
       private$.availableNIDatasets <- niDatasets
     },
     .getTreatmentArm = function() {

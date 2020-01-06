@@ -4,8 +4,7 @@
 \alias{connectDS}
 \title{Create a connection to DataSpace}
 \usage{
-connectDS(login = NULL, password = NULL, verbose = FALSE,
-  onStaging = FALSE)
+connectDS(login = NULL, password = NULL, verbose = FALSE, onStaging = FALSE)
 }
 \arguments{
 \item{login}{A character. Optional argument. If there is no netrc

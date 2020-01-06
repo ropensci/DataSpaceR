@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DataSpaceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Accessing_Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
+      <a href="../articles/Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
     </li>
     <li>
       <a href="../articles/Non_Integrated_Datasets.html">Accessing Non-Integrated Datastes</a>
@@ -208,71 +208,62 @@
 <a href="#loading-non-integrated-data" class="anchor"></a>Loading non-integrated data</h2>
 <p>Non-Integrated datasets can be loaded with <code>getDataset</code> like integrated data. This will unzip the non-integrated data to a temp directory and load it into the environment.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">adcp &lt;-<span class="st"> </span>vtn505<span class="op">$</span><span class="kw">getDataset</span>(<span class="st">"ADCP"</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; downloading vtn505_adcp.zip to /tmp/RtmpntWkgA...</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; downloading vtn505_adcp.zip to /var/folders/9m/vwxpkj1100z3gpsf27m21fx00000gn/T//RtmpjQ8Wnk...</span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; unzipping vtn505_adcp.zip to /tmp/RtmpntWkgA/vtn505_adcp</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; unzipping vtn505_adcp.zip to /var/folders/9m/vwxpkj1100z3gpsf27m21fx00000gn/T//RtmpjQ8Wnk/vtn505_adcp</span></a>
 <a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(adcp)</a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; [1] 378  11</span></a>
 <a class="sourceLine" id="cb3-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(adcp)</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;  [1] "study_prot"             "ParticipantId"         </span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;  [3] "study_day"              "lab_code"              </span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;  [5] "specimen_type"          "antigen"               </span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;  [7] "percent_cv"             "avg_phagocytosis_score"</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;  [9] "positivity_threshold"   "response"              </span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; [11] "assay_identifier"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;  [1] "study_prot"             "ParticipantId"          "study_day"             </span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;  [4] "lab_code"               "specimen_type"          "antigen"               </span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;  [7] "percent_cv"             "avg_phagocytosis_score" "positivity_threshold"  </span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; [10] "response"               "assay_identifier"</span></a></code></pre></div>
 <p>You can also view the file format info using <code>getDatasetDescription</code>. For non-integrated data, this will open a pdf into your computer’s default pdf viewer.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">vtn505<span class="op">$</span><span class="kw">getDatasetDescription</span>(<span class="st">"ADCP"</span>)</a></code></pre></div>
 <p>Non-integrated data is downloaded to a temp directory by default. There are a couple of ways to override this if desired. One is to specify <code>outputDir</code> when calling <code>getDataset</code> or <code>getDatasetDescription</code>.</p>
 <p>If you will be accessing the data at another time and don’t want to have to re-download it, you can change the default directory for the whole study object with <code>setDataDir</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">vtn505<span class="op">$</span>dataDir</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; [1] "/tmp/RtmpntWkgA"</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; [1] "/var/folders/9m/vwxpkj1100z3gpsf27m21fx00000gn/T//RtmpjQ8Wnk"</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">vtn505<span class="op">$</span><span class="kw">setDataDir</span>(<span class="st">"."</span>)</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">vtn505<span class="op">$</span>dataDir</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; [1] "/home/hmiller/DataSpace/DataSpaceR/vignettes"</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; [1] "/Users/jkim/git/DataSpaceR/vignettes"</span></a></code></pre></div>
 <p>If the dataset already exists in the specified <code>dataDir</code> or <code>outputDir</code>, it will be not be downloaded. This can be overridden with <code>reload=TRUE</code>, which forces a re-download.</p>
 </div>
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session information</h2>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; R version 3.6.1 (2019-07-05)</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Running under: Ubuntu 18.04.2 LTS</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; R version 3.6.2 (2019-12-12)</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Running under: macOS Catalina 10.15.2</span></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Matrix products: default</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib</span></a>
 <a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; locale:</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; attached base packages:</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; other attached packages:</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; [1] DataSpaceR_0.7.2</span></a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">#&gt;  [1] Rcpp_1.0.1        Rlabkey_2.3.2     rstudioapi_0.10  </span></a>
-<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co">#&gt;  [4] knitr_1.23        magrittr_1.5      MASS_7.3-51.4    </span></a>
-<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="co">#&gt;  [7] R6_2.4.0          rlang_0.4.0       highr_0.8        </span></a>
-<a class="sourceLine" id="cb6-28" data-line-number="28"><span class="co">#&gt; [10] stringr_1.4.0     httr_1.4.0        tools_3.6.1      </span></a>
-<a class="sourceLine" id="cb6-29" data-line-number="29"><span class="co">#&gt; [13] data.table_1.12.6 xfun_0.8          htmltools_0.3.6  </span></a>
-<a class="sourceLine" id="cb6-30" data-line-number="30"><span class="co">#&gt; [16] yaml_2.2.0        assertthat_0.2.1  digest_0.6.20    </span></a>
-<a class="sourceLine" id="cb6-31" data-line-number="31"><span class="co">#&gt; [19] rprojroot_1.3-2   pkgdown_1.4.1     crayon_1.3.4     </span></a>
-<a class="sourceLine" id="cb6-32" data-line-number="32"><span class="co">#&gt; [22] fs_1.3.1          curl_3.3          memoise_1.1.0    </span></a>
-<a class="sourceLine" id="cb6-33" data-line-number="33"><span class="co">#&gt; [25] evaluate_0.14     rmarkdown_1.14    stringi_1.4.3    </span></a>
-<a class="sourceLine" id="cb6-34" data-line-number="34"><span class="co">#&gt; [28] compiler_3.6.1    desc_1.2.0        backports_1.1.4  </span></a>
-<a class="sourceLine" id="cb6-35" data-line-number="35"><span class="co">#&gt; [31] jsonlite_1.6</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; attached base packages:</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; other attached packages:</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; [1] DataSpaceR_0.7.3</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt;  [1] Rcpp_1.0.3        Rlabkey_2.3.3     rstudioapi_0.10   knitr_1.26       </span></a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt;  [5] magrittr_1.5      MASS_7.3-51.4     R6_2.4.1          rlang_0.4.2      </span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt;  [9] highr_0.8         stringr_1.4.0     httr_1.4.1        tools_3.6.2      </span></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; [13] data.table_1.12.8 xfun_0.11         htmltools_0.4.0   yaml_2.2.0       </span></a>
+<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt; [17] assertthat_0.2.1  digest_0.6.23     rprojroot_1.3-2   pkgdown_1.4.1    </span></a>
+<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">#&gt; [21] crayon_1.3.4      fs_1.3.1          curl_4.3          memoise_1.1.0    </span></a>
+<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co">#&gt; [25] evaluate_0.14     rmarkdown_2.0     stringi_1.4.3     compiler_3.6.2   </span></a>
+<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="co">#&gt; [29] desc_1.2.0        backports_1.1.5   jsonlite_1.6</span></a></code></pre></div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -289,7 +280,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Ju Yeong Kim, Jason Taylor.</p>
+  <p>Developed by Ju Yeong Kim, Jason Taylor, Helen Miller.</p>
 </div>
 
 <div class="pkgdown">

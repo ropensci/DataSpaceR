@@ -100,9 +100,9 @@ DataSpaceConnection <- R6Class(
   classname = "DataSpaceConnection",
   public = list(
     initialize = function(login = NULL,
-                              password = NULL,
-                              verbose = FALSE,
-                              onStaging = FALSE) {
+                          password = NULL,
+                          verbose = FALSE,
+                          onStaging = FALSE) {
       assert_that(
         (is.null(login) && is.null(password)) ||
           (!is.null(login) && !is.null(password)),

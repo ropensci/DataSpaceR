@@ -35,7 +35,7 @@ This package simplifies access to the database by taking advantage of the standa
 
 ## Examples & Documentation
 
-For more detailed examples and detailed documentation, see [the introductory vignette](https://ropensci.github.io/DataSpaceR/articles/Intro_to_DataSpaceR.html) and [the pkgdown site](https://ropensci.github.io/DataSpaceR/).
+For more detailed examples and detailed documentation, see [the introductory vignette](https://docs.ropensci.org/DataSpaceR/articles/DataSpaceR.html) and [the pkgdown site](https://docs.ropensci.org/DataSpaceR/).
 
 
 ## Installation

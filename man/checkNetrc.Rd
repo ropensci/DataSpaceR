@@ -4,8 +4,7 @@
 \alias{checkNetrc}
 \title{Check netrc file}
 \usage{
-checkNetrc(netrcFile = getNetrcPath(), onStaging = FALSE,
-  verbose = TRUE)
+checkNetrc(netrcFile = getNetrcPath(), onStaging = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{netrcFile}{A character. File path to netrc file to check.}

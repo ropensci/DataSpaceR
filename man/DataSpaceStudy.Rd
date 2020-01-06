@@ -4,13 +4,12 @@
 \name{DataSpaceStudy}
 \alias{DataSpaceStudy}
 \title{The DataSpaceStudy class}
-\usage{
-DataSpaceStudy
-}
 \value{
 an instance of \code{DataSpaceStudy}
 }
 \description{
+The DataSpaceStudy class
+
 The DataSpaceStudy class
 }
 \section{Constructor}{
@@ -144,4 +143,96 @@ cvd$refresh()
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 }
-\keyword{datasets}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{DataSpaceStudy$new()}}
+\item \href{#method-print}{\code{DataSpaceStudy$print()}}
+\item \href{#method-getDataset}{\code{DataSpaceStudy$getDataset()}}
+\item \href{#method-clearCache}{\code{DataSpaceStudy$clearCache()}}
+\item \href{#method-getDatasetDescription}{\code{DataSpaceStudy$getDatasetDescription()}}
+\item \href{#method-refresh}{\code{DataSpaceStudy$refresh()}}
+\item \href{#method-setDataDir}{\code{DataSpaceStudy$setDataDir()}}
+\item \href{#method-clone}{\code{DataSpaceStudy$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$new(study = NULL, config = NULL, group = NULL, studyInfo = NULL)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$print()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getDataset"></a>}}
+\subsection{Method \code{getDataset()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$getDataset(
+  datasetName,
+  mergeExtra = FALSE,
+  colFilter = NULL,
+  reload = FALSE,
+  outputDir = NULL,
+  ...
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clearCache"></a>}}
+\subsection{Method \code{clearCache()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$clearCache()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getDatasetDescription"></a>}}
+\subsection{Method \code{getDatasetDescription()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$getDatasetDescription(datasetName, outputDir = NULL)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-refresh"></a>}}
+\subsection{Method \code{refresh()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$refresh()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setDataDir"></a>}}
+\subsection{Method \code{setDataDir()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$setDataDir(dataDir)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DataSpaceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Accessing_Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
+      <a href="../articles/Monoconal_Antibody_Data.html">Accessing Monoclonal Antibody Data</a>
     </li>
     <li>
       <a href="../articles/Non_Integrated_Datasets.html">Accessing Non-Integrated Datastes</a>
@@ -173,12 +173,12 @@ password supersecretpassword</code></pre>
 <a class="sourceLine" id="cb3-4" data-line-number="4">con</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; &lt;DataSpaceConnection&gt;</span></a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt;   URL: https://dataspace.cavd.org</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;   User: hmiller@fredhutch.org</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;   Available studies: 345</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;     - 73 studies with data</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;     - 4896 subjects</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;     - 424194 data points</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;   Available groups: 3</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;   User: jkim2345@scharp.org</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;   Available studies: 254</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;     - 72 studies with data</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;     - 4872 subjects</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;     - 407558 data points</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;   Available groups: 6</span></a></code></pre></div>
 <p>The call to <code>connectDS</code> instantiates the connection. Printing the object shows where it’s connected and the available studies.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(con<span class="op">$</span>availableStudies))</a></code></pre></div>
 <table class="table">
@@ -199,7 +199,7 @@ password supersecretpassword</code></pre>
 <tr class="odd">
 <td align="left">cvd232</td>
 <td align="left">Parks_RV_232</td>
-<td align="left">​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.</td>
+<td align="left">Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.</td>
 <td align="left">Pre-Clinical NHP</td>
 <td align="left">Inactive</td>
 <td align="left">Assays Completed</td>
@@ -276,7 +276,7 @@ password supersecretpassword</code></pre>
 </tr>
 </tbody>
 </table>
-<p><code>con$availableStudies</code> shows the available studies in the CAVD DataSpace. Check out <a href="https://ropensci.github.io/DataSpaceR/reference/DataSpaceConnection.html">the reference page</a> of <code>DataSpaceConnection</code> for all available fields and methods.</p>
+<p><code>con$availableStudies</code> shows the available studies in the CAVD DataSpace. Check out <a href="https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html">the reference page</a> of <code>DataSpaceConnection</code> for all available fields and methods.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">cvd256 &lt;-<span class="st"> </span>con<span class="op">$</span><span class="kw">getStudy</span>(<span class="st">"cvd256"</span>)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">cvd256</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; &lt;DataSpaceStudy&gt;</span></a>
@@ -362,21 +362,16 @@ password supersecretpassword</code></pre>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(NAb)</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; [1] 1419   29</span></a>
 <a class="sourceLine" id="cb8-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(NAb)</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt;  [1] "ParticipantId"          "ParticipantVisit/Visit"</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;  [3] "visit_day"              "assay_identifier"      </span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt;  [5] "summary_level"          "specimen_type"         </span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt;  [7] "antigen"                "antigen_type"          </span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt;  [9] "virus"                  "virus_type"            </span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; [11] "virus_insert_name"      "clade"                 </span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; [13] "neutralization_tier"    "tier_clade_virus"      </span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; [15] "target_cell"            "initial_dilution"      </span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; [17] "titer_ic50"             "titer_ic80"            </span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; [19] "response_call"          "nab_lab_source_key"    </span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; [21] "lab_code"               "exp_assayid"           </span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt; [23] "titer_ID50"             "titer_ID80"            </span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; [25] "nab_response_ID50"      "nab_response_ID80"     </span></a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; [27] "slope"                  "vaccine_matched"       </span></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; [29] "study_prot"</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt;  [1] "ParticipantId"          "ParticipantVisit/Visit" "visit_day"             </span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;  [4] "assay_identifier"       "summary_level"          "specimen_type"         </span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt;  [7] "antigen"                "antigen_type"           "virus"                 </span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; [10] "virus_type"             "virus_insert_name"      "clade"                 </span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; [13] "neutralization_tier"    "tier_clade_virus"       "target_cell"           </span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; [16] "initial_dilution"       "titer_ic50"             "titer_ic80"            </span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; [19] "response_call"          "nab_lab_source_key"     "lab_code"              </span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; [22] "exp_assayid"            "titer_ID50"             "titer_ID80"            </span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; [25] "nab_response_ID50"      "nab_response_ID80"      "slope"                 </span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; [28] "vaccine_matched"        "study_prot"</span></a></code></pre></div>
 <p>The <em>cvd256</em> object is an <a href="https://cran.r-project.org/package=R6"><code>R6</code></a> class, so it behaves like a true object. Functions (like <code>getDataset</code>) are members of the object, thus the <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> semantics to access member functions.</p>
 <p>We can get detailed variable information using <code>getDatasetDescription</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(cvd256<span class="op">$</span><span class="kw">getDatasetDescription</span>(<span class="st">"NAb"</span>))</a></code></pre></div>
@@ -595,13 +590,13 @@ password supersecretpassword</code></pre>
 <tr class="odd">
 <td align="left">BAMA</td>
 <td align="left">Binding Ab multiplex assay</td>
-<td align="right">174770</td>
+<td align="right">169071</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">Demographics</td>
 <td align="left">Demographics</td>
-<td align="right">4896</td>
+<td align="right">4872</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
@@ -613,13 +608,13 @@ password supersecretpassword</code></pre>
 <tr class="even">
 <td align="left">ICS</td>
 <td align="left">Intracellular Cytokine Staining</td>
-<td align="right">192516</td>
+<td align="right">182779</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">NAb</td>
 <td align="left">Neutralizing antibody</td>
-<td align="right">51298</td>
+<td align="right">50098</td>
 <td align="left">TRUE</td>
 </tr>
 </tbody>
@@ -648,7 +643,7 @@ password supersecretpassword</code></pre>
 <a class="sourceLine" id="cb13-21" data-line-number="21"><span class="co">#&gt; [31] "study_grant_pi_name"             "study_strategy"                 </span></a>
 <a class="sourceLine" id="cb13-22" data-line-number="22"><span class="co">#&gt; [33] "study_prot"                      "genderidentity"                 </span></a>
 <a class="sourceLine" id="cb13-23" data-line-number="23"><span class="co">#&gt; [35] "studycohort"                     "bmi_category"</span></a></code></pre></div>
-<p>Check out <a href="https://ropensci.github.io/DataSpaceR/reference/DataSpaceStudy.html">the reference page</a> of <code>DataSpaceStudy</code> for all available fields and methods.</p>
+<p>Check out <a href="https://docs.ropensci.org/DataSpaceR/reference/DataSpaceStudy.html">the reference page</a> of <code>DataSpaceStudy</code> for all available fields and methods.</p>
 </div>
 <div id="connect-to-a-saved-group" class="section level2">
 <h2 class="hasAnchor">
@@ -670,6 +665,26 @@ password supersecretpassword</code></pre>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="right">216</td>
+<td align="left">mice</td>
+<td align="left">mice</td>
+<td align="left">NA</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">75</td>
+<td align="left">c(“cvd468”, “cvd483”, “cvd316”, “cvd331”)</td>
+</tr>
+<tr class="even">
+<td align="right">217</td>
+<td align="left">CAVD 242</td>
+<td align="left">CAVD 242</td>
+<td align="left">This is a fake group for CAVD 242</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">30</td>
+<td align="left">cvd242</td>
+</tr>
+<tr class="odd">
 <td align="right">220</td>
 <td align="left">NYVAC durability comparison</td>
 <td align="left">NYVAC_durability</td>
@@ -680,6 +695,16 @@ password supersecretpassword</code></pre>
 <td align="left">c(“cvd281”, “cvd434”, “cvd259”, “cvd277”)</td>
 </tr>
 <tr class="even">
+<td align="right">224</td>
+<td align="left">cvd338</td>
+<td align="left">cvd338</td>
+<td align="left">NA</td>
+<td align="left">readjk</td>
+<td align="left">FALSE</td>
+<td align="right">36</td>
+<td align="left">cvd338</td>
+</tr>
+<tr class="odd">
 <td align="right">228</td>
 <td align="left">HVTN 505 case control subjects</td>
 <td align="left">HVTN 505 case control subjects</td>
@@ -689,7 +714,7 @@ password supersecretpassword</code></pre>
 <td align="right">189</td>
 <td align="left">vtn505</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right">230</td>
 <td align="left">HVTN 505 polyfunctionality vs BAMA</td>
 <td align="left">HVTN 505 polyfunctionality vs BAMA</td>
@@ -881,44 +906,37 @@ password supersecretpassword</code></pre>
 <h2 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session information</h2>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co">#&gt; R version 3.6.1 (2019-07-05)</span></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co">#&gt; Running under: Ubuntu 18.04.2 LTS</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co">#&gt; R version 3.6.2 (2019-12-12)</span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co">#&gt; Running under: macOS Catalina 10.15.2</span></a>
 <a class="sourceLine" id="cb18-5" data-line-number="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co">#&gt; Matrix products: default</span></a>
-<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">#&gt; BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1</span></a>
-<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#&gt; LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib</span></a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib</span></a>
 <a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt; locale:</span></a>
-<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></a>
-<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></a>
-<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></a>
-<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></a>
-<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></a>
-<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></a>
-<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt; attached base packages:</span></a>
-<a class="sourceLine" id="cb18-19" data-line-number="19"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
-<a class="sourceLine" id="cb18-20" data-line-number="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb18-21" data-line-number="21"><span class="co">#&gt; other attached packages:</span></a>
-<a class="sourceLine" id="cb18-22" data-line-number="22"><span class="co">#&gt; [1] DataSpaceR_0.7.2</span></a>
-<a class="sourceLine" id="cb18-23" data-line-number="23"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb18-24" data-line-number="24"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
-<a class="sourceLine" id="cb18-25" data-line-number="25"><span class="co">#&gt;  [1] Rcpp_1.0.1        Rlabkey_2.3.2     rstudioapi_0.10  </span></a>
-<a class="sourceLine" id="cb18-26" data-line-number="26"><span class="co">#&gt;  [4] knitr_1.23        magrittr_1.5      MASS_7.3-51.4    </span></a>
-<a class="sourceLine" id="cb18-27" data-line-number="27"><span class="co">#&gt;  [7] R6_2.4.0          rlang_0.4.0       highr_0.8        </span></a>
-<a class="sourceLine" id="cb18-28" data-line-number="28"><span class="co">#&gt; [10] stringr_1.4.0     httr_1.4.0        tools_3.6.1      </span></a>
-<a class="sourceLine" id="cb18-29" data-line-number="29"><span class="co">#&gt; [13] data.table_1.12.6 xfun_0.8          htmltools_0.3.6  </span></a>
-<a class="sourceLine" id="cb18-30" data-line-number="30"><span class="co">#&gt; [16] yaml_2.2.0        assertthat_0.2.1  digest_0.6.20    </span></a>
-<a class="sourceLine" id="cb18-31" data-line-number="31"><span class="co">#&gt; [19] rprojroot_1.3-2   pkgdown_1.4.1     crayon_1.3.4     </span></a>
-<a class="sourceLine" id="cb18-32" data-line-number="32"><span class="co">#&gt; [22] fs_1.3.1          curl_3.3          memoise_1.1.0    </span></a>
-<a class="sourceLine" id="cb18-33" data-line-number="33"><span class="co">#&gt; [25] evaluate_0.14     rmarkdown_1.14    stringi_1.4.3    </span></a>
-<a class="sourceLine" id="cb18-34" data-line-number="34"><span class="co">#&gt; [28] compiler_3.6.1    desc_1.2.0        backports_1.1.4  </span></a>
-<a class="sourceLine" id="cb18-35" data-line-number="35"><span class="co">#&gt; [31] jsonlite_1.6</span></a></code></pre></div>
+<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt; attached base packages:</span></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt; other attached packages:</span></a>
+<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt; [1] DataSpaceR_0.7.3</span></a>
+<a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb18-19" data-line-number="19"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
+<a class="sourceLine" id="cb18-20" data-line-number="20"><span class="co">#&gt;  [1] Rcpp_1.0.3        Rlabkey_2.3.3     rstudioapi_0.10   knitr_1.26       </span></a>
+<a class="sourceLine" id="cb18-21" data-line-number="21"><span class="co">#&gt;  [5] magrittr_1.5      MASS_7.3-51.4     R6_2.4.1          rlang_0.4.2      </span></a>
+<a class="sourceLine" id="cb18-22" data-line-number="22"><span class="co">#&gt;  [9] highr_0.8         stringr_1.4.0     httr_1.4.1        tools_3.6.2      </span></a>
+<a class="sourceLine" id="cb18-23" data-line-number="23"><span class="co">#&gt; [13] data.table_1.12.8 xfun_0.11         htmltools_0.4.0   yaml_2.2.0       </span></a>
+<a class="sourceLine" id="cb18-24" data-line-number="24"><span class="co">#&gt; [17] assertthat_0.2.1  digest_0.6.23     rprojroot_1.3-2   pkgdown_1.4.1    </span></a>
+<a class="sourceLine" id="cb18-25" data-line-number="25"><span class="co">#&gt; [21] crayon_1.3.4      fs_1.3.1          curl_4.3          memoise_1.1.0    </span></a>
+<a class="sourceLine" id="cb18-26" data-line-number="26"><span class="co">#&gt; [25] evaluate_0.14     rmarkdown_2.0     stringi_1.4.3     compiler_3.6.2   </span></a>
+<a class="sourceLine" id="cb18-27" data-line-number="27"><span class="co">#&gt; [29] desc_1.2.0        backports_1.1.5   jsonlite_1.6</span></a></code></pre></div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -940,7 +958,7 @@ password supersecretpassword</code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by Ju Yeong Kim, Jason Taylor.</p>
+  <p>Developed by Ju Yeong Kim, Jason Taylor, Helen Miller.</p>
 </div>
 
 <div class="pkgdown">

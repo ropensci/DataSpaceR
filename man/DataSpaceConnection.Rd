@@ -4,13 +4,12 @@
 \name{DataSpaceConnection}
 \alias{DataSpaceConnection}
 \title{The DataSpaceConnection class}
-\usage{
-DataSpaceConnection
-}
 \value{
 an instance of \code{DataSpaceConnection}
 }
 \description{
+The DataSpaceConnection class
+
 The DataSpaceConnection class
 }
 \section{Constructor}{
@@ -108,4 +107,103 @@ con$refresh()
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceR-package}}
 }
-\keyword{datasets}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{DataSpaceConnection$new()}}
+\item \href{#method-print}{\code{DataSpaceConnection$print()}}
+\item \href{#method-getStudy}{\code{DataSpaceConnection$getStudy()}}
+\item \href{#method-getGroup}{\code{DataSpaceConnection$getGroup()}}
+\item \href{#method-filterMabGrid}{\code{DataSpaceConnection$filterMabGrid()}}
+\item \href{#method-resetMabGrid}{\code{DataSpaceConnection$resetMabGrid()}}
+\item \href{#method-getMab}{\code{DataSpaceConnection$getMab()}}
+\item \href{#method-refresh}{\code{DataSpaceConnection$refresh()}}
+\item \href{#method-clone}{\code{DataSpaceConnection$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$new(
+  login = NULL,
+  password = NULL,
+  verbose = FALSE,
+  onStaging = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$print()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getStudy"></a>}}
+\subsection{Method \code{getStudy()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getStudy(study)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getGroup"></a>}}
+\subsection{Method \code{getGroup()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getGroup(groupId)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-filterMabGrid"></a>}}
+\subsection{Method \code{filterMabGrid()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$filterMabGrid(using, value)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-resetMabGrid"></a>}}
+\subsection{Method \code{resetMabGrid()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$resetMabGrid()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getMab"></a>}}
+\subsection{Method \code{getMab()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getMab()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-refresh"></a>}}
+\subsection{Method \code{refresh()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$refresh()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

@@ -4,13 +4,12 @@
 \name{DataSpaceMab}
 \alias{DataSpaceMab}
 \title{The DataSpaceMab class}
-\usage{
-DataSpaceMab
-}
 \value{
 an instance of \code{DataSpaceMab}
 }
 \description{
+The DataSpaceMab class
+
 The DataSpaceMab class
 }
 \section{Constructor}{
@@ -98,4 +97,53 @@ mab$nabMab
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 }
-\keyword{datasets}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{DataSpaceMab$new()}}
+\item \href{#method-print}{\code{DataSpaceMab$print()}}
+\item \href{#method-refresh}{\code{DataSpaceMab$refresh()}}
+\item \href{#method-clone}{\code{DataSpaceMab$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceMab$new(mabMixture, filters, config)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceMab$print()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-refresh"></a>}}
+\subsection{Method \code{refresh()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceMab$refresh()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceMab$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}
