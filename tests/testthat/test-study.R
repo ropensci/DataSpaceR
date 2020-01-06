@@ -126,8 +126,6 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
       })
 
       test_that("`group`", {
-        print(cavd$group)
-        print(groupLabel)
         expect_equal(cavd$group, groupLabel)
       })
 
