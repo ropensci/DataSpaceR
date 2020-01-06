@@ -10,14 +10,14 @@
   "codeRepository": "https://github.com/ropensci/DataSpaceR",
   "issueTracker": "https://github.com/ropensci/DataSpaceR/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.0 (2019-04-26)",
+  "runtimePlatform": "R version 3.6.2 (2019-12-12)",
   "author": [
     {
       "@type": "Person",
@@ -29,6 +29,11 @@
       "@type": "Person",
       "givenName": "Jason",
       "familyName": "Taylor"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Helen",
+      "familyName": "Miller"
     }
   ],
   "copyrightHolder": [
@@ -225,8 +230,8 @@
       "sameAs": "https://CRAN.R-project.org/package=data.table"
     }
   ],
-  "releaseNotes": "https://github.com/CAVDDataSpace/DataSpaceR/blob/master/NEWS.md",
-  "fileSize": "48.637KB",
+  "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
+  "fileSize": "52.899KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/DataSpaceR",
     "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master",
@@ -254,5 +259,5 @@
     "name": "Comprehensive R Archive Network (CRAN)",
     "url": "https://cran.r-project.org"
   },
-  "relatedLink": "https://CRAN.R-project.org/package=DataSpaceR"
+  "relatedLink": ["https://CRAN.R-project.org/package=DataSpaceR", "https://docs.ropensci.org/DataSpaceR"]
 }
