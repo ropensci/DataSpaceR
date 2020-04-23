@@ -183,6 +183,17 @@ dim(NAb_nyvac)
 ```
 
 
+## Access Virus Metadata
+
+DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NAb) assays. This data can be accessed through the app on the [NAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB/antigens) and [NAb MAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB%20MAB/antigens). 
+
+We can access this metadata in `DataSpaceR` with `con$virusMetadata`: 
+
+```{r virusMetadata}
+knitr::kable(head(con$virusMetadata))
+```
+
+
 ## Access monoclonal antibody data
 
 See other vignette for a tutorial on accessing monoclonal antibody data with `DataSpaceR`:
@@ -204,6 +215,7 @@ The followings are the tables of all fields and methods that work on `DataSpaceC
 | `availableGroups` | The table of available groups. |
 | `mabGrid` | The filtered mAb grid. |
 | `mabGridSummary` | The summarized mAb grid with updated `n_` columns and `geometric_mean_curve_ic50`. |
+| `virusMetadata` | Metadata about all viruses in the DataSpace. |
 | `filterMabGrid` | Filter rows in the mAb grid by specifying the values to keep in the columns found in the `mabGrid` field. |
 | `resetMabGrid` | Reset the mAb grid to the unfiltered state. |
 | `getMab` | Create a `DataSpaceMab` object by filtered `mabGrid`. |

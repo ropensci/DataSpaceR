@@ -37,6 +37,9 @@ The DataSpaceConnection class
     A data.table. The filtered grid with updated \code{n_} columns and
     \code{geometric_mean_curve_ic50}.
   }
+  \item{\code{virusMetadata}}{
+    A data.table. Metadata about all viruses in the DataSpace.
+  }
 }
 }
 

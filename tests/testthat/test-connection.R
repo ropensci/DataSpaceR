@@ -10,6 +10,7 @@ test_that("can connect to DataSpace", {
 if ("DataSpaceConnection" %in% class(con)) {
   con_names <- c(
     ".__enclos_env__",
+    "virusMetadata",
     "mabGrid",
     "mabGridSummary",
     "availableGroups",
@@ -116,6 +117,19 @@ if ("DataSpaceConnection" %in% class(con)) {
         )
       )
       expect_gt(nrow(con$availableGroups), 0)
+    })
+
+    test_that("`virusMetadata`", {
+      expect_is(con$virusMetadata, "data.table")
+      expect_equal(
+        names(con$virusMetadata),
+        c(
+          "assay_identifier", "virus", "virus_type", "neutralization_tier", "clade",
+          "antigen_control", "virus_full_name", "virus_name_other", "virus_species",
+          "virus_host_cell", "virus_backbone", "panel_names"
+        )
+      )
+      expect_gt(nrow(con$virusMetadata), 0)
     })
 
     test_that("`getStudy`", {

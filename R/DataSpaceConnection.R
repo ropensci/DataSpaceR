@@ -24,6 +24,9 @@
 #'     A data.table. The filtered grid with updated \code{n_} columns and
 #'     \code{geometric_mean_curve_ic50}.
 #'   }
+#'   \item{\code{virusMetadata}}{
+#'     A data.table. Metadata about all viruses in the DataSpace.
+#'   }
 #' }
 #'
 #' @section Methods:
@@ -266,6 +269,10 @@ DataSpaceConnection <- R6Class(
         class(try(
           private$.getMabGrid(),
           silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getVirusMetadata(),
+          silent = !private$.config$verbose
         ))
       )
 
@@ -369,6 +376,9 @@ DataSpaceConnection <- R6Class(
       )
 
       mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, virus, clade, tier, curve_ic50, study)]
+    },
+    virusMetadata = function() {
+      private$.virusMetadata
     }
   ),
   private = list(
@@ -379,6 +389,7 @@ DataSpaceConnection <- R6Class(
     .mabGridBase = data.table(),
     .mabMetaGridBase = data.table(),
     .mabFilters = list(),
+    .virusMetadata = data.table(),
     .cache = list(),
 
     .getAvailableStudies = function() {
@@ -490,6 +501,27 @@ DataSpaceConnection <- R6Class(
       private$.cache$mabMetaGridBase <- copy(mabMetaGridBase)
 
       invisible(NULL)
+    },
+    .getVirusMetadata = function() {
+      colSelect <- c(
+        "assay_identifier", "virus", "virus_type", "neutralization_tier", "clade",
+        "antigen_control", "virus_full_name", "virus_name_other", "virus_species",
+        "virus_host_cell", "virus_backbone", "panel_names"
+      )
+
+      virusMetadata <- labkey.selectRows(
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = "/CAVD/",
+        schemaName = "CDS",
+        queryName = "nabAntigenWithPanelMeta",
+        colSelect = colSelect,
+        colNameOpt = "fieldname",
+        method = "GET"
+      )
+      setDT(virusMetadata)
+      setkey(virusMetadata, virus)
+
+      private$.virusMetadata <- virusMetadata
     }
   )
 )
