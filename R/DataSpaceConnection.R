@@ -52,6 +52,16 @@
 #'
 #'     \code{groupId}: An integer. ID of the group to retrieve.
 #'   }
+#'   \item{\code{downloadPublicationData(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE)}}{
+#'     Download publication data for a chosen publication.
+#'
+#'     \code{publicationID}: A character or integer. ID for the publication to download data for.
+#'
+#'     \code{outputDir}: A character. Path to directory to download publication data.
+#'
+#'     \code{unzip}: A boolean. If TRUE, unzip publication data to outputDir.
+#'
+#'   }
 #'   \item{\code{refresh()}}{
 #'     Refresh the connection object to update available studies and groups.
 #'   }
@@ -255,6 +265,59 @@ DataSpaceConnection <- R6Class(
     getMab = function() {
       DataSpaceMab$new(self$mabGridSummary$mab_mixture, private$.mabFilters, private$.config)
     },
+    downloadPublicationData = function(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE) {
+
+      assert_that(dir.exists(outputDir),
+                  msg = paste0(outputDir, " is not a directory"))
+      assert_that(publicationID %in% private$.availablePublications$publication_id,
+                  msg = paste0(publicationID, " is not a valid publicationID"))
+      assert_that(private$.availablePublications[publication_id == publicationID]$publication_data_available,
+                  msg = paste0("No publication data available for publication ", publicationID))
+
+      remotePath <- private$.availablePublications[publication_id == publicationID]$remotePath
+      fileName <- basename(remotePath)
+      localZipPath <- file.path(outputDir, fileName)
+      fullOutputDir <- file.path(outputDir, gsub(".zip", "", fileName))
+      if (private$.config$verbose) message("downloading ", fileName, " to ", outputDir, " ...")
+
+
+      # Use getStudyDocumentUrl.view to download
+      getStudyDocumentUrl <- paste0(
+        private$.config$labkeyUrlBase,
+        "/cds/CAVD/getStudyDocument.view?",
+        "&documentId=", private$.availablePublications[publication_id == publicationID]$document_id,
+        "&filename=", gsub("/", "%2F", remotePath),
+        "&publicAccess=true"
+      )
+
+      # Use labkey.webdav.getByUrl which includes filesystem and permissions checks
+      ret <- Rlabkey:::labkey.webdav.getByUrl(getStudyDocumentUrl, localFilePath = localZipPath, overwrite = TRUE)
+      if (!is.null(ret) && !is.na(ret) && ret == FALSE) {
+        success <- FALSE
+        stop("failed to download ", fileName)
+      } else {
+        success <- file.exists(localZipPath)
+        if (!success) stop("failed to download to", localZipPath)
+      }
+
+      if (private$.config$verbose) {
+        message("File Contents: ")
+        fileContents <- capture.output(unzip(localZipPath, list = TRUE))
+        message(paste0(fileContents, collapse = "\n"))
+      }
+
+      if (unzip) {
+        if (private$.config$verbose) message("unzipping ", fileName, " to ", fullOutputDir)
+        unzippedFiles <- unzip(localZipPath, exdir = fullOutputDir)
+        unlink(localZipPath)
+        # Return vector of file paths
+        return(invisible(unzippedFiles))
+      }
+
+      # Return path of zip file
+      return(invisible(localZipPath))
+
+    },
     refresh = function() {
       tries <- c(
         class(try(
@@ -297,7 +360,7 @@ DataSpaceConnection <- R6Class(
       private$.availableGroups
     },
     availablePublications = function() {
-      private$.availablePublications
+      private$.availablePublications[, !c("document_id", "remotePath")]
     },
     mabGridSummary = function() {
       mabGridBase <- copy(private$.mabGridBase)
@@ -537,8 +600,9 @@ DataSpaceConnection <- R6Class(
     .getAvailablePublications = function() {
       sqlQuery <-
 "
-SELECT author_first first_author, title, journal_short journal, date publication_date,
-link, related_studies, studies_with_data, document_id IS NOT NULL as publication_data_available
+SELECT publication.id as publication_id, author_first first_author, title, journal_short journal, date publication_date,
+link, related_studies, studies_with_data, filename IS NOT NULL as publication_data_available, document_id,
+filename as remote_path
 FROM publication
 LEFT OUTER JOIN
   (
@@ -564,7 +628,7 @@ LEFT OUTER JOIN
   ON da.publication_id = publication.id
 LEFT OUTER JOIN
   (
-    SELECT * from publicationDocument
+    SELECT filename, document_id, publication_id from learn_publicationdata
   ) pd
   ON pd.publication_id = publication.id
 "
@@ -577,9 +641,10 @@ LEFT OUTER JOIN
         colNameOpt = "fieldname"
       )
 
-
     setDT(availablePublications)
+    setnames(availablePublications, "remote_path", "remotePath")
     private$.availablePublications <- availablePublications
     }
+
   )
 )
