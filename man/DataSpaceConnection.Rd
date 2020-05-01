@@ -30,6 +30,9 @@ The DataSpaceConnection class
   \item{\code{availableGroups}}{
     A data.table. The table of available groups.
   }
+  \item{\code{availablePublications}}{
+    A data.table. The table of available publications.
+  }
   \item{\code{mabGrid}}{
     A data.table. The filtered mAb grid.
   }

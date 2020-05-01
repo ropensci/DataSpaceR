@@ -17,6 +17,9 @@
 #'   \item{\code{availableGroups}}{
 #'     A data.table. The table of available groups.
 #'   }
+#'   \item{\code{availablePublications}}{
+#'     A data.table. The table of available publications.
+#'   }
 #'   \item{\code{mabGrid}}{
 #'     A data.table. The filtered mAb grid.
 #'   }
@@ -273,6 +276,10 @@ DataSpaceConnection <- R6Class(
         class(try(
           private$.getVirusMetadata(),
           silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getAvailablePublications(),
+          silent = !private$.config$verbose
         ))
       )
 
@@ -288,6 +295,9 @@ DataSpaceConnection <- R6Class(
     },
     availableGroups = function() {
       private$.availableGroups
+    },
+    availablePublications = function() {
+      private$.availablePublications
     },
     mabGridSummary = function() {
       mabGridBase <- copy(private$.mabGridBase)
@@ -390,6 +400,7 @@ DataSpaceConnection <- R6Class(
     .mabMetaGridBase = data.table(),
     .mabFilters = list(),
     .virusMetadata = data.table(),
+    .availablePublications = data.table(),
     .cache = list(),
 
     .getAvailableStudies = function() {
@@ -522,6 +533,53 @@ DataSpaceConnection <- R6Class(
       setkey(virusMetadata, virus)
 
       private$.virusMetadata <- virusMetadata
+    },
+    .getAvailablePublications = function() {
+      sqlQuery <-
+"
+SELECT author_first first_author, title, journal_short journal, date publication_date,
+link, related_studies, studies_with_data, document_id IS NOT NULL as publication_data_available
+FROM publication
+LEFT OUTER JOIN
+  (
+    SELECT GROUP_CONCAT(DISTINCT prot, ', ') AS related_studies, publication_id
+    FROM studypublication
+    GROUP BY publication_id
+  ) sp
+  ON sp.publication_id = publication.id
+LEFT OUTER JOIN
+  (
+  SELECT GROUP_CONCAT(DISTINCT prot, ', ') AS studies_with_data, publication_id
+  FROM (
+    studypublication
+    LEFT OUTER JOIN
+      (
+        SELECT study_name, data_availability FROM study
+      ) sdy
+      ON sdy.study_name = prot
+    )
+  WHERE data_availability IS NOT NULL
+  GROUP BY publication_id
+  ) da
+  ON da.publication_id = publication.id
+LEFT OUTER JOIN
+  (
+    SELECT * from publicationDocument
+  ) pd
+  ON pd.publication_id = publication.id
+"
+
+      availablePublications <- labkey.executeSql(
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = "/CAVD/",
+        schemaName = "CDS",
+        sql = sqlQuery,
+        colNameOpt = "fieldname"
+      )
+
+
+    setDT(availablePublications)
+    private$.availablePublications <- availablePublications
     }
   )
 )

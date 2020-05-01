@@ -13,6 +13,7 @@ if ("DataSpaceConnection" %in% class(con)) {
     "virusMetadata",
     "mabGrid",
     "mabGridSummary",
+    "availablePublications",
     "availableGroups",
     "availableStudies",
     "config",
