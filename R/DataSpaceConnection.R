@@ -52,7 +52,7 @@
 #'
 #'     \code{groupId}: An integer. ID of the group to retrieve.
 #'   }
-#'   \item{\code{downloadPublicationData(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE)}}{
+#'   \item{\code{downloadPublicationData(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE, verbose = NULL)}}{
 #'     Download publication data for a chosen publication.
 #'
 #'     \code{publicationID}: A character or integer. ID for the publication to download data for.
@@ -60,6 +60,8 @@
 #'     \code{outputDir}: A character. Path to directory to download publication data.
 #'
 #'     \code{unzip}: A boolean. If TRUE, unzip publication data to outputDir.
+#'
+#'     \code{verbose}: A boolean. Optional parameter to override \code{config$verbose} for this function.
 #'
 #'   }
 #'   \item{\code{refresh()}}{
@@ -266,20 +268,25 @@ DataSpaceConnection <- R6Class(
     getMab = function() {
       DataSpaceMab$new(self$mabGridSummary$mab_mixture, private$.mabFilters, private$.config)
     },
-    downloadPublicationData = function(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE) {
+    downloadPublicationData = function(publicationID,
+                                       outputDir = file.path("~", "Downloads"),
+                                       unzip = TRUE,
+                                       verbose = NULL) {
 
+      if (is.null(verbose)) verbose <- self$config$verbose
       assert_that(dir.exists(outputDir),
                   msg = paste0(outputDir, " is not a directory"))
       assert_that(publicationID %in% private$.availablePublications$publication_id,
                   msg = paste0(publicationID, " is not a valid publicationID"))
       assert_that(private$.availablePublications[publication_id == publicationID]$publication_data_available,
                   msg = paste0("No publication data available for publication ", publicationID))
+      assert_that(is.logical(verbose))
 
       remotePath <- private$.availablePublications[publication_id == publicationID]$remotePath
       fileName <- basename(remotePath)
       localZipPath <- file.path(outputDir, fileName)
       fullOutputDir <- file.path(outputDir, gsub(".zip", "", fileName))
-      if (private$.config$verbose) message("downloading ", fileName, " to ", outputDir, " ...")
+      if (verbose) message("downloading ", fileName, " to ", outputDir, " ...")
 
 
       # Use getStudyDocumentUrl.view to download
@@ -301,14 +308,14 @@ DataSpaceConnection <- R6Class(
         if (!success) stop("failed to download to", localZipPath)
       }
 
-      if (private$.config$verbose) {
+      if (verbose) {
         message("File Contents: ")
         fileContents <- capture.output(unzip(localZipPath, list = TRUE))
         message(paste0(fileContents, collapse = "\n"))
       }
 
       if (unzip) {
-        if (private$.config$verbose) message("unzipping ", fileName, " to ", fullOutputDir)
+        if (verbose) message("unzipping ", fileName, " to ", fullOutputDir)
         unzippedFiles <- unzip(localZipPath, exdir = fullOutputDir)
         unlink(localZipPath)
         # Return vector of file paths
@@ -643,6 +650,7 @@ LEFT OUTER JOIN
       )
 
     setDT(availablePublications)
+    setorder(availablePublications, "first_author")
     setnames(availablePublications, "remote_path", "remotePath")
     private$.availablePublications <- availablePublications
     }

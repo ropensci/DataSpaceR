@@ -183,6 +183,21 @@ dim(NAb_nyvac)
 ```
 
 
+## Download Publication Data
+
+DataSpace maintains a curated collection of relevant publications, which can be accessed through the [Publications page](https://dataspace.cavd.org/cds/CAVD/app.view?#learn/learn/Publication) through the app. Metadata about these publications can be accessed through `DataSpaceR` with `con$availablePublications`. 
+
+```{r availablePublications}
+knitr::kable(head(con$availablePublications))
+```
+
+DataSpace also includes publication datasets for some publications. The format of this data will vary from publication to publication, and is stored in a zip file. Data for a publication can be accessed through `DataSpaceR` with `con$downloadPublicationData()`. The publication ID must be specified, as found under `publication_id` in `con$availablePublications`. 
+
+```{r downloadPublicationData}
+publicationDataFiles <- con$downloadPublicationData("1461", outputDir = tempdir(), unzip = TRUE)
+basename(publicationDataFiles)
+```
+
 ## Access Virus Metadata
 
 DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NAb) assays. This data can be accessed through the app on the [NAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB/antigens) and [NAb MAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB%20MAB/antigens). 
@@ -213,6 +228,7 @@ The followings are the tables of all fields and methods that work on `DataSpaceC
 | --- | --- |
 | `availableStudies` | The table of available studies. |
 | `availableGroups` | The table of available groups. |
+| `availablePublications` | The table of available publications. |
 | `mabGrid` | The filtered mAb grid. |
 | `mabGridSummary` | The summarized mAb grid with updated `n_` columns and `geometric_mean_curve_ic50`. |
 | `virusMetadata` | Metadata about all viruses in the DataSpace. |
@@ -221,6 +237,8 @@ The followings are the tables of all fields and methods that work on `DataSpaceC
 | `getMab` | Create a `DataSpaceMab` object by filtered `mabGrid`. |
 | `getStudy` | Create a `DataSpaceStudy` object by study. |
 | `getGroup` | Create a `DataSpaceStudy` object by group. |
+| `downloadPublicationData` | Download data from a chosen publication. |
+
 
 ### `DataSpaceStudy`
 

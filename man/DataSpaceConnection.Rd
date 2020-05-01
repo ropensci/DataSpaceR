@@ -67,6 +67,18 @@ The DataSpaceConnection class
 
     \code{groupId}: An integer. ID of the group to retrieve.
   }
+  \item{\code{downloadPublicationData(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE, verbose = NULL)}}{
+    Download publication data for a chosen publication.
+
+    \code{publicationID}: A character or integer. ID for the publication to download data for.
+
+    \code{outputDir}: A character. Path to directory to download publication data.
+
+    \code{unzip}: A boolean. If TRUE, unzip publication data to outputDir.
+
+    \code{verbose}: A boolean. Optional parameter to override \code{config$verbose} for this function.
+
+  }
   \item{\code{refresh()}}{
     Refresh the connection object to update available studies and groups.
   }
@@ -123,6 +135,7 @@ con$refresh()
 \item \href{#method-filterMabGrid}{\code{DataSpaceConnection$filterMabGrid()}}
 \item \href{#method-resetMabGrid}{\code{DataSpaceConnection$resetMabGrid()}}
 \item \href{#method-getMab}{\code{DataSpaceConnection$getMab()}}
+\item \href{#method-downloadPublicationData}{\code{DataSpaceConnection$downloadPublicationData()}}
 \item \href{#method-refresh}{\code{DataSpaceConnection$refresh()}}
 \item \href{#method-clone}{\code{DataSpaceConnection$clone()}}
 }
@@ -185,6 +198,19 @@ con$refresh()
 \subsection{Method \code{getMab()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getMab()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-downloadPublicationData"></a>}}
+\subsection{Method \code{downloadPublicationData()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$downloadPublicationData(
+  publicationID,
+  outputDir = file.path("~", "Downloads"),
+  unzip = TRUE,
+  verbose = NULL
+)}\if{html}{\out{</div>}}
 }
 
 }
