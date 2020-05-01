@@ -180,7 +180,8 @@ DataSpaceConnection <- R6Class(
       cat("\n    -", private$.stats$subjects, "subjects")
       cat("\n    -", private$.stats$datacount, "data points")
       cat("\n  Available groups:", nrow(private$.availableGroups))
-      cat("\n")
+      cat("\n  Available publications:", nrow(private$.availablePublications))
+      cat("\n    -", sum(private$.availablePublications$publication_data_available), "publications with data")
     },
     getStudy = function(study) {
       if (study != "") {
