@@ -1,0 +1,109 @@
+---
+title: "Accessing Publication Data"
+author: "Helen Miller"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Accessing Publication Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo = FALSE, warning=FALSE, message=FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
+labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  purl = NOT_CRAN,
+  eval = NOT_CRAN,
+  message = FALSE
+)
+```
+
+
+DataSpace maintains a curated collection of relevant publications, which can be accessed through the [Publications page](https://dataspace.cavd.org/cds/CAVD/app.view?#learn/learn/Publication) through the app. Some publications laos include datasets which can be downloaded as a zip file. `DataSpaceR` provides an interface for browsing publications in DataSpace and downloading publication data where available. 
+
+## Browsing publications in DataSpace
+
+The `DataSpaceConnection` object includes methods for browsing and downloading publications and publication data. 
+
+```{r connectDS}
+library(DataSpaceR)
+library(data.table)
+con <- connectDS()
+con
+```
+
+The `DataSpaceConnection` print method summarizes the publications and publication data. More details about publications can be accessed through `con$availablePublications`. 
+
+```{r availablePublications}
+knitr::kable(head(con$availablePublications))
+```
+
+This table summarizes all publications, providing some information like first author, journal where it was published, and title as a `data.table`. It also includes a pubmed url where available under `link`. Related studies under `related_studies`, and related studies with data available under `studies_with_data`.  We can use `data.table` methods to filter and sort this table to browse available publications. 
+
+For example, we can filter this table to view only publications related to a particular study:
+
+```{r filter_by_study}
+vtn096_pubs <- con$availablePublications[grepl("vtn096", related_studies)]
+knitr::kable(vtn096_pubs)
+```
+
+
+or publications that have related studies with integrated data in DataSpace:
+
+```{r filter_by_study_data}
+pubs_with_study_data <- con$availablePublications[!is.na(studies_with_data)]
+knitr::kable(head(pubs_with_study_data))
+```
+
+We can also use this information to connect to related studies and pull integrated data. Say we are interested in this Rouphael (2019) publication: 
+
+```{r garciaArriaza2019}
+rouphael2019 <- con$availablePublications[first_author == "Rouphael NG"]
+knitr::kable(rouphael2019)
+```
+
+We can find this publication in the available publications table, determine related studies, and pull data for those studies where available. 
+
+```{r pullStudyData}
+related_studies <- rouphael2019$related_studies
+related_studies
+rouphael2019_study <- con$getStudy(related_studies)
+rouphael2019_study
+dim(rouphael2019_study$availableDatasets)
+```
+
+We can see that there are `r nrow(rouphael2019_study$availableDatasets)` available datasets for this study. We can pull any of them using `rouphael2019_study$getDataset()`. 
+
+## Downloading Publication Data
+
+
+DataSpace also includes publication datasets for some publications. The format of this data will vary from publication to publication, and is stored in a zip file. The `publication_data_available` field specifies publications where publication data is available. 
+
+```{r available_publication_data}
+pubs_with_data <- con$availablePublications[publication_data_available == TRUE]
+knitr::kable(head(pubs_with_data))
+```
+
+Data for a publication can be accessed through `DataSpaceR` with `con$downloadPublicationData()`. The publication ID must be specified, as found under `publication_id` in `con$availablePublications`. The file is presented as a zip file. The `unzip` argument gives us the option whether to unzip this file. By default, the file will be unzipped. You may also specify the directory to download the file. By default, it will be saved to your `Downloads` directory. This function invisibly returns the paths to the downloaded files. 
+
+Here, we download data for publication with ID 1461 (Westling, 2020), and view the resulting downoads. 
+
+```{r downloadPublicationData}
+publicationDataFiles <- con$downloadPublicationData("1461", unzip = TRUE)
+basename(publicationDataFiles)
+```
+
+All zip files will include a file format document as a PDF, as well as a readme. These documents will give an overview of the remaning contents of the files. In this case, data is separated by CD8+ T-cell responses and CD4+ T-cell responses, as described in the `README.txt`. 
+
+```{r readPubData}
+cd4 <- fread(publicationDataFiles[grepl("cd4_data", publicationDataFiles)])
+cd4
+```
+
+This publication also includes analysis scripts used for the publication, which can allow users to reproduce the analysis and results. 
+
+
