@@ -185,6 +185,7 @@ DataSpaceStudy <- R6Class(
       if (nrow(private$.availableNIDatasets) > 0) {
         cat(paste0("\n    - ", private$.availableNIDatasets$name), sep = "")
       }
+      cat("\n")
     },
     getDataset = function(datasetName,
                           mergeExtra = FALSE,
