@@ -67,7 +67,7 @@ The DataSpaceConnection class
 
     \code{groupId}: An integer. ID of the group to retrieve.
   }
-  \item{\code{downloadPublicationData(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE, verbose = NULL)}}{
+  \item{\code{downloadPublicationData(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE, verbose = TRUE)}}{
     Download publication data for a chosen publication.
 
     \code{publicationID}: A character or integer. ID for the publication to download data for.
@@ -76,7 +76,7 @@ The DataSpaceConnection class
 
     \code{unzip}: A boolean. If TRUE, unzip publication data to outputDir.
 
-    \code{verbose}: A boolean. Optional parameter to override \code{config$verbose} for this function.
+    \code{verbose}: A boolean. Default TRUE.
 
   }
   \item{\code{refresh()}}{
@@ -207,9 +207,9 @@ con$refresh()
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$downloadPublicationData(
   publicationID,
-  outputDir = file.path("~", "Downloads"),
+  outputDir = getwd(),
   unzip = TRUE,
-  verbose = NULL
+  verbose = TRUE
 )}\if{html}{\out{</div>}}
 }
 

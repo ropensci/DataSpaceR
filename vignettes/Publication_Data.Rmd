@@ -93,7 +93,7 @@ Data for a publication can be accessed through `DataSpaceR` with `con$downloadPu
 Here, we download data for publication with ID 1461 (Westling, 2020), and view the resulting downoads. 
 
 ```{r downloadPublicationData}
-publicationDataFiles <- con$downloadPublicationData("1461", unzip = TRUE)
+publicationDataFiles <- con$downloadPublicationData("1461", outputDir = tempdir(), unzip = TRUE, verbose = TRUE)
 basename(publicationDataFiles)
 ```
 

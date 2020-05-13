@@ -52,7 +52,7 @@
 #'
 #'     \code{groupId}: An integer. ID of the group to retrieve.
 #'   }
-#'   \item{\code{downloadPublicationData(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE, verbose = NULL)}}{
+#'   \item{\code{downloadPublicationData(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE, verbose = TRUE)}}{
 #'     Download publication data for a chosen publication.
 #'
 #'     \code{publicationID}: A character or integer. ID for the publication to download data for.
@@ -61,7 +61,7 @@
 #'
 #'     \code{unzip}: A boolean. If TRUE, unzip publication data to outputDir.
 #'
-#'     \code{verbose}: A boolean. Optional parameter to override \code{config$verbose} for this function.
+#'     \code{verbose}: A boolean. Default TRUE.
 #'
 #'   }
 #'   \item{\code{refresh()}}{
@@ -269,11 +269,10 @@ DataSpaceConnection <- R6Class(
       DataSpaceMab$new(self$mabGridSummary$mab_mixture, private$.mabFilters, private$.config)
     },
     downloadPublicationData = function(publicationID,
-                                       outputDir = file.path("~", "Downloads"),
+                                       outputDir = getwd(),
                                        unzip = TRUE,
-                                       verbose = NULL) {
+                                       verbose = TRUE) {
 
-      if (is.null(verbose)) verbose <- self$config$verbose
       assert_that(dir.exists(outputDir),
                   msg = paste0(outputDir, " is not a directory"))
       assert_that(publicationID %in% private$.availablePublications$publication_id,
@@ -291,12 +290,12 @@ DataSpaceConnection <- R6Class(
 
       # Use getStudyDocumentUrl.view to download
       getStudyDocumentUrl <- paste0(
-        private$.config$labkeyUrlBase,
-        "/cds/CAVD/getStudyDocument.view?",
-        "&documentId=", private$.availablePublications[publication_id == publicationID]$document_id,
-        "&filename=", gsub("/", "%2F", remotePath),
-        "&publicAccess=true"
-      )
+          private$.config$labkeyUrlBase,
+          "/cds/CAVD/getStudyDocument.view?",
+          "&documentId=", private$.availablePublications[publication_id == publicationID]$document_id,
+          "&filename=", gsub("/", "%2F", remotePath),
+          "&publicAccess=true"
+        )
 
       # Use labkey.webdav.getByUrl which includes filesystem and permissions checks
       ret <- Rlabkey:::labkey.webdav.getByUrl(getStudyDocumentUrl, localFilePath = localZipPath, overwrite = TRUE)
@@ -323,7 +322,7 @@ DataSpaceConnection <- R6Class(
       }
 
       # Return path of zip file
-      return(invisible(localZipPath))
+      invisible(localZipPath)
 
     },
     refresh = function() {
@@ -609,7 +608,7 @@ DataSpaceConnection <- R6Class(
       sqlQuery <-
 "
 SELECT publication.id as publication_id, author_first first_author, title, journal_short journal, date publication_date,
-link, related_studies, studies_with_data, filename IS NOT NULL as publication_data_available, document_id,
+link, pmid as pubmed_id, related_studies, studies_with_data, filename IS NOT NULL as publication_data_available, document_id,
 filename as remote_path
 FROM publication
 LEFT OUTER JOIN

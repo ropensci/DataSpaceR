@@ -183,20 +183,6 @@ dim(NAb_nyvac)
 ```
 
 
-## Download Publication Data
-
-DataSpace maintains a curated collection of relevant publications, which can be accessed through the [Publications page](https://dataspace.cavd.org/cds/CAVD/app.view?#learn/learn/Publication) through the app. Metadata about these publications can be accessed through `DataSpaceR` with `con$availablePublications`. 
-
-```{r availablePublications}
-knitr::kable(head(con$availablePublications))
-```
-
-DataSpace also includes publication datasets for some publications. The format of this data will vary from publication to publication, and is stored in a zip file. Data for a publication can be accessed through `DataSpaceR` with `con$downloadPublicationData()`. The publication ID must be specified, as found under `publication_id` in `con$availablePublications`. 
-
-```{r downloadPublicationData}
-publicationDataFiles <- con$downloadPublicationData("1461", outputDir = tempdir(), unzip = TRUE)
-basename(publicationDataFiles)
-```
 
 ## Access Virus Metadata
 
@@ -217,6 +203,14 @@ See other vignette for a tutorial on accessing monoclonal antibody data with `Da
 vignette("Accessing_Monoconal_Antibody_Data")
 ```
 
+## Browse and Download Publication Data
+
+DataSpace maintains a curated collection of relevant publications, which can be accessed through the [Publications page](https://dataspace.cavd.org/cds/CAVD/app.view?#learn/learn/Publication) through the app. Metadata about these publications can be accessed through `DataSpaceR` with `con$availablePublications`. 
+
+See Publication Data vignette for a tutorial on accessing publication data through DataSpaceR. 
+```{r publication_data}
+vignette("Publication_Data")
+```
 
 ## Reference Tables
 
