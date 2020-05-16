@@ -500,6 +500,8 @@ DataSpaceStudy <- R6Class(
           makeCountQuery("NAb", private$.group),
           "UNION",
           makeCountQuery("Demographics", private$.group),
+          "UNION",
+          makeCountQuery("PKMAb", private$.group),
           ") AS dataset_n,",
           "DataSets",
           "WHERE",

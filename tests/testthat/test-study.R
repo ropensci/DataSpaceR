@@ -264,7 +264,7 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
 
 test_study(
   study = "",
-  datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb")
+  datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb", "PKMAb")
 )
 test_study(
   study = "cvd408",
