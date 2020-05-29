@@ -175,15 +175,20 @@ if ("DataSpaceConnection" %in% class(con)) {
 
       # Check messages
       expect_message(con$downloadPublicationData(1461, outputDir = outputDir, verbose = TRUE))
-      expect_message(con$downloadPublicationData(1461, outputDir = outputDir, verbose = FALSE),
-                     regexp = "encoding", all = TRUE)
+      expect_message(
+        con$downloadPublicationData(1461, outputDir = outputDir, verbose = FALSE),
+        regexp = "encoding", all = TRUE
+      )
 
       # Check errors
-      expect_error(con$downloadPublicationData("badpublicationid", outputDir = outputDir),
-                   regexp = "not a valid publication")
-      expect_error(con$downloadPublicationData(1461, outputDir = "badoutputdir"),
-                   regexp = 'badoutputdir is not a directory')
-
+      expect_error(
+        con$downloadPublicationData("badpublicationid", outputDir = outputDir),
+        regexp = "not a valid publication"
+      )
+      expect_error(
+        con$downloadPublicationData(1461, outputDir = "badoutputdir"),
+        regexp = "badoutputdir is not a directory"
+      )
     })
 
     test_that("`refresh`", {

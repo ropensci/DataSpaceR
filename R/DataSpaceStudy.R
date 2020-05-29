@@ -386,7 +386,7 @@ DataSpaceStudy <- R6Class(
         # https://github.com/Bioconductor/Biobase/blob/6017663b35b7380c7d8b09e6ec8a1c1087a7bd62/R/tools.R#L39
         if (isWindows()) {
           shell.exec(file.path(datasetDir, fileFormatPdf))
-        } else  {
+        } else {
           pdf <- getOption("pdfviewer")
           msg <- NULL
           if (is.null(pdf)) {

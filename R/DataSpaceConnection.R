@@ -273,13 +273,18 @@ DataSpaceConnection <- R6Class(
                                        outputDir = getwd(),
                                        unzip = TRUE,
                                        verbose = TRUE) {
-
-      assert_that(dir.exists(outputDir),
-                  msg = paste0(outputDir, " is not a directory"))
-      assert_that(publicationID %in% private$.availablePublications$publication_id,
-                  msg = paste0(publicationID, " is not a valid publicationID"))
-      assert_that(private$.availablePublications[publication_id == publicationID]$publication_data_available,
-                  msg = paste0("No publication data available for publication ", publicationID))
+      assert_that(
+        dir.exists(outputDir),
+        msg = paste0(outputDir, " is not a directory")
+      )
+      assert_that(
+        publicationID %in% private$.availablePublications$publication_id,
+        msg = paste0(publicationID, " is not a valid publicationID")
+      )
+      assert_that(
+        private$.availablePublications[publication_id == publicationID]$publication_data_available,
+        msg = paste0("No publication data available for publication ", publicationID)
+      )
       assert_that(is.logical(verbose))
 
       remotePath <- private$.availablePublications[publication_id == publicationID]$remotePath
@@ -288,15 +293,14 @@ DataSpaceConnection <- R6Class(
       fullOutputDir <- file.path(outputDir, gsub(".zip", "", fileName))
       if (verbose) message("downloading ", fileName, " to ", outputDir, " ...")
 
-
       # Use getStudyDocumentUrl.view to download
       getStudyDocumentUrl <- paste0(
-          private$.config$labkeyUrlBase,
-          "/cds/CAVD/getStudyDocument.view?",
-          "&documentId=", private$.availablePublications[publication_id == publicationID]$document_id,
-          "&filename=", gsub("/", "%2F", remotePath),
-          "&publicAccess=true"
-        )
+        private$.config$labkeyUrlBase,
+        "/cds/CAVD/getStudyDocument.view?",
+        "&documentId=", private$.availablePublications[publication_id == publicationID]$document_id,
+        "&filename=", gsub("/", "%2F", remotePath),
+        "&publicAccess=true"
+      )
 
       # Use labkey.webdav.getByUrl which includes filesystem and permissions checks
       ret <- Rlabkey:::labkey.webdav.getByUrl(getStudyDocumentUrl, localFilePath = localZipPath, overwrite = TRUE)
@@ -324,7 +328,6 @@ DataSpaceConnection <- R6Class(
 
       # Return path of zip file
       invisible(localZipPath)
-
     },
     refresh = function() {
       tries <- c(
@@ -649,11 +652,10 @@ LEFT OUTER JOIN
         colNameOpt = "fieldname"
       )
 
-    setDT(availablePublications)
-    setorder(availablePublications, "first_author")
-    setnames(availablePublications, "remote_path", "remotePath")
-    private$.availablePublications <- availablePublications
+      setDT(availablePublications)
+      setorder(availablePublications, "first_author")
+      setnames(availablePublications, "remote_path", "remotePath")
+      private$.availablePublications <- availablePublications
     }
-
   )
 )
