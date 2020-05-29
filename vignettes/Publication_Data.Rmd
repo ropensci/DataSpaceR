@@ -76,7 +76,7 @@ rouphael2019_study
 dim(rouphael2019_study$availableDatasets)
 ```
 
-We can see that there are `r nrow(rouphael2019_study$availableDatasets)` available datasets for this study. We can pull any of them using `rouphael2019_study$getDataset()`. 
+We can see that there are datasets available for this study. We can pull any of them using `rouphael2019_study$getDataset()`. 
 
 ## Downloading Publication Data
 
