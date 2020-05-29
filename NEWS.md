@@ -1,3 +1,11 @@
+# DataSpaceR 0.7.4
+
+* Added `virusMetadata` field to `DataSpaceConnection` which shows virus metadata for viruses used in NAb assays (thanks @helenmiller16 #26)
+* Added `availablePublications` field to `DataSpaceConnection` which summarizes all available publications  (thanks @helenmiller16 #27)
+* Added `downloadPublicationData` method to `DataSpaceConnection` which will download available publication data for a specified publication (thanks @helenmiller16 #27)
+* Added a vignette: `Accessing Publication Data`  (thanks @helenmiller16 #27)
+* Made `PKMAb` dataset available to retrieve in `DataSpaceStudy` (thanks @helenmiller16 and @jmtaylor-fhcrc #27)
+
 # DataSpaceR 0.7.3
 
 * Remove `tolower` in functions that check study names. (thanks @jmtaylor-fhcrc #23)
