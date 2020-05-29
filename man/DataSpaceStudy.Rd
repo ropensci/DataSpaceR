@@ -158,6 +158,7 @@ cvd$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$new(study = NULL, config = NULL, group = NULL, studyInfo = NULL)}\if{html}{\out{</div>}}
@@ -166,6 +167,7 @@ cvd$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$print()}\if{html}{\out{</div>}}
@@ -174,6 +176,7 @@ cvd$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getDataset"></a>}}
+\if{latex}{\out{\hypertarget{method-getDataset}{}}}
 \subsection{Method \code{getDataset()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$getDataset(
@@ -189,6 +192,7 @@ cvd$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clearCache"></a>}}
+\if{latex}{\out{\hypertarget{method-clearCache}{}}}
 \subsection{Method \code{clearCache()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$clearCache()}\if{html}{\out{</div>}}
@@ -197,6 +201,7 @@ cvd$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getDatasetDescription"></a>}}
+\if{latex}{\out{\hypertarget{method-getDatasetDescription}{}}}
 \subsection{Method \code{getDatasetDescription()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$getDatasetDescription(datasetName, outputDir = NULL)}\if{html}{\out{</div>}}
@@ -205,6 +210,7 @@ cvd$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$refresh()}\if{html}{\out{</div>}}
@@ -213,6 +219,7 @@ cvd$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setDataDir"></a>}}
+\if{latex}{\out{\hypertarget{method-setDataDir}{}}}
 \subsection{Method \code{setDataDir()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceStudy$setDataDir(dataDir)}\if{html}{\out{</div>}}
@@ -221,6 +228,7 @@ cvd$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

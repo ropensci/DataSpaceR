@@ -142,6 +142,7 @@ con$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$new(
@@ -155,6 +156,7 @@ con$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$print()}\if{html}{\out{</div>}}
@@ -163,6 +165,7 @@ con$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getStudy"></a>}}
+\if{latex}{\out{\hypertarget{method-getStudy}{}}}
 \subsection{Method \code{getStudy()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getStudy(study)}\if{html}{\out{</div>}}
@@ -171,6 +174,7 @@ con$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getGroup"></a>}}
+\if{latex}{\out{\hypertarget{method-getGroup}{}}}
 \subsection{Method \code{getGroup()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getGroup(groupId)}\if{html}{\out{</div>}}
@@ -179,6 +183,7 @@ con$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filterMabGrid"></a>}}
+\if{latex}{\out{\hypertarget{method-filterMabGrid}{}}}
 \subsection{Method \code{filterMabGrid()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$filterMabGrid(using, value)}\if{html}{\out{</div>}}
@@ -187,6 +192,7 @@ con$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetMabGrid"></a>}}
+\if{latex}{\out{\hypertarget{method-resetMabGrid}{}}}
 \subsection{Method \code{resetMabGrid()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$resetMabGrid()}\if{html}{\out{</div>}}
@@ -195,6 +201,7 @@ con$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getMab"></a>}}
+\if{latex}{\out{\hypertarget{method-getMab}{}}}
 \subsection{Method \code{getMab()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getMab()}\if{html}{\out{</div>}}
@@ -203,6 +210,7 @@ con$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-downloadPublicationData"></a>}}
+\if{latex}{\out{\hypertarget{method-downloadPublicationData}{}}}
 \subsection{Method \code{downloadPublicationData()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$downloadPublicationData(
@@ -216,6 +224,7 @@ con$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$refresh()}\if{html}{\out{</div>}}
@@ -224,6 +233,7 @@ con$refresh()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
