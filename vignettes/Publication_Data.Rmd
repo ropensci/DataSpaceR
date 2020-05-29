@@ -90,14 +90,14 @@ knitr::kable(head(pubs_with_data))
 
 Data for a publication can be accessed through `DataSpaceR` with `con$downloadPublicationData()`. The publication ID must be specified, as found under `publication_id` in `con$availablePublications`. The file is presented as a zip file. The `unzip` argument gives us the option whether to unzip this file. By default, the file will be unzipped. You may also specify the directory to download the file. By default, it will be saved to your `Downloads` directory. This function invisibly returns the paths to the downloaded files. 
 
-Here, we download data for publication with ID 1461 (Westling, 2020), and view the resulting downoads. 
+Here, we download data for publication with ID 1461 (Westling, 2020), and view the resulting downloads. 
 
 ```{r downloadPublicationData}
 publicationDataFiles <- con$downloadPublicationData("1461", outputDir = tempdir(), unzip = TRUE, verbose = TRUE)
 basename(publicationDataFiles)
 ```
 
-All zip files will include a file format document as a PDF, as well as a readme. These documents will give an overview of the remaning contents of the files. In this case, data is separated by CD8+ T-cell responses and CD4+ T-cell responses, as described in the `README.txt`. 
+All zip files will include a file format document as a PDF, as well as a README. These documents will give an overview of the remaining contents of the files. In this case, data is separated by CD8+ T-cell responses and CD4+ T-cell responses, as described in the `README.txt`. 
 
 ```{r readPubData}
 cd4 <- fread(publicationDataFiles[grepl("cd4_data", publicationDataFiles)])
