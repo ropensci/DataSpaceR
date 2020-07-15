@@ -56,6 +56,7 @@
 #'     \code{datasetName}: A character. Name of the dataset to retrieve.
 #'
 #'     \code{mergeExtra}: A logical. If set to TRUE, merge extra information.
+#'     Ignored for non-integrated datasets.
 #'
 #'     \code{colFilter}: A matrix. A filter as returned by Rlabkey's
 #'     \code{\link[Rlabkey]{makeFilter}}.
@@ -286,34 +287,40 @@ DataSpaceStudy <- R6Class(
         private$.availableNIDatasets[name == datasetName, n := nrow(dataset)]
 
         # change "subject_id" to "ParticipantId" to be consistent with other datasets
-        setnames(dataset, c("subject_id", "prot"), c("ParticipantId", "study_prot"))
+        setnames(dataset, c("subject_id", "prot"), c("ParticipantId", "study_prot"), skip_absent = TRUE)
       }
 
       # merge extra information
       if (args$mergeExtra) {
-        if (!identical(datasetName, "Demographics")) {
-          dem <- self$getDataset("Demographics")
 
-          subj <- ifelse(private$.study == "", "Subject", "Participant")
-          cols <- c(paste0(subj, "Visit/Visit"), "study_prot")
-          dem <- dem[, -cols, with = FALSE]
+        # mergeExtra is only allowed for integrated datasets
+        if (! self$availableDatasets[name == datasetName]$integrated) {
+          message("'mergeExtra' is not allowed for non-integrated datsets. Skipping.")
+        } else {
+          if (!identical(datasetName, "Demographics")) {
+            dem <- self$getDataset("Demographics")
 
-          key <- paste0(subj, "Id")
-          setkeyv(dem, key)
-          setkeyv(dataset, key)
+            subj <- ifelse(private$.study == "", "Subject", "Participant")
+            cols <- c(paste0(subj, "Visit/Visit"), "study_prot")
+            dem <- dem[, -cols, with = FALSE]
 
-          dataset <- dataset[dem, nomatch = 0]
+            key <- paste0(subj, "Id")
+            setkeyv(dem, key)
+            setkeyv(dataset, key)
+
+            dataset <- dataset[dem, nomatch = 0]
+          }
+
+          # create arm_id column with demographics and set it as key
+          dataset[, arm_id := paste(
+            study_prot, study_part, study_group, study_arm,
+            sep = "-"
+          )]
+          setkey(dataset, arm_id)
+
+          dataset[private$.treatmentArm, nomatch = 0]
+          setkey(dataset, NULL)
         }
-
-        # create arm_id column with demographics and set it as key
-        dataset[, arm_id := paste(
-          study_prot, study_part, study_group, study_arm,
-          sep = "-"
-        )]
-        setkey(dataset, arm_id)
-
-        dataset[private$.treatmentArm, nomatch = 0]
-        setkey(dataset, NULL)
       }
 
       # caching
@@ -444,14 +451,14 @@ DataSpaceStudy <- R6Class(
     availableDatasets = function() {
       rbind(
         private$.availableDatasets[, .(name,
-          label,
-          n,
-          integrated = rep(TRUE, nrow(private$.availableDatasets))
+                                       label,
+                                       n,
+                                       integrated = rep(TRUE, nrow(private$.availableDatasets))
         )],
         private$.availableNIDatasets[, .(name,
-          label,
-          n,
-          integrated = rep(FALSE, nrow(private$.availableNIDatasets))
+                                         label,
+                                         n,
+                                         integrated = rep(FALSE, nrow(private$.availableNIDatasets))
         )]
       )
     },
