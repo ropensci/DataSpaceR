@@ -70,6 +70,7 @@ The DataSpaceStudy class
     \code{datasetName}: A character. Name of the dataset to retrieve.
 
     \code{mergeExtra}: A logical. If set to TRUE, merge extra information.
+    Ignored for non-integrated datasets.
 
     \code{colFilter}: A matrix. A filter as returned by Rlabkey's
     \code{\link[Rlabkey]{makeFilter}}.
