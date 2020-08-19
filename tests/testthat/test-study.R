@@ -283,11 +283,11 @@ test_study(
   datasets = c("BAMA", "Demographics", "ICS", "NAb"),
   niDatasets = c("ADCP", "DEM SUPP", "Fc Array")
 )
-test_study(
-  study = "cvd812",
-  datasets = c(),
-  niDatasets = c("NAB Ig")
-)
+# test_study(
+#   study = "cvd812",
+#   datasets = c(),
+#   niDatasets = c("NAB Ig")
+# )
 test_study(
   study = "",
   datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"),
