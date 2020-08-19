@@ -294,7 +294,7 @@ DataSpaceStudy <- R6Class(
       if (args$mergeExtra) {
 
         # mergeExtra is only allowed for integrated datasets
-        if (! self$availableDatasets[name == datasetName]$integrated) {
+        if (!self$availableDatasets[name == datasetName]$integrated) {
           message("'mergeExtra' is not allowed for non-integrated datsets. Skipping.")
         } else {
           if (!identical(datasetName, "Demographics")) {
@@ -451,14 +451,14 @@ DataSpaceStudy <- R6Class(
     availableDatasets = function() {
       rbind(
         private$.availableDatasets[, .(name,
-                                       label,
-                                       n,
-                                       integrated = rep(TRUE, nrow(private$.availableDatasets))
+          label,
+          n,
+          integrated = rep(TRUE, nrow(private$.availableDatasets))
         )],
         private$.availableNIDatasets[, .(name,
-                                         label,
-                                         n,
-                                         integrated = rep(FALSE, nrow(private$.availableNIDatasets))
+          label,
+          n,
+          integrated = rep(FALSE, nrow(private$.availableNIDatasets))
         )]
       )
     },

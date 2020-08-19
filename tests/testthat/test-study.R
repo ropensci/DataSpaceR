@@ -227,7 +227,6 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
           } else {
             expect_false("arm_id" %in% names(dataset))
           }
-
         }
       })
 
