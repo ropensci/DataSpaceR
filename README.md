@@ -3,10 +3,10 @@
 
 # DataSpaceR <img src="man/figures/logo.png" align="right" />
 
-[![Build
-Status](https://travis-ci.org/ropensci/DataSpaceR.svg?branch=master)](https://travis-ci.org/ropensci/DataSpaceR)
-[![Build
-status](https://ci.appveyor.com/api/projects/status/github/ropensci/DataSpaceR?branch=master&svg=true)](https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master)
+<!-- badges: start -->
+
+[![R build
+status](https://github.com/ropensci/DataSpaceR/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/DataSpaceR/actions)
 [![codecov](https://codecov.io/gh/ropensci/DataSpaceR/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/DataSpaceR/branch/master)
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/DataSpaceR)](https://cran.r-project.org/package=DataSpaceR)
@@ -18,6 +18,7 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![](https://badges.ropensci.org/261_status.svg)](https://github.com/ropensci/software-review/issues/261)
+<!-- badges: end -->
 
 `DataSpaceR` is an R interface to [the CAVD
 DataSpace](https://dataspace.cavd.org), a data sharing and discovery
@@ -126,15 +127,16 @@ con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
 #>   User: jkim2345@scharp.org
-#>   Available studies: 254
-#>     - 72 studies with data
-#>     - 4872 subjects
-#>     - 407558 data points
+#>   Available studies: 260
+#>     - 76 studies with data
+#>     - 4994 subjects
+#>     - 423195 data points
 #>   Available groups: 6
+#>   Available publications: 1403
+#>     - 1 publications with data
 ```
 
-`connectDS()` will create a connection to
-DataSpace.
+`connectDS()` will create a connection to DataSpace.
 
 ### available studies can be listed by `availableStudies` field
 
@@ -149,7 +151,7 @@ knitr::kable(head(con$availableStudies))
 | cvd235      | mAbs potency                   | Weiss mAbs potency                                                                        | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2008-08-21  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
 | cvd236      | neutralization assays          | neutralization assays                                                                     | Antibody Screening | Active   | In Progress      | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
 | cvd238      | Gallo\_PA\_238                 | HIV-1 neutralization responses in chronically infected individuals                        | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-01-08  | Prophylactic neutralizing Ab         | CAVD    | NA                                                |
-| cvd239      | CAVIMC-015                     | Lehner\_Thorstensson\_Allovac                                                             | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-01-08  | Protein and peptide vaccines         | CAVD    | This study has assay data (NAB) in the DataSpace. |
+| cvd239      | CAVIMC-015                     | Lehner\_Thorstensson\_Allovac                                                             | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-01-08  | Protein & peptide vaccines           | CAVD    | This study has assay data (NAB) in the DataSpace. |
 
 ### available groups can be listed by `availableGroups` field
 
@@ -157,14 +159,14 @@ knitr::kable(head(con$availableStudies))
 knitr::kable(con$availableGroups)
 ```
 
-|  id | label                              | original\_label                    | description                                                                                                               | created\_by | shared |   n | studies                                   |
-| --: | :--------------------------------- | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :---------- | :----- | --: | :---------------------------------------- |
-| 216 | mice                               | mice                               | NA                                                                                                                        | readjk      | FALSE  |  75 | c(“cvd468”, “cvd483”, “cvd316”, “cvd331”) |
-| 217 | CAVD 242                           | CAVD 242                           | This is a fake group for CAVD 242                                                                                         | readjk      | FALSE  |  30 | cvd242                                    |
-| 220 | NYVAC durability comparison        | NYVAC\_durability                  | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products.                            | ehenrich    | TRUE   |  78 | c(“cvd281”, “cvd434”, “cvd259”, “cvd277”) |
-| 224 | cvd338                             | cvd338                             | NA                                                                                                                        | readjk      | FALSE  |  36 | cvd338                                    |
-| 228 | HVTN 505 case control subjects     | HVTN 505 case control subjects     | Participants from HVTN 505 included in the case-control analysis                                                          | drienna     | TRUE   | 189 | vtn505                                    |
-| 230 | HVTN 505 polyfunctionality vs BAMA | HVTN 505 polyfunctionality vs BAMA | Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort | drienna     | TRUE   | 170 | vtn505                                    |
+|  id | label                              | original\_label                    | description                                                                                                               | created\_by | shared |   n | studies                        |
+| --: | :--------------------------------- | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :---------- | :----- | --: | :----------------------------- |
+| 216 | mice                               | mice                               | NA                                                                                                                        | readjk      | FALSE  |  75 | cvd468, cvd483, cvd316, cvd331 |
+| 217 | CAVD 242                           | CAVD 242                           | This is a fake group for CAVD 242                                                                                         | readjk      | FALSE  |  30 | cvd242                         |
+| 220 | NYVAC durability comparison        | NYVAC\_durability                  | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products.                            | ehenrich    | TRUE   |  78 | cvd281, cvd434, cvd259, cvd277 |
+| 224 | cvd338                             | cvd338                             | NA                                                                                                                        | readjk      | FALSE  |  36 | cvd338                         |
+| 228 | HVTN 505 case control subjects     | HVTN 505 case control subjects     | Participants from HVTN 505 included in the case-control analysis                                                          | drienna     | TRUE   | 189 | vtn505                         |
+| 230 | HVTN 505 polyfunctionality vs BAMA | HVTN 505 polyfunctionality vs BAMA | Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort | drienna     | TRUE   | 170 | vtn505                         |
 
 ***Note***: A group is a curated collection of participants from
 filtering of treatments, products, studies, or species, and it is
@@ -246,7 +248,6 @@ behavior.
   - Please note that this project is released with a [Contributor Code
     of
     Conduct](https://github.com/ropensci/DataSpaceR/blob/master/CONDUCT.md).
-    By participating in this project you agree to abide by its
-terms.
+    By participating in this project you agree to abide by its terms.
 
 [![ropensci\_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
