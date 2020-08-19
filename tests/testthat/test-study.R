@@ -122,7 +122,10 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
             "randomization", "coded_label", "last_day", "description"
           )
         )
-        expect_gt(nrow(cavd$treatmentArm), 0)
+        if (length(datasets) > 0) {
+          # Allow for studies which have niData but no integrated data (eg cvd812)
+          expect_gt(nrow(cavd$treatmentArm), 0)
+        }
       })
 
       test_that("`group`", {
@@ -219,7 +222,12 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
           )
           expect_is(dataset, "data.table", info = datasetName)
           expect_gt(nrow(dataset), 0)
-          expect_true("arm_id" %in% names(dataset))
+          if (cavd$availableDatasets[name == datasetName]$integrated) {
+            expect_true("arm_id" %in% names(dataset))
+          } else {
+            expect_false("arm_id" %in% names(dataset))
+          }
+
         }
       })
 
@@ -275,6 +283,11 @@ test_study(
   datasets = c("BAMA", "Demographics", "ICS", "NAb"),
   niDatasets = c("ADCP", "DEM SUPP", "Fc Array")
 )
+# test_study(
+#   study = "cvd812",
+#   datasets = c(),
+#   niDatasets = c("NAB Ig")
+# )
 test_study(
   study = "",
   datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"),
