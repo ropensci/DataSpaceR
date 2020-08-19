@@ -67,6 +67,9 @@ jobs:
         shell: Rscript {0}
 
       - name: Setup netrc
+        env:
+          DSR_login: ${{ secrets.DSR_LOGIN }}
+          DSR_pwd: ${{ secrets.DSR_PWD }}
         run: |
           netrc <- ifelse(.Platform$OS.type == "windows", "~/_netrc", "~/.netrc")
           write(
@@ -83,8 +86,6 @@ jobs:
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
           NOT_CRAN: true
-          DSR_login: ${{ secrets.DSR_LOGIN }}
-          DSR_pwd: ${{ secrets.DSR_PWD }}
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
