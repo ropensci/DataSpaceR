@@ -3,7 +3,7 @@ title: "Accessing Monoclonal Antibody Data"
 author:
 - Ju Yeong Kim
 - Jason Taylor
-date: "2020-08-20"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Monoclonal Antibody Data}
@@ -11,7 +11,17 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
+labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  purl = NOT_CRAN,
+  eval = NOT_CRAN
+)
+```
 
 
 ## Workflow overview
@@ -42,16 +52,11 @@ Using the DataSpace [app](https://dataspace.cavd.org/cds/CAVD/app.view#mabgrid),
 
 You can browse the mAb Grid by calling the `mabGridSummary` field in the connection object:
 
-
-```r
+```{r}
 library(DataSpaceR)
 con <- connectDS()
 
 DT::datatable(con$mabGridSummary, options = list(autoWidth = TRUE, scrollX = TRUE))
-#> dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib
-#>   Referenced from: /usr/local/bin/phantomjs
-#>   Reason: image not found
-#> Error in (function (url = NULL, file = "webshot.png", vwidth = 992, vheight = 744, : webshot.js returned failure value: -6
 ```
 
 This table is designed to mimic the mAb grid found in the app.
@@ -62,8 +67,7 @@ One can also access the unsummarized data from the mAb grid by calling `con$mabG
 
 You can filter rows in the grid by specifying the values to keep in the columns found in the field `con$mabGrid`: `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tiers`, `clades`, `viruses`, and `studies`. `filterMabGrid` takes the column and the values and filters the underlying tables (private fields), and when you call the `mabGridSummary` or (which is actually an [active binding](https://r6.r-lib.org/articles/Introduction.html#active-bindings)), it returns the filtered grid with updated `n_` columns and `geometric_mean_curve_ic50`.
 
-
-```r
+```{r}
 # filter the grid by viruses
 con$filterMabGrid(using = "virus", value = c("242-14", "Q23.17", "6535.3", "BaL.26", "DJ263.8"))
 
@@ -72,16 +76,11 @@ con$filterMabGrid(using = "donor_species", value = "llama")
 
 # check the updated grid
 DT::datatable(con$mabGridSummary, options = list(autoWidth = TRUE, scrollX = TRUE))
-#> dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib
-#>   Referenced from: /usr/local/bin/phantomjs
-#>   Reason: image not found
-#> Error in (function (url = NULL, file = "webshot.png", vwidth = 992, vheight = 744, : webshot.js returned failure value: -6
 ```
 
 Or we can use method chaining to call multiple filter methods and browse the grid. Method chaining is unique to R6 objects and related to the pipe. See Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/r6.html) for more info
 
-
-```r
+```{r eval=FALSE}
 con$
   filterMabGrid(using = "hxb2_location", value = c("Env", "gp160"))$
   filterMabGrid(using = "donor_species", value = "llama")$
@@ -93,15 +92,12 @@ con$
 
 You can retrieve values from the grid by `mab_mixture`, `donor_species`, `isotype`, `hxb2_location`, `tier`, `clade`, `virus`, and `studies`, or any variables found in the `mabGrid` field in the connection object via `data.table` operations.
 
-
-```r
+```{r}
 # retrieve available viruses in the filtered grid
 con$mabGrid[, unique(virus)]
-#> [1] "Q23.17"  "6535.3"  "242-14"  "BaL.26"  "DJ263.8"
 
 # retrieve available clades for 1H9 mAb mixture in the filtered grid
 con$mabGrid[mab_mixture == "1H9", unique(clade)]
-#> [1] "B"        "CRF02_AG"
 ```
 
 
@@ -109,69 +105,27 @@ con$mabGrid[mab_mixture == "1H9", unique(clade)]
 
 After filtering the grid, you can create a DataSpaceMab object that contains the filtered mAb data.
 
-
-```r
+```{r}
 mab <- con$getMab()
 mab
-#> <DataSpaceMab>
-#>   URL: https://dataspace.cavd.org
-#>   User: jkim2345@scharp.org
-#>   Summary:
-#>     - 3 studies
-#>     - 14 mAb mixtures
-#>     - 1 neutralization tiers
-#>     - 3 clades
-#>   Filters:
-#>     - virus: 242-14, Q23.17, 6535.3, BaL.26, DJ263.8
-#>     - mab_donor_species: llama
 ```
 
 There are 6 public fields available in the `DataSpaceMab` object: `studyAndMabs`, `mabs`, `nabMab`, `studies`, `assays`, and `variableDefinitions`, and they are equivalent to the sheets in the excel file or the csv files you would download from the app via "Export Excel"/"Export CSV". 
 
-
-```r
+```{r}
 DT::datatable(mab$nabMab, options = list(autoWidth = TRUE, scrollX = TRUE))
-#> Error in (function (url = NULL, file = "webshot.png", vwidth = 992, vheight = 744, : webshot.js returned failure value: -6
 ```
 
 ## View metadata concerning the mAb object
 
 There are several metadata fields that can be exported in the mAb object.
 
-
-```r
+```{r}
 names(mab)
-#>  [1] ".__enclos_env__"     "variableDefinitions" "assays"              "studies"             "nabMab"             
-#>  [6] "mabs"                "studyAndMabs"        "config"              "clone"               "refresh"            
-#> [11] "print"               "initialize"
 ```
 
 ## Session information
 
-
-```r
+```{r session-info}
 sessionInfo()
-#> R version 4.0.2 (2020-06-22)
-#> Platform: x86_64-apple-darwin17.0 (64-bit)
-#> Running under: macOS Catalina 10.15.6
-#> 
-#> Matrix products: default
-#> BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
-#> LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
-#> 
-#> locale:
-#> [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-#> 
-#> attached base packages:
-#> [1] stats     graphics  grDevices utils     datasets  methods   base     
-#> 
-#> other attached packages:
-#> [1] knitr_1.29        data.table_1.13.0 testthat_2.3.2    DataSpaceR_0.7.4 
-#> 
-#> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.5        compiler_4.0.2    pryr_0.1.4        highr_0.8         tools_4.0.2       digest_0.6.25     jsonlite_1.7.0   
-#>  [8] evaluate_0.14     rlang_0.4.7       cli_2.0.2         rstudioapi_0.11   crosstalk_1.1.0.1 curl_4.3          yaml_2.2.1       
-#> [15] xfun_0.16         httr_1.4.2        stringr_1.4.0     htmlwidgets_1.5.1 DT_0.15           webshot_0.5.2     glue_1.4.1       
-#> [22] R6_2.4.1          processx_3.4.3    fansi_0.4.1       Rlabkey_2.5.2     rmarkdown_2.3     callr_3.4.3       magrittr_1.5     
-#> [29] codetools_0.2-16  ps_1.3.4          htmltools_0.5.0   assertthat_0.2.1  stringi_1.4.6     crayon_1.3.4
 ```

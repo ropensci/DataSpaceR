@@ -1,0 +1,267 @@
+---
+title: "Introduction to DataSpaceR"
+author: "Ju Yeong Kim"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to DataSpaceR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
+labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  purl = NOT_CRAN,
+  eval = NOT_CRAN
+)
+```
+
+
+This package provides a thin wrapper around [Rlabkey](https://cran.r-project.org/package=Rlabkey) and connects to the the [CAVD DataSpace](https://dataspace.cavd.org) database, making it easier to fetch datasets from specific studies.
+
+
+## Configuration
+
+First, go to [DataSpace](https://dataspace.cavd.org) now and set yourself up with an account.
+
+In order to connect to the CAVD DataSpace via `DataSpaceR`, you will need a `netrc` file in your home directory that will contain a `machine` name (hostname of DataSpace), and `login` and `password`. There are two ways to create a `netrc` file.
+
+### Creating a netrc file with `writeNetrc`
+
+On your R console, create a `netrc` file using a function from `DataSpaceR`:
+
+```{r, eval=FALSE}
+writeNetrc(
+  login = "yourEmail@address.com", 
+  password = "yourSecretPassword",
+  netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path 
+)
+```
+
+This will create a `netrc` file in your home directory. Make sure you have a valid login and password.
+
+### Manually creating a netrc file
+
+***Alternatively***, you can manually create a netrc file.
+
+* On Windows, this file should be named `_netrc`
+* On UNIX/Mac, it should be named `.netrc`
+* The file should be located in the user's home directory, and the permissions on the file should be unreadable for everybody except the owner
+* To determine your home directory, run `Sys.getenv("HOME")` in R
+
+The following three lines must be included in the `.netrc` or `_netrc` file either separated by white space (spaces, tabs, or newlines) or commas. Multiple such blocks can exist in one file.
+
+```
+machine dataspace.cavd.org
+login myuser@domain.com
+password supersecretpassword
+```
+
+See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc) for more information about `netrc`.
+
+
+## Initiate a connection
+
+We'll be looking at study `cvd256`. If you want to use a different study, change that string. You can instantiate multiple connections to different studies simultaneously.
+
+```{r connectDS}
+library(DataSpaceR)
+con <- connectDS()
+con
+```
+
+The call to `connectDS` instantiates the connection. Printing the object shows where it's connected and the available studies.
+
+```{r availableStudies}
+knitr::kable(head(con$availableStudies))
+```
+
+`con$availableStudies` shows the available studies in the CAVD DataSpace. Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
+
+```{r getStudy}
+cvd256 <- con$getStudy("cvd256")
+cvd256
+```
+
+`con$getStudy` creates a connection to the study `cvd256`. Printing the object shows where it's connected, to what study, and the available datasets.
+
+```{r other-fields}
+knitr::kable(cvd256$availableDatasets)
+knitr::kable(cvd256$treatmentArm)
+```
+
+Available datasets and treatment arm information for the connection can be accessed by `availableDatasets` and `treatmentArm`.
+
+
+## Fetching datasets
+
+We can grab any of the datasets listed in the connection (`availableDatasets`).
+
+```{r getDataset}
+NAb <- cvd256$getDataset("NAb")
+dim(NAb)
+colnames(NAb)
+```
+
+The *cvd256* object is an [`R6`](https://cran.r-project.org/package=R6) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
+
+We can get detailed variable information using `getDatasetDescription`.
+
+```{r getVariableInfo}
+knitr::kable(cvd256$getDatasetDescription("NAb"))
+```
+
+To get only a subset of the data and speed up the download, filters can be passed to `getDataset`. The filters are created using the `makeFilter` function of the `Rlabkey` package.
+
+```{r getDataset-filter}
+cvd256Filter <- makeFilter(c("visit_day", "EQUAL", "0"))
+NAb_day0 <- cvd256$getDataset("NAb", colFilter = cvd256Filter)
+dim(NAb_day0)
+```
+
+See `?makeFilter` for more information on the syntax.
+
+
+## Creating a connection to all studies
+
+To fetch data from multiple studies, create a connection at the project level.
+
+```{r connection-all-studies}
+cavd <- con$getStudy("")
+```
+
+This will instantiate a connection at the `CAVD` level. Most functions work cross study connections just like they do on single studies.
+
+You can get a list of datasets available across all studies.
+
+```{r connection-all-studies-datasets}
+cavd
+knitr::kable(cavd$availableDatasets)
+```
+
+In all-study connection, `getDataset` will combine the requested datasets. Note that in most cases, the datasets will have too many subjects for quick data transfer, making filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
+
+```{r connection-all-studies-dem}
+conFilter <- makeFilter(c("species", "EQUAL", "Human"))
+human <- cavd$getDataset("Demographics", colFilter = conFilter)
+dim(human)
+colnames(human)
+```
+
+Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
+
+
+## Connect to a saved group
+
+A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
+
+Let's say you are using the App to filter and visualize data and want to save them for later or explore in R with `DataSpaceR`. You can save a group by clicking the Save button on the Active Filter Panel.
+
+We can browse available the saved groups or the curated groups by DataSpace Team via `availableGroups`.
+
+```{r availableGroups}
+knitr::kable(con$availableGroups)
+```
+
+To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to the "NYVAC durability comparison" group which has group ID 220 by `getGroup`.
+
+```{r group-connection}
+nyvac <- con$getGroup(220)
+nyvac
+```
+
+Retrieving a dataset is the same as before.
+
+```{r group-connection-nab}
+NAb_nyvac <- nyvac$getDataset("NAb")
+dim(NAb_nyvac)
+```
+
+
+
+## Access Virus Metadata
+
+DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NAb) assays. This data can be accessed through the app on the [NAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB/antigens) and [NAb MAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB%20MAB/antigens). 
+
+We can access this metadata in `DataSpaceR` with `con$virusMetadata`: 
+
+```{r virusMetadata}
+knitr::kable(head(con$virusMetadata))
+```
+
+
+## Access monoclonal antibody data
+
+See other vignette for a tutorial on accessing monoclonal antibody data with `DataSpaceR`:
+
+```{r eval=FALSE}
+vignette("Accessing_Monoconal_Antibody_Data")
+```
+
+## Browse and Download Publication Data
+
+DataSpace maintains a curated collection of relevant publications, which can be accessed through the [Publications page](https://dataspace.cavd.org/cds/CAVD/app.view?#learn/learn/Publication) through the app. Metadata about these publications can be accessed through `DataSpaceR` with `con$availablePublications`. 
+
+See Publication Data vignette for a tutorial on accessing publication data through DataSpaceR. 
+```{r publication_data}
+vignette("Publication_Data")
+```
+
+## Reference Tables
+
+The followings are the tables of all fields and methods that work on `DataSpaceConnection` and `DataSpaceStudy` objects and could be used as a quick reference.
+
+### `DataSpaceConnection`
+
+| Name | Description |
+| --- | --- |
+| `availableStudies` | The table of available studies. |
+| `availableGroups` | The table of available groups. |
+| `availablePublications` | The table of available publications. |
+| `mabGrid` | The filtered mAb grid. |
+| `mabGridSummary` | The summarized mAb grid with updated `n_` columns and `geometric_mean_curve_ic50`. |
+| `virusMetadata` | Metadata about all viruses in the DataSpace. |
+| `filterMabGrid` | Filter rows in the mAb grid by specifying the values to keep in the columns found in the `mabGrid` field. |
+| `resetMabGrid` | Reset the mAb grid to the unfiltered state. |
+| `getMab` | Create a `DataSpaceMab` object by filtered `mabGrid`. |
+| `getStudy` | Create a `DataSpaceStudy` object by study. |
+| `getGroup` | Create a `DataSpaceStudy` object by group. |
+| `downloadPublicationData` | Download data from a chosen publication. |
+
+
+### `DataSpaceStudy`
+
+| Name | Description |
+| --- | --- |
+| `study` | The study name. |
+| `group` | The group name. |
+| `availableDatasets` | The table of datasets available in the study object. |
+| `treatmentArm` | The table of treatment arm information for the connected study. Not available for all study connection. |
+| `dataDir` | The default target directory for downloading non-integrated datasets. |
+| `studyInfo` | Stores the information about the study. |
+| `getDataset` | Get a dataset from the connection. |
+| `getDatasetDescription` | Get variable information. |
+| `setDataDir` | Set default target directory for downloading non-integrated datasets. |
+
+### `DataSpaceMab`
+
+| Name | Description |
+| --- | --- |
+| `studyAndMabs` | The table of available mAbs by study. |
+| `mabs` | The table of available mAbs and their attributes. |
+| `nabMab` | The table of mAbs and their neutralizing measurements against viruses. |
+| `studies` | The table of available studies. |
+| `assays` | The table of assay status by study. |
+| `variableDefinitions` | The table of variable definitions. |
+
+
+## Session information
+
+```{r session-info}
+sessionInfo()
+```
