@@ -1,96 +1,8 @@
 #' The DataSpaceStudy class
 #'
-#'
-#' @return an instance of \code{DataSpaceStudy}
-#'
 #' @section Constructor:
 #' \code{DataSpaceConnection$getStudy()}
 #' \code{DataSpaceConnection$getGroup()}
-#'
-#' @section Fields:
-#' \describe{
-#'   \item{\code{study}}{
-#'     A character. The study name.
-#'   }
-#'   \item{\code{config}}{
-#'     A list. Stores configuration of the connection object such as
-#'     URL, path and username.
-#'   }
-#'   \item{\code{availableDatasets}}{
-#'     A data.table. The table of datasets available in the study object.
-#'   }
-#'   \item{\code{cache}}{
-#'     A list. Stores the data to avoid downloading the same tables multiple
-#'     times.
-#'   }
-#'   \item{\code{treatmentArm}}{
-#'     A data.table. The table of treatment arm information for the connected
-#'     study. Not available for all study connection.
-#'   }
-#'   \item{\code{group}}{
-#'     A character. The group name.
-#'   }
-#'   \item{\code{studyInfo}}{
-#'     A list. Stores the information about the study.
-#'   }
-#'   \item{\code{dataDir}}{
-#'     A character. Default directory for storing nonstandard datasets. Set with
-#'     \code{setDataDir(dataDir)}.
-#'   }
-#' }
-#'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{initialize(study = NULL, config = NULL, group = NULL,
-#'   studyInfo = NULL)}}{
-#'     Initialize \code{DataSpaceStudy} class.
-#'     See \code{\link{DataSpaceConnection}}.
-#'   }
-#'   \item{\code{print()}}{
-#'     Print \code{DataSpaceStudy} class.
-#'   }
-#'   \item{\code{getDataset(datasetName, mergeExtra = FALSE, colFilter = NULL,
-#'   reload = FALSE, outputDir = NULL, ...)}}{
-#'     Get a dataset from the connection.
-#'
-#'     \code{datasetName}: A character. Name of the dataset to retrieve.
-#'
-#'     \code{mergeExtra}: A logical. If set to TRUE, merge extra information.
-#'     Ignored for non-integrated datasets.
-#'
-#'     \code{colFilter}: A matrix. A filter as returned by Rlabkey's
-#'     \code{\link[Rlabkey]{makeFilter}}.
-#'
-#'     \code{reload}: A logical. If set to TRUE, download the dataset, whether
-#'     a cached version exist or not.
-#'
-#'     \code{outputDir}: A character. Optional, specifies directory to download
-#'     nonstandard datasets. If \code{NULL}, data will be downloaded to \code{dataDir},
-#'     set with \code{setDataDir(dataDir)}. If \code{dataDir} is not set, and
-#'     \code{outputDir} is \code{NULL}, a tmp directory will be used.
-#'
-#'     \code{...}: Extra arguments to be passed to
-#'     \code{\link[Rlabkey]{labkey.selectRows}}
-#'   }
-#'   \item{\code{clearCache()}}{
-#'     Clear \code{cache}. Remove downloaded datasets.
-#'   }
-#'   \item{\code{getDatasetDescription(datasetName)}}{
-#'     Get variable information.
-#'
-#'     \code{datasetName}: A character. Name of the dataset to retrieve.
-#'   }
-#'   \item{\code{setDataDir(dataDir)}}{
-#'     Set default directory to download non-integrated datasets. If no
-#'     dataDir is set, a tmp directory will be used.
-#'
-#'     \code{dataDir}: A character. Directory path.
-#'
-#'   }
-#'   \item{\code{refresh()}}{
-#'     Refresh the study object to update available datasets and treatment info.
-#'   }
-#' }
 #'
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 #'
@@ -127,15 +39,21 @@
 #' cvd$refresh()
 #' }
 #'
-#' @docType class
-#' @format NULL
-#'
 #' @importFrom data.table fread
 #' @importFrom digest digest
 #' @importFrom Rlabkey labkey.getQueryDetails labkey.executeSql labkey.webdav.get
 DataSpaceStudy <- R6Class(
   classname = "DataSpaceStudy",
   public = list(
+
+    #' @description
+    #' Initialize \code{DataSpaceStudy} class.
+    #' See \code{\link{DataSpaceConnection}}.
+    #' @param study A character. Name of the study to retrieve.
+    #' @param config A list. Stores configuration of the connection object such
+    #' as URL, path and username.
+    #' @param group An integer. ID of the group to retrieve.
+    #' @param studyInfo A list. Stores the information about the study.
     initialize = function(study = NULL,
                           config = NULL,
                           group = NULL,
@@ -164,6 +82,9 @@ DataSpaceStudy <- R6Class(
 
       NULL
     },
+
+    #' @description
+    #' Print \code{DataSpaceStudy} class.
     print = function() {
       study <- ifelse(private$.study == "", "CAVD", private$.study)
       url <- file.path(
@@ -188,6 +109,23 @@ DataSpaceStudy <- R6Class(
       }
       cat("\n")
     },
+
+    #' @description
+    #' Get a dataset from the connection.
+    #' @param datasetName A character. Name of the dataset to retrieve.
+    #' @param mergeExtra A logical. If set to TRUE, merge extra information.
+    #' Ignored for non-integrated datasets.
+    #' @param colFilter A matrix. A filter as returned by Rlabkey's
+    #' \code{\link[Rlabkey]{makeFilter}}.
+    #' @param reload A logical. If set to TRUE, download the dataset, whether
+    #' a cached version exist or not.
+    #' @param outputDir A character. Optional, specifies directory to download
+    #' nonstandard datasets. If \code{NULL}, data will be downloaded to
+    #' \code{dataDir}, set with \code{setDataDir(dataDir)}. If \code{dataDir}
+    #' is not set, and \code{outputDir} is \code{NULL}, a tmp directory will be
+    #' used.
+    #' @param ... Extra arguments to be passed to
+    #' \code{\link[Rlabkey]{labkey.selectRows}}
     getDataset = function(datasetName,
                           mergeExtra = FALSE,
                           colFilter = NULL,
@@ -222,7 +160,6 @@ DataSpaceStudy <- R6Class(
           return(private$.cache[[digestedArgs]]$data)
         }
       }
-
 
       # Retrieve dataset
       if (self$availableDatasets[name == datasetName]$integrated) {
@@ -331,9 +268,17 @@ DataSpaceStudy <- R6Class(
 
       dataset
     },
+
+    #' @description
+    #' Clear \code{cache}. Remove downloaded datasets.
     clearCache = function() {
       private$.cache <- list()
     },
+
+    #' @description
+    #' Get variable information.
+    #' @param datasetName A character. Name of the dataset to retrieve.
+    #' @param outputDir A character. Directory path.
     getDatasetDescription = function(datasetName, outputDir = NULL) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
@@ -341,7 +286,6 @@ DataSpaceStudy <- R6Class(
         datasetName %in% self$availableDatasets$name,
         msg = paste0(datasetName, " is not a available dataset")
       )
-
 
       if (self$availableDatasets[name == datasetName]$integrated) {
         varInfo <- labkey.getQueryDetails(
@@ -369,7 +313,6 @@ DataSpaceStudy <- R6Class(
 
         return(varInfo)
       } else {
-
         # Download and unzip dataset if not already downloaded
         datasetDir <- private$.availableNIDatasets[name == datasetName]$localPath
 
@@ -409,6 +352,26 @@ DataSpaceStudy <- R6Class(
         }
       }
     },
+
+    #' @description
+    #' Set default directory to download non-integrated datasets. If no
+    #' \code{dataDir} is set, a tmp directory will be used.
+    #' @param dataDir A character. Directory path.
+    setDataDir = function(dataDir) {
+      if (length(dataDir) == 0) {
+        private$.dataDir <- character()
+      } else {
+        assert_that(file.exists(dataDir))
+        assert_that(dir.exists(dataDir))
+
+        private$.dataDir <- normalizePath(dataDir)
+      }
+
+      invisible(self)
+    },
+
+    #' @description
+    #' Refresh the study object to update available datasets and treatment info.
     refresh = function() {
       tries <- c(
         class(try(
@@ -426,28 +389,24 @@ DataSpaceStudy <- R6Class(
       )
 
       invisible(!"try-error" %in% tries)
-    },
-    setDataDir = function(dataDir) {
-      if (length(dataDir) == 0) {
-        private$.dataDir <- character()
-      } else {
-        assert_that(file.exists(dataDir))
-        assert_that(dir.exists(dataDir))
-
-        private$.dataDir <- normalizePath(dataDir)
-      }
-
-      invisible(self)
     }
   ),
 
   active = list(
+
+    #' @field study A character. The study name.
     study = function() {
       private$.study
     },
+
+    #' @field config A list. Stores configuration of the connection object such
+    #' as URL, path and username.
     config = function() {
       private$.config
     },
+
+    #' @field availableDatasets A data.table. The table of datasets available in
+    #' the \code{DataSpaceStudy} object.
     availableDatasets = function() {
       rbind(
         private$.availableDatasets[, .(name,
@@ -462,22 +421,37 @@ DataSpaceStudy <- R6Class(
         )]
       )
     },
+
+    #' @field cache A list. Stores the data to avoid downloading the same tables
+    #' multiple times.
     cache = function() {
       private$.cache
     },
+
+    #' @field dataDir A character. Default directory for storing nonstandard
+    #' datasets. Set with \code{setDataDir(dataDir)}.
     dataDir = function() {
       private$.dataDir
     },
+
+    #' @field treatmentArm A data.table. The table of treatment arm
+    #' information for the connected study. Not available for all study
+    #' connection.
     treatmentArm = function() {
       private$.treatmentArm
     },
+
+    #' @field group A character. The group name.
     group = function() {
       private$.group
     },
+
+    #' @field studyInfo A list. Stores the information about the study.
     studyInfo = function() {
       private$.studyInfo
     }
   ),
+
   private = list(
     .study = character(),
     .config = list(),
@@ -530,6 +504,7 @@ DataSpaceStudy <- R6Class(
 
       private$.availableDatasets <- availableDatasets[order(name)]
     },
+
     .getAvailableNIDatasets = function() {
       document <- labkey.selectRows(
         private$.config$labkeyUrlBase,
@@ -566,6 +541,7 @@ DataSpaceStudy <- R6Class(
       ]
       private$.availableNIDatasets <- niDatasets
     },
+
     .getTreatmentArm = function() {
       colSelect <- c(
         "arm_id", "arm_part", "arm_group", "arm_name",
@@ -593,6 +569,7 @@ DataSpaceStudy <- R6Class(
 
       private$.treatmentArm <- treatmentArm
     },
+
     .downloadNIDataset = function(datasetName, outputDir = NULL) {
       remotePath <- private$.availableNIDatasets[name == datasetName]$remotePath
       outputDir <- private$.getOutputDir(outputDir)
@@ -635,6 +612,7 @@ DataSpaceStudy <- R6Class(
 
       return(fullOutputDir)
     },
+
     .getOutputDir = function(outputDir = NULL) {
       if (!is.null(outputDir)) {
         if (dir.exists(outputDir)) {

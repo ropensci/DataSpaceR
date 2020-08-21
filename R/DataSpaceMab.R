@@ -1,50 +1,8 @@
 #' The DataSpaceMab class
 #'
-#' @return an instance of \code{DataSpaceMab}
-#'
 #' @section Constructor:
 #' \code{DataSpaceConnection$getMab()}
 #'
-#' @section Fields:
-#' \describe{
-#'   \item{\code{config}}{
-#'     A list. Stores configuration of the connection object such as
-#'     URL, path and username.
-#'   }
-#'   \item{\code{studyAndMabs}}{
-#'     A data.table. The table of available mAbs by study.
-#'   }
-#'   \item{\code{mabs}}{
-#'     A data.table. The table of available mAbs and their attributes.
-#'   }
-#'   \item{\code{nabMab}}{
-#'     A data.table. The table of mAbs and their neutralizing measurements
-#'     against viruses.
-#'   }
-#'   \item{\code{studies}}{
-#'     A data.table. The table of available studies.
-#'   }
-#'   \item{\code{assays}}{
-#'     A data.table. The table of assay status by study.
-#'   }
-#'   \item{\code{variableDefinitions}}{
-#'     A data.table. The table of variable definitions.
-#'   }
-#' }
-#'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{initialize(mabMixture, filters, config)}}{
-#'     Initialize \code{DataSpaceMab} object.
-#'     See \code{\link{DataSpaceConnection}}.
-#'   }
-#'   \item{\code{print()}}{
-#'     Print \code{DataSpaceMab} object summary.
-#'   }
-#'   \item{\code{refresh()}}{
-#'     Refresh the mab object to update datasets.
-#'   }
-#' }
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 #'
 #' @examples
@@ -78,13 +36,17 @@
 #' mab$nabMab
 #' }
 #'
-#' @docType class
-#' @format NULL
-#'
 #' @importFrom data.table setnames
 DataSpaceMab <- R6Class(
   classname = "DataSpaceMab",
   public = list(
+
+    #' @description
+    #' Initialize \code{DataSpaceMab} object.
+    #' See \code{\link{DataSpaceConnection}}.
+    #' @param mabMixture A character vector.
+    #' @param filters A list.
+    #' @param config A list.
     initialize = function(mabMixture, filters, config) {
       assert_that(!is.null(config))
 
@@ -98,6 +60,9 @@ DataSpaceMab <- R6Class(
 
       NULL
     },
+
+    #' @description
+    #' Print the \code{DataSpaceMab} object summary.
     print = function() {
       cat("<DataSpaceMab>")
       cat("\n  URL:", private$.config$labkeyUrlBase)
@@ -117,6 +82,9 @@ DataSpaceMab <- R6Class(
       }
       cat(" \n")
     },
+
+    #' @description
+    #' Refresh the \code{DataSpaceMab} object to update datasets.
     refresh = function() {
       tries <- c(
         class(try(
@@ -144,29 +112,49 @@ DataSpaceMab <- R6Class(
       invisible(!"try-error" %in% tries)
     }
   ),
+
   active = list(
+
+    #' @field config A list. Stores configuration of the connection object such
+    #' as URL, path and username.
     config = function() {
       private$.config
     },
+
+    #' @field studyAndMabs A data.table. The table of available mAbs by study.
     studyAndMabs = function() {
       unique(private$.nabMab[, .(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)])
     },
+
+    #' @field mabs A data.table. The table of available mAbs and their
+    #' attributes.
     mabs = function() {
       private$.mabs
     },
+
+    #' @field nabMab A data.table. The table of mAbs and their neutralizing
+    #' measurements against viruses.
     nabMab = function() {
       private$.nabMab
     },
+
+    #' @field studies A data.table. The table of available studies.
     studies = function() {
       private$.studies
     },
+
+    #' @field assays A data.table. The table of assay status by study.
     assays = function() {
       private$.assays
     },
+
+    #' @field variableDefinitions A data.table. The table of variable
+    #' definitions.
     variableDefinitions = function() {
       private$.variableDefinitions
     }
   ),
+
   private = list(
     .config = list(),
     .filters = list(),
@@ -206,6 +194,7 @@ DataSpaceMab <- R6Class(
 
       private$.nabMab <- nabMab
     },
+
     .getMabs = function() {
       mabs <- labkey.executeSql(
         baseUrl = private$.config$labkeyUrlBase,
@@ -227,6 +216,7 @@ DataSpaceMab <- R6Class(
 
       private$.mabs <- mabs
     },
+
     .getStudies = function() {
       studies <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -268,6 +258,7 @@ DataSpaceMab <- R6Class(
         )]
       )
     },
+
     .getAssays = function() {
       assays <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -285,6 +276,7 @@ DataSpaceMab <- R6Class(
 
       private$.assays <- assays[, container := NULL]
     },
+
     .getVariableDefinitions = function() {
       varInfo <- labkey.getQueryDetails(
         baseUrl = private$.config$labkeyUrlBase,

@@ -1,88 +1,7 @@
 #' The DataSpaceConnection class
 #'
-#' @return an instance of \code{DataSpaceConnection}
-#'
 #' @section Constructor:
 #' \code{\link{connectDS}}
-#'
-#' @section Fields:
-#' \describe{
-#'   \item{\code{config}}{
-#'     A list. Stores configuration of the connection object such as
-#'     URL, path and username.
-#'   }
-#'   \item{\code{availableStudies}}{
-#'     A data.table. The table of available studies.
-#'   }
-#'   \item{\code{availableGroups}}{
-#'     A data.table. The table of available groups.
-#'   }
-#'   \item{\code{availablePublications}}{
-#'     A data.table. The table of available publications.
-#'   }
-#'   \item{\code{mabGrid}}{
-#'     A data.table. The filtered mAb grid.
-#'   }
-#'   \item{\code{mabGridSummary}}{
-#'     A data.table. The filtered grid with updated \code{n_} columns and
-#'     \code{geometric_mean_curve_ic50}.
-#'   }
-#'   \item{\code{virusMetadata}}{
-#'     A data.table. Metadata about all viruses in the DataSpace.
-#'   }
-#' }
-#'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{initialize(login = NULL, password = NULL, verbose = FALSE,
-#'   onStaging = FALSE)}}{
-#'     Initialize a \code{DataSpaceConnection} object.
-#'     See \code{\link{connectDS}}.
-#'   }
-#'   \item{\code{print()}}{
-#'     Print the \code{DataSpaceConnection} object.
-#'   }
-#'   \item{\code{getStudy(study, groupId = NULL)}}{
-#'     Create a \code{\link{DataSpaceStudy}} object.
-#'
-#'     \code{study}: A character. Name of the study to retrieve.
-#'   }
-#'   \item{\code{getGroup(groupId)}}{
-#'     Create a \code{\link{DataSpaceStudy}} object.
-#'
-#'     \code{groupId}: An integer. ID of the group to retrieve.
-#'   }
-#'   \item{\code{downloadPublicationData(publicationID, outputDir = file.path("~", "Downloads"), unzip = TRUE, verbose = TRUE)}}{
-#'     Download publication data for a chosen publication.
-#'
-#'     \code{publicationID}: A character or integer. ID for the publication to download data for.
-#'
-#'     \code{outputDir}: A character. Path to directory to download publication data.
-#'
-#'     \code{unzip}: A boolean. If TRUE, unzip publication data to outputDir.
-#'
-#'     \code{verbose}: A boolean. Default TRUE.
-#'
-#'   }
-#'   \item{\code{refresh()}}{
-#'     Refresh the connection object to update available studies and groups.
-#'   }
-#'   \item{\code{filterMabGrid(using, value)}}{
-#'     Filter rows in the mAb grid by specifying the values to keep in the
-#'     columns found in the \code{mabGrid} field. It takes the column and the
-#'     values and filters the underlying tables.
-#'
-#'     \code{using}: A character. Name of the column to filter.
-#'
-#'     \code{value}: A character vector. Values to keep in the mAb grid.
-#'   }
-#'   \item{\code{getMab()}}{
-#'     Create a \code{\link{DataSpaceMab}} object.
-#'   }
-#'   \item{\code{resetMabGrid()}}{
-#'     Reset the mAb grid to the unfiltered state.
-#'   }
-#' }
 #'
 #' @seealso \code{\link{connectDS}} \code{\link{DataSpaceR-package}}
 #'
@@ -107,9 +26,6 @@
 #' con$refresh()
 #' }
 #'
-#' @docType class
-#' @format NULL
-#'
 #' @importFrom jsonlite fromJSON
 #' @importFrom curl has_internet nslookup
 #' @importFrom Rlabkey labkey.selectRows
@@ -117,6 +33,20 @@
 DataSpaceConnection <- R6Class(
   classname = "DataSpaceConnection",
   public = list(
+
+    #' @description
+    #' Initialize a \code{DataSpaceConnection} object.
+    #' See \code{\link{connectDS}}.
+    #' @param login A character. Optional argument. If there is no netrc file a
+    #' temporary one can be written by passing login and password of an active
+    #' DataSpace account.
+    #' @param password A character. Optional. The password for the selected
+    #' login.
+    #' @param verbose A logical. Whether to print the extra details for
+    #' troubleshooting.
+    #' @param onStaging A logical. Whether to connect to the staging server
+    #' instead of the production server.
+    #' @return A new `DataSpaceConnection` object.
     initialize = function(login = NULL,
                           password = NULL,
                           verbose = FALSE,
@@ -173,6 +103,9 @@ DataSpaceConnection <- R6Class(
 
       NULL
     },
+
+    #' @description
+    #' Print the \code{DataSpaceConnection} object.
     print = function() {
       cat("<DataSpaceConnection>")
       cat("\n  URL:", private$.config$labkeyUrlBase)
@@ -186,6 +119,10 @@ DataSpaceConnection <- R6Class(
       cat("\n    -", sum(private$.availablePublications$publication_data_available), "publications with data")
       cat("\n")
     },
+
+    #' @description
+    #' Create a \code{\link{DataSpaceStudy}} object.
+    #' @param study A character. Name of the study to retrieve.
     getStudy = function(study) {
       if (study != "") {
         studyInfo <- as.list(
@@ -197,6 +134,10 @@ DataSpaceConnection <- R6Class(
 
       DataSpaceStudy$new(study, private$.config, NULL, studyInfo)
     },
+
+    #' @description
+    #' Create a \code{\link{DataSpaceStudy}} object.
+    #' @param groupId An integer. ID of the group to retrieve.
     getGroup = function(groupId) {
       assert_that(
         is.number(groupId),
@@ -212,6 +153,13 @@ DataSpaceConnection <- R6Class(
 
       DataSpaceStudy$new("", private$.config, group, NULL)
     },
+
+    #' @description
+    #' Filter rows in the mAb grid by specifying the values to keep in the
+    #' columns found in the \code{mabGrid} field. It takes the column and the
+    #' values and filters the underlying tables.
+    #' @param using A character. Name of the column to filter.
+    #' @param value A character vector. Values to keep in the mAb grid.
     filterMabGrid = function(using, value) {
       assertColumn(using, self)
 
@@ -259,6 +207,9 @@ DataSpaceConnection <- R6Class(
 
       invisible(self)
     },
+
+    #' @description
+    #' Reset the mAb grid to the unfiltered state.
     resetMabGrid = function() {
       private$.mabGridBase <- private$.cache$mabGridBase
       private$.mabMetaGridBase <- private$.cache$mabMetaGridBase
@@ -266,9 +217,21 @@ DataSpaceConnection <- R6Class(
 
       invisible(self)
     },
+
+    #' @description
+    #' Create a \code{\link{DataSpaceMab}} object.
     getMab = function() {
       DataSpaceMab$new(self$mabGridSummary$mab_mixture, private$.mabFilters, private$.config)
     },
+
+    #' @description
+    #' Download publication data for a chosen publication.
+    #' @param publicationID A character/integer. ID for the publication to
+    #' download data for.
+    #' @param outputDir A character. Path to directory to download publication
+    #' data.
+    #' @param unzip A logical. If TRUE, unzip publication data to outputDir.
+    #' @param verbose A logical. Default TRUE.
     downloadPublicationData = function(publicationID,
                                        outputDir = getwd(),
                                        unzip = TRUE,
@@ -329,6 +292,9 @@ DataSpaceConnection <- R6Class(
       # Return path of zip file
       invisible(localZipPath)
     },
+
+    #' @description
+    #' Refresh the connection object to update available studies and groups.
     refresh = function() {
       tries <- c(
         class(try(
@@ -361,18 +327,31 @@ DataSpaceConnection <- R6Class(
     }
   ),
   active = list(
+
+    #' @field config A list. Stores configuration of the connection object such as
+    #' URL, path and username.
     config = function() {
       private$.config
     },
+
+    #' @field availableStudies A data.table. The table of available studies.
     availableStudies = function() {
       private$.availableStudies
     },
+
+    #' @field availableGroups A data.table. The table of available groups.
     availableGroups = function() {
       private$.availableGroups
     },
+
+    #' @field availablePublications A data.table. The table of available
+    #' publications.
     availablePublications = function() {
       private$.availablePublications[, !c("document_id", "remotePath")]
     },
+
+    #' @field mabGridSummary A data.table. The filtered grid with updated
+    #' \code{n_} columns and \code{geometric_mean_curve_ic50}.
     mabGridSummary = function() {
       mabGridBase <- copy(private$.mabGridBase)
       mabMetaGridBase <- copy(private$.mabMetaGridBase)
@@ -416,6 +395,8 @@ DataSpaceConnection <- R6Class(
 
       mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)]
     },
+
+    #' @field mabGrid A data.table. The filtered mAb grid.
     mabGrid = function() {
       mabGridBase <- copy(private$.mabGridBase)
       mabMetaGridBase <- copy(private$.mabMetaGridBase)
@@ -448,7 +429,6 @@ DataSpaceConnection <- R6Class(
         ]
       )
 
-
       setkey(mabGridBase, mab_mix_id)
       setkey(mabMetaGridBase, mab_mix_id)
 
@@ -461,6 +441,9 @@ DataSpaceConnection <- R6Class(
 
       mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, virus, clade, tier, curve_ic50, study)]
     },
+
+    #' @field virusMetadata A data.table. Metadata about all viruses in the
+    #' DataSpace.
     virusMetadata = function() {
       private$.virusMetadata
     }
@@ -499,6 +482,7 @@ DataSpaceConnection <- R6Class(
 
       private$.availableStudies <- availableStudies
     },
+
     .getStats = function() {
       stats <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -513,6 +497,7 @@ DataSpaceConnection <- R6Class(
 
       private$.stats <- stats
     },
+
     .getAvailableGroups = function() {
       participantGroupApi <- paste0(
         private$.config$labkeyUrlBase,
@@ -558,6 +543,7 @@ DataSpaceConnection <- R6Class(
 
       private$.availableGroups <- availableGroups
     },
+
     .getMabGrid = function() {
       mabGridBase <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -587,6 +573,7 @@ DataSpaceConnection <- R6Class(
 
       invisible(NULL)
     },
+
     .getVirusMetadata = function() {
       colSelect <- c(
         "assay_identifier", "virus", "virus_type", "neutralization_tier", "clade",
@@ -608,6 +595,7 @@ DataSpaceConnection <- R6Class(
 
       private$.virusMetadata <- virusMetadata
     },
+
     .getAvailablePublications = function() {
       sqlQuery <-
         "
