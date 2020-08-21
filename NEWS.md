@@ -3,8 +3,11 @@
 * Added `virusMetadata` field to `DataSpaceConnection` which shows virus metadata for viruses used in NAb assays (thanks @helenmiller16 #26)
 * Added `availablePublications` field to `DataSpaceConnection` which summarizes all available publications  (thanks @helenmiller16 #27)
 * Added `downloadPublicationData` method to `DataSpaceConnection` which will download available publication data for a specified publication (thanks @helenmiller16 #27)
-* Added a vignette: `Accessing Publication Data`  (thanks @helenmiller16 #27)
+* Added a vignette: `Accessing Publication Data` (thanks @helenmiller16 #27)
 * Made `PKMAb` dataset available to retrieve in `DataSpaceStudy` (thanks @helenmiller16 and @jmtaylor-fhcrc #27)
+* Relaxed some assumptions when pulling non-integrated data, which allows users to pull non-integrated mab data, like in cvd812. (thanks @helenmiller16 #28)
+* Fixed a test for `mabGridSummary$geometric_mean_curve_ic50` calculation to reflect updated data. (thanks @helenmiller16 #28)
+* Updated documentation using the R6 documentation syntax in roxygen
 
 # DataSpaceR 0.7.3
 
