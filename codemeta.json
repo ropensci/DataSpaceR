@@ -10,14 +10,13 @@
   "codeRepository": "https://github.com/ropensci/DataSpaceR",
   "issueTracker": "https://github.com/ropensci/DataSpaceR/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.2 (2019-12-12)",
+  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
   "author": [
     {
       "@type": "Person",
@@ -231,12 +230,8 @@
     }
   ],
   "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
-  "fileSize": "52.899KB",
-  "contIntegration": [
-    "https://travis-ci.org/ropensci/DataSpaceR",
-    "https://ci.appveyor.com/project/juyeongkim/dataspacer/branch/master",
-    "https://codecov.io/gh/ropensci/DataSpaceR/branch/master"
-  ],
+  "fileSize": "303.901KB",
+  "contIntegration": "https://codecov.io/gh/ropensci/DataSpaceR/branch/master",
   "keywords": [
     "r",
     "labkey",
@@ -249,7 +244,7 @@
     "hvtn",
     "immunology"
   ],
-  "developmentStatus": "https://www.repostatus.org/#active",
+  "developmentStatus": ["https://www.repostatus.org/#active", "https://www.tidyverse.org/lifecycle/#maturing"],
   "contributor": {},
   "funder": {},
   "readme": "https://github.com/ropensci/DataSpaceR/blob/master/README.md",
@@ -259,5 +254,14 @@
     "name": "Comprehensive R Archive Network (CRAN)",
     "url": "https://cran.r-project.org"
   },
-  "relatedLink": ["https://CRAN.R-project.org/package=DataSpaceR", "https://docs.ropensci.org/DataSpaceR"]
+  "relatedLink": [
+    "https://CRAN.R-project.org/package=DataSpaceR",
+    "https://docs.ropensci.org/DataSpaceR",
+    "https://docs.ropensci.org/DataSpaceR/"
+  ],
+  "review": {
+    "@type": "Review",
+    "url": "https://github.com/ropensci/software-review/issues/261",
+    "provider": "https://ropensci.org"
+  }
 }
