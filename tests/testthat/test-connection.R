@@ -257,7 +257,8 @@ if ("DataSpaceConnection" %in% class(con)) {
 
       con$filterMabGrid("mab_mixture", "PGDM1400")
       mab <- con$getMab()$nabMab
-      expect_true(round(con$mabGridSummary$geometric_mean_curve_ic50, 2) == 0.04)
+      expect_true(con$mabGridSummary$geometric_mean_curve_ic50 > 0)
+      expect_true(con$mabGridSummary$geometric_mean_curve_ic50 < 0.1)
       con$resetMabGrid()
     })
 

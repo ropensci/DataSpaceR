@@ -1,7 +1,7 @@
 ---
 title: "Introduction to DataSpaceR"
 author: "Ju Yeong Kim"
-date: "2020-08-20"
+date: "2020-11-23"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to DataSpaceR}
@@ -28,9 +28,9 @@ On your R console, create a `netrc` file using a function from `DataSpaceR`:
 
 ```r
 writeNetrc(
-  login = "yourEmail@address.com", 
+  login = "yourEmail@address.com",
   password = "yourSecretPassword",
-  netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path 
+  netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path
 )
 ```
 
@@ -67,14 +67,14 @@ con <- connectDS()
 con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
-#>   User: jkim2345@scharp.org
+#>   User: hmiller@scharp.org
 #>   Available studies: 260
-#>     - 76 studies with data
-#>     - 4994 subjects
+#>     - 77 studies with data
+#>     - 5049 subjects
 #>     - 423195 data points
-#>   Available groups: 6
-#>   Available publications: 1403
-#>     - 1 publications with data
+#>   Available groups: 3
+#>   Available publications: 1478
+#>     - 10 publications with data
 ```
 
 The call to `connectDS` instantiates the connection. Printing the object shows where it's connected and the available studies.
@@ -105,9 +105,9 @@ cvd256
 #>   Study: cvd256
 #>   URL: https://dataspace.cavd.org/CAVD/cvd256
 #>   Available datasets:
-#>     - BAMA
+#>     - Binding Ab multiplex assay
 #>     - Demographics
-#>     - NAb
+#>     - Neutralizing antibody
 #>   Available non-integrated datasets:
 ```
 
@@ -148,19 +148,30 @@ We can grab any of the datasets listed in the connection (`availableDatasets`).
 ```r
 NAb <- cvd256$getDataset("NAb")
 dim(NAb)
-#> [1] 1419   29
+#> [1] 1419   33
 colnames(NAb)
-#>  [1] "ParticipantId"          "ParticipantVisit/Visit" "visit_day"              "assay_identifier"       "summary_level"         
-#>  [6] "specimen_type"          "antigen"                "antigen_type"           "virus"                  "virus_type"            
-#> [11] "virus_insert_name"      "clade"                  "neutralization_tier"    "tier_clade_virus"       "target_cell"           
-#> [16] "initial_dilution"       "titer_ic50"             "titer_ic80"             "response_call"          "nab_lab_source_key"    
-#> [21] "lab_code"               "exp_assayid"            "titer_ID50"             "titer_ID80"             "nab_response_ID50"     
-#> [26] "nab_response_ID80"      "slope"                  "vaccine_matched"        "study_prot"
+#>  [1] "ParticipantId"          "ParticipantVisit/Visit"
+#>  [3] "visit_day"              "assay_identifier"      
+#>  [5] "summary_level"          "specimen_type"         
+#>  [7] "antigen"                "antigen_type"          
+#>  [9] "virus"                  "virus_type"            
+#> [11] "virus_insert_name"      "clade"                 
+#> [13] "neutralization_tier"    "tier_clade_virus"      
+#> [15] "target_cell"            "initial_dilution"      
+#> [17] "titer_ic50"             "titer_ic80"            
+#> [19] "response_call"          "nab_lab_source_key"    
+#> [21] "lab_code"               "exp_assayid"           
+#> [23] "titer_ID50"             "titer_ID80"            
+#> [25] "nab_response_ID50"      "nab_response_ID80"     
+#> [27] "slope"                  "vaccine_matched"       
+#> [29] "study_prot"             "virus_full_name"       
+#> [31] "virus_species"          "virus_host_cell"       
+#> [33] "virus_backbone"
 ```
 
 The *cvd256* object is an [`R6`](https://cran.r-project.org/package=R6) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
 
-We can get detailed variable information using `getDatasetDescription`.
+We can get detailed variable information using `getDatasetDescription`. `getDataset` and `getDatasetDescription` accept either the `name` or `label` field listed in `availableDatasets`.
 
 
 ```r
@@ -196,7 +207,11 @@ knitr::kable(cvd256$getDatasetDescription("NAb"))
 |titer_ic80          |Titer IC80                                  |Number (Double)      |The 80% maximal inhibitory concentration (IC80).                                                                                                                          |
 |vaccine_matched     |Antigen vaccine match indicator             |True/False (Boolean) |Indicates if the interactive part of the antigen was designed to match the immunogen in the vaccine.                                                                      |
 |virus               |Virus name                                  |Text (String)        |The term for the virus (antigen) being tested.                                                                                                                            |
+|virus_backbone      |Virus backbone                              |Text (String)        |Indicates the backbone used to generate the virus if from a different plasmid than the envelope.                                                                          |
+|virus_full_name     |Virus full name                             |Text (String)        |The full name of the virus used in the construction of the nAb antigen.                                                                                                   |
+|virus_host_cell     |Virus host cell                             |Text (String)        |The host cell used to incubate the virus stock.                                                                                                                           |
 |virus_insert_name   |Virus insert name                           |Text (String)        |The amino acid sequence inserted in the virus construct.                                                                                                                  |
+|virus_species       |Virus species                               |Text (String)        |A classification for virus species using informal taxonomy.                                                                                                               |
 |virus_type          |Virus type                                  |Text (String)        |The type of virus used in the construction of the nAb antigen.                                                                                                            |
 |visit_day           |Visit Day                                   |Integer              |Target study day defined for a study visit. Study days are relative to Day 0, where Day 0 is typically defined as enrollment and/or first injection.                      |
 
@@ -207,7 +222,7 @@ To get only a subset of the data and speed up the download, filters can be passe
 cvd256Filter <- makeFilter(c("visit_day", "EQUAL", "0"))
 NAb_day0 <- cvd256$getDataset("NAb", colFilter = cvd256Filter)
 dim(NAb_day0)
-#> [1] 709  29
+#> [1] 709  33
 ```
 
 See `?makeFilter` for more information on the syntax.
@@ -233,12 +248,12 @@ cavd
 #>   Study: CAVD
 #>   URL: https://dataspace.cavd.org/CAVD
 #>   Available datasets:
-#>     - BAMA
+#>     - Binding Ab multiplex assay
 #>     - Demographics
-#>     - ELISPOT
-#>     - ICS
-#>     - NAb
-#>     - PKMAb
+#>     - Enzyme-Linked ImmunoSpot
+#>     - Intracellular Cytokine Staining
+#>     - Neutralizing antibody
+#>     - PK MAb
 #>   Available non-integrated datasets:
 knitr::kable(cavd$availableDatasets)
 ```
@@ -248,11 +263,11 @@ knitr::kable(cavd$availableDatasets)
 |name         |label                           |      n|integrated |
 |:------------|:-------------------------------|------:|:----------|
 |BAMA         |Binding Ab multiplex assay      | 170320|TRUE       |
-|Demographics |Demographics                    |   4994|TRUE       |
+|Demographics |Demographics                    |   5049|TRUE       |
 |ELISPOT      |Enzyme-Linked ImmunoSpot        |   5610|TRUE       |
 |ICS          |Intracellular Cytokine Staining | 195883|TRUE       |
 |NAb          |Neutralizing antibody           |  51382|TRUE       |
-|PKMAb        |PK MAb                          |   2041|TRUE       |
+|PKMAb        |PK MAb                          |   3217|TRUE       |
 
 In all-study connection, `getDataset` will combine the requested datasets. Note that in most cases, the datasets will have too many subjects for quick data transfer, making filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
 
@@ -261,20 +276,44 @@ In all-study connection, `getDataset` will combine the requested datasets. Note 
 conFilter <- makeFilter(c("species", "EQUAL", "Human"))
 human <- cavd$getDataset("Demographics", colFilter = conFilter)
 dim(human)
-#> [1] 3087   36
+#> [1] 3142   36
 colnames(human)
-#>  [1] "SubjectId"                       "SubjectVisit/Visit"              "species"                        
-#>  [4] "subspecies"                      "sexatbirth"                      "race"                           
-#>  [7] "ethnicity"                       "country_enrollment"              "circumcised_enrollment"         
-#> [10] "bmi_enrollment"                  "agegroup_range"                  "agegroup_enrollment"            
-#> [13] "age_enrollment"                  "study_label"                     "study_start_date"               
-#> [16] "study_first_enr_date"            "study_fu_complete_date"          "study_public_date"              
-#> [19] "study_network"                   "study_last_vaccination_day"      "study_type"                     
-#> [22] "study_part"                      "study_group"                     "study_arm"                      
-#> [25] "study_arm_summary"               "study_arm_coded_label"           "study_randomization"            
-#> [28] "study_product_class_combination" "study_product_combination"       "study_short_name"               
-#> [31] "study_grant_pi_name"             "study_strategy"                  "study_prot"                     
-#> [34] "genderidentity"                  "studycohort"                     "bmi_category"
+#>  [1] "SubjectId"                      
+#>  [2] "SubjectVisit/Visit"             
+#>  [3] "species"                        
+#>  [4] "subspecies"                     
+#>  [5] "sexatbirth"                     
+#>  [6] "race"                           
+#>  [7] "ethnicity"                      
+#>  [8] "country_enrollment"             
+#>  [9] "circumcised_enrollment"         
+#> [10] "bmi_enrollment"                 
+#> [11] "agegroup_range"                 
+#> [12] "agegroup_enrollment"            
+#> [13] "age_enrollment"                 
+#> [14] "study_label"                    
+#> [15] "study_start_date"               
+#> [16] "study_first_enr_date"           
+#> [17] "study_fu_complete_date"         
+#> [18] "study_public_date"              
+#> [19] "study_network"                  
+#> [20] "study_last_vaccination_day"     
+#> [21] "study_type"                     
+#> [22] "study_part"                     
+#> [23] "study_group"                    
+#> [24] "study_arm"                      
+#> [25] "study_arm_summary"              
+#> [26] "study_arm_coded_label"          
+#> [27] "study_randomization"            
+#> [28] "study_product_class_combination"
+#> [29] "study_product_combination"      
+#> [30] "study_short_name"               
+#> [31] "study_grant_pi_name"            
+#> [32] "study_strategy"                 
+#> [33] "study_prot"                     
+#> [34] "genderidentity"                 
+#> [35] "studycohort"                    
+#> [36] "bmi_category"
 ```
 
 Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
@@ -297,10 +336,7 @@ knitr::kable(con$availableGroups)
 
 |  id|label                              |original_label                     |description                                                                                                               |created_by |shared |   n|studies                        |
 |---:|:----------------------------------|:----------------------------------|:-------------------------------------------------------------------------------------------------------------------------|:----------|:------|---:|:------------------------------|
-| 216|mice                               |mice                               |NA                                                                                                                        |readjk     |FALSE  |  75|cvd468, cvd483, cvd316, cvd331 |
-| 217|CAVD 242                           |CAVD 242                           |This is a fake group for CAVD 242                                                                                         |readjk     |FALSE  |  30|cvd242                         |
 | 220|NYVAC durability comparison        |NYVAC_durability                   |Compare durability in 4 NHP studies using NYVAC-C (vP2010)  and NYVAC-KC-gp140 (ZM96) products.                           |ehenrich   |TRUE   |  78|cvd281, cvd434, cvd259, cvd277 |
-| 224|cvd338                             |cvd338                             |NA                                                                                                                        |readjk     |FALSE  |  36|cvd338                         |
 | 228|HVTN 505 case control subjects     |HVTN 505 case control subjects     |Participants from HVTN 505 included in the case-control analysis                                                          |drienna    |TRUE   | 189|vtn505                         |
 | 230|HVTN 505 polyfunctionality vs BAMA |HVTN 505 polyfunctionality vs BAMA |Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort |drienna    |TRUE   | 170|vtn505                         |
 
@@ -314,11 +350,11 @@ nyvac
 #>   Group: NYVAC durability comparison
 #>   URL: https://dataspace.cavd.org/CAVD
 #>   Available datasets:
-#>     - BAMA
+#>     - Binding Ab multiplex assay
 #>     - Demographics
-#>     - ELISPOT
-#>     - ICS
-#>     - NAb
+#>     - Enzyme-Linked ImmunoSpot
+#>     - Intracellular Cytokine Staining
+#>     - Neutralizing antibody
 #>   Available non-integrated datasets:
 ```
 
@@ -328,16 +364,16 @@ Retrieving a dataset is the same as before.
 ```r
 NAb_nyvac <- nyvac$getDataset("NAb")
 dim(NAb_nyvac)
-#> [1] 4281   29
+#> [1] 4281   33
 ```
 
 
 
 ## Access Virus Metadata
 
-DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NAb) assays. This data can be accessed through the app on the [NAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB/antigens) and [NAb MAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB%20MAB/antigens). 
+DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NAb) assays. This data can be accessed through the app on the [NAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB/antigens) and [NAb MAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB%20MAB/antigens).
 
-We can access this metadata in `DataSpaceR` with `con$virusMetadata`: 
+We can access this metadata in `DataSpaceR` with `con$virusMetadata`:
 
 
 ```r
@@ -367,9 +403,9 @@ vignette("Accessing_Monoconal_Antibody_Data")
 
 ## Browse and Download Publication Data
 
-DataSpace maintains a curated collection of relevant publications, which can be accessed through the [Publications page](https://dataspace.cavd.org/cds/CAVD/app.view?#learn/learn/Publication) through the app. Metadata about these publications can be accessed through `DataSpaceR` with `con$availablePublications`. 
+DataSpace maintains a curated collection of relevant publications, which can be accessed through the [Publications page](https://dataspace.cavd.org/cds/CAVD/app.view?#learn/learn/Publication) through the app. Metadata about these publications can be accessed through `DataSpaceR` with `con$availablePublications`.
 
-See Publication Data vignette for a tutorial on accessing publication data through DataSpaceR. 
+See Publication Data vignette for a tutorial on accessing publication data through DataSpaceR.
 
 ```r
 vignette("Publication_Data")
@@ -431,7 +467,7 @@ The followings are the tables of all fields and methods that work on `DataSpaceC
 sessionInfo()
 #> R version 4.0.2 (2020-06-22)
 #> Platform: x86_64-apple-darwin17.0 (64-bit)
-#> Running under: macOS Catalina 10.15.6
+#> Running under: macOS Catalina 10.15.7
 #> 
 #> Matrix products: default
 #> BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
@@ -441,15 +477,24 @@ sessionInfo()
 #> [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 #> 
 #> attached base packages:
-#> [1] stats     graphics  grDevices utils     datasets  methods   base     
+#> [1] stats     graphics  grDevices utils     datasets 
+#> [6] methods   base     
 #> 
 #> other attached packages:
-#> [1] knitr_1.29        data.table_1.13.0 testthat_2.3.2    DataSpaceR_0.7.4 
+#> [1] data.table_1.13.0 DataSpaceR_0.7.4 
+#> [3] knitr_1.29       
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.5        compiler_4.0.2    pryr_0.1.4        highr_0.8         tools_4.0.2       digest_0.6.25     jsonlite_1.7.0   
-#>  [8] evaluate_0.14     rlang_0.4.7       cli_2.0.2         rstudioapi_0.11   crosstalk_1.1.0.1 curl_4.3          yaml_2.2.1       
-#> [15] xfun_0.16         httr_1.4.2        stringr_1.4.0     htmlwidgets_1.5.1 DT_0.15           webshot_0.5.2     glue_1.4.1       
-#> [22] R6_2.4.1          processx_3.4.3    fansi_0.4.1       Rlabkey_2.5.2     rmarkdown_2.3     callr_3.4.3       magrittr_1.5     
-#> [29] codetools_0.2-16  ps_1.3.4          htmltools_0.5.0   assertthat_0.2.1  stringi_1.4.6     crayon_1.3.4
+#>  [1] Rcpp_1.0.5        codetools_0.2-16 
+#>  [3] digest_0.6.25     assertthat_0.2.1 
+#>  [5] R6_2.4.1          jsonlite_1.7.1   
+#>  [7] magrittr_1.5      evaluate_0.14    
+#>  [9] highr_0.8         httr_1.4.1       
+#> [11] rlang_0.4.7       stringi_1.4.6    
+#> [13] curl_4.3          pryr_0.1.4       
+#> [15] DT_0.14           tools_4.0.2      
+#> [17] stringr_1.4.0     htmlwidgets_1.5.1
+#> [19] Rlabkey_2.5.1     crosstalk_1.1.0.1
+#> [21] xfun_0.15         yaml_2.2.1       
+#> [23] compiler_4.0.2    htmltools_0.5.0
 ```

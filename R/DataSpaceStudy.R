@@ -101,11 +101,11 @@ DataSpaceStudy <- R6Class(
       cat("\n  URL:", url)
       cat("\n  Available datasets:")
       if (nrow(private$.availableDatasets) > 0) {
-        cat(paste0("\n    - ", private$.availableDatasets$name), sep = "")
+        cat(paste0("\n    - ", private$.availableDatasets$label), sep = "")
       }
       cat("\n  Available non-integrated datasets:")
       if (nrow(private$.availableNIDatasets) > 0) {
-        cat(paste0("\n    - ", private$.availableNIDatasets$name), sep = "")
+        cat(paste0("\n    - ", private$.availableNIDatasets$label), sep = "")
       }
       cat("\n")
     },
@@ -113,6 +113,7 @@ DataSpaceStudy <- R6Class(
     #' @description
     #' Get a dataset from the connection.
     #' @param datasetName A character. Name of the dataset to retrieve.
+    #' Accepts the value in either the "name" or "label" field from \code{availableDatasets}.
     #' @param mergeExtra A logical. If set to TRUE, merge extra information.
     #' Ignored for non-integrated datasets.
     #' @param colFilter A matrix. A filter as returned by Rlabkey's
@@ -135,7 +136,7 @@ DataSpaceStudy <- R6Class(
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
       assert_that(
-        datasetName %in% self$availableDatasets$name,
+        datasetName %in% self$availableDatasets$name | datasetName %in% self$availableDatasets$label,
         msg = paste0(datasetName, " is invalid dataset")
       )
       assert_that(is.logical(mergeExtra))
@@ -144,6 +145,11 @@ DataSpaceStudy <- R6Class(
         msg = "colFilter is not a matrix"
       )
       assert_that(is.logical(reload))
+
+      # Use dataset name instead of label
+      if (datasetName %in% self$availableDatasets$label) {
+        datasetName <- self$availableDatasets[label == datasetName]$name
+      }
 
       # build a list of arguments to digest and compare
       args <- list(
@@ -278,14 +284,20 @@ DataSpaceStudy <- R6Class(
     #' @description
     #' Get variable information.
     #' @param datasetName A character. Name of the dataset to retrieve.
+    #' Accepts the value in either the "name" or "label" field from \code{availableDatasets}.
     #' @param outputDir A character. Directory path.
     getDatasetDescription = function(datasetName, outputDir = NULL) {
       assert_that(is.character(datasetName))
       assert_that(length(datasetName) == 1)
       assert_that(
-        datasetName %in% self$availableDatasets$name,
+        datasetName %in% self$availableDatasets$name | datasetName %in% self$availableDatasets$label,
         msg = paste0(datasetName, " is not a available dataset")
       )
+
+      # Use dataset name instead of label
+      if (datasetName %in% self$availableDatasets$label) {
+        datasetName <- self$availableDatasets[label == datasetName]$name
+      }
 
       if (self$availableDatasets[name == datasetName]$integrated) {
         varInfo <- labkey.getQueryDetails(
