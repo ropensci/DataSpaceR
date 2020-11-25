@@ -145,7 +145,8 @@ Get a dataset from the connection.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{datasetName}}{A character. Name of the dataset to retrieve.}
+\item{\code{datasetName}}{A character. Name of the dataset to retrieve.
+Accepts the value in either the "name" or "label" field from \code{availableDatasets}.}
 
 \item{\code{mergeExtra}}{A logical. If set to TRUE, merge extra information.
 Ignored for non-integrated datasets.}
@@ -190,7 +191,8 @@ Get variable information.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{datasetName}}{A character. Name of the dataset to retrieve.}
+\item{\code{datasetName}}{A character. Name of the dataset to retrieve.
+Accepts the value in either the "name" or "label" field from \code{availableDatasets}.}
 
 \item{\code{outputDir}}{A character. Directory path.}
 }

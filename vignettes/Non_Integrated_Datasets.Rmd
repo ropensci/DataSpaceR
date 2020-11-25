@@ -1,7 +1,7 @@
 ---
 title: "Accessing Non-Integrated Datasets"
 author: "Helen Miller"
-date: "2020-08-20"
+date: "2020-11-23"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Non-Integrated Datasets}
@@ -27,13 +27,13 @@ vtn505
 #>   Study: vtn505
 #>   URL: https://dataspace.cavd.org/CAVD/vtn505
 #>   Available datasets:
-#>     - BAMA
+#>     - Binding Ab multiplex assay
 #>     - Demographics
-#>     - ICS
-#>     - NAb
+#>     - Intracellular Cytokine Staining
+#>     - Neutralizing antibody
 #>   Available non-integrated datasets:
 #>     - ADCP
-#>     - DEM SUPP
+#>     - Demographics (Supplemental)
 #>     - Fc Array
 ```
 
@@ -63,11 +63,17 @@ Non-Integrated datasets can be loaded with `getDataset` like integrated data. Th
 
 ```r
 adcp <- vtn505$getDataset("ADCP")
+#> downloading vtn505_adcp.zip to /var/folders/9_/h20m2y51053_6bc26dvzrs140000gn/T//RtmpZyMMda...
+#> No encoding supplied: defaulting to UTF-8.
+#> unzipping vtn505_adcp.zip to /var/folders/9_/h20m2y51053_6bc26dvzrs140000gn/T//RtmpZyMMda/vtn505_adcp
 dim(adcp)
 #> [1] 378  11
 colnames(adcp)
-#>  [1] "study_prot"             "ParticipantId"          "study_day"              "lab_code"               "specimen_type"         
-#>  [6] "antigen"                "percent_cv"             "avg_phagocytosis_score" "positivity_threshold"   "response"              
+#>  [1] "study_prot"             "ParticipantId"         
+#>  [3] "study_day"              "lab_code"              
+#>  [5] "specimen_type"          "antigen"               
+#>  [7] "percent_cv"             "avg_phagocytosis_score"
+#>  [9] "positivity_threshold"   "response"              
 #> [11] "assay_identifier"
 ```
 
@@ -85,10 +91,10 @@ If you will be accessing the data at another time and don't want to have to re-d
 
 ```r
 vtn505$dataDir
-#> [1] "/var/folders/9m/vwxpkj1100z3gpsf27m21fx00000gn/T//RtmptzIOlk"
+#> [1] "/var/folders/9_/h20m2y51053_6bc26dvzrs140000gn/T//RtmpZyMMda"
 vtn505$setDataDir(".")
 vtn505$dataDir
-#> [1] "/Users/jkim/git/DataSpaceR/vignettes"
+#> [1] "/Users/hmiller/DataSpace/DataSpaceR/vignettes"
 ```
 
 If the dataset already exists in the specified `dataDir` or `outputDir`, it will be not be downloaded. This can be overridden with `reload=TRUE`, which forces a re-download. 
@@ -101,7 +107,7 @@ If the dataset already exists in the specified `dataDir` or `outputDir`, it will
 sessionInfo()
 #> R version 4.0.2 (2020-06-22)
 #> Platform: x86_64-apple-darwin17.0 (64-bit)
-#> Running under: macOS Catalina 10.15.6
+#> Running under: macOS Catalina 10.15.7
 #> 
 #> Matrix products: default
 #> BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
@@ -111,15 +117,25 @@ sessionInfo()
 #> [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 #> 
 #> attached base packages:
-#> [1] stats     graphics  grDevices utils     datasets  methods   base     
+#> [1] stats     graphics  grDevices utils     datasets 
+#> [6] methods   base     
 #> 
 #> other attached packages:
-#> [1] knitr_1.29        data.table_1.13.0 testthat_2.3.2    DataSpaceR_0.7.4 
+#> [1] data.table_1.13.0 DataSpaceR_0.7.4 
+#> [3] knitr_1.29       
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.5        compiler_4.0.2    pryr_0.1.4        highr_0.8         tools_4.0.2       digest_0.6.25     jsonlite_1.7.0   
-#>  [8] evaluate_0.14     rlang_0.4.7       cli_2.0.2         rstudioapi_0.11   crosstalk_1.1.0.1 curl_4.3          yaml_2.2.1       
-#> [15] xfun_0.16         httr_1.4.2        stringr_1.4.0     htmlwidgets_1.5.1 DT_0.15           webshot_0.5.2     glue_1.4.1       
-#> [22] R6_2.4.1          processx_3.4.3    fansi_0.4.1       Rlabkey_2.5.2     rmarkdown_2.3     callr_3.4.3       magrittr_1.5     
-#> [29] codetools_0.2-16  ps_1.3.4          htmltools_0.5.0   assertthat_0.2.1  stringi_1.4.6     crayon_1.3.4
+#>  [1] Rcpp_1.0.5        Rlabkey_2.5.1    
+#>  [3] magrittr_1.5      R6_2.4.1         
+#>  [5] rlang_0.4.7       stringr_1.4.0    
+#>  [7] httr_1.4.1        highr_0.8        
+#>  [9] tools_4.0.2       webshot_0.5.2    
+#> [11] DT_0.14           xfun_0.15        
+#> [13] htmltools_0.5.0   crosstalk_1.1.0.1
+#> [15] yaml_2.2.1        assertthat_0.2.1 
+#> [17] digest_0.6.25     pryr_0.1.4       
+#> [19] htmlwidgets_1.5.1 codetools_0.2-16 
+#> [21] curl_4.3          evaluate_0.14    
+#> [23] stringi_1.4.6     compiler_4.0.2   
+#> [25] jsonlite_1.7.1
 ```

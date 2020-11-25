@@ -56,10 +56,10 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
       "initialize"
     )
     test_that("`DataSpaceStudy` contains correct fields and methods", {
-      expect_equal(names(cavd), con_names)
+      expect_equal(sort(names(cavd)), sort(con_names))
     })
 
-    if (identical(names(cavd), con_names)) {
+    if (identical(sort(names(cavd)), sort(con_names))) {
       test_that("`print`", {
         path <- ifelse(study == "", study, paste0("/", study))
         con_output <- c(
@@ -99,7 +99,7 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
           c("name", "label", "n", "integrated")
         )
         expect_equal(
-          cavd$availableDatasets$name,
+          cavd$availableDatasets$label,
           c(datasets, niDatasets)
         )
       })
@@ -201,6 +201,14 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         }
       })
 
+      test_that("`getDataset` (label)", {
+        for (datasetLabel in cavd$availableDatasets$label) {
+          dataset <- try(cavd$getDataset(datasetLabel), silent = TRUE)
+          expect_is(dataset, "data.table", info = datasetLabel)
+          expect_gt(nrow(dataset), 0)
+        }
+      })
+
       test_that("`getDataset` (access cache)", {
         for (i in seq_len(nrow(cavd$availableDatasets))) {
           datasetName <- cavd$availableDatasets$name[i]
@@ -259,6 +267,21 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         }
       })
 
+      test_that("`getDatasetDescription` (label)", {
+        for (datasetLabel in cavd$availableDatasets[integrated == TRUE]$label) {
+          dataset <- try(
+            cavd$getDatasetDescription(datasetName = datasetLabel),
+            silent = TRUE
+          )
+          expect_is(dataset, "data.table", info = datasetLabel)
+          expect_gt(nrow(dataset), 0)
+          expect_equal(
+            names(dataset),
+            c("fieldName", "caption", "type", "description")
+          )
+        }
+      })
+
       test_that("`refresh`", {
         refresh <- try(cavd$refresh(), silent = TRUE)
 
@@ -275,12 +298,20 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
 # )
 test_study(
   study = "cvd408",
-  datasets = c("BAMA", "ICS", "Demographics", "NAb")
+  datasets = c("Binding Ab multiplex assay",
+               "Intracellular Cytokine Staining",
+               "Demographics",
+               "Neutralizing antibody")
 )
 test_study(
   study = "vtn505",
-  datasets = c("BAMA", "Demographics", "ICS", "NAb"),
-  niDatasets = c("ADCP", "DEM SUPP", "Fc Array")
+  datasets = c("Binding Ab multiplex assay",
+               "Intracellular Cytokine Staining",
+               "Demographics",
+               "Neutralizing antibody"),
+  niDatasets = c("ADCP",
+                 "Demographics (Supplemental)",
+                 "Fc Array")
 )
 # test_study(
 #   study = "cvd812",
@@ -289,13 +320,20 @@ test_study(
 # )
 test_study(
   study = "",
-  datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb"),
+  datasets = c("Binding Ab multiplex assay",
+               "Intracellular Cytokine Staining",
+               "Enzyme-Linked ImmunoSpot",
+               "Demographics",
+               "Neutralizing antibody"),
   groupId = 220,
   groupLabel = c("NYVAC_durability" = "NYVAC durability comparison")
 )
 test_study(
   study = "",
-  datasets = c("BAMA", "Demographics", "ICS", "NAb"),
+  datasets = c("Binding Ab multiplex assay",
+               "Demographics",
+               "Intracellular Cytokine Staining",
+               "Neutralizing antibody"),
   groupId = ifelse(onStaging, 226, 228),
   groupLabel = {
     if (onStaging) {
@@ -310,13 +348,13 @@ email <- DataSpaceR:::getUserEmail(baseUrl, NULL)
 if (identical(email, "jkim2345@scharp.org")) {
   test_study(
     study = "",
-    datasets = c("Demographics", "NAb"),
+    datasets = c("Demographics", "Neutralizing antibody"),
     groupId = 216,
     groupLabel = c("mice" = "mice")
   )
   test_study(
     study = "",
-    datasets = c("Demographics", "NAb"),
+    datasets = c("Demographics", "Neutralizing antibody"),
     groupId = 217,
     groupLabel = c("CAVD 242" = "CAVD 242")
   )

@@ -37,9 +37,9 @@ On your R console, create a `netrc` file using a function from `DataSpaceR`:
 
 ```{r, eval=FALSE}
 writeNetrc(
-  login = "yourEmail@address.com", 
+  login = "yourEmail@address.com",
   password = "yourSecretPassword",
-  netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path 
+  netrcFile = "/your/home/directory/.netrc" # use getNetrcPath() to get the default path
 )
 ```
 
@@ -110,7 +110,7 @@ colnames(NAb)
 
 The *cvd256* object is an [`R6`](https://cran.r-project.org/package=R6) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
 
-We can get detailed variable information using `getDatasetDescription`.
+We can get detailed variable information using `getDatasetDescription`. `getDataset` and `getDatasetDescription` accept either the `name` or `label` field listed in `availableDatasets`.
 
 ```{r getVariableInfo}
 knitr::kable(cvd256$getDatasetDescription("NAb"))
@@ -186,9 +186,9 @@ dim(NAb_nyvac)
 
 ## Access Virus Metadata
 
-DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NAb) assays. This data can be accessed through the app on the [NAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB/antigens) and [NAb MAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB%20MAB/antigens). 
+DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NAb) assays. This data can be accessed through the app on the [NAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB/antigens) and [NAb MAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB%20MAB/antigens).
 
-We can access this metadata in `DataSpaceR` with `con$virusMetadata`: 
+We can access this metadata in `DataSpaceR` with `con$virusMetadata`:
 
 ```{r virusMetadata}
 knitr::kable(head(con$virusMetadata))
@@ -205,9 +205,9 @@ vignette("Accessing_Monoconal_Antibody_Data")
 
 ## Browse and Download Publication Data
 
-DataSpace maintains a curated collection of relevant publications, which can be accessed through the [Publications page](https://dataspace.cavd.org/cds/CAVD/app.view?#learn/learn/Publication) through the app. Metadata about these publications can be accessed through `DataSpaceR` with `con$availablePublications`. 
+DataSpace maintains a curated collection of relevant publications, which can be accessed through the [Publications page](https://dataspace.cavd.org/cds/CAVD/app.view?#learn/learn/Publication) through the app. Metadata about these publications can be accessed through `DataSpaceR` with `con$availablePublications`.
 
-See Publication Data vignette for a tutorial on accessing publication data through DataSpaceR. 
+See Publication Data vignette for a tutorial on accessing publication data through DataSpaceR.
 ```{r publication_data}
 vignette("Publication_Data")
 ```

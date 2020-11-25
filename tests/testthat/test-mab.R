@@ -77,7 +77,7 @@ test_that("test mab object results", {
   expect_true(all(mab$nabMab$virus %in% c("MN.3", "PVO.4", "TH023.6", "Ce0682_E4", "SHIV_C3", "SHIV_C4", "SHIV_C5")))
   expect_true(all(mab$studies$species %in% c("Non-Organism Study")))
   expect_true(all(mab$studyAndMabs$mab_mix_name_std %in% c("CH27")))
-  expect_true(nrow(mab$variableDefinitions) == 45)
+  expect_true(nrow(mab$variableDefinitions) == 49)
   expect_true(ncol(mab$variableDefinitions) == 3)
   expect_true(length(unique(mab$nabMab$prot)) == nrow(mab$studies))
   expect_true(length(unique(mab$studyAndMabs$prot)) == nrow(mab$studies))

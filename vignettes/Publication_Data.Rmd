@@ -1,7 +1,7 @@
 ---
 title: "Accessing Publication Data"
 author: "Helen Miller"
-date: "2020-08-21"
+date: "2020-11-23"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Publication Data}
@@ -26,14 +26,14 @@ con <- connectDS()
 con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
-#>   User: jkim2345@scharp.org
+#>   User: hmiller@scharp.org
 #>   Available studies: 260
-#>     - 76 studies with data
-#>     - 4994 subjects
+#>     - 77 studies with data
+#>     - 5049 subjects
 #>     - 423195 data points
-#>   Available groups: 6
-#>   Available publications: 1403
-#>     - 1 publications with data
+#>   Available groups: 3
+#>   Available publications: 1478
+#>     - 10 publications with data
 ```
 
 The `DataSpaceConnection` print method summarizes the publications and publication data. More details about publications can be accessed through `con$availablePublications`.
@@ -50,9 +50,9 @@ knitr::kable(head(con$availablePublications[, -"link"]))
 |1006           |Abbink P      |Construction and evaluation of novel rhesus monkey adenovirus vaccine vectors                                                                    |J Virol                     |2015 Feb         |25410856  |NA              |NA                |FALSE                      |
 |1303           |Abbott RK     |Precursor frequency and affinity determine B Cell competitive fitness in germinal centers, tested with germline-targeting HIV vaccine immunogens |Immunity                    |2018 Jan 16      |29287996  |NA              |NA                |FALSE                      |
 |1136           |Abu-Raddad LJ |Analytic insights into the population level impact of imperfect prophylactic HIV vaccines                                                        |J Acquir Immune Defic Syndr |2007 Aug 1       |17554215  |NA              |NA                |FALSE                      |
+|1485           |Abu-Raddad LJ |Have the explosive HIV epidemics in sub-Saharan Africa been driven by higher community viral load?                                               |AIDS                        |2013 Mar 27      |23196933  |NA              |NA                |FALSE                      |
 |842            |Acharya P     |Structural definition of an antibody-dependent cellular cytotoxicity response implicated in reduced risk for HIV-1 infection                     |J Virol                     |2014 Nov         |25165110  |NA              |NA                |FALSE                      |
 |1067           |Ackerman ME   |Polyfunctional HIV-specific antibody responses are associated with spontaneous HIV control                                                       |PLOS Pathog                 |2016 Jan         |26745376  |NA              |NA                |FALSE                      |
-|1076           |Ackerman ME   |Systems serology for evaluation of HIV vaccine trials                                                                                            |Immunol Rev                 |2017 Jan         |28133810  |NA              |NA                |FALSE                      |
 
 This table summarizes all publications, providing some information like first author, journal where it was published, and title as a `data.table`. It also includes a pubmed url where available under `link`. Related studies under `related_studies`, and related studies with data available under `studies_with_data`.  We can use `data.table` methods to filter and sort this table to browse available publications.
 
@@ -68,10 +68,11 @@ knitr::kable(vtn096_pubs[, -"link"])
 
 |publication_id |first_author |title                                                                                                                                                                              |journal              |publication_date |pubmed_id |related_studies        |studies_with_data |publication_data_available |
 |:--------------|:------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------|:----------------|:---------|:----------------------|:-----------------|:--------------------------|
+|1466           |Cram JA      |Human gut microbiota is associated with HIV-reactive immunoglobulin at baseline and following HIV vaccination                                                                      |PLoS One             |2019             |31869338  |vtn096                 |NA                |TRUE                       |
 |250            |Huang Y      |Selection of HIV vaccine candidates for concurrent testing in an efficacy trial                                                                                                    |Curr Opin Virol      |2016 Jan 28      |26827165  |mrv144, vtn096         |NA                |FALSE                      |
 |267            |Huang Y      |Predictors of durable immune responses six months after the last vaccination in preventive HIV vaccine trials                                                                      |Vaccine              |2017 Feb 22      |28131393  |mrv144, vtn096, vtn205 |NA                |FALSE                      |
 |268            |Huang Y      |Statistical methods for down-selection of treatment regimens based on multiple endpoints, with application to HIV vaccine trials                                                   |Biostatistics        |2017 Apr 1       |27649715  |mrv144, vtn096         |NA                |FALSE                      |
-|1392           |Pantaleo G   |Safety and immunogenicity of a multivalent HIV vaccine comprising envelope protein with either DNA or NYVAC vectors (HVTN 096): a phase 1b, double-blind, placebo-controlled trial |Lancet HIV           |2019 Oct 7       |31601541  |vtn096                 |NA                |FALSE                      |
+|1392           |Pantaleo G   |Safety and immunogenicity of a multivalent HIV vaccine comprising envelope protein with either DNA or NYVAC vectors (HVTN 096): a phase 1b, double-blind, placebo-controlled trial |Lancet HIV           |2019 Oct 7       |31601541  |mrv144, vtn096, vtn100 |NA                |TRUE                       |
 |1420           |Westling T   |Methods for comparing durability of immune responses between vaccine regimens in early-phase trials                                                                                |Stat Methods Med Res |2019 Jan 9       |30623732  |vtn094, vtn096         |NA                |FALSE                      |
 |281            |Yates NL     |HIV-1 envelope glycoproteins from diverse clades differentiate antibody responses and durability among vaccinees                                                                   |J Virol              |2018 Mar 28      |29386288  |mrv144, vtn096         |NA                |FALSE                      |
 
@@ -107,7 +108,7 @@ knitr::kable(rouphael2019[, -"link"])
 
 |publication_id |first_author |title                                                                                         |journal       |publication_date |pubmed_id |related_studies |studies_with_data |publication_data_available |
 |:--------------|:------------|:---------------------------------------------------------------------------------------------|:-------------|:----------------|:---------|:---------------|:-----------------|:--------------------------|
-|1390           |Rouphael NG  |DNA priming and gp120 boosting induces HIV-specific antibodies in a randomized clinical trial |J Clin Invest |2019 Sep 30      |31566579  |vtn105          |vtn105            |FALSE                      |
+|1390           |Rouphael NG  |DNA priming and gp120 boosting induces HIV-specific antibodies in a randomized clinical trial |J Clin Invest |2019 Sep 30      |31566579  |vtn105          |vtn105            |TRUE                       |
 
 We can find this publication in the available publications table, determine related studies, and pull data for those studies where available.
 
@@ -122,10 +123,10 @@ rouphael2019_study
 #>   Study: vtn105
 #>   URL: https://dataspace.cavd.org/CAVD/vtn105
 #>   Available datasets:
-#>     - BAMA
+#>     - Binding Ab multiplex assay
 #>     - Demographics
-#>     - ICS
-#>     - NAb
+#>     - Intracellular Cytokine Staining
+#>     - Neutralizing antibody
 #>   Available non-integrated datasets:
 dim(rouphael2019_study$availableDatasets)
 #> [1] 4 4
@@ -146,9 +147,14 @@ knitr::kable(head(pubs_with_data[, -"link"]))
 
 
 
-|publication_id |first_author |title                      |journal      |publication_date |pubmed_id |related_studies                                                                        |studies_with_data |publication_data_available |
-|:--------------|:------------|:--------------------------|:------------|:----------------|:---------|:--------------------------------------------------------------------------------------|:-----------------|:--------------------------|
-|1461           |Westling T   |Causal isotonic regression |J R Stat Soc |2020             |NA        |vtn044, vtn052, vtn060, vtn063, vtn064, vtn068, vtn069, vtn070, vtn080, vtn100, vtn204 |NA                |TRUE                       |
+|publication_id |first_author    |title                                                                                                                                                                              |journal         |publication_date |pubmed_id |related_studies |studies_with_data |publication_data_available |
+|:--------------|:---------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------|:----------------|:---------|:---------------|:-----------------|:--------------------------|
+|136            |Bekker LG       |A phase 1/2 HIV-1 vaccine trial of a Subtype C ALVAC-HIV and Bivalent Subtype C gp120/MF59 vaccine regimen in low risk HIV uninfected South African adults                         |Lancet HIV      |2018 Jul         |29898870  |mrv144, vtn100  |NA                |TRUE                       |
+|1466           |Cram JA         |Human gut microbiota is associated with HIV-reactive immunoglobulin at baseline and following HIV vaccination                                                                      |PLoS One        |2019             |31869338  |vtn096          |NA                |TRUE                       |
+|80             |Fong Y          |Modification of the association between T-Cell immune responses and human immunodeficiency virus type 1 infection risk by vaccine-induced antibody responses in the HVTN 505 trial |J Infect Dis    |2018 Mar 28      |29325070  |vtn505          |vtn505            |TRUE                       |
+|79             |Hammer SM       |Efficacy Trial of a DNA/rAd5 HIV-1 Preventive Vaccine                                                                                                                              |N Engl J Med    |2013 Nov 28      |24099601  |vtn505          |vtn505            |TRUE                       |
+|1467           |Hosseinipour MC |Phase 1 HIV vaccine trial to evaluate the safety and immunogenicity of HIV subtype C DNA and MF59-adjuvanted subtype C Env protein                                                 |Clin Infect Dis |2020 Jan 4       |31900486  |vtn111          |NA                |TRUE                       |
+|81             |Janes HE        |Higher T-Cell responses induced by DNA/rAd5 HIV-1 preventive vaccine are associated with lower HIV-1 infection risk in an efficacy trial                                           |J Infect Dis    |2017 May 1       |28199679  |vtn505          |vtn505            |TRUE                       |
 
 Data for a publication can be accessed through `DataSpaceR` with `con$downloadPublicationData()`. The publication ID must be specified, as found under `publication_id` in `con$availablePublications`. The file is presented as a zip file. The `unzip` argument gives us the option whether to unzip this file. By default, the file will be unzipped. You may also specify the directory to download the file. By default, it will be saved to your `Downloads` directory. This function invisibly returns the paths to the downloaded files.
 
@@ -158,10 +164,14 @@ Here, we download data for publication with ID 1461 (Westling, 2020), and view t
 ```r
 publicationDataFiles <- con$downloadPublicationData("1461", outputDir = tempdir(), unzip = TRUE, verbose = TRUE)
 basename(publicationDataFiles)
-#> [1] "causal.isoreg.fns.R"           "CD.SuperLearner.R"            
-#> [3] "cd4_analysis.R"                "cd4_data.csv"                 
-#> [5] "cd8_analysis.R"                "cd8_data.csv"                 
-#> [7] "README.txt"                    "Westling_1461_file_format.pdf"
+#> [1] "causal.isoreg.fns.R"          
+#> [2] "CD.SuperLearner.R"            
+#> [3] "cd4_analysis.R"               
+#> [4] "cd4_data.csv"                 
+#> [5] "cd8_analysis.R"               
+#> [6] "cd8_data.csv"                 
+#> [7] "README.txt"                   
+#> [8] "Westling_1461_file_format.pdf"
 ```
 
 All zip files will include a file format document as a PDF, as well as a README. These documents will give an overview of the remaining contents of the files. In this case, data is separated by CD8+ T-cell responses and CD4+ T-cell responses, as described in the `README.txt`.
@@ -170,42 +180,54 @@ All zip files will include a file format document as a PDF, as well as a README.
 ```r
 cd4 <- fread(publicationDataFiles[grepl("cd4_data", publicationDataFiles)])
 cd4
-#>       pub_id age    sex      bmi   prot num_vacc dose response sexFemale studyHVTN052
-#>   1: 069-071  23   Male 33.31000 vtn069        3  4.0        0         0            0
-#>   2: 069-068  20 Female 32.74000 vtn069        3  4.0        1         1            0
-#>   3: 069-020  19   Male 20.24000 vtn069        3  4.0        0         0            0
-#>   4: 069-008  19   Male 29.98000 vtn069        3  4.0        0         0            0
-#>   5: 069-058  27   Male 31.48000 vtn069        3  4.0        0         0            0
-#>  ---                                                                                 
-#> 368: 100-182  36 Female 24.32323 vtn100        4  1.5        0         1            0
-#> 369: 100-034  20   Male 25.15590 vtn100        4  1.5        1         0            0
-#> 370: 100-115  20   Male 22.94812 vtn100        4  1.5        1         0            0
-#> 371: 100-144  19   Male 20.95661 vtn100        4  1.5        0         0            0
-#> 372: 100-189  24   Male 19.03114 vtn100        4  1.5        1         0            0
-#>      studyHVTN068 studyHVTN069 studyHVTN204 studyHVTN100 vacc_type vacc_typeSinglePlasmid
-#>   1:            0            1            0            0   VRC4or6                      0
-#>   2:            0            1            0            0   VRC4or6                      0
-#>   3:            0            1            0            0   VRC4or6                      0
-#>   4:            0            1            0            0   VRC4or6                      0
-#>   5:            0            1            0            0   VRC4or6                      0
-#>  ---                                                                                     
-#> 368:            0            0            0            1   VRC4or6                      0
-#> 369:            0            0            0            1   VRC4or6                      0
-#> 370:            0            0            0            1   VRC4or6                      0
-#> 371:            0            0            0            1   VRC4or6                      0
-#> 372:            0            0            0            1   VRC4or6                      0
-#>      vacc_typeVRC4or6
-#>   1:                1
-#>   2:                1
-#>   3:                1
-#>   4:                1
-#>   5:                1
-#>  ---                 
-#> 368:                1
-#> 369:                1
-#> 370:                1
-#> 371:                1
-#> 372:                1
+#>       pub_id age    sex      bmi   prot num_vacc dose
+#>   1: 069-071  23   Male 33.31000 vtn069        3  4.0
+#>   2: 069-068  20 Female 32.74000 vtn069        3  4.0
+#>   3: 069-020  19   Male 20.24000 vtn069        3  4.0
+#>   4: 069-008  19   Male 29.98000 vtn069        3  4.0
+#>   5: 069-058  27   Male 31.48000 vtn069        3  4.0
+#>  ---                                                 
+#> 368: 100-182  36 Female 24.32323 vtn100        4  1.5
+#> 369: 100-034  20   Male 25.15590 vtn100        4  1.5
+#> 370: 100-115  20   Male 22.94812 vtn100        4  1.5
+#> 371: 100-144  19   Male 20.95661 vtn100        4  1.5
+#> 372: 100-189  24   Male 19.03114 vtn100        4  1.5
+#>      response sexFemale studyHVTN052 studyHVTN068
+#>   1:        0         0            0            0
+#>   2:        1         1            0            0
+#>   3:        0         0            0            0
+#>   4:        0         0            0            0
+#>   5:        0         0            0            0
+#>  ---                                             
+#> 368:        0         1            0            0
+#> 369:        1         0            0            0
+#> 370:        1         0            0            0
+#> 371:        0         0            0            0
+#> 372:        1         0            0            0
+#>      studyHVTN069 studyHVTN204 studyHVTN100 vacc_type
+#>   1:            1            0            0   VRC4or6
+#>   2:            1            0            0   VRC4or6
+#>   3:            1            0            0   VRC4or6
+#>   4:            1            0            0   VRC4or6
+#>   5:            1            0            0   VRC4or6
+#>  ---                                                 
+#> 368:            0            0            1   VRC4or6
+#> 369:            0            0            1   VRC4or6
+#> 370:            0            0            1   VRC4or6
+#> 371:            0            0            1   VRC4or6
+#> 372:            0            0            1   VRC4or6
+#>      vacc_typeSinglePlasmid vacc_typeVRC4or6
+#>   1:                      0                1
+#>   2:                      0                1
+#>   3:                      0                1
+#>   4:                      0                1
+#>   5:                      0                1
+#>  ---                                        
+#> 368:                      0                1
+#> 369:                      0                1
+#> 370:                      0                1
+#> 371:                      0                1
+#> 372:                      0                1
 ```
 
 This publication also includes analysis scripts used for the publication, which can allow users to reproduce the analysis and results.
