@@ -1,7 +1,7 @@
 ---
 title: "Accessing Publication Data"
 author: "Helen Miller"
-date: "2020-11-23"
+date: "2021-02-18"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Publication Data}
@@ -26,14 +26,14 @@ con <- connectDS()
 con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
-#>   User: hmiller@scharp.org
-#>   Available studies: 260
-#>     - 77 studies with data
-#>     - 5049 subjects
-#>     - 423195 data points
+#>   User: jmtaylor@fredhutch.org
+#>   Available studies: 356
+#>     - 78 studies with data
+#>     - 5073 subjects
+#>     - 439831 data points
 #>   Available groups: 3
-#>   Available publications: 1478
-#>     - 10 publications with data
+#>   Available publications: 1530
+#>     - 12 publications with data
 ```
 
 The `DataSpaceConnection` print method summarizes the publications and publication data. More details about publications can be accessed through `con$availablePublications`.
@@ -87,14 +87,14 @@ knitr::kable(head(pubs_with_study_data[, -"link"]))
 
 
 
-|publication_id |first_author |title                                                                                                                                                   |journal            |publication_date |pubmed_id |related_studies                                                                |studies_with_data |publication_data_available |
-|:--------------|:------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|:----------------|:---------|:------------------------------------------------------------------------------|:-----------------|:--------------------------|
-|213            |Andrasik MP  |Exploring barriers and facilitators to participation of male-to-female transgender persons in preventive HIV vaccine clinical trials.                   |Prev Sci           |2014 Jun         |23446435  |vtn505                                                                         |vtn505            |FALSE                      |
-|218            |Andrasik MP  |Behavioral risk assessment in HIV Vaccine Trials Network (HVTN) clinical trials: A qualitative study exploring HVTN staff perspectives                  |Vaccine            |2013 Sep 13      |23859840  |vtn069, vtn404, vtn502, vtn503, vtn504, vtn505, vtn802, vtn903, vtn906, vtn907 |vtn505            |FALSE                      |
-|225            |Andrasik MP  |Bridging the divide: HIV prevention research and Black men who have sex with men                                                                        |Am J Public Health |2014 Apr         |24524520  |vtn505                                                                         |vtn505            |FALSE                      |
-|226            |Arnold MP    |Sources of racial/ethnic differences in HIV vaccine trial awareness: Exposure, attention, or both?                                                      |Am J Public Health |2014 Aug         |24922153  |vtn505                                                                         |vtn505            |FALSE                      |
-|7              |Asbach B     |Potential to streamline heterologous DNA prime and NYVAC/protein boost HIV vaccine regimens in rhesus macaques by employing improved antigens           |J Virol            |2016 Mar 28      |26865719  |cvd277, cvd281                                                                 |cvd277, cvd281    |FALSE                      |
-|1394           |Boppana S    |Cross-reactive CD8 T-cell responses elicited by Ad5-based HIV-1 vaccines contributed to early viral evolution in vaccine recipients who became infected |J Virol            |2019 Oct 23      |31645444  |vtn502, vtn505                                                                 |vtn505            |FALSE                      |
+|publication_id |first_author      |title                                                                                                                                         |journal            |publication_date |pubmed_id |related_studies                                                                |studies_with_data |publication_data_available |
+|:--------------|:-----------------|:---------------------------------------------------------------------------------------------------------------------------------------------|:------------------|:----------------|:---------|:------------------------------------------------------------------------------|:-----------------|:--------------------------|
+|1540           |Andersen-Nissen E |Innate immune signatures to a partially-efficacious HIV vaccine predict correlates of HIV-1 infection risk                                    |PLOS Pathog        |2021             |NA        |vtn097                                                                         |vtn097            |TRUE                       |
+|213            |Andrasik MP       |Exploring barriers and facilitators to participation of male-to-female transgender persons in preventive HIV vaccine clinical trials.         |Prev Sci           |2014 Jun         |23446435  |vtn505                                                                         |vtn505            |FALSE                      |
+|218            |Andrasik MP       |Behavioral risk assessment in HIV Vaccine Trials Network (HVTN) clinical trials: A qualitative study exploring HVTN staff perspectives        |Vaccine            |2013 Sep 13      |23859840  |vtn069, vtn404, vtn502, vtn503, vtn504, vtn505, vtn802, vtn903, vtn906, vtn907 |vtn505            |FALSE                      |
+|225            |Andrasik MP       |Bridging the divide: HIV prevention research and Black men who have sex with men                                                              |Am J Public Health |2014 Apr         |24524520  |vtn505                                                                         |vtn505            |FALSE                      |
+|226            |Arnold MP         |Sources of racial/ethnic differences in HIV vaccine trial awareness: Exposure, attention, or both?                                            |Am J Public Health |2014 Aug         |24922153  |vtn505                                                                         |vtn505            |FALSE                      |
+|7              |Asbach B          |Potential to streamline heterologous DNA prime and NYVAC/protein boost HIV vaccine regimens in rhesus macaques by employing improved antigens |J Virol            |2016 Mar 28      |26865719  |cvd277, cvd281                                                                 |cvd277, cvd281    |FALSE                      |
 
 We can also use this information to connect to related studies and pull integrated data. Say we are interested in this Rouphael (2019) publication:
 
@@ -147,14 +147,14 @@ knitr::kable(head(pubs_with_data[, -"link"]))
 
 
 
-|publication_id |first_author    |title                                                                                                                                                                              |journal         |publication_date |pubmed_id |related_studies |studies_with_data |publication_data_available |
-|:--------------|:---------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------|:----------------|:---------|:---------------|:-----------------|:--------------------------|
-|136            |Bekker LG       |A phase 1/2 HIV-1 vaccine trial of a Subtype C ALVAC-HIV and Bivalent Subtype C gp120/MF59 vaccine regimen in low risk HIV uninfected South African adults                         |Lancet HIV      |2018 Jul         |29898870  |mrv144, vtn100  |NA                |TRUE                       |
-|1466           |Cram JA         |Human gut microbiota is associated with HIV-reactive immunoglobulin at baseline and following HIV vaccination                                                                      |PLoS One        |2019             |31869338  |vtn096          |NA                |TRUE                       |
-|80             |Fong Y          |Modification of the association between T-Cell immune responses and human immunodeficiency virus type 1 infection risk by vaccine-induced antibody responses in the HVTN 505 trial |J Infect Dis    |2018 Mar 28      |29325070  |vtn505          |vtn505            |TRUE                       |
-|79             |Hammer SM       |Efficacy Trial of a DNA/rAd5 HIV-1 Preventive Vaccine                                                                                                                              |N Engl J Med    |2013 Nov 28      |24099601  |vtn505          |vtn505            |TRUE                       |
-|1467           |Hosseinipour MC |Phase 1 HIV vaccine trial to evaluate the safety and immunogenicity of HIV subtype C DNA and MF59-adjuvanted subtype C Env protein                                                 |Clin Infect Dis |2020 Jan 4       |31900486  |vtn111          |NA                |TRUE                       |
-|81             |Janes HE        |Higher T-Cell responses induced by DNA/rAd5 HIV-1 preventive vaccine are associated with lower HIV-1 infection risk in an efficacy trial                                           |J Infect Dis    |2017 May 1       |28199679  |vtn505          |vtn505            |TRUE                       |
+|publication_id |first_author      |title                                                                                                                                                                              |journal         |publication_date |pubmed_id |related_studies |studies_with_data |publication_data_available |
+|:--------------|:-----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------|:----------------|:---------|:---------------|:-----------------|:--------------------------|
+|1540           |Andersen-Nissen E |Innate immune signatures to a partially-efficacious HIV vaccine predict correlates of HIV-1 infection risk                                                                         |PLOS Pathog     |2021             |NA        |vtn097          |vtn097            |TRUE                       |
+|136            |Bekker LG         |A phase 1/2 HIV-1 vaccine trial of a Subtype C ALVAC-HIV and Bivalent Subtype C gp120/MF59 vaccine regimen in low risk HIV uninfected South African adults                         |Lancet HIV      |2018 Jul         |29898870  |mrv144, vtn100  |NA                |TRUE                       |
+|1466           |Cram JA           |Human gut microbiota is associated with HIV-reactive immunoglobulin at baseline and following HIV vaccination                                                                      |PLoS One        |2019             |31869338  |vtn096          |NA                |TRUE                       |
+|80             |Fong Y            |Modification of the association between T-Cell immune responses and human immunodeficiency virus type 1 infection risk by vaccine-induced antibody responses in the HVTN 505 trial |J Infect Dis    |2018 Mar 28      |29325070  |vtn505          |vtn505            |TRUE                       |
+|79             |Hammer SM         |Efficacy trial of a DNA/rAd5 HIV-1 preventive vaccine                                                                                                                              |N Engl J Med    |2013 Nov 28      |24099601  |vtn505          |vtn505            |TRUE                       |
+|1467           |Hosseinipour MC   |Phase 1 HIV vaccine trial to evaluate the safety and immunogenicity of HIV subtype C DNA and MF59-adjuvanted subtype C Env protein                                                 |Clin Infect Dis |2020 Jan 4       |31900486  |vtn111          |NA                |TRUE                       |
 
 Data for a publication can be accessed through `DataSpaceR` with `con$downloadPublicationData()`. The publication ID must be specified, as found under `publication_id` in `con$availablePublications`. The file is presented as a zip file. The `unzip` argument gives us the option whether to unzip this file. By default, the file will be unzipped. You may also specify the directory to download the file. By default, it will be saved to your `Downloads` directory. This function invisibly returns the paths to the downloaded files.
 
@@ -164,14 +164,10 @@ Here, we download data for publication with ID 1461 (Westling, 2020), and view t
 ```r
 publicationDataFiles <- con$downloadPublicationData("1461", outputDir = tempdir(), unzip = TRUE, verbose = TRUE)
 basename(publicationDataFiles)
-#> [1] "causal.isoreg.fns.R"          
-#> [2] "CD.SuperLearner.R"            
-#> [3] "cd4_analysis.R"               
-#> [4] "cd4_data.csv"                 
-#> [5] "cd8_analysis.R"               
-#> [6] "cd8_data.csv"                 
-#> [7] "README.txt"                   
-#> [8] "Westling_1461_file_format.pdf"
+#> [1] "causal.isoreg.fns.R"           "CD.SuperLearner.R"            
+#> [3] "cd4_analysis.R"                "cd4_data.csv"                 
+#> [5] "cd8_analysis.R"                "cd8_data.csv"                 
+#> [7] "README.txt"                    "Westling_1461_file_format.pdf"
 ```
 
 All zip files will include a file format document as a PDF, as well as a README. These documents will give an overview of the remaining contents of the files. In this case, data is separated by CD8+ T-cell responses and CD4+ T-cell responses, as described in the `README.txt`.
@@ -180,42 +176,30 @@ All zip files will include a file format document as a PDF, as well as a README.
 ```r
 cd4 <- fread(publicationDataFiles[grepl("cd4_data", publicationDataFiles)])
 cd4
-#>       pub_id age    sex      bmi   prot num_vacc dose
-#>   1: 069-071  23   Male 33.31000 vtn069        3  4.0
-#>   2: 069-068  20 Female 32.74000 vtn069        3  4.0
-#>   3: 069-020  19   Male 20.24000 vtn069        3  4.0
-#>   4: 069-008  19   Male 29.98000 vtn069        3  4.0
-#>   5: 069-058  27   Male 31.48000 vtn069        3  4.0
-#>  ---                                                 
-#> 368: 100-182  36 Female 24.32323 vtn100        4  1.5
-#> 369: 100-034  20   Male 25.15590 vtn100        4  1.5
-#> 370: 100-115  20   Male 22.94812 vtn100        4  1.5
-#> 371: 100-144  19   Male 20.95661 vtn100        4  1.5
-#> 372: 100-189  24   Male 19.03114 vtn100        4  1.5
-#>      response sexFemale studyHVTN052 studyHVTN068
-#>   1:        0         0            0            0
-#>   2:        1         1            0            0
-#>   3:        0         0            0            0
-#>   4:        0         0            0            0
-#>   5:        0         0            0            0
-#>  ---                                             
-#> 368:        0         1            0            0
-#> 369:        1         0            0            0
-#> 370:        1         0            0            0
-#> 371:        0         0            0            0
-#> 372:        1         0            0            0
-#>      studyHVTN069 studyHVTN204 studyHVTN100 vacc_type
-#>   1:            1            0            0   VRC4or6
-#>   2:            1            0            0   VRC4or6
-#>   3:            1            0            0   VRC4or6
-#>   4:            1            0            0   VRC4or6
-#>   5:            1            0            0   VRC4or6
-#>  ---                                                 
-#> 368:            0            0            1   VRC4or6
-#> 369:            0            0            1   VRC4or6
-#> 370:            0            0            1   VRC4or6
-#> 371:            0            0            1   VRC4or6
-#> 372:            0            0            1   VRC4or6
+#>       pub_id age    sex      bmi   prot num_vacc dose response sexFemale
+#>   1: 069-071  23   Male 33.31000 vtn069        3  4.0        0         0
+#>   2: 069-068  20 Female 32.74000 vtn069        3  4.0        1         1
+#>   3: 069-020  19   Male 20.24000 vtn069        3  4.0        0         0
+#>   4: 069-008  19   Male 29.98000 vtn069        3  4.0        0         0
+#>   5: 069-058  27   Male 31.48000 vtn069        3  4.0        0         0
+#>  ---                                                                    
+#> 368: 100-182  36 Female 24.32323 vtn100        4  1.5        0         1
+#> 369: 100-034  20   Male 25.15590 vtn100        4  1.5        1         0
+#> 370: 100-115  20   Male 22.94812 vtn100        4  1.5        1         0
+#> 371: 100-144  19   Male 20.95661 vtn100        4  1.5        0         0
+#> 372: 100-189  24   Male 19.03114 vtn100        4  1.5        1         0
+#>      studyHVTN052 studyHVTN068 studyHVTN069 studyHVTN204 studyHVTN100 vacc_type
+#>   1:            0            0            1            0            0   VRC4or6
+#>   2:            0            0            1            0            0   VRC4or6
+#>   3:            0            0            1            0            0   VRC4or6
+#>   4:            0            0            1            0            0   VRC4or6
+#>   5:            0            0            1            0            0   VRC4or6
+#>  ---                                                                           
+#> 368:            0            0            0            0            1   VRC4or6
+#> 369:            0            0            0            0            1   VRC4or6
+#> 370:            0            0            0            0            1   VRC4or6
+#> 371:            0            0            0            0            1   VRC4or6
+#> 372:            0            0            0            0            1   VRC4or6
 #>      vacc_typeSinglePlasmid vacc_typeVRC4or6
 #>   1:                      0                1
 #>   2:                      0                1

@@ -35,6 +35,7 @@ Suggests:
     knitr,
     pryr,
     rmarkdown,
-    DT
+    DT,
+    webshot
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
