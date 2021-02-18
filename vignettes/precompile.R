@@ -5,7 +5,7 @@
 
 library(knitr)
 Sys.setenv("NOT_CRAN" = "true")
-knit("vignettes/DataSpaceR.Rmd.og", "vignettes/DataSpaceR.Rmd")
-knit("vignettes/Monoconal_Antibody_Data.Rmd.og", "vignettes/Monoconal_Antibody_Data.Rmd")
-knit("vignettes/Non_Integrated_Datasets.Rmd.og", "vignettes/Non_Integrated_Datasets.Rmd")
-knit("vignettes/Publication_Data.Rmd.og", "vignettes/Publication_Data.Rmd")
+knit("vignettes/DataSpaceR.Rmd.orig", "vignettes/DataSpaceR.Rmd")
+knit("vignettes/Monoconal_Antibody_Data.Rmd.orig", "vignettes/Monoconal_Antibody_Data.Rmd")
+knit("vignettes/Non_Integrated_Datasets.Rmd.orig", "vignettes/Non_Integrated_Datasets.Rmd")
+knit("vignettes/Publication_Data.Rmd.orig", "vignettes/Publication_Data.Rmd")

@@ -200,7 +200,7 @@ knitr::kable(head(con$virusMetadata))
 See other vignette for a tutorial on accessing monoclonal antibody data with `DataSpaceR`:
 
 ```{r eval=FALSE}
-vignette("Accessing_Monoconal_Antibody_Data")
+vignette("Monoconal_Antibody_Data")
 ```
 
 ## Browse and Download Publication Data
