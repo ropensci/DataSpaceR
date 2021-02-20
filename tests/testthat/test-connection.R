@@ -128,7 +128,7 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_equal(
         names(con$availablePublications),
         c(
-          "publication_id", "first_author", "title", "journal", "publication_date",
+          "publication_id", "first_author", "all_authors", "title", "journal", "publication_date",
           "link", "pubmed_id", "related_studies", "studies_with_data", "publication_data_available"
         )
       )
