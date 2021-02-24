@@ -144,7 +144,7 @@ DataSpaceConnection <- R6Class(
         msg = "groupId should be an integer."
       )
       assert_that(
-        groupId %in% private$.availableGroups$id,
+        groupId %in% private$.availableGroups$group_id,
         msg = paste(groupId, "is not a valid group ID. See `group_id` field in `availableGroups`.")
       )
 
