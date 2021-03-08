@@ -16,7 +16,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
+  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
   "author": [
     {
       "@type": "Person",
@@ -230,8 +230,8 @@
     }
   ],
   "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
-  "fileSize": "303.901KB",
-  "contIntegration": "https://codecov.io/gh/ropensci/DataSpaceR/branch/master",
+  "fileSize": "312.163KB",
+  "contIntegration": "https://codecov.io/gh/ropensci/DataSpaceR/branch/main",
   "keywords": [
     "r",
     "labkey",
@@ -242,12 +242,13 @@
     "r-package",
     "rstats",
     "hvtn",
-    "immunology"
+    "immunology",
+    "cavd-dataspace"
   ],
   "developmentStatus": ["https://www.repostatus.org/#active", "https://www.tidyverse.org/lifecycle/#maturing"],
   "contributor": {},
   "funder": {},
-  "readme": "https://github.com/ropensci/DataSpaceR/blob/master/README.md",
+  "readme": "https://github.com/ropensci/DataSpaceR/blob/main/README.md",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
