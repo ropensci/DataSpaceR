@@ -122,17 +122,17 @@ DataSpaceConnection <- R6Class(
 
     #' @description
     #' Create a \code{\link{DataSpaceStudy}} object.
-    #' @param study A character. Name of the study to retrieve.
-    getStudy = function(study) {
-      if (study != "") {
+    #' @param studyName A character. Name of the study to retrieve.
+    getStudy = function(studyName) {
+      if (studyName != "") {
         studyInfo <- as.list(
-          private$.availableStudies[.(study)]
+          private$.availableStudies[.(study_name)]
         )
       } else {
         studyInfo <- NULL
       }
 
-      DataSpaceStudy$new(study, private$.config, NULL, studyInfo)
+      DataSpaceStudy$new(studyName, private$.config, NULL, studyInfo)
     },
 
     #' @description
