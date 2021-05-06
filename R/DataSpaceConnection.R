@@ -122,17 +122,17 @@ DataSpaceConnection <- R6Class(
 
     #' @description
     #' Create a \code{\link{DataSpaceStudy}} object.
-    #' @param study A character. Name of the study to retrieve.
-    getStudy = function(study) {
-      if (study != "") {
+    #' @param studyName A character. Name of the study to retrieve.
+    getStudy = function(studyName) {
+      if (studyName != "") {
         studyInfo <- as.list(
-          private$.availableStudies[.(study)]
+          private$.availableStudies[.(study_name)]
         )
       } else {
         studyInfo <- NULL
       }
 
-      DataSpaceStudy$new(study, private$.config, NULL, studyInfo)
+      DataSpaceStudy$new(studyName, private$.config, NULL, studyInfo)
     },
 
     #' @description
@@ -144,8 +144,8 @@ DataSpaceConnection <- R6Class(
         msg = "groupId should be an integer."
       )
       assert_that(
-        groupId %in% private$.availableGroups$id,
-        msg = paste(groupId, "is not a valid group ID")
+        groupId %in% private$.availableGroups$group_id,
+        msg = paste(groupId, "is not a valid group ID. See `group_id` field in `availableGroups`.")
       )
 
       group <- private$.availableGroups[.(groupId), label]
@@ -226,13 +226,13 @@ DataSpaceConnection <- R6Class(
 
     #' @description
     #' Download publication data for a chosen publication.
-    #' @param publicationID A character/integer. ID for the publication to
+    #' @param publicationId A character/integer. ID for the publication to
     #' download data for.
     #' @param outputDir A character. Path to directory to download publication
     #' data.
     #' @param unzip A logical. If TRUE, unzip publication data to outputDir.
     #' @param verbose A logical. Default TRUE.
-    downloadPublicationData = function(publicationID,
+    downloadPublicationData = function(publicationId,
                                        outputDir = getwd(),
                                        unzip = TRUE,
                                        verbose = TRUE) {
@@ -241,16 +241,16 @@ DataSpaceConnection <- R6Class(
         msg = paste0(outputDir, " is not a directory")
       )
       assert_that(
-        publicationID %in% private$.availablePublications$publication_id,
-        msg = paste0(publicationID, " is not a valid publicationID")
+        publicationId %in% private$.availablePublications$publication_id,
+        msg = paste0(publicationId, " is not a valid publication ID. See the `publication_id` field in `availablePublications`.")
       )
       assert_that(
-        private$.availablePublications[publication_id == publicationID]$publication_data_available,
-        msg = paste0("No publication data available for publication ", publicationID)
+        private$.availablePublications[publication_id == publicationId]$publication_data_available,
+        msg = paste0("No publication data available for publication ", publicationId)
       )
       assert_that(is.logical(verbose))
 
-      remotePath <- private$.availablePublications[publication_id == publicationID]$remotePath
+      remotePath <- private$.availablePublications[publication_id == publicationId]$remotePath
       fileName <- basename(remotePath)
       localZipPath <- file.path(outputDir, fileName)
       fullOutputDir <- file.path(outputDir, gsub(".zip", "", fileName))
@@ -260,7 +260,7 @@ DataSpaceConnection <- R6Class(
       getStudyDocumentUrl <- paste0(
         private$.config$labkeyUrlBase,
         "/cds/CAVD/getStudyDocument.view?",
-        "&documentId=", private$.availablePublications[publication_id == publicationID]$document_id,
+        "&documentId=", private$.availablePublications[publication_id == publicationId]$document_id,
         "&filename=", gsub("/", "%2F", remotePath),
         "&publicAccess=true"
       )
@@ -519,7 +519,7 @@ DataSpaceConnection <- R6Class(
       # construct a data.table for each group
       groupsList <- lapply(parsed$groups, function(group) {
         data.table(
-          id = group$id,
+          group_id = group$id,
           label = group$label,
           original_label = group$category$label,
           description = ifelse(
@@ -538,8 +538,8 @@ DataSpaceConnection <- R6Class(
       availableGroups <- rbindlist(groupsList)
 
       # set order by id
-      setorder(availableGroups, id)
-      setkey(availableGroups, id)
+      setorder(availableGroups, group_id)
+      setkey(availableGroups, group_id)
 
       private$.availableGroups <- availableGroups
     },

@@ -116,7 +116,7 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_equal(
         names(con$availableGroups),
         c(
-          "id", "label", "original_label", "description", "created_by",
+          "group_id", "label", "original_label", "description", "created_by",
           "shared", "n", "studies"
         )
       )
@@ -193,7 +193,6 @@ if ("DataSpaceConnection" %in% class(con)) {
 
     test_that("`refresh`", {
       refresh <- try(con$refresh(), silent = TRUE)
-
       expect_is(refresh, "logical")
       expect_true(refresh)
     })
