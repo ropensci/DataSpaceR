@@ -599,7 +599,7 @@ DataSpaceConnection <- R6Class(
     .getAvailablePublications = function() {
       sqlQuery <-
         "
-SELECT publication.id as publication_id, author_first first_author, title, journal_short journal, date publication_date,
+SELECT publication.id as publication_id, author_first as first_author, author_all as all_authors, title, journal_short journal, date publication_date,
 link, pmid as pubmed_id, related_studies, studies_with_data, filename IS NOT NULL as publication_data_available, document_id,
 filename as remote_path
 FROM publication
