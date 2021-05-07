@@ -34,8 +34,6 @@ Suggests:
     covr,
     knitr,
     pryr,
-    rmarkdown,
-    DT,
-    webshot
+    rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1

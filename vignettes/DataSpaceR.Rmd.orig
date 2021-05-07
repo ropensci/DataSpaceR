@@ -9,6 +9,20 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+<style>
+table {
+    display: block;
+    max-width: 100%;
+    max-height: 600px;
+    overflow: scroll;
+}
+thead{
+    position: sticky;
+    top: 0px;
+    background-color: #fff;
+}
+</style>
+
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
@@ -21,9 +35,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-
 This package provides a thin wrapper around [Rlabkey](https://cran.r-project.org/package=Rlabkey) and connects to the the [CAVD DataSpace](https://dataspace.cavd.org) database, making it easier to fetch datasets from specific studies.
-
 
 ## Configuration
 
@@ -78,7 +90,7 @@ con
 The call to `connectDS` instantiates the connection. Printing the object shows where it's connected and the available studies.
 
 ```{r availableStudies}
-knitr::kable(head(con$availableStudies))
+knitr::kable(con$availableStudies)
 ```
 
 `con$availableStudies` shows the available studies in the CAVD DataSpace. Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
@@ -182,8 +194,6 @@ NAb_nyvac <- nyvac$getDataset("NAb")
 dim(NAb_nyvac)
 ```
 
-
-
 ## Access Virus Metadata
 
 DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NAb) assays. This data can be accessed through the app on the [NAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB/antigens) and [NAb MAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB%20MAB/antigens).
@@ -191,9 +201,8 @@ DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NA
 We can access this metadata in `DataSpaceR` with `con$virusMetadata`:
 
 ```{r virusMetadata}
-knitr::kable(head(con$virusMetadata))
+knitr::kable(con$virusMetadata)
 ```
-
 
 ## Access monoclonal antibody data
 

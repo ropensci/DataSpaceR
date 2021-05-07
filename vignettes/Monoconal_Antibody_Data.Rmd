@@ -3,13 +3,27 @@ title: "Accessing Monoclonal Antibody Data"
 author:
 - Ju Yeong Kim
 - Jason Taylor
-date: "2021-02-18"
+date: "2021-05-07"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Monoclonal Antibody Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+<style>
+table {
+    display: block;
+    max-width: 100%;
+    max-height: 600px;
+    overflow: scroll;
+}
+thead{
+    position: sticky;
+    top: 0px;
+    background-color: #fff;
+}
+</style>
 
 
 
@@ -47,10 +61,185 @@ You can browse the mAb Grid by calling the `mabGridSummary` field in the connect
 library(DataSpaceR)
 con <- connectDS()
 
-DT::datatable(con$mabGridSummary, options = list(autoWidth = TRUE, scrollX = TRUE))
-#> PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
-#> Error in path.expand(path): invalid 'path' argument
+knitr::kable(con$mabGridSummary)
 ```
+
+
+
+|mab_mixture                 |donor_species      |isotype   |hxb2_location | n_viruses| n_clades| n_tiers| geometric_mean_curve_ic50| n_studies|
+|:---------------------------|:------------------|:---------|:-------------|---------:|--------:|-------:|-------------------------:|---------:|
+|10-1074                     |human              |IgG       |Env           |         7|        3|       2|                 0.0213723|         1|
+|10E8                        |human              |IgG3      |gp160         |       227|       11|       7|                 0.4843333|         2|
+|10E8 V2.0                   |human              |          |              |        28|        3|       1|                 0.0031350|         1|
+|10E8 V2.0/iMab              |human              |          |gp160         |        13|        8|       2|                 0.0462897|         1|
+|10E8 V4.0                   |human              |          |              |        28|        3|       1|                 0.0024094|         1|
+|10E8 V4.0/iMab              |human              |          |              |       119|       12|       6|                 0.0015396|         1|
+|10E8 V5.0                   |human              |          |              |        28|        3|       1|                 0.0015109|         1|
+|10E8 V5.0/iMab              |human              |          |              |         1|        1|       0|                 0.0003376|         1|
+|11F1B                       |llama              |          |              |        46|        7|       7|                25.0511457|         1|
+|11F1F                       |llama              |          |              |        46|        7|       7|                17.2717247|         1|
+|1H9                         |llama              |          |Env           |        46|        7|       7|                 4.5817121|         1|
+|2B4F                        |llama              |          |              |        46|        7|       7|                 5.8680663|         1|
+|2F5                         |human              |IgG3k     |gp160         |        32|        7|       3|                 1.4776460|         2|
+|2G12                        |human              |IgG1k     |Env           |         4|        1|       3|                 0.8504410|         1|
+|2H10                        |llama              |          |              |        24|        4|       5|                 8.5478517|         1|
+|2H10/W100A                  |llama              |          |              |        24|        4|       5|                12.3405073|         1|
+|3BNC117                     |human              |IgG       |gp160         |         1|        0|       0|                        NA|         1|
+|3BNC117/PGT135              |human              |IgG       |Env, gp160    |       128|        4|       5|                 0.0655007|         1|
+|3E3                         |llama              |          |gp160         |        43|       11|       5|                 0.8098631|         1|
+|4E10                        |human              |IgG3k     |gp160         |        32|        7|       3|                 2.4101426|         2|
+|4H73                        |llama              |          |              |        46|        7|       7|                        NA|         1|
+|5B10D                       |llama              |          |              |        46|        7|       7|                30.4486245|         1|
+|9B6B                        |llama              |          |              |        40|        7|       7|                14.0677173|         1|
+|A12                         |llama              |          |Env           |        16|        9|       4|                        NA|         1|
+|A14                         |llama              |          |gp160         |        45|       12|       5|                 0.6678108|         1|
+|AB-000796-1                 |human              |          |              |        16|        8|       4|                11.4322508|         1|
+|AB-000797-1                 |human              |          |              |        16|        8|       4|                 0.1135811|         1|
+|AB-000798-1                 |human              |          |              |        16|        8|       4|                 3.8927100|         1|
+|AB-000799-1                 |human              |          |              |        16|        8|       4|                 0.5875192|         1|
+|AB-000800-1                 |human              |          |              |        16|        8|       4|                 1.1511497|         1|
+|AB-000801-1                 |human              |          |              |        16|        8|       4|                 0.0265538|         1|
+|AB-000802-1                 |human              |          |              |        16|        8|       4|                 0.6196583|         1|
+|AB-000803-1                 |human              |          |              |        16|        8|       4|                 0.1970731|         1|
+|AB-000804-1                 |human              |          |              |        16|        8|       4|                 0.0687607|         1|
+|AB-000805-1                 |human              |          |              |        16|        8|       4|                 0.0892102|         1|
+|AB-000806-1                 |human              |          |              |        16|        8|       4|                26.5516376|         1|
+|AB-000807-1                 |human              |          |              |        15|        8|       4|                        NA|         1|
+|AB-000808-1                 |human              |          |              |        16|        8|       4|                 0.3858537|         1|
+|AB-000809-1                 |human              |          |              |        16|        8|       4|                 0.0487155|         1|
+|Ab530039K                   |human              |IgG1      |              |        10|        3|       3|                        NA|         1|
+|Ab530039L                   |human              |IgG1      |              |        10|        3|       3|                 3.2108424|         1|
+|Ab530057                    |human              |IgG1      |              |        10|        3|       3|                        NA|         1|
+|Ab530139K1                  |human              |IgG1      |              |        10|        3|       3|                        NA|         1|
+|Ab530139K2                  |human              |IgG1      |              |        10|        3|       3|                17.9937994|         1|
+|Ab530168                    |human              |IgG1      |              |        10|        3|       3|                 0.2115329|         1|
+|Ab530204                    |human              |IgG1      |              |        10|        3|       3|                        NA|         1|
+|Ab530212                    |human              |IgG3      |              |        10|        3|       3|                        NA|         1|
+|Ab530238K                   |human              |IgG1      |              |        10|        3|       3|                        NA|         1|
+|Ab530239                    |human              |IgG1      |              |        10|        3|       3|                        NA|         1|
+|Ab530402.1                  |human              |IgG1      |              |        44|        6|       6|                 0.8941010|         2|
+|Ab530402.2                  |human              |IgG1      |              |        44|        6|       6|                 0.8967894|         2|
+|B21                         |llama              |          |gp160         |        48|       12|       5|                 0.4655927|         1|
+|B9                          |llama              |          |gp160         |        48|       12|       5|                 0.6608435|         1|
+|CH01                        |human              |IgG1      |gp160         |         3|        0|       0|                        NA|         1|
+|CH22                        |human              |IgG1      |gp160         |        13|        1|       0|                 8.9138079|         1|
+|CH27                        |human              |IgA2      |gp160         |         7|        3|       3|                 0.2134122|         2|
+|CH28                        |human              |IgA2      |gp160         |         4|        3|       3|                 0.2181122|         1|
+|CH31                        |human              |IgG1      |Env           |        10|        3|       3|                 4.9107676|         2|
+|CH38                        |human              |IgA1      |Env           |         4|        3|       3|                        NA|         2|
+|DH511                       |human              |IgG3      |Env           |       100|        1|       5|                 2.8363579|         1|
+|DH511.11P                   |human              |IgG3      |Env           |        31|       11|       5|                 0.9582981|         1|
+|DH511.12P                   |human              |IgG3      |Env           |        31|       11|       5|                 0.5872158|         1|
+|DH511.2                     |human              |IgG3      |Env           |        31|       11|       5|                 0.7693510|         1|
+|DH511.2_K3                  |human              |IgG3      |Env           |       130|       11|       7|                 0.3673506|         1|
+|DH511_2B                    |human              |IgG3      |Env           |        31|       11|       5|                 1.2012606|         1|
+|DH511_2B_K2                 |human              |IgG3      |Env           |        31|       11|       5|                 1.2946842|         1|
+|DH511_3a_K2                 |human              |IgG3      |Env           |        31|       11|       5|                 2.4417224|         1|
+|DH511_4a_K2                 |human              |IgG3      |Env           |        31|       11|       5|                 1.4237246|         1|
+|DH511_4b_K2                 |human              |IgG3      |Env           |        31|       11|       5|                 0.8122413|         1|
+|DH511_4b_K3                 |human              |IgG3      |Env           |        31|       11|       5|                 3.2225799|         1|
+|DH512_ K2                   |human              |IgG3      |Env           |        31|       11|       5|                 1.0906260|         1|
+|DH512_K4                    |human              |IgG3      |Env           |        31|       11|       5|                 0.7300400|         1|
+|DH517                       |human              |IgG       |Env           |        22|        1|       0|                 1.6550927|         1|
+|HG131                       |human              |IgG1      |Env           |        13|        1|       0|                        NA|         1|
+|HIVIG                       |human              |          |Gag           |         4|        0|       0|              1974.2509279|         1|
+|J3                          |mouse              |IgG1      |gp160         |        92|       12|       7|                 1.1823511|         1|
+|LAB5                        |llama              |          |              |        19|        5|       5|                        NA|         1|
+|LN01                        |human              |IgG1      |Env           |       344|       15|       7|                 1.3220806|         1|
+|MVN                         |human              |          |              |        20|       11|       5|                 2.2995833|         1|
+|MVN/A12                     |human, llama       |          |Env           |        20|       11|       5|                 0.1839795|         1|
+|N6                          |human              |          |Env           |       200|        1|       5|                 0.0658529|         1|
+|PG16                        |human              |IgG1      |Env           |         1|        0|       0|                        NA|         1|
+|PG16/iMab                   |human              |IgG1      |Env           |         9|        1|       0|                 0.0751227|         1|
+|PG9                         |human              |IgG1      |gp160         |       119|       12|       7|                 0.2256852|         3|
+|PG9/iMab                    |human              |IgG1      |gp160         |         9|        1|       0|                 0.0943004|         1|
+|PGDM1400                    |human              |IgG       |Env           |       307|       12|       8|                 0.0593726|         4|
+|PGDM1400-LS                 |human              |          |              |        14|        6|       3|                 0.1163097|         1|
+|PGT121                      |human              |IgG       |Env           |       295|       12|       8|                 0.0796585|         4|
+|PGT121 + PGDM1400           |human              |IgG       |Env           |       293|       12|       7|                 0.0191512|         1|
+|PGT121 + PGT145             |human              |IgG       |Env           |       293|       12|       7|                 0.0614652|         1|
+|PGT121-LS                   |human              |          |              |        14|        6|       3|                 0.0502924|         1|
+|PGT123                      |human              |IgG       |Env           |       117|       12|       6|                 0.0504119|         2|
+|PGT125                      |human              |IgG       |Env           |       117|       12|       6|                 0.0929302|         2|
+|PGT126                      |human              |IgG       |Env           |       117|       12|       6|                 0.1144483|         2|
+|PGT127                      |human              |IgG       |Env           |       117|       12|       6|                 0.1133725|         2|
+|PGT128                      |human              |IgG1      |Env           |       117|       12|       6|                 0.0519221|         2|
+|PGT128 + 3BNC117 + PGDM1400 |human              |IgG, IgG1 |Env, gp160    |       118|       12|       6|                 0.0358595|         1|
+|PGT128/3BNC117 + PGDM1400   |human              |IgG, IgG1 |Env, gp160    |       118|       12|       6|                 0.0090916|         1|
+|PGT128/PGDM1400             |human              |IgG, IgG1 |Env           |       119|       12|       6|                 0.0141116|         1|
+|PGT130                      |human              |IgG       |Env           |       117|       12|       6|                 0.2008383|         2|
+|PGT135                      |human              |IgG       |Env           |       117|       12|       6|                 0.5261996|         2|
+|PGT143                      |human              |IgG       |Env           |       117|       12|       6|                 0.1910367|         2|
+|PGT144                      |human              |IgG       |Env           |       116|       12|       6|                 2.4669616|         1|
+|PGT145                      |human              |IgG       |Env           |       293|       12|       7|                 0.1905598|         3|
+|PGT151                      |human              |IgG       |Env           |       116|       12|       6|                 0.0246540|         1|
+|PGT151/3BNC117              |human              |IgG       |Env, gp160    |       118|       12|       6|                 0.0449669|         1|
+|PGT152                      |human              |IgG       |Env           |       116|       12|       6|                 0.0226595|         1|
+|RhiMab                      |macaquenized human |          |              |         9|        1|       0|                 0.2033766|         1|
+|VRC01                       |human              |IgG1      |Env           |        18|        5|       5|                 0.1821460|         2|
+|VRC01-CCFV                  |human              |IgG1      |Env           |        20|       11|       5|                 0.7844952|         1|
+|VRC01-SCFV                  |human              |IgG1      |Env           |        20|       11|       5|                 0.5002616|         1|
+|VRC07-523-LS                |human              |IgG       |Env           |       200|        1|       5|                 0.0679112|         1|
+|VRC13                       |human              |          |Env           |       200|        1|       5|                 0.2773581|         1|
+|VRC26.25                    |human              |          |Env           |       200|        1|       5|                 0.0153080|         1|
+|b12                         |human              |IgG1k     |Env           |        32|        7|       3|                 0.2040754|         2|
+|iMab                        |human              |          |              |       129|       12|       6|                 0.0499102|         3|
+|iMab-CCFV                   |human              |          |              |        20|       11|       5|                 0.0651764|         1|
+|iMab-SCFV                   |human              |          |              |        20|       11|       5|                 0.0629519|         1|
+|iMab/LM52                   |human              |          |              |         9|        1|       0|                 0.1476190|         1|
+|mAb 1.1                     |human              |          |              |         4|        3|       3|                 0.1908879|         1|
+|mAb 10.1                    |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 100                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 101                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 102                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 103                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 104                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 105                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 106                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 107                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 108                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 109                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 11.1                    |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 110                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 111                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 112                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 113                     |human              |          |              |         4|        3|       3|                17.8700708|         1|
+|mAb 114                     |human              |          |              |         4|        3|       3|                 0.3626073|         1|
+|mAb 115                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 116                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 117                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 118                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 119                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 120                     |human              |          |              |         4|        3|       3|                23.6684456|         1|
+|mAb 121                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 122                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 123                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 124                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 125                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 126                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 127                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 128                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 2.1                     |human              |          |              |         4|        3|       3|                 0.4495945|         1|
+|mAb 28.1                    |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 3.1                     |human              |          |              |         4|        3|       3|                 0.3529547|         1|
+|mAb 31.1                    |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 33.1                    |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 34.1                    |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 37.1                    |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 4.1                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 5.1                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 6.1                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 7.1                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 8.1                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 9.1                     |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 93                      |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 94                      |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 95                      |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 96                      |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 97                      |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 98                      |human              |          |              |         4|        3|       3|                        NA|         1|
+|mAb 99                      |human              |          |              |         4|        3|       3|                        NA|         1|
+|sCD4                        |human              |          |Env           |        13|        1|       1|                 3.8639649|         1|
 
 This table is designed to mimic the mAb grid found in the app.
 
@@ -69,10 +258,27 @@ con$filterMabGrid(using = "virus", value = c("242-14", "Q23.17", "6535.3", "BaL.
 con$filterMabGrid(using = "donor_species", value = "llama")
 
 # check the updated grid
-DT::datatable(con$mabGridSummary, options = list(autoWidth = TRUE, scrollX = TRUE))
-#> PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
-#> Error in path.expand(path): invalid 'path' argument
+knitr::kable(con$mabGridSummary)
 ```
+
+
+
+|mab_mixture |donor_species |isotype |hxb2_location | n_viruses| n_clades| n_tiers| geometric_mean_curve_ic50| n_studies|
+|:-----------|:-------------|:-------|:-------------|---------:|--------:|-------:|-------------------------:|---------:|
+|11F1B       |llama         |        |              |         4|        2|       1|                        NA|         1|
+|11F1F       |llama         |        |              |         4|        2|       1|                26.2961178|         1|
+|1H9         |llama         |        |Env           |         4|        2|       1|                 5.0898322|         1|
+|2B4F        |llama         |        |              |         4|        2|       1|                 1.5242288|         1|
+|2H10        |llama         |        |              |         2|        2|       1|                        NA|         1|
+|2H10/W100A  |llama         |        |              |         2|        2|       1|                        NA|         1|
+|3E3         |llama         |        |gp160         |         3|        3|       1|                 0.9944945|         1|
+|4H73        |llama         |        |              |         4|        2|       1|                        NA|         1|
+|5B10D       |llama         |        |              |         4|        2|       1|                        NA|         1|
+|9B6B        |llama         |        |              |         4|        2|       1|                24.3643637|         1|
+|A14         |llama         |        |gp160         |         3|        3|       1|                 1.8444582|         1|
+|B21         |llama         |        |gp160         |         3|        3|       1|                 0.0936399|         1|
+|B9          |llama         |        |gp160         |         3|        3|       1|                 0.0386986|         1|
+|LAB5        |llama         |        |              |         4|        2|       1|                        NA|         1|
 
 Or we can use method chaining to call multiple filter methods and browse the grid. Method chaining is unique to R6 objects and related to the pipe. See Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/r6.html) for more info
 
@@ -93,11 +299,11 @@ You can retrieve values from the grid by `mab_mixture`, `donor_species`, `isotyp
 ```r
 # retrieve available viruses in the filtered grid
 con$mabGrid[, unique(virus)]
-#> [1] "Q23.17"  "6535.3"  "DJ263.8" "BaL.26"  "242-14"
+#> [1] "6535.3"  "Q23.17"  "BaL.26"  "DJ263.8" "242-14"
 
 # retrieve available clades for 1H9 mAb mixture in the filtered grid
 con$mabGrid[mab_mixture == "1H9", unique(clade)]
-#> [1] "B"        "CRF02_AG"
+#> [1] "CRF02_AG" "B"
 ```
 
 
@@ -111,7 +317,7 @@ mab <- con$getMab()
 mab
 #> <DataSpaceMab>
 #>   URL: https://dataspace.cavd.org
-#>   User: jmtaylor@fredhutch.org
+#>   User: jmtaylor@scharp.org
 #>   Summary:
 #>     - 3 studies
 #>     - 14 mAb mixtures
@@ -126,10 +332,27 @@ There are 6 public fields available in the `DataSpaceMab` object: `studyAndMabs`
 
 
 ```r
-DT::datatable(mab$nabMab, options = list(autoWidth = TRUE, scrollX = TRUE))
-#> PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
-#> Error in path.expand(path): invalid 'path' argument
+knitr::kable(con$mabGridSummary)
 ```
+
+
+
+|mab_mixture |donor_species |isotype |hxb2_location | n_viruses| n_clades| n_tiers| geometric_mean_curve_ic50| n_studies|
+|:-----------|:-------------|:-------|:-------------|---------:|--------:|-------:|-------------------------:|---------:|
+|11F1B       |llama         |        |              |         4|        2|       1|                        NA|         1|
+|11F1F       |llama         |        |              |         4|        2|       1|                26.2961178|         1|
+|1H9         |llama         |        |Env           |         4|        2|       1|                 5.0898322|         1|
+|2B4F        |llama         |        |              |         4|        2|       1|                 1.5242288|         1|
+|2H10        |llama         |        |              |         2|        2|       1|                        NA|         1|
+|2H10/W100A  |llama         |        |              |         2|        2|       1|                        NA|         1|
+|3E3         |llama         |        |gp160         |         3|        3|       1|                 0.9944945|         1|
+|4H73        |llama         |        |              |         4|        2|       1|                        NA|         1|
+|5B10D       |llama         |        |              |         4|        2|       1|                        NA|         1|
+|9B6B        |llama         |        |              |         4|        2|       1|                24.3643637|         1|
+|A14         |llama         |        |gp160         |         3|        3|       1|                 1.8444582|         1|
+|B21         |llama         |        |gp160         |         3|        3|       1|                 0.0936399|         1|
+|B9          |llama         |        |gp160         |         3|        3|       1|                 0.0386986|         1|
+|LAB5        |llama         |        |              |         4|        2|       1|                        NA|         1|
 
 ## View metadata concerning the mAb object
 
@@ -149,13 +372,13 @@ names(mab)
 
 ```r
 sessionInfo()
-#> R version 4.0.1 (2020-06-06)
+#> R version 3.6.3 (2020-02-29)
 #> Platform: x86_64-pc-linux-gnu (64-bit)
 #> Running under: Ubuntu 20.04 LTS
 #> 
 #> Matrix products: default
-#> BLAS:   /opt/R/4.0.1/lib/R/lib/libRblas.so
-#> LAPACK: /opt/R/4.0.1/lib/R/lib/libRlapack.so
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
 #> 
 #> locale:
 #>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -169,19 +392,18 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] data.table_1.13.6 DataSpaceR_0.7.4  knitr_1.31       
+#> [1] DataSpaceR_0.7.4  data.table_1.14.0 knitr_1.33       
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.6        highr_0.8         compiler_4.0.1    prettyunits_1.1.1
-#>  [5] remotes_2.2.0     tools_4.0.1       digest_0.6.27     testthat_3.0.2   
-#>  [9] pkgbuild_1.2.0    pkgload_1.1.0     jsonlite_1.7.2    evaluate_0.14    
-#> [13] memoise_2.0.0     lifecycle_1.0.0   rlang_0.4.10      cli_2.3.0        
-#> [17] rstudioapi_0.13   crosstalk_1.1.1   yaml_2.2.1        curl_4.3         
-#> [21] xfun_0.21         fastmap_1.1.0     withr_2.4.1       stringr_1.4.0    
-#> [25] httr_1.4.2        htmlwidgets_1.5.3 desc_1.2.0        fs_1.5.0         
-#> [29] devtools_2.3.2    webshot_0.5.2     DT_0.17           rprojroot_2.0.2  
-#> [33] glue_1.4.2        R6_2.5.0          processx_3.4.5    Rlabkey_2.6.0    
-#> [37] sessioninfo_1.1.1 callr_3.5.1       purrr_0.3.4       magrittr_2.0.1   
-#> [41] htmltools_0.5.1.1 ps_1.5.0          ellipsis_0.3.1    usethis_2.0.1    
-#> [45] assertthat_0.2.1  stringi_1.5.3     cachem_1.0.4      crayon_1.4.1
+#>  [1] Rcpp_1.0.6        highr_0.9         compiler_3.6.3    prettyunits_1.1.1
+#>  [5] remotes_2.2.0     tools_3.6.3       digest_0.6.27     testthat_3.0.1   
+#>  [9] pkgbuild_1.2.0    pkgload_1.2.1     evaluate_0.14     jsonlite_1.7.2   
+#> [13] memoise_2.0.0     lifecycle_1.0.0   rlang_0.4.11      cli_2.5.0        
+#> [17] rstudioapi_0.13   curl_4.3.1        xfun_0.22         fastmap_1.1.0    
+#> [21] withr_2.4.2       stringr_1.4.0     httr_1.4.2        roxygen2_7.1.1   
+#> [25] xml2_1.3.2        desc_1.3.0        fs_1.5.0          devtools_2.3.2   
+#> [29] rprojroot_2.0.2   glue_1.4.2        R6_2.5.0          processx_3.5.2   
+#> [33] Rlabkey_2.6.0     sessioninfo_1.1.1 callr_3.7.0       purrr_0.3.4      
+#> [37] magrittr_2.0.1    ps_1.6.0          ellipsis_0.3.2    usethis_2.0.0    
+#> [41] assertthat_0.2.1  stringi_1.5.3     cachem_1.0.1      crayon_1.4.1
 ```
