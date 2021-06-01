@@ -503,7 +503,7 @@ DataSpaceConnection <- R6Class(
       setDT(availableStudies)
       setkey(availableStudies, study_name)
 
-      availableStudies <- merge(availableStudies, niData)
+      availableStudies <- merge(availableStudies, niData, all.x = TRUE)
       availableStudies[,data_availability:=gsub("This study has assay data \\(",  "", gsub("\\) in the DataSpace\\.", "", data_availability))]
 
       private$.availableStudies <- availableStudies
