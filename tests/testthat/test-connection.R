@@ -1,6 +1,6 @@
 context("DataSpaceConnection")
 
-con <- try(connectDS(onStaging = onStaging), silent = TRUE)
+con <- try(connectDS(), silent = TRUE)
 
 test_that("can connect to DataSpace", {
   expect_is(con, "DataSpaceConnection")
@@ -39,7 +39,7 @@ if ("DataSpaceConnection" %in% class(con)) {
 
       if (length(cap_output) == 10) {
         expect_equal(cap_output[1], "<DataSpaceConnection>")
-        expect_equal(cap_output[2], paste0("  URL: ", baseUrl))
+        expect_equal(cap_output[2], "  URL: https://dataspace.cavd.org")
         expect_match(cap_output[3], "  User: \\S+@\\S+")
         expect_match(cap_output[4], "  Available studies: \\d+")
         expect_match(cap_output[5], "  - \\d+ studies with data")
@@ -78,7 +78,7 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_equal(names(con$config), configs)
 
       if (all.equal(names(con$config), configs)) {
-        expect_equal(con$config$labkeyUrlBase, baseUrl)
+        expect_equal(con$config$labkeyUrlBase, "https://dataspace.cavd.org")
         expect_match(con$config$labkeyUserEmail, "\\S+@\\S+")
         expect_false(con$config$verbose)
         expect_equal(con$config$packageVersion, packageVersion("DataSpaceR"))

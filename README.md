@@ -217,7 +217,7 @@ NAb <- cvd408$getDataset("NAb")
 dim(NAb)
 #> [1] 540  33
 colnames(NAb)
-#>  [1] "ParticipantId"          "ParticipantVisit/Visit" "visit_day"             
+#>  [1] "participant_id"         "participant_visit"      "visit_day"             
 #>  [4] "assay_identifier"       "summary_level"          "specimen_type"         
 #>  [7] "antigen"                "antigen_type"           "virus"                 
 #> [10] "virus_type"             "virus_insert_name"      "clade"                 
