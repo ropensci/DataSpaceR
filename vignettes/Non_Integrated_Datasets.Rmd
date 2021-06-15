@@ -1,7 +1,7 @@
 ---
 title: "Accessing Non-Integrated Datasets"
 author: "Helen Miller"
-date: "2020-11-23"
+date: "2021-05-07"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Non-Integrated Datasets}
@@ -63,18 +63,13 @@ Non-Integrated datasets can be loaded with `getDataset` like integrated data. Th
 
 ```r
 adcp <- vtn505$getDataset("ADCP")
-#> downloading vtn505_adcp.zip to /var/folders/9_/h20m2y51053_6bc26dvzrs140000gn/T//RtmpZyMMda...
-#> No encoding supplied: defaulting to UTF-8.
-#> unzipping vtn505_adcp.zip to /var/folders/9_/h20m2y51053_6bc26dvzrs140000gn/T//RtmpZyMMda/vtn505_adcp
 dim(adcp)
 #> [1] 378  11
 colnames(adcp)
-#>  [1] "study_prot"             "ParticipantId"         
-#>  [3] "study_day"              "lab_code"              
-#>  [5] "specimen_type"          "antigen"               
-#>  [7] "percent_cv"             "avg_phagocytosis_score"
-#>  [9] "positivity_threshold"   "response"              
-#> [11] "assay_identifier"
+#>  [1] "study_prot"             "ParticipantId"          "study_day"             
+#>  [4] "lab_code"               "specimen_type"          "antigen"               
+#>  [7] "percent_cv"             "avg_phagocytosis_score" "positivity_threshold"  
+#> [10] "response"               "assay_identifier"
 ```
 
 You can also view the file format info using `getDatasetDescription`. For non-integrated data, this will open a pdf into your computer's default pdf viewer. 
@@ -91,10 +86,10 @@ If you will be accessing the data at another time and don't want to have to re-d
 
 ```r
 vtn505$dataDir
-#> [1] "/var/folders/9_/h20m2y51053_6bc26dvzrs140000gn/T//RtmpZyMMda"
+#> [1] "/tmp/RtmpXqcnwk"
 vtn505$setDataDir(".")
 vtn505$dataDir
-#> [1] "/Users/hmiller/DataSpace/DataSpaceR/vignettes"
+#> [1] "/home/jmtaylor/Projects/DataSpaceR/vignettes"
 ```
 
 If the dataset already exists in the specified `dataDir` or `outputDir`, it will be not be downloaded. This can be overridden with `reload=TRUE`, which forces a re-download. 
@@ -105,37 +100,38 @@ If the dataset already exists in the specified `dataDir` or `outputDir`, it will
 
 ```r
 sessionInfo()
-#> R version 4.0.2 (2020-06-22)
-#> Platform: x86_64-apple-darwin17.0 (64-bit)
-#> Running under: macOS Catalina 10.15.7
+#> R version 3.6.3 (2020-02-29)
+#> Platform: x86_64-pc-linux-gnu (64-bit)
+#> Running under: Ubuntu 20.04 LTS
 #> 
 #> Matrix products: default
-#> BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
-#> LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
 #> 
 #> locale:
-#> [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+#>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+#> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 #> 
 #> attached base packages:
-#> [1] stats     graphics  grDevices utils     datasets 
-#> [6] methods   base     
+#> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] data.table_1.13.0 DataSpaceR_0.7.4 
-#> [3] knitr_1.29       
+#> [1] DataSpaceR_0.7.4  data.table_1.14.0 knitr_1.33       
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.5        Rlabkey_2.5.1    
-#>  [3] magrittr_1.5      R6_2.4.1         
-#>  [5] rlang_0.4.7       stringr_1.4.0    
-#>  [7] httr_1.4.1        highr_0.8        
-#>  [9] tools_4.0.2       webshot_0.5.2    
-#> [11] DT_0.14           xfun_0.15        
-#> [13] htmltools_0.5.0   crosstalk_1.1.0.1
-#> [15] yaml_2.2.1        assertthat_0.2.1 
-#> [17] digest_0.6.25     pryr_0.1.4       
-#> [19] htmlwidgets_1.5.1 codetools_0.2-16 
-#> [21] curl_4.3          evaluate_0.14    
-#> [23] stringi_1.4.6     compiler_4.0.2   
-#> [25] jsonlite_1.7.1
+#>  [1] Rcpp_1.0.6        highr_0.9         compiler_3.6.3    prettyunits_1.1.1
+#>  [5] remotes_2.2.0     tools_3.6.3       digest_0.6.27     testthat_3.0.1   
+#>  [9] pkgbuild_1.2.0    pkgload_1.2.1     evaluate_0.14     jsonlite_1.7.2   
+#> [13] memoise_2.0.0     lifecycle_1.0.0   rlang_0.4.11      cli_2.5.0        
+#> [17] rstudioapi_0.13   curl_4.3.1        xfun_0.22         fastmap_1.1.0    
+#> [21] withr_2.4.2       stringr_1.4.0     httr_1.4.2        roxygen2_7.1.1   
+#> [25] xml2_1.3.2        desc_1.3.0        fs_1.5.0          devtools_2.3.2   
+#> [29] rprojroot_2.0.2   glue_1.4.2        R6_2.5.0          processx_3.5.2   
+#> [33] Rlabkey_2.6.0     sessioninfo_1.1.1 callr_3.7.0       purrr_0.3.4      
+#> [37] magrittr_2.0.1    ps_1.6.0          ellipsis_0.3.2    usethis_2.0.0    
+#> [41] assertthat_0.2.1  stringi_1.5.3     cachem_1.0.1      crayon_1.4.1
 ```

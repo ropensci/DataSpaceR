@@ -9,6 +9,20 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+<style>
+table {
+    display: block;
+    max-width: 100%;
+    max-height: 600px;
+    overflow: scroll;
+}
+thead{
+    position: sticky;
+    top: 0px;
+    background-color: #fff;
+}
+</style>
+
 ```{r setup, echo = FALSE, warning=FALSE, message=FALSE}
 NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
@@ -39,7 +53,7 @@ con
 The `DataSpaceConnection` print method summarizes the publications and publication data. More details about publications can be accessed through `con$availablePublications`.
 
 ```{r availablePublications}
-knitr::kable(head(con$availablePublications[, -"link"]))
+knitr::kable(con$availablePublications[, -"link"])
 ```
 
 This table summarizes all publications, providing some information like first author, journal where it was published, and title as a `data.table`. It also includes a pubmed url where available under `link`. Related studies under `related_studies`, and related studies with data available under `studies_with_data`.  We can use `data.table` methods to filter and sort this table to browse available publications.
@@ -56,7 +70,7 @@ or publications that have related studies with integrated data in DataSpace:
 
 ```{r filter_by_study_data}
 pubs_with_study_data <- con$availablePublications[!is.na(studies_with_data)]
-knitr::kable(head(pubs_with_study_data[, -"link"]))
+knitr::kable(pubs_with_study_data[, -"link"])
 ```
 
 We can also use this information to connect to related studies and pull integrated data. Say we are interested in this Rouphael (2019) publication:
@@ -85,7 +99,7 @@ DataSpace also includes publication datasets for some publications. The format o
 
 ```{r available_publication_data}
 pubs_with_data <- con$availablePublications[publication_data_available == TRUE]
-knitr::kable(head(pubs_with_data[, -"link"]))
+knitr::kable(pubs_with_data[, -"link"])
 ```
 
 Data for a publication can be accessed through `DataSpaceR` with `con$downloadPublicationData()`. The publication ID must be specified, as found under `publication_id` in `con$availablePublications`. The file is presented as a zip file. The `unzip` argument gives us the option whether to unzip this file. By default, the file will be unzipped. You may also specify the directory to download the file. By default, it will be saved to your `Downloads` directory. This function invisibly returns the paths to the downloaded files.
