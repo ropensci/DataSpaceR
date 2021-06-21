@@ -30,6 +30,10 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
     cavd <- try(con$getGroup(groupId), silent = TRUE)
   }
 
+  normPath <- function(path){
+      gsub("\\\\", "/", path)
+  }
+  
   test_that("can connect to studies", {
     expect_is(cavd, "DataSpaceStudy")
     expect_is(cavd, "R6")
@@ -143,16 +147,16 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
 
       test_that("`setDataDir`, `getOutputDir`", {
         getOutputDir <- cavd$.__enclos_env__$private$.getOutputDir
-        expect_equal(normalizePath(getOutputDir(), winslash = "/"), normalizePath(tempdir(), winslash = "/"))
-        expect_equal(normalizePath(getOutputDir("."), winslash = "/"), getwd())
+        expect_equal(normPath(getOutputDir()), normPath(tempdir()))
+        expect_equal(normPath(getOutputDir(".")), getwd())
 
         cavd$setDataDir(".")
-        expect_equal(cavd$dataDir, getwd())
-        expect_equal(normalizePath(getOutputDir(), winslash = "/"), getwd())
-        expect_equal(normalizePath(getOutputDir(tempdir()), winslash = "/"), normalizePath(tempdir(), winslash = "/"))
+        expect_equal(normPath(cavd$dataDir), getwd())
+        expect_equal(normPath(getOutputDir()), getwd())
+        expect_equal(normPath(getOutputDir(tempdir())), normPath(tempdir()))
 
         cavd$setDataDir(NULL)
-        expect_equal(normalizePath(getOutputDir(), winslash = "/"), normalizePath(tempdir(), winslash = "/"))
+        expect_equal(normPath(getOutputDir()), normPath(tempdir()))
       })
 
       test_that("`.downloadNIDataset`", {
@@ -163,9 +167,9 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
             files <- list.files(".")
 
             path <- downloadNIDataset(datasetName)
-            expect_equal(dirname(path), normalizePath(tempdir(), winslash = "/"))
+            expect_equal(dirname(path), normPath(tempdir()))
             expect_equal(path, availableNIDatasets[name == datasetName]$localPath)
-            expect_equal(cavd$.__enclos_env__$private$.getOutputDir(), dirname(path))
+            expect_equal(normPath(cavd$.__enclos_env__$private$.getOutputDir()), dirname(path))
             expect_true(dir.exists(path))
             expect_gt(length(list.files(path)), 0)
 
@@ -179,8 +183,8 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
             cavd$setDataDir(".")
             path <- downloadNIDataset(datasetName)
             expect_equal(getwd(), dirname(path))
-            expect_equal(normalizePath(cavd$dataDir, winslash = "/"), dirname(path))
-            expect_equal(normalizePath(cavd$.__enclos_env__$private$.getOutputDir(), winslash = "/"), dirname(path))
+            expect_equal(normPath(cavd$dataDir), dirname(path))
+            expect_equal(normPath(cavd$.__enclos_env__$private$.getOutputDir()), dirname(path))
             expect_equal(availableNIDatasets[name == datasetName]$localPath, path)
             expect_true(dir.exists(path))
             expect_gt(length(list.files(path)), 0)
