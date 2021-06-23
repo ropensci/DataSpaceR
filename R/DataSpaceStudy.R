@@ -628,7 +628,7 @@ DataSpaceStudy <- R6Class(
     .getOutputDir = function(outputDir = NULL) {
       if (!is.null(outputDir)) {
         if (dir.exists(outputDir)) {
-          return(normalizePath(outputDir))
+          return(outputDir)
         } else {
           stop(paste0(outputDir, " is not a directory."))
         }
