@@ -7,7 +7,7 @@ teardown({
   unlink("tmp_test")
 })
 
-con <- try(connectDS(), silent = TRUE)
+con <- connectDS(onStaging = onStaging)
 
 test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupLabel = NULL) {
   datasets <- sort(datasets)
@@ -72,7 +72,7 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
             paste0("  Study: ", ifelse(study == "", "CAVD", study)),
             paste0("  Group: ", groupLabel)
           ),
-          paste0("  URL: https://dataspace.cavd.org/CAVD", path),
+          paste0("  URL: ", baseUrl, "/CAVD", path),
           "  Available datasets:",
           strwrap(datasets, prefix = "    - "),
           "  Available non-integrated datasets:",
@@ -338,11 +338,17 @@ test_study(
                "Demographics",
                "Intracellular Cytokine Staining",
                "Neutralizing antibody"),
-  groupId = 228,
-  groupLabel = c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
+  groupId = ifelse(onStaging, 226, 228),
+  groupLabel = {
+    if (onStaging) {
+      c("HVTN 505 case control polyfunctionality and BAMA" = "HVTN 505 case control polyfunctionality and BAMA")
+    } else {
+      c("HVTN 505 case control subjects" = "HVTN 505 case control subjects")
+    }
+  }
 )
 
-email <- DataSpaceR:::getUserEmail("https://dataspace.cavd.org", NULL)
+email <- DataSpaceR:::getUserEmail(baseUrl, NULL)
 if (identical(email, "jkim2345@scharp.org")) {
   test_study(
     study = "",
