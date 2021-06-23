@@ -158,7 +158,7 @@ if ("DataSpaceConnection" %in% class(con)) {
     })
 
     test_that("`downloadPublicationData`", {
-      outputDir <- tempdir()
+      outputDir <- normalizePath(tempdir(), winslash = "/")
       .availablePublications <- con$.__enclos_env__$private$.availablePublications
 
       # unzip = FALSE
