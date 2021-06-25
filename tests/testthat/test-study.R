@@ -35,8 +35,8 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
   }
   
   test_that("can connect to studies", {
-    expect_is(cavd, "DataSpaceStudy")
-    expect_is(cavd, "R6")
+    expect_is(cavd, "DataSpaceStudy", info=cavd[1])
+    expect_is(cavd, "R6", info=cavd[1])
   })
 
   if ("DataSpaceStudy" %in% class(cavd)) {
@@ -200,7 +200,7 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
       test_that("`getDataset`", {
         for (datasetName in cavd$availableDatasets$name) {
           dataset <- try(cavd$getDataset(datasetName), silent = TRUE)
-          expect_is(dataset, "data.table", info = datasetName)
+          expect_is(dataset, "data.table", info = paste(datasetName, study, groupId))
           expect_gt(nrow(dataset), 0)
         }
       })
@@ -208,7 +208,7 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
       test_that("`getDataset` (label)", {
         for (datasetLabel in cavd$availableDatasets$label) {
           dataset <- try(cavd$getDataset(datasetLabel), silent = TRUE)
-          expect_is(dataset, "data.table", info = datasetLabel)
+          expect_is(dataset, "data.table", info = paste(datasetLabel, study, groupId))
           expect_gt(nrow(dataset), 0)
         }
       })
@@ -217,7 +217,7 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         for (i in seq_len(nrow(cavd$availableDatasets))) {
           datasetName <- cavd$availableDatasets$name[i]
           dataset <- try(cavd$getDataset(datasetName), silent = TRUE)
-          expect_is(dataset, "data.table", info = datasetName)
+          expect_is(dataset, "data.table", info = paste(datasetName, study, groupId))
 
           if (cavd$availableDatasets$integrated[i]) {
             datasetN <- cavd$availableDatasets$n[i]

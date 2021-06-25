@@ -194,6 +194,13 @@ DataSpaceStudy <- R6Class(
           ...
         )
 
+        ## set variable names that are returned as camel case with slash to snake case
+        setnames(
+          dataset,
+          names(dataset),
+          tolower(gsub("/[A-z]+", "", gsub("^([A-z]+)([A-Z])", "\\1_\\2", names(dataset))))
+        )
+          
         # convert to data.table
         setDT(dataset)
       } else {
@@ -229,8 +236,8 @@ DataSpaceStudy <- R6Class(
         # update 'n'
         private$.availableNIDatasets[name == datasetName, n := nrow(dataset)]
 
-        # change "subject_id" to "ParticipantId" to be consistent with other datasets
-        setnames(dataset, c("subject_id", "prot"), c("ParticipantId", "study_prot"), skip_absent = TRUE)
+        # change "subject_id" to "participant_id" to be consistent with other datasets
+        setnames(dataset, c("subject_id", "prot"), c("participant_id", "study_prot"), skip_absent = TRUE)
       }
 
       # merge extra information
@@ -243,11 +250,11 @@ DataSpaceStudy <- R6Class(
           if (!identical(datasetName, "Demographics")) {
             dem <- self$getDataset("Demographics")
 
-            subj <- ifelse(private$.study == "", "Subject", "Participant")
-            cols <- c(paste0(subj, "Visit/Visit"), "study_prot")
+            subj <- ifelse(private$.study == "", "subject", "participant")
+            cols <- c(paste0(subj, "_visit"), "study_prot")
             dem <- dem[, -cols, with = FALSE]
 
-            key <- paste0(subj, "Id")
+            key <- paste0(subj, "_id")
             setkeyv(dem, key)
             setkeyv(dataset, key)
 
