@@ -8,8 +8,7 @@
   netrc <- getNetrcPath()
 
   if (!file.exists(netrc) &&
-    !exists("labkey.url.base") &&
-    !exists("labkey.user.email") &&
+    !exists("labkey.apiKey") &&
     Sys.getenv("DS_login") == "") {
     packageStartupMessage(
       "A netrc file is required to connect to the DataSpace. ",

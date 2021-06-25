@@ -81,7 +81,7 @@ DataSpaceConnection <- R6Class(
       curlOptions <- setCurlOptions(netrcFile)
 
       # check netrc file
-      if (!(exists("labkey.url.base") && exists("labkey.user.email"))) {
+      if (!exists("labkey.apiKey")) {
         checkNetrc(netrcFile, onStaging, verbose = FALSE)
       }
 
