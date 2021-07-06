@@ -198,7 +198,15 @@ DataSpaceStudy <- R6Class(
         setnames(
           dataset,
           names(dataset),
-          tolower(gsub("/[A-z]+", "", gsub("^([A-z]+)([A-Z])", "\\1_\\2", names(dataset))))
+          tolower(
+            gsub("/[A-z]+", "", 
+                 gsub("_+", "_",
+                      gsub("([A-z]+|[0-9]+)_?([A-Z])", "\\1_\\2",
+                           gsub("([A-Z])([A-Z])", "\\1\\L\\2", names(dataset), perl = TRUE)
+                           )
+                      )
+                 )
+          )
         )
           
         # convert to data.table
