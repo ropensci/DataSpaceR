@@ -1,8 +1,6 @@
 ## Set STAGING to TRUE in .Renviron to run tests against staging server.
-
 onStaging <- identical(tolower(Sys.getenv("STAGING")), "true")
 baseUrl <- ifelse(onStaging, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
-stop(baseUrl)
 
 ## build objects for testing column names for standardized assays
 .NABNAMES <- c(
