@@ -79,7 +79,11 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
           strwrap(niDatasets, prefix = "    - ")
         )
         cap_output <- capture.output(cavd$print())
-        expect_equal(cap_output, con_output)
+        expect_equal(
+          cap_output,
+          con_output,
+          info=paste(study, groupId, "connection console print does not match inputs in `test_study()`.")
+        )
       })
 
       test_that("`config`", {
@@ -104,7 +108,8 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         )
         expect_equal(
           cavd$availableDatasets$label,
-          c(datasets, niDatasets)
+          c(datasets, niDatasets),
+          info=paste(study, groupId, "does not have the correct datasets arguments for `test_study()`." )
         )
       })
 
@@ -202,6 +207,25 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
           dataset <- try(cavd$getDataset(datasetName), silent = TRUE)
           expect_is(dataset, "data.table", info = paste(datasetName, study, groupId))
           expect_gt(nrow(dataset), 0)
+          ## checking column names for study datasets
+          if (cavd$availableDatasets$integrated[cavd$availableDatasets$name == datasetName] & cavd$study != ""){
+            datasetColNames <- switch(
+              datasetName, 
+              "BAMA"    = .BAMANAMES,
+              "ELISPOT" = .ELINAMES,
+              "ICS"     = .ICSNAMES,
+              "NAb"     = .NABNAMES,
+              "PK MAb"  = .PKNAMES,
+              NULL
+            )
+            check <- names(dataset) == datasetColNames
+            expect_true(
+              all(check),
+              info = paste(
+                datasetName, "does not match set names in helper.R file for", study, groupId, "."
+              )
+            )
+          }
         }
       })
 
@@ -288,7 +312,6 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
 
       test_that("`refresh`", {
         refresh <- try(cavd$refresh(), silent = TRUE)
-
         expect_is(refresh, "logical")
         expect_true(refresh)
       })
@@ -301,11 +324,25 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
 #   datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb", "PKMAb")
 # )
 test_study(
+  study = "cvd277",
+  datasets = c("Binding Ab multiplex assay",     
+               "Demographics",     
+               "Enzyme-Linked ImmunoSpot",
+               "Intracellular Cytokine Staining",
+               "Neutralizing antibody")
+)
+test_study(
   study = "cvd408",
   datasets = c("Binding Ab multiplex assay",
                "Intracellular Cytokine Staining",
                "Demographics",
                "Neutralizing antibody")
+)
+test_study(
+  study = "cvd446",
+  datasets = c("Demographics",
+               "PK MAb"),
+  niDatasets = c("Demographics (Supplemental)")
 )
 test_study(
   study = "vtn505",
@@ -317,6 +354,7 @@ test_study(
                  "Demographics (Supplemental)",
                  "Fc Array")
 )
+
 # test_study(
 #   study = "cvd812",
 #   datasets = c(),
