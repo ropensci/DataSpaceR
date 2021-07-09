@@ -105,7 +105,7 @@ if ("DataSpaceConnection" %in% class(con)) {
         names(con$availableStudies),
         c(
           "study_name", "short_name", "title", "type", "status", "stage",
-          "species", "start_date", "strategy", "network", "data_availability"
+          "species", "start_date", "strategy", "network", "data_availability", "ni_data_availability"
         )
       )
       expect_gt(nrow(con$availableStudies), 0)

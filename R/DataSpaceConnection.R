@@ -467,6 +467,29 @@ DataSpaceConnection <- R6Class(
         "network", "data_availability"
       )
 
+      niData <- setDT(
+        merge(
+          labkey.selectRows(
+            baseUrl=private$.config$labkeyUrlBase, 
+            folderPath="/CAVD", 
+            schemaName = "CDS",
+            queryName = "document",
+            colNameOpt = "fieldname",
+            colSelect = c("document_id", "label", "filename", "document_type", "assay_identifier")
+          ),
+          labkey.selectRows(
+            baseUrl=private$.config$labkeyUrlBase, 
+            folderPath="/CAVD", 
+            schemaName = "CDS",
+            queryName = "studydocument",
+            colNameOpt = "fieldname",
+            colSelect = c("document_id", "prot")
+          ),
+          by = "document_id")
+      )[document_type == "Non-Integrated Assay"][,.(ni_data_availability=paste(label, collapse = ", ")), by = "prot"]
+
+      setnames(niData, "prot", "study_name")
+
       availableStudies <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
@@ -479,6 +502,9 @@ DataSpaceConnection <- R6Class(
 
       setDT(availableStudies)
       setkey(availableStudies, study_name)
+
+      availableStudies <- merge(availableStudies, niData, all.x = TRUE)
+      availableStudies[,data_availability:=gsub("This study has assay data \\(",  "", gsub("\\) in the DataSpace\\.", "", data_availability))]
 
       private$.availableStudies <- availableStudies
     },
