@@ -226,8 +226,7 @@ assertColumn <- function(using, self) {
 }
 
 switchColumn <- function(using) {
-  switch(
-    using,
+  switch(using,
     "mab_mixture" = "mab_mix_name_std",
     "donor_species" = "mab_donor_species",
     "isotype" = "mab_isotype",

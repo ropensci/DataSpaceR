@@ -30,13 +30,13 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
     cavd <- try(con$getGroup(groupId), silent = TRUE)
   }
 
-  normPath <- function(path){
-      gsub("\\\\", "/", path)
+  normPath <- function(path) {
+    gsub("\\\\", "/", path)
   }
-  
+
   test_that("can connect to studies", {
-    expect_is(cavd, "DataSpaceStudy", info=cavd[1])
-    expect_is(cavd, "R6", info=cavd[1])
+    expect_is(cavd, "DataSpaceStudy", info = cavd[1])
+    expect_is(cavd, "R6", info = cavd[1])
   })
 
   if ("DataSpaceStudy" %in% class(cavd)) {
@@ -82,7 +82,7 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         expect_equal(
           cap_output,
           con_output,
-          info=paste(study, groupId, "connection console print does not match inputs in `test_study()`.")
+          info = paste(study, groupId, "connection console print does not match inputs in `test_study()`.")
         )
       })
 
@@ -109,7 +109,7 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
         expect_equal(
           cavd$availableDatasets$label,
           c(datasets, niDatasets),
-          info=paste(study, groupId, "does not have the correct datasets arguments for `test_study()`." )
+          info = paste(study, groupId, "does not have the correct datasets arguments for `test_study()`.")
         )
       })
 
@@ -208,9 +208,8 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
           expect_is(dataset, "data.table", info = paste(datasetName, study, groupId))
           expect_gt(nrow(dataset), 0)
           ## checking column names for study datasets
-          if (cavd$availableDatasets$integrated[cavd$availableDatasets$name == datasetName] & cavd$study != ""){
-            datasetColNames <- switch(
-              datasetName, 
+          if (cavd$availableDatasets$integrated[cavd$availableDatasets$name == datasetName] & cavd$study != "") {
+            datasetColNames <- switch(datasetName,
               "BAMA"    = .BAMANAMES,
               "ELISPOT" = .ELINAMES,
               "ICS"     = .ICSNAMES,
@@ -325,34 +324,44 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
 # )
 test_study(
   study = "cvd277",
-  datasets = c("Binding Ab multiplex assay",     
-               "Demographics",     
-               "Enzyme-Linked ImmunoSpot",
-               "Intracellular Cytokine Staining",
-               "Neutralizing antibody")
+  datasets = c(
+    "Binding Ab multiplex assay",
+    "Demographics",
+    "Enzyme-Linked ImmunoSpot",
+    "Intracellular Cytokine Staining",
+    "Neutralizing antibody"
+  )
 )
 test_study(
   study = "cvd408",
-  datasets = c("Binding Ab multiplex assay",
-               "Intracellular Cytokine Staining",
-               "Demographics",
-               "Neutralizing antibody")
+  datasets = c(
+    "Binding Ab multiplex assay",
+    "Intracellular Cytokine Staining",
+    "Demographics",
+    "Neutralizing antibody"
+  )
 )
 test_study(
   study = "cvd446",
-  datasets = c("Demographics",
-               "PK MAb"),
+  datasets = c(
+    "Demographics",
+    "PK MAb"
+  ),
   niDatasets = c("Demographics (Supplemental)")
 )
 test_study(
   study = "vtn505",
-  datasets = c("Binding Ab multiplex assay",
-               "Intracellular Cytokine Staining",
-               "Demographics",
-               "Neutralizing antibody"),
-  niDatasets = c("ADCP",
-                 "Demographics (Supplemental)",
-                 "Fc Array")
+  datasets = c(
+    "Binding Ab multiplex assay",
+    "Intracellular Cytokine Staining",
+    "Demographics",
+    "Neutralizing antibody"
+  ),
+  niDatasets = c(
+    "ADCP",
+    "Demographics (Supplemental)",
+    "Fc Array"
+  )
 )
 
 # test_study(
@@ -362,20 +371,24 @@ test_study(
 # )
 test_study(
   study = "",
-  datasets = c("Binding Ab multiplex assay",
-               "Intracellular Cytokine Staining",
-               "Enzyme-Linked ImmunoSpot",
-               "Demographics",
-               "Neutralizing antibody"),
+  datasets = c(
+    "Binding Ab multiplex assay",
+    "Intracellular Cytokine Staining",
+    "Enzyme-Linked ImmunoSpot",
+    "Demographics",
+    "Neutralizing antibody"
+  ),
   groupId = 220,
   groupLabel = c("NYVAC_durability" = "NYVAC durability comparison")
 )
 test_study(
   study = "",
-  datasets = c("Binding Ab multiplex assay",
-               "Demographics",
-               "Intracellular Cytokine Staining",
-               "Neutralizing antibody"),
+  datasets = c(
+    "Binding Ab multiplex assay",
+    "Demographics",
+    "Intracellular Cytokine Staining",
+    "Neutralizing antibody"
+  ),
   groupId = ifelse(onStaging, 226, 228),
   groupLabel = {
     if (onStaging) {

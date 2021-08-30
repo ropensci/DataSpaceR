@@ -100,7 +100,7 @@ baseUrl <- ifelse(onStaging, "https://dataspace-staging.cavd.org", "https://data
   "mfi_bkgd",
   "mfi_bkgd_blank",
   "auc",
-  "study_prot"         
+  "study_prot"
 )
 
 .ELINAMES <- c(

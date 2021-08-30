@@ -459,7 +459,6 @@ DataSpaceConnection <- R6Class(
     .virusMetadata = data.table(),
     .availablePublications = data.table(),
     .cache = list(),
-
     .getAvailableStudies = function() {
       colSelect <- c(
         "study_name", "short_name", "title", "type", "status",
@@ -470,23 +469,24 @@ DataSpaceConnection <- R6Class(
       niData <- setDT(
         merge(
           labkey.selectRows(
-            baseUrl=private$.config$labkeyUrlBase, 
-            folderPath="/CAVD", 
+            baseUrl = private$.config$labkeyUrlBase,
+            folderPath = "/CAVD",
             schemaName = "CDS",
             queryName = "document",
             colNameOpt = "fieldname",
             colSelect = c("document_id", "label", "filename", "document_type", "assay_identifier")
           ),
           labkey.selectRows(
-            baseUrl=private$.config$labkeyUrlBase, 
-            folderPath="/CAVD", 
+            baseUrl = private$.config$labkeyUrlBase,
+            folderPath = "/CAVD",
             schemaName = "CDS",
             queryName = "studydocument",
             colNameOpt = "fieldname",
             colSelect = c("document_id", "prot")
           ),
-          by = "document_id")
-      )[document_type == "Non-Integrated Assay"][,.(ni_data_availability=paste(label, collapse = ", ")), by = "prot"]
+          by = "document_id"
+        )
+      )[document_type == "Non-Integrated Assay"][, .(ni_data_availability = paste(label, collapse = ", ")), by = "prot"]
 
       setnames(niData, "prot", "study_name")
 
@@ -504,11 +504,10 @@ DataSpaceConnection <- R6Class(
       setkey(availableStudies, study_name)
 
       availableStudies <- merge(availableStudies, niData, all.x = TRUE)
-      availableStudies[,data_availability:=gsub("This study has assay data \\(",  "", gsub("\\) in the DataSpace\\.", "", data_availability))]
+      availableStudies[, data_availability := gsub("This study has assay data \\(", "", gsub("\\) in the DataSpace\\.", "", data_availability))]
 
       private$.availableStudies <- availableStudies
     },
-
     .getStats = function() {
       stats <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -523,7 +522,6 @@ DataSpaceConnection <- R6Class(
 
       private$.stats <- stats
     },
-
     .getAvailableGroups = function() {
       participantGroupApi <- paste0(
         private$.config$labkeyUrlBase,
@@ -569,7 +567,6 @@ DataSpaceConnection <- R6Class(
 
       private$.availableGroups <- availableGroups
     },
-
     .getMabGrid = function() {
       mabGridBase <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -599,7 +596,6 @@ DataSpaceConnection <- R6Class(
 
       invisible(NULL)
     },
-
     .getVirusMetadata = function() {
       colSelect <- c(
         "assay_identifier", "virus", "virus_type", "neutralization_tier", "clade",
@@ -621,7 +617,6 @@ DataSpaceConnection <- R6Class(
 
       private$.virusMetadata <- virusMetadata
     },
-
     .getAvailablePublications = function() {
       sqlQuery <-
         "

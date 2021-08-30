@@ -112,7 +112,6 @@ DataSpaceMab <- R6Class(
       invisible(!"try-error" %in% tries)
     }
   ),
-
   active = list(
 
     #' @field config A list. Stores configuration of the connection object such
@@ -154,7 +153,6 @@ DataSpaceMab <- R6Class(
       private$.variableDefinitions
     }
   ),
-
   private = list(
     .config = list(),
     .filters = list(),
@@ -164,7 +162,6 @@ DataSpaceMab <- R6Class(
     .studies = data.table(),
     .assays = data.table(),
     .variableDefinitions = data.table(),
-
     .getNabMabs = function() {
       filters <- private$.filters
       if (length(filters) > 0) {
@@ -194,7 +191,6 @@ DataSpaceMab <- R6Class(
 
       private$.nabMab <- nabMab
     },
-
     .getMabs = function() {
       mabs <- labkey.executeSql(
         baseUrl = private$.config$labkeyUrlBase,
@@ -216,7 +212,6 @@ DataSpaceMab <- R6Class(
 
       private$.mabs <- mabs
     },
-
     .getStudies = function() {
       studies <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -258,7 +253,6 @@ DataSpaceMab <- R6Class(
         )]
       )
     },
-
     .getAssays = function() {
       assays <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -276,7 +270,6 @@ DataSpaceMab <- R6Class(
 
       private$.assays <- assays[, container := NULL]
     },
-
     .getVariableDefinitions = function() {
       varInfo <- labkey.getQueryDetails(
         baseUrl = private$.config$labkeyUrlBase,

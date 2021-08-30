@@ -199,16 +199,19 @@ DataSpaceStudy <- R6Class(
           dataset,
           names(dataset),
           tolower(
-            gsub("/[A-z]+", "", 
-                 gsub("_+", "_",
-                      gsub("([A-z]+|[0-9]+)_?([A-Z])", "\\1_\\2",
-                           gsub("([A-Z])([A-Z])", "\\1\\L\\2", names(dataset), perl = TRUE)
-                           )
-                      )
-                 )
+            gsub(
+              "/[A-z]+", "",
+              gsub(
+                "_+", "_",
+                gsub(
+                  "([A-z]+|[0-9]+)_?([A-Z])", "\\1_\\2",
+                  gsub("([A-Z])([A-Z])", "\\1\\L\\2", names(dataset), perl = TRUE)
+                )
+              )
+            )
           )
         )
-          
+
         # convert to data.table
         setDT(dataset)
       } else {
@@ -418,7 +421,6 @@ DataSpaceStudy <- R6Class(
       invisible(!"try-error" %in% tries)
     }
   ),
-
   active = list(
 
     #' @field study A character. The study name.
@@ -478,7 +480,6 @@ DataSpaceStudy <- R6Class(
       private$.studyInfo
     }
   ),
-
   private = list(
     .study = character(),
     .config = list(),
@@ -489,7 +490,6 @@ DataSpaceStudy <- R6Class(
     .treatmentArm = data.table(),
     .group = character(),
     .studyInfo = list(),
-
     .getAvailableDatasets = function() {
       datasetQuery <-
         paste(
@@ -531,7 +531,6 @@ DataSpaceStudy <- R6Class(
 
       private$.availableDatasets <- availableDatasets[order(name)]
     },
-
     .getAvailableNIDatasets = function() {
       document <- labkey.selectRows(
         private$.config$labkeyUrlBase,
@@ -568,7 +567,6 @@ DataSpaceStudy <- R6Class(
       ]
       private$.availableNIDatasets <- niDatasets
     },
-
     .getTreatmentArm = function() {
       colSelect <- c(
         "arm_id", "arm_part", "arm_group", "arm_name",
@@ -596,7 +594,6 @@ DataSpaceStudy <- R6Class(
 
       private$.treatmentArm <- treatmentArm
     },
-
     .downloadNIDataset = function(datasetName, outputDir = NULL) {
       remotePath <- private$.availableNIDatasets[name == datasetName]$remotePath
       outputDir <- private$.getOutputDir(outputDir)
@@ -639,7 +636,6 @@ DataSpaceStudy <- R6Class(
 
       return(fullOutputDir)
     },
-
     .getOutputDir = function(outputDir = NULL) {
       if (!is.null(outputDir)) {
         if (dir.exists(outputDir)) {

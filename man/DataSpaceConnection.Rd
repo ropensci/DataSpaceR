@@ -129,13 +129,13 @@ Print the \code{DataSpaceConnection} object.
 \subsection{Method \code{getStudy()}}{
 Create a \code{\link{DataSpaceStudy}} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getStudy(study)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getStudy(studyName)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{study}}{A character. Name of the study to retrieve.}
+\item{\code{studyName}}{A character. Name of the study to retrieve.}
 }
 \if{html}{\out{</div>}}
 }
@@ -205,7 +205,7 @@ Create a \code{\link{DataSpaceMab}} object.
 Download publication data for a chosen publication.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$downloadPublicationData(
-  publicationID,
+  publicationId,
   outputDir = getwd(),
   unzip = TRUE,
   verbose = TRUE
@@ -215,7 +215,7 @@ Download publication data for a chosen publication.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{publicationID}}{A character/integer. ID for the publication to
+\item{\code{publicationId}}{A character/integer. ID for the publication to
 download data for.}
 
 \item{\code{outputDir}}{A character. Path to directory to download publication
