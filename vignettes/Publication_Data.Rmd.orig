@@ -28,7 +28,7 @@ STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
 labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
   message = FALSE
 )
 ```
@@ -50,7 +50,7 @@ con
 The `DataSpaceConnection` print method summarizes the publications and publication data. More details about publications can be accessed through `con$availablePublications`.
 
 ```{r availablePublications}
-knitr::kable(con$availablePublications[, -"link"])
+knitr::kable(head(con$availablePublications[, -"link"]))
 ```
 
 This table summarizes all publications, providing some information like first author, journal where it was published, and title as a `data.table`. It also includes a pubmed url where available under `link`. Related studies under `related_studies`, and related studies with data available under `studies_with_data`.  We can use `data.table` methods to filter and sort this table to browse available publications.

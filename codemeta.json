@@ -217,7 +217,7 @@
     }
   ],
   "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
-  "fileSize": "7800.878KB",
+  "fileSize": "771.297KB",
   "contIntegration": ["https://github.com/ropensci/DataSpaceR/actions", "https://codecov.io/gh/ropensci/DataSpaceR/branch/main"],
   "keywords": [
     "r",
@@ -232,7 +232,7 @@
     "immunology",
     "cavd-dataspace"
   ],
-  "developmentStatus": ["https://www.repostatus.org/#active", "https://www.tidyverse.org/lifecycle/#maturing"],
+  "developmentStatus": ["https://www.repostatus.org/#active", "https://lifecycle.r-lib.org/articles/stages.html"],
   "contributor": {},
   "funder": {},
   "provider": {
