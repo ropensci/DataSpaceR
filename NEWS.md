@@ -1,3 +1,10 @@
+# DataSpaceR 0.7.5
+
+* Fixed bug concerning missing cookie session name for app reports which will update this package to work when run on CDS as in a report.
+* Show NI data in available datasets active binding which will allow users to look for NI (non-integrated) data in DSR.
+* Set active binding names to snake case which is in effort to standardize fields names used in the API.
+* Add all authors to publication table which will allow users to find publication by authors who were not listed as the primary author.
+
 # DataSpaceR 0.7.4
 
 * Added `virusMetadata` field to `DataSpaceConnection` which shows virus metadata for viruses used in NAb assays (thanks @helenmiller16 #26)
