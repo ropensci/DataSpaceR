@@ -1,6 +1,7 @@
 # For help debugging build failures open an issue on the RStudio community with the 'github-actions' tag.
 # https://community.rstudio.com/new-topic?category=Package%20development&tags=github-actions
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -87,6 +88,12 @@ jobs:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
           NOT_CRAN: true
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
+
+      - name: Test coverage
+        env:
+          NOT_CRAN: true
+        run: covr::codecov()
         shell: Rscript {0}
 
       - name: Upload check results
