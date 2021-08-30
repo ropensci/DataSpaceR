@@ -10,24 +10,24 @@
   "codeRepository": "https://github.com/ropensci/DataSpaceR",
   "issueTracker": "https://github.com/ropensci/DataSpaceR/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
+  "runtimePlatform": "R version 4.1.1 (2021-08-10)",
   "author": [
     {
       "@type": "Person",
       "givenName": "Ju Yeong",
-      "familyName": "Kim",
-      "email": "jkim2345@fredhutch.org"
+      "familyName": "Kim"
     },
     {
       "@type": "Person",
       "givenName": "Jason",
-      "familyName": "Taylor"
+      "familyName": "Taylor",
+      "email": "jmtaylor@fredhutch.org"
     },
     {
       "@type": "Person",
@@ -37,18 +37,17 @@
   ],
   "copyrightHolder": [
     {
-      "@type": "Person",
-      "givenName": "Ju Yeong",
-      "familyName": "Kim",
-      "email": "jkim2345@fredhutch.org"
+      "@type": "Organization",
+      "name": "CAVD DataSpace",
+      "email": "dataspace.support@scharp.org"
     }
   ],
   "maintainer": [
     {
       "@type": "Person",
-      "givenName": "Ju Yeong",
-      "familyName": "Kim",
-      "email": "jkim2345@fredhutch.org"
+      "givenName": "Jason",
+      "familyName": "Taylor",
+      "email": "jmtaylor@fredhutch.org"
     }
   ],
   "softwareSuggestions": [
@@ -111,18 +110,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "DT",
-      "name": "DT",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=DT"
     }
   ],
   "softwareRequirements": [
@@ -230,8 +217,8 @@
     }
   ],
   "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
-  "fileSize": "312.163KB",
-  "contIntegration": "https://codecov.io/gh/ropensci/DataSpaceR/branch/main",
+  "fileSize": "7800.878KB",
+  "contIntegration": ["https://github.com/ropensci/DataSpaceR/actions", "https://codecov.io/gh/ropensci/DataSpaceR/branch/main"],
   "keywords": [
     "r",
     "labkey",
@@ -248,7 +235,6 @@
   "developmentStatus": ["https://www.repostatus.org/#active", "https://www.tidyverse.org/lifecycle/#maturing"],
   "contributor": {},
   "funder": {},
-  "readme": "https://github.com/ropensci/DataSpaceR/blob/main/README.md",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",

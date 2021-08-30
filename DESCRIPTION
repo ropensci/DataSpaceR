@@ -2,14 +2,11 @@ Package: DataSpaceR
 Type: Package
 Title: Interface to 'the CAVD DataSpace'
 Version: 0.7.5
-Authors@R: c(person("Ju Yeong", "Kim",
-                    email = "jkim2345@fredhutch.org",
-                    role = c("aut", "cre", "cph")),
-             person("Sean", "Hughes",
-                    comment = "Sean reviewed the package for ropensci, see <https://github.com/ropensci/software-review/issues/261>",
-                    role = "rev"),
-             person("Jason", "Taylor", role = "aut"),
-             person("Helen", "Miller", role = "aut"))
+Authors@R: c(person("Ju Yeong", "Kim", role = "aut"),
+             person("Sean", "Hughes", role = "rev"),
+             person("Jason", "Taylor", email = "jmtaylor@fredhutch.org", role = c("aut", "cre")),
+             person("Helen", "Miller", role = "aut"),
+             person("CAVD DataSpace", email = "dataspace.support@scharp.org", role = "cph"))
 Description: Provides a convenient API interface to access immunological data
     within 'the CAVD DataSpace'(<https://dataspace.cavd.org>), a data sharing 
     and discovery tool that facilitates exploration of HIV immunological data 
@@ -18,7 +15,6 @@ URL: https://docs.ropensci.org/DataSpaceR/, https://github.com/ropensci/DataSpac
 BugReports: https://github.com/ropensci/DataSpaceR/issues
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
 Imports:
     utils,
     R6,
