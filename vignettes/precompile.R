@@ -4,7 +4,6 @@
 # https://github.com/ropensci/eia/blob/master/vignettes/precompile.R
 
 library(knitr)
-Sys.setenv("NOT_CRAN" = "true")
 knit("vignettes/DataSpaceR.Rmd.orig", "vignettes/DataSpaceR.Rmd")
 knit("vignettes/Monoconal_Antibody_Data.Rmd.orig", "vignettes/Monoconal_Antibody_Data.Rmd")
 knit("vignettes/Non_Integrated_Datasets.Rmd.orig", "vignettes/Non_Integrated_Datasets.Rmd")

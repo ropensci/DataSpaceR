@@ -26,14 +26,11 @@ thead{
 </style>
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
 labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  purl = NOT_CRAN,
-  eval = NOT_CRAN
+  comment = "#>"
 )
 ```
 
@@ -124,7 +121,7 @@ mab <- con$getMab()
 mab
 ```
 
-There are 6 public fields available in the `DataSpaceMab` object: `studyAndMabs`, `mabs`, `nabMab`, `studies`, `assays`, and `variableDefinitions`, and they are equivalent to the sheets in the excel file or the csv files you would download from the app via "Export Excel"/"Export CSV". 
+There are 6 public fields available in the `DataSpaceMab` object: `studyAndMabs`, `mabs`, `nabMab`, `studies`, `assays`, and `variableDefinitions`, and they are equivalent to the sheets in the excel file or the csv files you would download from the app via "Export Excel"/"Export CSV".
 
 ```{r}
 knitr::kable(con$mabGridSummary)
