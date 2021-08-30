@@ -67,7 +67,7 @@ or publications that have related studies with integrated data in DataSpace:
 
 ```{r filter_by_study_data}
 pubs_with_study_data <- con$availablePublications[!is.na(studies_with_data)]
-knitr::kable(pubs_with_study_data[, -"link"])
+knitr::kable(head(pubs_with_study_data[, -"link"]))
 ```
 
 We can also use this information to connect to related studies and pull integrated data. Say we are interested in this Rouphael (2019) publication:
@@ -96,7 +96,7 @@ DataSpace also includes publication datasets for some publications. The format o
 
 ```{r available_publication_data}
 pubs_with_data <- con$availablePublications[publication_data_available == TRUE]
-knitr::kable(pubs_with_data[, -"link"])
+knitr::kable(head(pubs_with_data[, -"link"]))
 ```
 
 Data for a publication can be accessed through `DataSpaceR` with `con$downloadPublicationData()`. The publication ID must be specified, as found under `publication_id` in `con$availablePublications`. The file is presented as a zip file. The `unzip` argument gives us the option whether to unzip this file. By default, the file will be unzipped. You may also specify the directory to download the file. By default, it will be saved to your `Downloads` directory. This function invisibly returns the paths to the downloaded files.
@@ -118,3 +118,8 @@ cd4
 This publication also includes analysis scripts used for the publication, which can allow users to reproduce the analysis and results.
 
 
+## Session information
+
+```{r session-info}
+sessionInfo()
+```

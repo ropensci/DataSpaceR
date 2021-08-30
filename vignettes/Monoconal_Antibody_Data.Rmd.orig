@@ -67,7 +67,7 @@ You can browse the mAb Grid by calling the `mabGridSummary` field in the connect
 library(DataSpaceR)
 con <- connectDS()
 
-knitr::kable(con$mabGridSummary)
+knitr::kable(head(con$mabGridSummary))
 ```
 
 This table is designed to mimic the mAb grid found in the app.

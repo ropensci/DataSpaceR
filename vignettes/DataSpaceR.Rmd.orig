@@ -87,7 +87,7 @@ con
 The call to `connectDS` instantiates the connection. Printing the object shows where it's connected and the available studies.
 
 ```{r availableStudies}
-knitr::kable(con$availableStudies)
+knitr::kable(head(con$availableStudies))
 ```
 
 `con$availableStudies` shows the available studies in the CAVD DataSpace. Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
@@ -198,7 +198,7 @@ DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NA
 We can access this metadata in `DataSpaceR` with `con$virusMetadata`:
 
 ```{r virusMetadata}
-knitr::kable(con$virusMetadata)
+knitr::kable(head(con$virusMetadata))
 ```
 
 ## Access monoclonal antibody data
