@@ -16,7 +16,7 @@ Downloads](https://cranlogs.r-pkg.org/badges/grand-total/DataSpaceR)](https://ww
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![](https://badges.ropensci.org/261_status.svg)](https://github.com/ropensci/software-review/issues/261)
 <!-- badges: end -->
 
@@ -124,12 +124,12 @@ con <- connectDS()
 con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
-#>   User: jkim2345@fredhutch.org
-#>   Available studies: 365
-#>     - 78 studies with data
-#>     - 5073 subjects
-#>     - 439831 data points
-#>   Available groups: 8
+#>   User: jkim2345@scharp.org
+#>   Available studies: 273
+#>     - 77 studies with data
+#>     - 5049 subjects
+#>     - 423195 data points
+#>   Available groups: 6
 #>   Available publications: 1530
 #>     - 12 publications with data
 ```
@@ -142,14 +142,14 @@ con
 knitr::kable(head(con$availableStudies))
 ```
 
-| study\_name | short\_name                    | title                                                                                                                                                                                                                                                              | type               | status   | stage            | species            | start\_date | strategy                             | network | data\_availability |
-|:------------|:-------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------|:---------|:-----------------|:-------------------|:------------|:-------------------------------------|:--------|:-------------------|
-| cor01       | NA                             | The correlate of risk targeted intervention study (CORTIS): A randomized, partially-blinded, clinical trial of isoniazid and rifapentine (3HP) therapy to prevent pulmonary tuberculosis in high-risk individuals identified by a transcriptomic correlate of risk | Phase III          | Inactive | Assays Completed | Human              | NA          | NA                                   | GH-VAP  | NA                 |
-| cvd232      | Parks\_RV\_232                 | Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.                                                                                                                                                                          | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-11-24  | Vector vaccines (viral or bacterial) | CAVD    | NA                 |
-| cvd234      | Zolla-Pazner\_Mab\_test1 Study | Zolla-Pazner\_Mab\_Test1                                                                                                                                                                                                                                           | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         | CAVD    | NA                 |
-| cvd235      | mAbs potency                   | Weiss mAbs potency                                                                                                                                                                                                                                                 | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2008-08-21  | Prophylactic neutralizing Ab         | CAVD    | NA                 |
-| cvd236      | neutralization assays          | neutralization assays                                                                                                                                                                                                                                              | Antibody Screening | Active   | In Progress      | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         | CAVD    | NA                 |
-| cvd238      | Gallo\_PA\_238                 | HIV-1 neutralization responses in chronically infected individuals                                                                                                                                                                                                 | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-01-08  | Prophylactic neutralizing Ab         | CAVD    | NA                 |
+| study\_name | short\_name                    | title                                                                                                                                                                                                                                                              | type               | status   | stage            | species            | start\_date | strategy                             | network | data\_availability | ni\_data\_availability |
+|:------------|:-------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------|:---------|:-----------------|:-------------------|:------------|:-------------------------------------|:--------|:-------------------|:-----------------------|
+| cor01       | NA                             | The correlate of risk targeted intervention study (CORTIS): A randomized, partially-blinded, clinical trial of isoniazid and rifapentine (3HP) therapy to prevent pulmonary tuberculosis in high-risk individuals identified by a transcriptomic correlate of risk | Phase III          | Inactive | Assays Completed | Human              | NA          | NA                                   | GH-VAP  | NA                 | NA                     |
+| cvd232      | Parks\_RV\_232                 | ​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.                                                                                                                                                                         | Pre-Clinical NHP   | Inactive | Assays Completed | Rhesus macaque     | 2009-11-24  | Vector vaccines (viral or bacterial) | CAVD    | NA                 | NA                     |
+| cvd234      | Zolla-Pazner\_Mab\_test1 Study | Zolla-Pazner\_Mab\_Test1                                                                                                                                                                                                                                           | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         | CAVD    | NA                 | NA                     |
+| cvd235      | mAbs potency                   | Weiss mAbs potency                                                                                                                                                                                                                                                 | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2008-08-21  | Prophylactic neutralizing Ab         | CAVD    | NA                 | NA                     |
+| cvd236      | neutralization assays          | neutralization assays                                                                                                                                                                                                                                              | Antibody Screening | Active   | In Progress      | Non-Organism Study | 2009-02-03  | Prophylactic neutralizing Ab         | CAVD    | NA                 | NA                     |
+| cvd238      | Gallo\_PA\_238                 | HIV-1 neutralization responses in chronically infected individuals                                                                                                                                                                                                 | Antibody Screening | Inactive | Assays Completed | Non-Organism Study | 2009-01-08  | Prophylactic neutralizing Ab         | CAVD    | NA                 | NA                     |
 
 ### available groups can be listed by `availableGroups` field
 
@@ -157,16 +157,14 @@ knitr::kable(head(con$availableStudies))
 knitr::kable(con$availableGroups)
 ```
 
-|  id | label                              | original\_label                    | description                                                                                                               | created\_by | shared |   n | studies                                |
-|----:|:-----------------------------------|:-----------------------------------|:--------------------------------------------------------------------------------------------------------------------------|:------------|:-------|----:|:---------------------------------------|
-| 188 | cvd 239                            | cvd239                             | NA                                                                                                                        | jkim2345    | FALSE  |   0 |                                        |
-| 190 | rabbit                             | rabbit                             | NA                                                                                                                        | jkim2345    | FALSE  | 100 | cvd338, cvd317, cvd305, cvd324, cvd320 |
-| 207 | mice                               | mice                               | NA                                                                                                                        | jkim2345    | FALSE  |  51 | cvd483, cvd316, cvd331                 |
-| 209 | cavd 239 important study           | cavd 239                           | cavd 239                                                                                                                  | jkim2345    | FALSE  |   0 |                                        |
-| 220 | NYVAC durability comparison        | NYVAC\_durability                  | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products.                            | ehenrich    | TRUE   |  78 | cvd281, cvd434, cvd259, cvd277         |
-| 223 | cvd338                             | cvd338                             | NA                                                                                                                        | jkim2345    | FALSE  |  36 | cvd338                                 |
-| 228 | HVTN 505 case control subjects     | HVTN 505 case control subjects     | Participants from HVTN 505 included in the case-control analysis                                                          | drienna     | TRUE   | 189 | vtn505                                 |
-| 230 | HVTN 505 polyfunctionality vs BAMA | HVTN 505 polyfunctionality vs BAMA | Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort | drienna     | TRUE   | 170 | vtn505                                 |
+| group\_id | label                              | original\_label                    | description                                                                                                               | created\_by | shared |   n | studies                        |
+|----------:|:-----------------------------------|:-----------------------------------|:--------------------------------------------------------------------------------------------------------------------------|:------------|:-------|----:|:-------------------------------|
+|       216 | mice                               | mice                               | NA                                                                                                                        | readjk      | FALSE  |  75 | cvd468, cvd483, cvd316, cvd331 |
+|       217 | CAVD 242                           | CAVD 242                           | This is a fake group for CAVD 242                                                                                         | readjk      | FALSE  |  30 | cvd242                         |
+|       220 | NYVAC durability comparison        | NYVAC\_durability                  | Compare durability in 4 NHP studies using NYVAC-C (vP2010) and NYVAC-KC-gp140 (ZM96) products.                            | ehenrich    | TRUE   |  78 | cvd281, cvd434, cvd259, cvd277 |
+|       224 | cvd338                             | cvd338                             | NA                                                                                                                        | readjk      | FALSE  |  36 | cvd338                         |
+|       228 | HVTN 505 case control subjects     | HVTN 505 case control subjects     | Participants from HVTN 505 included in the case-control analysis                                                          | drienna     | TRUE   | 189 | vtn505                         |
+|       230 | HVTN 505 polyfunctionality vs BAMA | HVTN 505 polyfunctionality vs BAMA | Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort | drienna     | TRUE   | 170 | vtn505                         |
 
 ***Note***: A group is a curated collection of participants from
 filtering of treatments, products, studies, or species, and it is
@@ -217,17 +215,17 @@ NAb <- cvd408$getDataset("NAb")
 dim(NAb)
 #> [1] 540  33
 colnames(NAb)
-#>  [1] "participant_id"         "participant_visit"      "visit_day"             
-#>  [4] "assay_identifier"       "summary_level"          "specimen_type"         
-#>  [7] "antigen"                "antigen_type"           "virus"                 
-#> [10] "virus_type"             "virus_insert_name"      "clade"                 
-#> [13] "neutralization_tier"    "tier_clade_virus"       "target_cell"           
-#> [16] "initial_dilution"       "titer_ic50"             "titer_ic80"            
-#> [19] "response_call"          "nab_lab_source_key"     "lab_code"              
-#> [22] "exp_assayid"            "titer_ID50"             "titer_ID80"            
-#> [25] "nab_response_ID50"      "nab_response_ID80"      "slope"                 
-#> [28] "vaccine_matched"        "study_prot"             "virus_full_name"       
-#> [31] "virus_species"          "virus_host_cell"        "virus_backbone"
+#>  [1] "participant_id"      "participant_visit"   "visit_day"          
+#>  [4] "assay_identifier"    "summary_level"       "specimen_type"      
+#>  [7] "antigen"             "antigen_type"        "virus"              
+#> [10] "virus_type"          "virus_insert_name"   "clade"              
+#> [13] "neutralization_tier" "tier_clade_virus"    "target_cell"        
+#> [16] "initial_dilution"    "titer_ic50"          "titer_ic80"         
+#> [19] "response_call"       "nab_lab_source_key"  "lab_code"           
+#> [22] "exp_assayid"         "titer_id50"          "titer_id80"         
+#> [25] "nab_response_id50"   "nab_response_id80"   "slope"              
+#> [28] "vaccine_matched"     "study_prot"          "virus_full_name"    
+#> [31] "virus_species"       "virus_host_cell"     "virus_backbone"
 ```
 
 Check out [the reference
