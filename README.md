@@ -25,7 +25,7 @@ DataSpace](https://dataspace.cavd.org), a data sharing and discovery
 tool that facilitates exploration of HIV immunological data from
 pre-clinical and clinical HIV vaccine studies.
 
-The package is intended for use by immunologists, bioinformaticians, and
+This package is intended for use by immunologists, bioinformaticians, and
 statisticians in HIV vaccine research, or anyone interested in the
 analysis of HIV immunological data across assays, studies, and time.
 
@@ -42,6 +42,8 @@ For more detailed examples and detailed documentation, see [the
 introductory
 vignette](https://docs.ropensci.org/DataSpaceR/articles/DataSpaceR.html)
 and [the pkgdown site](https://docs.ropensci.org/DataSpaceR/).
+
+For a quick guide of how to use the API, see our [cheat sheet](https://dataspace.cavd.org/_webdav/static/%40files/documents/dataspacer_cheat_sheet.pdf) .
 
 ## Installation
 
