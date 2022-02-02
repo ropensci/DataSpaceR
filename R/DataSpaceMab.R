@@ -133,11 +133,12 @@ DataSpaceMab <- R6Class(
         dat <- tryCatch({
           page <- suppressWarnings(readLines(url, warn = FALSE))
           dat <- lapply(fromJSON(page), data.table)
+          dat$source <- url
           lapply(dat, checkList)
           return(dat)
         },
         error = function(err){
-          return(paste("LANL metadata for ID", lanl_id, "is not available at this time."))
+          return(paste("LANL metadata found at '", url, "'."))
         })
         return(dat)
       }

@@ -3,7 +3,7 @@ title: "Accessing Monoclonal Antibody Data"
 author:
 - Ju Yeong Kim
 - Jason Taylor
-date: "2021-08-30"
+date: "2022-02-02"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Monoclonal Antibody Data}
@@ -24,7 +24,6 @@ thead{
     background-color: #fff;
 }
 </style>
-
 
 
 
@@ -118,12 +117,13 @@ Or we can use method chaining to call multiple filter methods and browse the gri
 
 
 ```r
+con$resetMabGrid()
 con$
-  filterMabGrid(using = "hxb2_location", value = c("Env", "gp160"))$
-  filterMabGrid(using = "donor_species", value = "llama")$
+  filterMabGrid(using = "hxb2_location", value = "gp160")$
+  filterMabGrid(using = "donor_species", value = "human")$
+  filterMabGrid(using = "isotype",       value = "IgG")$
   mabGridSummary
 ```
-
 
 ## Retrieve column values from the mAb grid
 
@@ -135,9 +135,9 @@ You can retrieve values from the grid by `mab_mixture`, `donor_species`, `isotyp
 con$mabGrid[, unique(virus)]
 #> [1] "6535.3"  "Q23.17"  "242-14"  "BaL.26"  "DJ263.8"
 
-# retrieve available clades for 1H9 mAb mixture in the filtered grid
-con$mabGrid[mab_mixture == "1H9", unique(clade)]
-#> [1] "B"        "CRF02_AG"
+# retrieve available clades for PGT151/3BNC117 mAb mixture in the filtered grid
+con$mabGrid[mab_mixture == "PGT151/3BNC117", unique(clade)]
+#> character(0)
 ```
 
 
@@ -151,7 +151,7 @@ mab <- con$getMab()
 mab
 #> <DataSpaceMab>
 #>   URL: https://dataspace.cavd.org
-#>   User: 
+#>   User: jmtaylor@scharp.org
 #>   Summary:
 #>     - 3 studies
 #>     - 14 mAb mixtures
@@ -198,7 +198,23 @@ names(mab)
 #>  [1] ".__enclos_env__"     "variableDefinitions" "assays"             
 #>  [4] "studies"             "nabMab"              "mabs"               
 #>  [7] "studyAndMabs"        "config"              "clone"              
-#> [10] "refresh"             "print"               "initialize"
+#> [10] "getLanlMetadata"     "refresh"             "print"              
+#> [13] "initialize"
+```
+
+DataSpaceR can also fetch and add metadata associated with downloaded mAbs via the `getLanlMetadata` method that is associated with the `DataSpaceMab` object.
+
+
+```r
+mab$getLanlMetadata()
+```
+
+The lanl metadata can now be found at the `mabs$lanl_metadata` variable. This is a list column and its structure can very depending on what data LANL has collected.
+    
+
+```r
+mab$mabs[mab_name_std=="PGT128"]$lanl_metadata
+#> list()
 ```
 
 ## Session information
@@ -206,31 +222,39 @@ names(mab)
 
 ```r
 sessionInfo()
-#> R version 4.1.0 (2021-05-18)
+#> R version 4.1.2 (2021-11-01)
 #> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Ubuntu 20.04.2 LTS
+#> Running under: Ubuntu 18.04.5 LTS
 #> 
 #> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
 #> 
 #> locale:
-#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-#>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-#> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+#>  [1] LC_CTYPE=en_US.utf8       LC_NUMERIC=C             
+#>  [3] LC_TIME=en_US.utf8        LC_COLLATE=en_US.utf8    
+#>  [5] LC_MONETARY=en_US.utf8    LC_MESSAGES=en_US.utf8   
+#>  [7] LC_PAPER=en_US.utf8       LC_NAME=C                
+#>  [9] LC_ADDRESS=C              LC_TELEPHONE=C           
+#> [11] LC_MEASUREMENT=en_US.utf8 LC_IDENTIFICATION=C      
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] data.table_1.14.0 DataSpaceR_0.7.5  knitr_1.33       
+#> [1] DataSpaceR_0.7.5  data.table_1.14.2 knitr_1.37       
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.7       digest_0.6.27    assertthat_0.2.1 R6_2.5.0        
-#>  [5] jsonlite_1.7.2   magrittr_2.0.1   evaluate_0.14    highr_0.9       
-#>  [9] httr_1.4.2       stringi_1.7.3    curl_4.3.2       tools_4.1.0     
-#> [13] stringr_1.4.0    Rlabkey_2.8.0    xfun_0.25        compiler_4.1.0
+#>  [1] Rcpp_1.0.8        pillar_1.6.5      compiler_4.1.2    highr_0.9        
+#>  [5] prettyunits_1.1.1 remotes_2.4.2     tools_4.1.2       testthat_3.1.2   
+#>  [9] digest_0.6.29     pkgbuild_1.3.1    pkgload_1.2.4     tibble_3.1.6     
+#> [13] lifecycle_1.0.1   jsonlite_1.7.3    evaluate_0.14     memoise_2.0.1    
+#> [17] pkgconfig_2.0.3   rlang_1.0.0       cli_3.1.1         curl_4.3.2       
+#> [21] xfun_0.29         fastmap_1.1.0     withr_2.4.3       httr_1.4.2       
+#> [25] stringr_1.4.0     vctrs_0.3.8       desc_1.4.0        fs_1.5.2         
+#> [29] devtools_2.4.3    rprojroot_2.0.2   glue_1.6.1        R6_2.5.1         
+#> [33] processx_3.5.2    fansi_1.0.2       Rlabkey_2.8.2     sessioninfo_1.2.2
+#> [37] purrr_0.3.4       callr_3.7.0       magrittr_2.0.2    usethis_2.1.5    
+#> [41] ps_1.6.0          ellipsis_0.3.2    assertthat_0.2.1  utf8_1.2.2       
+#> [45] stringi_1.7.6     cachem_1.0.6      crayon_1.4.2      brio_1.1.3
 ```
