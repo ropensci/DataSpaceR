@@ -137,15 +137,15 @@ names(mab)
 
 DataSpaceR can also fetch and add metadata associated with downloaded mAbs via the `getLanlMetadata` method that is associated with the `DataSpaceMab` object.
 
-```{r}    
+```{r}
 mab$getLanlMetadata()
 ```
 
-The lanl metadata can now be found at the `mabs$lanl_metadata` variable. This is a list column and its structure can very depending on what data LANL has collected.
+The LANL metadata can now be found at the `mabs$lanl_metadata` variable. This is a list column and its structure can very depending on what data LANL has collected.
     
 ```{r}
 mab$mabs[mab_name_std=="PGT128"]$lanl_metadata
-```    
+```
 
 ## Session information
 

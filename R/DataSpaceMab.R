@@ -131,7 +131,7 @@ DataSpaceMab <- R6Class(
         url <- paste0("https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?id=", lanl_id)
         if(is.na(lanl_id)) return(NA)
         dat <- tryCatch({
-          page <- suppressWarnings(readLines(url, warn = FALSE))
+          page <- suppressWarnings(readLines(url))
           dat <- lapply(fromJSON(page), data.table)
           dat$source <- url
           lapply(dat, checkList)
