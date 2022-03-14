@@ -130,19 +130,18 @@ DataSpaceMab <- R6Class(
       pullForLanlId <- function(lanl_id){
         url <- paste0("https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?id=", lanl_id)
         if(is.na(lanl_id)) return(NA)
-        dat <- tryCatch({
-          page <- suppressWarnings(readLines(url))
-          dat <- lapply(fromJSON(page), data.table)
-          dat$source <- url
-          lapply(dat, checkList)
-          return(dat)
-        },
-        error = function(err){
-          return(paste("LANL metadata found at '", url, "'."))
-        })
-        return(dat)
+        res <- httr::GET(url)
+        if(res$status == 200){
+          json <- fromJSON(content(res, as="text")[[1]])
+          json[["epitopes"]] <- data.table(json[["epitopes"]])
+          json$source <- url
+          lapply(json$epitopes, checkList)
+          return(json)
+        } else {
+          return(paste0("No LANL metadata found at '", url, "'."))
+        }
       }
-      private$.mabs[, lanl_metadata:=lapply(mab_lanlid, pullForLanlId)]
+      private$.mabs[, lanl_metadata := lapply(mab_lanlid, pullForLanlId)]
     }
 
   ),
@@ -314,6 +313,6 @@ DataSpaceMab <- R6Class(
       setnames(varInfo, "fieldName", "field_name")
 
       private$.variableDefinitions <- varInfo[, .(field_name, caption, description)]
-    }    
+    }
   )
 )
