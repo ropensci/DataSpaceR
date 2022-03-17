@@ -95,7 +95,7 @@ con$resetMabGrid()
 con$
   filterMabGrid(using = "hxb2_location", value = "gp160")$
   filterMabGrid(using = "donor_species", value = "human")$
-  filterMabGrid(using = "isotype",       value = "IgG")$
+  filterMabGrid(using = "isotype", value = "IgG")$
   mabGridSummary
 ```
 
