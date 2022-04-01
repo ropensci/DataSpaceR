@@ -88,14 +88,13 @@ con$filterMabGrid(using = "donor_species", value = "llama")
 knitr::kable(con$mabGridSummary)
 ```
 
-Or we can use method chaining to call multiple filter methods and browse the grid. Method chaining is unique to R6 objects and related to the pipe. See Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/r6.html) for more info
+Or we can use method chaining to call multiple filter methods and browse the grid. Method chaining is unique to R6 objects and related to the pipe. See Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/r6.html) for more info.
 
 ```{r eval=FALSE}
 con$resetMabGrid()
 con$
-  filterMabGrid(using = "hxb2_location", value = "gp160")$
-  filterMabGrid(using = "donor_species", value = "human")$
-  filterMabGrid(using = "isotype", value = "IgG")$
+  filterMabGrid(using = "virus", value = c("242-14", "Q23.17", "6535.3", "BaL.26", "DJ263.8"))$
+  filterMabGrid(using = "donor_species", value = "llama")$
   mabGridSummary
 ```
 
@@ -108,7 +107,7 @@ You can retrieve values from the grid by `mab_mixture`, `donor_species`, `isotyp
 con$mabGrid[, unique(virus)]
 
 # retrieve available clades for PGT151/3BNC117 mAb mixture in the filtered grid
-con$mabGrid[mab_mixture == "PGT151/3BNC117", unique(clade)]
+con$mabGrid[, unique(hxb2_location)]
 ```
 
 
