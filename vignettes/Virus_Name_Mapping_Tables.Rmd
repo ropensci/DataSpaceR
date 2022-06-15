@@ -1,7 +1,7 @@
 ---
 title: "Using The Virus Name Mapping Tables"
 author: "Jason Taylor"
-date: "2022-05-06"
+date: "2022-06-15"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using The Virus Name Mapping Tables}
@@ -11,7 +11,6 @@ vignette: >
 
 <style>
 table {
-    display: block;
     max-width: 100%;
     max-height: 600px;
     overflow: scroll;
@@ -27,7 +26,7 @@ thead{
 
 ## Purpose
 
-The purpose of this feature is to offer users a list of various virus name synonyms that the DataSpace team has found over the years and have mapped to the standard virus names used in DataSpace. We hope that by making these maps available to the public users who find unfamiliar virus names can use these data to help them find standard names and metadata for those viruses, or help drive questions to laboratories as to what are the appropriate metadata or standard names for a virus name found in their data.
+The purpose of this feature is to offer users a list of various virus name synonyms that the DataSpace team has found over the years and has mapped to the standard virus names used in DataSpace. We hope that by making these maps available to the public, users who find unfamiliar virus names can use these data to help them find standard names and metadata for those viruses, or help drive questions to laboratories as to what are the appropriate metadata or standard names for a virus name found in their data.
 
 We encourage any users who find new synonyms for virus names not listed here to reach out to the DataSpace team (dataspace.support@scharp.org) with that information, and we can add it to these tables.
 
@@ -37,7 +36,7 @@ We use copies of the virus databases maintained by the Comprehensive Antibody Va
 
 ## Usage caveats
 
-Its important to know that there can be typos and misnamed viruses found in raw source data. The data that the DataSpace team provisions is checked for these types of errors before posting. A mapping that we have made in the past from a synonym to a standard name may not be correct for all synonyms found in your data.
+Its important to know that there can be typos and misnamed viruses found in raw source data. The data that the DataSpace team provisions is checked for these types of errors before posting. A mapping that we have made in the past from a synonym to a standard name may not be appropriate for all synonyms found in your data.
 
 ## Tutorial for using mapping tables
 
@@ -53,7 +52,7 @@ The mapping tables are gathered via the connection object into a list that can b
 
 | table name          | description                                                                    |
 |---------------------|--------------------------------------------------------------------------------|
-| virus\_metadata_all | a table of of CDS virus IDs, standard names, and metadata                      |
+| virus\_metadata_all | a table of CDS virus IDs, standard names, and metadata                      |
 | virus\_synonym      | a table of known synonyms for the viruses found in `virus_metadata_all`        |
 | virus\_lab\_id      | a table of CDS virus IDS and lab database IDs, as well as harvest dates for QC |
 
@@ -114,7 +113,7 @@ vnm$virus_metadata_all[cds_virus_id == "cds_23"]
 #> 1:     C                   2
 ```
 
-This process can also be done by mergeing the two tables first them searching in the merged table.
+This process can also be done by merging the two tables first, then searching in the merged table.
 
 
 ```r
@@ -230,20 +229,20 @@ vsn[grepl("A10", virus_synonym)]
 
 Once a CDS virus ID has been identified, CDS standard names can be applied to your data via the metadata found in `virus_metadata_all`. The fields in `virus_metadata_all` are:
 
-| Field                | Description                                               |
-| -------------------- | --------------------------------------------------------- |
-| cds\_virus\_id       | a unique identifier used by CDS to identify a given virus |
-| virus                | a shorter common name of the virus                        |
-| virus\_full\_name    | the full name of the virus derived from an ontology       |
-| virus\_backbone      | the backbone used for the virus                           |
-| virus\_host\_cell    | the hostcell used for the virus                           |
-| virus\_plot\_label   | a name of the virus commonly used in plotting             |
-| virus\_type          | the type of the virus                                     |
-| virus\_species       | the species of the virus                                  |
-| clade                | the clade of the virus                                    |
-| neutralization\_tier | the neutralization tier of the virus                      |
+| Field                | Description                                                     |
+|----------------------|-----------------------------------------------------------------|
+| cds\_virus\_id       | a unique identifier used by CDS to identify a given virus       |
+| virus                | a shorter common name of the virus                              |
+| virus\_full\_name    | the full name of the virus derived from an ontology<sup>1</sup> |
+| virus\_backbone      | the backbone used for the virus                                 |
+| virus\_host\_cell    | the hostcell used for the virus                                 |
+| virus\_plot\_label   | a name of the virus commonly used in plotting                   |
+| virus\_type          | the type of the virus                                           |
+| virus\_species       | the species of the virus                                        |
+| clade                | the clade of the virus                                          |
+| neutralization\_tier | the neutralization tier of the virus                            |
 
-1.  The virus ontology is defined as a 4 part combination of virus short name, backbone, target cell, and reagent.
+1.  The virus\_full\_name ontology is defined as a 4 part combination of virus short name, backbone, target cell, and reagent.
 
 ## Additional notes for users processing data from the CAVIMC Neutralizing Antibody Cores
 

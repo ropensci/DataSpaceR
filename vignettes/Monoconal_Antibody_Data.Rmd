@@ -3,7 +3,7 @@ title: "Accessing Monoclonal Antibody Data"
 author:
 - Ju Yeong Kim
 - Jason Taylor
-date: "2022-05-06"
+date: "2022-06-15"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Monoclonal Antibody Data}
@@ -13,7 +13,6 @@ vignette: >
 
 <style>
 table {
-    display: block;
     max-width: 100%;
     max-height: 600px;
     overflow: scroll;
@@ -229,11 +228,8 @@ sessionInfo()
 #> [1] data.table_1.14.2 DataSpaceR_0.7.5  knitr_1.37       
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.8       assertthat_0.2.1 digest_0.6.29    R6_2.5.1        
+#>  [1] Rcpp_1.0.8       digest_0.6.29    assertthat_0.2.1 R6_2.5.1        
 #>  [5] jsonlite_1.8.0   magrittr_2.0.2   evaluate_0.15    highr_0.9       
-#>  [9] httr_1.4.2       stringi_1.7.6    rlang_1.0.2      cli_3.2.0       
-#> [13] curl_4.3.2       jquerylib_0.1.4  bslib_0.3.1      rmarkdown_2.11  
-#> [17] tools_4.1.2      stringr_1.4.0    Rlabkey_2.8.3    xfun_0.29       
-#> [21] yaml_2.2.2       fastmap_1.1.0    compiler_4.1.2   htmltools_0.5.2 
-#> [25] sass_0.4.0
+#>  [9] httr_1.4.2       stringi_1.7.6    curl_4.3.2       tools_4.1.2     
+#> [13] stringr_1.4.0    Rlabkey_2.8.3    xfun_0.29        compiler_4.1.2
 ```
