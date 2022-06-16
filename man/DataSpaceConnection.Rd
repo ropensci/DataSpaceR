@@ -58,6 +58,10 @@ publications.}
 
 \item{\code{virusMetadata}}{A data.table. Metadata about all viruses in the
 DataSpace.}
+
+\item{\code{virusNameMappingTables}}{A list of data.table objects. This
+list contains `virusMetadataAll`, `virusLabId`, and `virus_synonym`
+which are described in the vignette `Virus_Name_Mapping_Tables`.}
 }
 \if{html}{\out{</div>}}
 }

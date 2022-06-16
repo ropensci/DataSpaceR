@@ -452,6 +452,9 @@ DataSpaceConnection <- R6Class(
       private$.virusMetadata
     },
 
+    #' @field virusNameMappingTables A list of data.table objects. This
+    #' list contains `virusMetadataAll`, `virusLabId`, and `virus_synonym`
+    #' which are described in the vignette `Virus_Name_Mapping_Tables`.
     virusNameMappingTables = function() {
       private$.virusNameMappingTables
     }
