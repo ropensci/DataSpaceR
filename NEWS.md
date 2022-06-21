@@ -1,3 +1,8 @@
+# DataSpaceR 0.7.6
+
+* Add new feature adding LANL metadata to NAb mAb data pulls.
+* Add new list of virus name mapping tables as an active binding.
+
 # DataSpaceR 0.7.5
 
 * Fixed bug concerning missing cookie session name for app reports which will update this package to work when run on CDS as in a report.
