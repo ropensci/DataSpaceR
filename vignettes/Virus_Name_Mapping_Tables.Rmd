@@ -1,0 +1,268 @@
+---
+title: "Using The Virus Name Mapping Tables"
+author: "Jason Taylor"
+date: "2022-06-15"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using The Virus Name Mapping Tables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+table {
+    max-width: 100%;
+    max-height: 600px;
+    overflow: scroll;
+}
+thead{
+    position: sticky;
+    top: 0px;
+    background-color: #fff;
+}
+</style>
+
+
+
+## Purpose
+
+The purpose of this feature is to offer users a list of various virus name synonyms that the DataSpace team has found over the years and has mapped to the standard virus names used in DataSpace. We hope that by making these maps available to the public, users who find unfamiliar virus names can use these data to help them find standard names and metadata for those viruses, or help drive questions to laboratories as to what are the appropriate metadata or standard names for a virus name found in their data.
+
+We encourage any users who find new synonyms for virus names not listed here to reach out to the DataSpace team (dataspace.support@scharp.org) with that information, and we can add it to these tables.
+
+## Our sources
+
+We use copies of the virus databases maintained by the Comprehensive Antibody Vaccine Immune Monitoring Consortium (CAVIMC) Neutralizing Antibodies Cores at the Duke University (David Montefiori) and Harvard University (Mike Seaman) labs to generate our standard virus lists. As we process data from those labs, we have kept running lists of the different ways those viruses have been identified and have compiled those here. We update our database periodically to sync with the updates at the labs. We only provide data for viruses that we have processed or plan to process, so our records are not exhaustive mappings of the records found in those databases.
+
+## Usage caveats
+
+Its important to know that there can be typos and misnamed viruses found in raw source data. The data that the DataSpace team provisions is checked for these types of errors before posting. A mapping that we have made in the past from a synonym to a standard name may not be appropriate for all synonyms found in your data.
+
+## Tutorial for using mapping tables
+
+First, connect to DataSpace via the R API.
+
+
+```r
+library(DataSpaceR)
+con <- connectDS()
+```
+
+The mapping tables are gathered via the connection object into a list that can be inspected. Each table can be merged together on the `cds_virus_id` field. There are three tables:
+
+| table name          | description                                                                    |
+|---------------------|--------------------------------------------------------------------------------|
+| virus\_metadata_all | a table of CDS virus IDs, standard names, and metadata                      |
+| virus\_synonym      | a table of known synonyms for the viruses found in `virus_metadata_all`        |
+| virus\_lab\_id      | a table of CDS virus IDS and lab database IDs, as well as harvest dates for QC |
+
+The list can be inspected as follows:
+
+
+```r
+vnm <- con$virusNameMappingTables
+names(vnm)
+#> [1] "virus_metadata_all" "virus_lab_id"       "virus_synonym"
+```
+
+### Checking the dataset for a virus name synonym
+
+Find standard names using the combination of the `virus_synonym` and `virus_metadata_all` tables. In this example, we search for virus synonyms containing, “A10”.
+
+
+```r
+vnm$virus_synonym[grepl("A10", virus_synonym)]
+#>     cds_virus_id                                      virus_synonym
+#>  1:       cds_23                  19715820_A10_H2 [SG3Δenv] 293T/17
+#>  2:       cds_23                                    19715820_A10_H2
+#>  3:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17
+#>  4:      cds_389                           AA104aRH5-40061v3c8.LucR
+#>  5:      cds_389                 AA104aRH5-40061.v3c8.LucR.T2A.ecto
+#>  6:      cds_389             AA104aRH5-40061v3c8.LucR (IMC) 293T/17
+#>  7:      cds_389               HIV AA104aRH5-40061v3c8.LucR/293T/17
+#>  8:      cds_390                           AA107awg8-40061v3c8.LucR
+#>  9:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17
+#> 10:      cds_390               HIV AA107awg8-40061v3c8.LucR/293T/17
+#> 11:      cds_390             AA107awg8-40061v3c8.LucR (IMC) 293T/17
+#> 12:      cds_390                 AA107awg8-40061.v3c8.LucR.T2A.ecto
+#> 13:      cds_471                                      HIV AA104aRH5
+#> 14:      cds_471                                          AA104aRH5
+#> 15:      cds_471                        AA104aRH5 [SG3Δenv] 293T/17
+#> 16:      cds_471                      HIV AA104aRH5[SG3Δenv]293T/17
+#> 17:      cds_472                        AA107awg8 [SG3Δenv] 293T/17
+#> 18:      cds_472                                      HIV AA107awg8
+#> 19:      cds_472                      HIV AA107awg8[SG3Δenv]293T/17
+#> 20:      cds_472                                          AA107awg8
+#> 21:      cds_665                                       ME067_A10_15
+#> 22:      cds_665                                       Me067_A10_15
+#> 23:      cds_665                                       ME067_A10-15
+#> 24:      cds_665                     ME067_A10-15 [SG3Δenv] 293T/17
+#>     cds_virus_id                                      virus_synonym
+```
+
+Once we have identified a virus, we can view the metadata for it using the `cds_virus_id` in the `virus_metadata_all` table.
+
+
+```r
+vnm$virus_metadata_all[cds_virus_id == "cds_23"]
+#>    cds_virus_id           virus                   virus_full_name
+#> 1:       cds_23 19715820_A10_H2 19715820_A10_H2 [SG3Δenv] 293T/17
+#>    virus_backbone virus_host_cell virus_plot_label     virus_type virus_species
+#> 1:        SG3Δenv         293T/17             <NA> Env Pseudotype           HIV
+#>    clade neutralization_tier
+#> 1:     C                   2
+```
+
+This process can also be done by merging the two tables first, then searching in the merged table.
+
+
+```r
+vsn <- merge(vnm$virus_metadata_all, vnm$virus_synonym, by = "cds_virus_id")
+vsn[grepl("A10", virus_synonym)]
+#>     cds_virus_id                              virus
+#>  1:       cds_23                    19715820_A10_H2
+#>  2:       cds_23                    19715820_A10_H2
+#>  3:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto
+#>  4:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto
+#>  5:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto
+#>  6:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto
+#>  7:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto
+#>  8:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
+#>  9:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
+#> 10:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
+#> 11:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
+#> 12:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
+#> 13:      cds_471                          AA104aRH5
+#> 14:      cds_471                          AA104aRH5
+#> 15:      cds_471                          AA104aRH5
+#> 16:      cds_471                          AA104aRH5
+#> 17:      cds_472                          AA107awg8
+#> 18:      cds_472                          AA107awg8
+#> 19:      cds_472                          AA107awg8
+#> 20:      cds_472                          AA107awg8
+#> 21:      cds_665                       ME067_A10-15
+#> 22:      cds_665                       ME067_A10-15
+#> 23:      cds_665                       ME067_A10-15
+#> 24:      cds_665                       ME067_A10-15
+#>     cds_virus_id                              virus
+#>                                        virus_full_name virus_backbone
+#>  1:                  19715820_A10_H2 [SG3Δenv] 293T/17        SG3Δenv
+#>  2:                  19715820_A10_H2 [SG3Δenv] 293T/17        SG3Δenv
+#>  3: AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#>  4: AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#>  5: AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#>  6: AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#>  7: AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#>  8: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#>  9: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#> 10: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#> 11: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#> 12: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#> 13:                        AA104aRH5 [SG3Δenv] 293T/17        SG3Δenv
+#> 14:                        AA104aRH5 [SG3Δenv] 293T/17        SG3Δenv
+#> 15:                        AA104aRH5 [SG3Δenv] 293T/17        SG3Δenv
+#> 16:                        AA104aRH5 [SG3Δenv] 293T/17        SG3Δenv
+#> 17:                        AA107awg8 [SG3Δenv] 293T/17        SG3Δenv
+#> 18:                        AA107awg8 [SG3Δenv] 293T/17        SG3Δenv
+#> 19:                        AA107awg8 [SG3Δenv] 293T/17        SG3Δenv
+#> 20:                        AA107awg8 [SG3Δenv] 293T/17        SG3Δenv
+#> 21:                     ME067_A10-15 [SG3Δenv] 293T/17        SG3Δenv
+#> 22:                     ME067_A10-15 [SG3Δenv] 293T/17        SG3Δenv
+#> 23:                     ME067_A10-15 [SG3Δenv] 293T/17        SG3Δenv
+#> 24:                     ME067_A10-15 [SG3Δenv] 293T/17        SG3Δenv
+#>                                        virus_full_name virus_backbone
+#>     virus_host_cell virus_plot_label     virus_type virus_species    clade
+#>  1:         293T/17             <NA> Env Pseudotype           HIV        C
+#>  2:         293T/17             <NA> Env Pseudotype           HIV        C
+#>  3:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#>  4:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#>  5:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#>  6:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#>  7:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#>  8:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#>  9:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#> 10:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#> 11:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#> 12:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#> 13:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
+#> 14:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
+#> 15:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
+#> 16:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
+#> 17:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
+#> 18:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
+#> 19:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
+#> 20:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
+#> 21:         293T/17             <NA> Env Pseudotype           HIV        C
+#> 22:         293T/17             <NA> Env Pseudotype           HIV        C
+#> 23:         293T/17             <NA> Env Pseudotype           HIV        C
+#> 24:         293T/17             <NA> Env Pseudotype           HIV        C
+#>     virus_host_cell virus_plot_label     virus_type virus_species    clade
+#>     neutralization_tier                                      virus_synonym
+#>  1:                   2                  19715820_A10_H2 [SG3Δenv] 293T/17
+#>  2:                   2                                    19715820_A10_H2
+#>  3:                <NA> AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17
+#>  4:                <NA>                           AA104aRH5-40061v3c8.LucR
+#>  5:                <NA>                 AA104aRH5-40061.v3c8.LucR.T2A.ecto
+#>  6:                <NA>             AA104aRH5-40061v3c8.LucR (IMC) 293T/17
+#>  7:                <NA>               HIV AA104aRH5-40061v3c8.LucR/293T/17
+#>  8:                <NA>                           AA107awg8-40061v3c8.LucR
+#>  9:                <NA> AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17
+#> 10:                <NA>               HIV AA107awg8-40061v3c8.LucR/293T/17
+#> 11:                <NA>             AA107awg8-40061v3c8.LucR (IMC) 293T/17
+#> 12:                <NA>                 AA107awg8-40061.v3c8.LucR.T2A.ecto
+#> 13:                <NA>                                      HIV AA104aRH5
+#> 14:                <NA>                                          AA104aRH5
+#> 15:                <NA>                        AA104aRH5 [SG3Δenv] 293T/17
+#> 16:                <NA>                      HIV AA104aRH5[SG3Δenv]293T/17
+#> 17:                <NA>                        AA107awg8 [SG3Δenv] 293T/17
+#> 18:                <NA>                                      HIV AA107awg8
+#> 19:                <NA>                      HIV AA107awg8[SG3Δenv]293T/17
+#> 20:                <NA>                                          AA107awg8
+#> 21:                   2                                       ME067_A10_15
+#> 22:                   2                                       Me067_A10_15
+#> 23:                   2                                       ME067_A10-15
+#> 24:                   2                     ME067_A10-15 [SG3Δenv] 293T/17
+#>     neutralization_tier                                      virus_synonym
+```
+
+### Getting standard names from `virus_metadata_all`
+
+Once a CDS virus ID has been identified, CDS standard names can be applied to your data via the metadata found in `virus_metadata_all`. The fields in `virus_metadata_all` are:
+
+| Field                | Description                                                     |
+|----------------------|-----------------------------------------------------------------|
+| cds\_virus\_id       | a unique identifier used by CDS to identify a given virus       |
+| virus                | a shorter common name of the virus                              |
+| virus\_full\_name    | the full name of the virus derived from an ontology<sup>1</sup> |
+| virus\_backbone      | the backbone used for the virus                                 |
+| virus\_host\_cell    | the hostcell used for the virus                                 |
+| virus\_plot\_label   | a name of the virus commonly used in plotting                   |
+| virus\_type          | the type of the virus                                           |
+| virus\_species       | the species of the virus                                        |
+| clade                | the clade of the virus                                          |
+| neutralization\_tier | the neutralization tier of the virus                            |
+
+1.  The virus\_full\_name ontology is defined as a 4 part combination of virus short name, backbone, target cell, and reagent.
+
+## Additional notes for users processing data from the CAVIMC Neutralizing Antibody Cores
+
+### Check the harvest date
+
+When processing data from the CAVIMCs, its important to check the harvest date reported in the assay data against the harvest dates provided in the `virus_lab_id` table. Once a standard name has been identified, check the harvest date in the `virus_lab_id` table. The harvest date in the neutralizing antibody data should match the harvest date in the `virus_lab_id` table. If the harvest date does not match, its possible that the name is mislabeled, or our dataset is out of date.
+
+Checking the harvest date can be done by querying the the `virus_lab_id` table with the `cds_virus_id` found for a given synonym.
+
+
+```r
+vnm$virus_lab_id[cds_virus_id == "cds_23"]
+#>    cds_virus_id lab_code lab_virus_id lab_virus_id_variable_name
+#> 1:       cds_23   Seaman          521                         ID
+#>           harvest_date
+#> 1: 2011-03-17 17:00:00
+```
+
+If the combination of the lab\_virus\_id (and/or virus name), lab, and harvest date found in your data matches the one found in this table, its a pretty good bet that you have the right name mapping. If not, its important to check with the appropriate lab that you have chosen the correct standard name.
+
+### Check with the lab
+
+Once virus names have been mapped, check with the appropriate lab to confirm you have the correct standard names. Please let the DataSpace team know if you believe that we have incorrect or misleading data in our database and we will investigate and correct as needed.

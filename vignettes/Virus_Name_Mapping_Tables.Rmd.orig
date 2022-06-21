@@ -1,0 +1,128 @@
+---
+title: "Using The Virus Name Mapping Tables"
+author: "Jason Taylor"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using The Virus Name Mapping Tables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+table {
+    max-width: 100%;
+    max-height: 600px;
+    overflow: scroll;
+}
+thead{
+    position: sticky;
+    top: 0px;
+    background-color: #fff;
+}
+</style>
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
+labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Purpose
+
+The purpose of this feature is to offer users a list of various virus name synonyms that the DataSpace team has found over the years and has mapped to the standard virus names used in DataSpace. We hope that by making these maps available to the public, users who find unfamiliar virus names can use these data to help them find standard names and metadata for those viruses, or help drive questions to laboratories as to what are the appropriate metadata or standard names for a virus name found in their data.
+
+We encourage any users who find new synonyms for virus names not listed here to reach out to the DataSpace team (dataspace.support@scharp.org) with that information, and we can add it to these tables.
+
+## Our sources
+
+We use copies of the virus databases maintained by the Comprehensive Antibody Vaccine Immune Monitoring Consortium (CAVIMC) Neutralizing Antibodies Cores at the Duke University (David Montefiori) and Harvard University (Mike Seaman) labs to generate our standard virus lists. As we process data from those labs, we have kept running lists of the different ways those viruses have been identified and have compiled those here. We update our database periodically to sync with the updates at the labs. We only provide data for viruses that we have processed or plan to process, so our records are not exhaustive mappings of the records found in those databases.
+
+## Usage caveats
+
+Its important to know that there can be typos and misnamed viruses found in raw source data. The data that the DataSpace team provisions is checked for these types of errors before posting. A mapping that we have made in the past from a synonym to a standard name may not be appropriate for all synonyms found in your data.
+
+## Tutorial for using mapping tables
+
+First, connect to DataSpace via the R API.
+
+```{r connect}
+library(DataSpaceR)
+con <- connectDS()
+```
+
+The mapping tables are gathered via the connection object into a list that can be inspected. Each table can be merged together on the `cds_virus_id` field. There are three tables:
+
+| table name          | description                                                                    |
+|---------------------|--------------------------------------------------------------------------------|
+| virus\_metadata_all | a table of CDS virus IDs, standard names, and metadata                      |
+| virus\_synonym      | a table of known synonyms for the viruses found in `virus_metadata_all`        |
+| virus\_lab\_id      | a table of CDS virus IDS and lab database IDs, as well as harvest dates for QC |
+
+The list can be inspected as follows:
+
+```{r map_list}
+vnm <- con$virusNameMappingTables
+names(vnm)
+```
+
+### Checking the dataset for a virus name synonym
+
+Find standard names using the combination of the `virus_synonym` and `virus_metadata_all` tables. In this example, we search for virus synonyms containing, “A10”.
+
+```{r check_synonyms}
+vnm$virus_synonym[grepl("A10", virus_synonym)]
+```
+
+Once we have identified a virus, we can view the metadata for it using the `cds_virus_id` in the `virus_metadata_all` table.
+
+```{r subset_metadata}
+vnm$virus_metadata_all[cds_virus_id == "cds_23"]
+```
+
+This process can also be done by merging the two tables first, then searching in the merged table.
+
+```{r merge_metadata}
+vsn <- merge(vnm$virus_metadata_all, vnm$virus_synonym, by = "cds_virus_id")
+vsn[grepl("A10", virus_synonym)]
+```
+
+### Getting standard names from `virus_metadata_all`
+
+Once a CDS virus ID has been identified, CDS standard names can be applied to your data via the metadata found in `virus_metadata_all`. The fields in `virus_metadata_all` are:
+
+| Field                | Description                                                     |
+|----------------------|-----------------------------------------------------------------|
+| cds\_virus\_id       | a unique identifier used by CDS to identify a given virus       |
+| virus                | a shorter common name of the virus                              |
+| virus\_full\_name    | the full name of the virus derived from an ontology<sup>1</sup> |
+| virus\_backbone      | the backbone used for the virus                                 |
+| virus\_host\_cell    | the hostcell used for the virus                                 |
+| virus\_plot\_label   | a name of the virus commonly used in plotting                   |
+| virus\_type          | the type of the virus                                           |
+| virus\_species       | the species of the virus                                        |
+| clade                | the clade of the virus                                          |
+| neutralization\_tier | the neutralization tier of the virus                            |
+
+1.  The virus\_full\_name ontology is defined as a 4 part combination of virus short name, backbone, target cell, and reagent.
+
+## Additional notes for users processing data from the CAVIMC Neutralizing Antibody Cores
+
+### Check the harvest date
+
+When processing data from the CAVIMCs, its important to check the harvest date reported in the assay data against the harvest dates provided in the `virus_lab_id` table. Once a standard name has been identified, check the harvest date in the `virus_lab_id` table. The harvest date in the neutralizing antibody data should match the harvest date in the `virus_lab_id` table. If the harvest date does not match, its possible that the name is mislabeled, or our dataset is out of date.
+
+Checking the harvest date can be done by querying the the `virus_lab_id` table with the `cds_virus_id` found for a given synonym.
+
+```{r check_harvest_date}
+vnm$virus_lab_id[cds_virus_id == "cds_23"]
+```
+
+If the combination of the lab\_virus\_id (and/or virus name), lab, and harvest date found in your data matches the one found in this table, its a pretty good bet that you have the right name mapping. If not, its important to check with the appropriate lab that you have chosen the correct standard name.
+
+### Check with the lab
+
+Once virus names have been mapped, check with the appropriate lab to confirm you have the correct standard names. Please let the DataSpace team know if you believe that we have incorrect or misleading data in our database and we will investigate and correct as needed.
