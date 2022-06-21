@@ -368,14 +368,14 @@ knitr::kable(head(con$virusMetadata))
 
 
 
-|assay_identifier |virus        |virus_type     |neutralization_tier |clade |antigen_control |virus_full_name                |virus_name_other |virus_species |virus_host_cell |virus_backbone |panel_names          |
-|:----------------|:------------|:--------------|:-------------------|:-----|:---------------|:------------------------------|:----------------|:-------------|:---------------|:--------------|:--------------------|
-|NAB MAB          |0013095-2.11 |Env Pseudotype |2                   |NA    |0               |0013095-2.11 [SG3Δenv] 293T/17 |NA               |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
-|NAB MAB          |001428-2.42  |Env Pseudotype |2                   |C     |0               |001428-2.42 [SG3Δenv] 293T/17  |NA               |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
-|NAB MAB          |0041.v3.c18  |Env Pseudotype |2                   |C     |0               |0041.v3.c18 [SG3Δenv] 293T/17  |0041.V3.C18      |HIV           |293T/17         |SG3Δenv        |NA                   |
-|NAB MAB          |0077.v1.c16  |Env Pseudotype |2                   |C     |0               |0077.v1.c16 [SG3Δenv] 293T/17  |0077.v1.c16      |HIV           |293T/17         |SG3Δenv        |NA                   |
-|NAB              |00836-2.5    |Env Pseudotype |1B                  |C     |0               |00836-2.5 [SG3Δenv] 293T/17    |NA               |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
-|NAB MAB          |0260.v5.c1   |Env Pseudotype |2                   |A     |0               |0260.v5.c1 [SG3Δenv] 293T/17   |0260.V5.C1       |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
+|assay_identifier |cds_virus_id |virus        |virus_type     |neutralization_tier |clade |antigen_control |virus_full_name                |virus_name_other |virus_species |virus_host_cell |virus_backbone |panel_names          |
+|:----------------|:------------|:------------|:--------------|:-------------------|:-----|:---------------|:------------------------------|:----------------|:-------------|:---------------|:--------------|:--------------------|
+|NAB MAB          |cds_1        |0013095-2.11 |Env Pseudotype |2                   |NA    |0               |0013095-2.11 [SG3Δenv] 293T/17 |NA               |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
+|NAB MAB          |cds_2        |001428-2.42  |Env Pseudotype |2                   |C     |0               |001428-2.42 [SG3Δenv] 293T/17  |NA               |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
+|NAB MAB          |cds_3        |0041.v3.c18  |Env Pseudotype |2                   |C     |0               |0041.v3.c18 [SG3Δenv] 293T/17  |0041.V3.C18      |HIV           |293T/17         |SG3Δenv        |NA                   |
+|NAB MAB          |cds_4        |0077.v1.c16  |Env Pseudotype |2                   |C     |0               |0077.v1.c16 [SG3Δenv] 293T/17  |0077.v1.c16      |HIV           |293T/17         |SG3Δenv        |NA                   |
+|NAB              |cds_252      |00836-2.5    |Env Pseudotype |1B                  |C     |0               |00836-2.5 [SG3Δenv] 293T/17    |NA               |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
+|NAB MAB          |cds_5        |0260.v5.c1   |Env Pseudotype |2                   |A     |0               |0260.v5.c1 [SG3Δenv] 293T/17   |0260.V5.C1       |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
 
 ## Access monoclonal antibody data
 

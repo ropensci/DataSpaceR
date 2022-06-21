@@ -82,3 +82,15 @@ test_that("test mab object results", {
   expect_true(length(unique(mab$nabMab$prot)) == nrow(mab$studies))
   expect_true(length(unique(mab$studyAndMabs$prot)) == nrow(mab$studies))
 })
+
+test_that("test lanl metadata merge and duplicates in mab table", {
+  con$resetMabGrid()
+  con$filterMabGrid("mab_mixture", "PGT128")
+  mab <- con$getMab()
+  expect_true(nrow(mab$mabs) == 1)
+  mab$getLanlMetadata()
+  expect_true(class(mab$mabs$lanl_metadata) == "list")
+  expect_true(length(mab$mabs$lanl_metadata[[1]]) == 4)
+  expect_true(names(mab$mabs$lanl_metadata[[1]])[1] == "epitopes")
+  expect_true("data.table" %in% class(mab$mabs$lanl_metadata[[1]]$epitopes$binding_type[[1]]))
+})

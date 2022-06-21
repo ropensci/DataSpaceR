@@ -141,7 +141,7 @@ if ("DataSpaceConnection" %in% class(con)) {
       expect_equal(
         names(con$virusMetadata),
         c(
-          "assay_identifier", "virus", "virus_type", "neutralization_tier", "clade",
+          "assay_identifier", "cds_virus_id", "virus", "virus_type", "neutralization_tier", "clade",
           "antigen_control", "virus_full_name", "virus_name_other", "virus_species",
           "virus_host_cell", "virus_backbone", "panel_names"
         )

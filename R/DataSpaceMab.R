@@ -110,10 +110,42 @@ DataSpaceMab <- R6Class(
       )
 
       invisible(!"try-error" %in% tries)
+    },
+
+    #' @description
+    #' Applies LANL metadata to mabs table.
+    getLanlMetadata = function(){
+      checkList <- function(x){
+        if(any(c("list", "data.frame") %in% class(x))){
+          lapply(x, function(y){
+            if("data.frame" %in% class(y)) {
+              setDT(y)
+              checkList(y)
+            } else {
+              checkList(y)
+            }
+          })
+        }
+      }
+      pullForLanlId <- function(lanl_id){
+        url <- paste0("https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?id=", lanl_id)
+        if(is.na(lanl_id)) return(NA)
+        res <- httr::GET(url)
+        if(res$status == 200){
+          json <- fromJSON(content(res, as="text")[[1]])
+          json[["epitopes"]] <- data.table(json[["epitopes"]])
+          json$source <- url
+          lapply(json$epitopes, checkList)
+          return(json)
+        } else {
+          return(paste0("No LANL metadata found at '", url, "'."))
+        }
+      }
+      private$.mabs[, lanl_metadata := lapply(mab_lanlid, pullForLanlId)]
     }
+
   ),
   active = list(
-
     #' @field config A list. Stores configuration of the connection object such
     #' as URL, path and username.
     config = function() {
@@ -197,7 +229,7 @@ DataSpaceMab <- R6Class(
         folderPath = "/CAVD",
         schemaName = "CDS",
         sql = paste0(
-          "SELECT ",
+          "SELECT DISTINCT",
           "     mabmetadata.mab_id, mabmetadata.mab_name_std, mabmetadata.mab_lanlid, mabmetadata.mab_hxb2_location, ",
           "     mabmetadata.mab_ab_binding_type, mabmetadata.mab_isotype, mabmetadata.mab_donorid, ",
           "     mabmetadata.mab_donor_species, mabmetadata.mab_donor_clade ",

@@ -26,7 +26,6 @@ thead{
 
 
 
-
 ## Workflow overview
 
 Using the DataSpace [app](https://dataspace.cavd.org/cds/CAVD/app.view#mabgrid), the workflow of using the mAb grid is the following:
@@ -113,16 +112,16 @@ knitr::kable(con$mabGridSummary)
 |B9          |llama         |        |gp160         |         3|        3|       1|                 0.0386986|         1|
 |LAB5        |llama         |        |              |         4|        2|       1|                        NA|         1|
 
-Or we can use method chaining to call multiple filter methods and browse the grid. Method chaining is unique to R6 objects and related to the pipe. See Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/r6.html) for more info
+Or we can use method chaining to call multiple filter methods and browse the grid. Method chaining is unique to R6 objects and related to the pipe. See Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/r6.html) for more info.
 
 
 ```r
+con$resetMabGrid()
 con$
-  filterMabGrid(using = "hxb2_location", value = c("Env", "gp160"))$
+  filterMabGrid(using = "virus", value = c("242-14", "Q23.17", "6535.3", "BaL.26", "DJ263.8"))$
   filterMabGrid(using = "donor_species", value = "llama")$
   mabGridSummary
 ```
-
 
 ## Retrieve column values from the mAb grid
 
@@ -197,7 +196,54 @@ names(mab)
 #>  [1] ".__enclos_env__"     "variableDefinitions" "assays"             
 #>  [4] "studies"             "nabMab"              "mabs"               
 #>  [7] "studyAndMabs"        "config"              "clone"              
-#> [10] "refresh"             "print"               "initialize"
+#> [10] "getLanlMetadata"     "refresh"             "print"              
+#> [13] "initialize"
+```
+
+DataSpaceR can also fetch and add metadata associated with downloaded mAbs via the `getLanlMetadata` method that is associated with the `DataSpaceMab` object.
+
+
+```r
+mab$getLanlMetadata()
+```
+
+The LANL metadata can now be found at the `mabs$lanl_metadata` variable. This is a list column and its structure can very depending on what data LANL has collected.
+    
+
+```r
+mab$mabs[mab_name_std == "B9"]$lanl_metadata
+#> [[1]]
+#> [[1]]$epitopes
+#>    accession alt_names      binding_type               cite   country dis
+#> 1:        NA        NA <data.table[1x2]> <data.table[1x25]> <list[0]>  NA
+#>    disrange donor epitope epitope_name hxb2_contig hxb2loc2end hxb2loc2start
+#> 1:       NA    NA      NA           NA          NA          NA            NA
+#>    hxb2locend hxb2locstart hxb2protein hxb2protein_id   id         immunogen
+#> 1:         NA           NA       gp160             18 3219 <data.table[1x2]>
+#>    in_catnap in_feature_db is_adcc   isotype           keyword mab_name
+#> 1:      TRUE         FALSE      NA <list[0]> <data.table[4x2]>       B9
+#>             modifydate neutralizing              note origlocend origlocstart
+#> 1: 2018-06-01 13:59:55            L <data.table[2x4]>         NA           NA
+#>    origprotein origprotein_id   patient           species strain subprotein
+#> 1:          NA              1 <list[0]> <data.table[1x2]>     NA         NA
+#>    subprotein_id           subtype table total_cite_count total_note_count
+#> 1:             1 <data.table[2x2]>    ab                1                2
+#>    vaccine_adjuvant vaccine_component    vaccine_strain      vaccine_type
+#> 1:        <list[0]> <data.table[1x2]> <data.table[2x2]> <data.table[1x2]>
+#> 
+#> [[1]]$params
+#> [[1]]$params$id
+#> [1] "3219"
+#> 
+#> [[1]]$params$table
+#> [1] "ab"
+#> 
+#> 
+#> [[1]]$timestamp
+#> [1] "2022-04-01 17:01:42z"
+#> 
+#> [[1]]$source
+#> [1] "https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?id=3219"
 ```
 
 ## Session information

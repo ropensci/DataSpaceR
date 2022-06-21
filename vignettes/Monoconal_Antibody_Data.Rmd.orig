@@ -33,7 +33,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-
 ## Workflow overview
 
 Using the DataSpace [app](https://dataspace.cavd.org/cds/CAVD/app.view#mabgrid), the workflow of using the mAb grid is the following:
@@ -88,15 +87,15 @@ con$filterMabGrid(using = "donor_species", value = "llama")
 knitr::kable(con$mabGridSummary)
 ```
 
-Or we can use method chaining to call multiple filter methods and browse the grid. Method chaining is unique to R6 objects and related to the pipe. See Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/r6.html) for more info
+Or we can use method chaining to call multiple filter methods and browse the grid. Method chaining is unique to R6 objects and related to the pipe. See Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/r6.html) for more info.
 
 ```{r eval=FALSE}
+con$resetMabGrid()
 con$
-  filterMabGrid(using = "hxb2_location", value = c("Env", "gp160"))$
+  filterMabGrid(using = "virus", value = c("242-14", "Q23.17", "6535.3", "BaL.26", "DJ263.8"))$
   filterMabGrid(using = "donor_species", value = "llama")$
   mabGridSummary
 ```
-
 
 ## Retrieve column values from the mAb grid
 
@@ -106,8 +105,8 @@ You can retrieve values from the grid by `mab_mixture`, `donor_species`, `isotyp
 # retrieve available viruses in the filtered grid
 con$mabGrid[, unique(virus)]
 
-# retrieve available clades for 1H9 mAb mixture in the filtered grid
-con$mabGrid[mab_mixture == "1H9", unique(clade)]
+# retrieve available clades for PGT151/3BNC117 mAb mixture in the filtered grid
+con$mabGrid[, unique(hxb2_location)]
 ```
 
 
@@ -132,6 +131,18 @@ There are several metadata fields that can be exported in the mAb object.
 
 ```{r}
 names(mab)
+```
+
+DataSpaceR can also fetch and add metadata associated with downloaded mAbs via the `getLanlMetadata` method that is associated with the `DataSpaceMab` object.
+
+```{r}
+mab$getLanlMetadata()
+```
+
+The LANL metadata can now be found at the `mabs$lanl_metadata` variable. This is a list column and its structure can very depending on what data LANL has collected.
+    
+```{r}
+mab$mabs[mab_name_std == "B9"]$lanl_metadata
 ```
 
 ## Session information
