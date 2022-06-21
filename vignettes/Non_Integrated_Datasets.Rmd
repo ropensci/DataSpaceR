@@ -1,7 +1,7 @@
 ---
 title: "Accessing Non-Integrated Datasets"
 author: "Helen Miller"
-date: "2021-08-30"
+date: "2022-06-15"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Non-Integrated Datasets}
@@ -63,15 +63,13 @@ Non-Integrated datasets can be loaded with `getDataset` like integrated data. Th
 
 ```r
 adcp <- vtn505$getDataset("ADCP")
-#> downloading vtn505_adcp.zip to /var/folders/d9/q394nzdj7b7_5hqkp1bvh9v40000gn/T//Rtmp4FHYQc...
-#> No encoding supplied: defaulting to UTF-8.
-#> unzipping vtn505_adcp.zip to /var/folders/d9/q394nzdj7b7_5hqkp1bvh9v40000gn/T//Rtmp4FHYQc/vtn505_adcp
 dim(adcp)
 #> [1] 378  11
 colnames(adcp)
-#>  [1] "study_prot"             "participant_id"         "study_day"              "lab_code"               "specimen_type"         
-#>  [6] "antigen"                "percent_cv"             "avg_phagocytosis_score" "positivity_threshold"   "response"              
-#> [11] "assay_identifier"
+#>  [1] "study_prot"             "participant_id"         "study_day"             
+#>  [4] "lab_code"               "specimen_type"          "antigen"               
+#>  [7] "percent_cv"             "avg_phagocytosis_score" "positivity_threshold"  
+#> [10] "response"               "assay_identifier"
 ```
 
 You can also view the file format info using `getDatasetDescription`. For non-integrated data, this will open a pdf into your computer's default pdf viewer.
@@ -88,10 +86,10 @@ If you will be accessing the data at another time and don't want to have to re-d
 
 ```r
 vtn505$dataDir
-#> [1] "/var/folders/d9/q394nzdj7b7_5hqkp1bvh9v40000gn/T//Rtmp4FHYQc"
+#> [1] "/tmp/RtmpoDO8Tc"
 vtn505$setDataDir(".")
 vtn505$dataDir
-#> [1] "/Users/juyeongkim/git/CDS/DataSpaceR/vignettes"
+#> [1] "/home/jmtaylor/Projects/DataSpaceR/vignettes"
 ```
 
 If the dataset already exists in the specified `dataDir` or `outputDir`, it will be not be downloaded. This can be overridden with `reload=TRUE`, which forces a re-download.
@@ -102,33 +100,31 @@ If the dataset already exists in the specified `dataDir` or `outputDir`, it will
 
 ```r
 sessionInfo()
-#> R version 4.1.1 (2021-08-10)
-#> Platform: x86_64-apple-darwin17.0 (64-bit)
-#> Running under: macOS Big Sur 11.5.2
+#> R version 4.1.2 (2021-11-01)
+#> Platform: x86_64-pc-linux-gnu (64-bit)
+#> Running under: Ubuntu 18.04.5 LTS
 #> 
 #> Matrix products: default
-#> LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
 #> 
 #> locale:
-#> [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+#>  [1] LC_CTYPE=en_US.utf8       LC_NUMERIC=C             
+#>  [3] LC_TIME=en_US.utf8        LC_COLLATE=en_US.utf8    
+#>  [5] LC_MONETARY=en_US.utf8    LC_MESSAGES=en_US.utf8   
+#>  [7] LC_PAPER=en_US.utf8       LC_NAME=C                
+#>  [9] LC_ADDRESS=C              LC_TELEPHONE=C           
+#> [11] LC_MEASUREMENT=en_US.utf8 LC_IDENTIFICATION=C      
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] DataSpaceR_0.7.5 knitr_1.33      
+#> [1] data.table_1.14.2 DataSpaceR_0.7.5  knitr_1.37       
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] httr_1.4.2        pkgload_1.2.1     jsonlite_1.7.2    spelling_2.2      assertthat_0.2.1  askpass_1.1       highr_0.9        
-#>  [8] triebeard_0.3.0   urltools_1.7.3    yaml_2.2.1        remotes_2.4.0     sessioninfo_1.1.1 pillar_1.6.2      glue_1.4.2       
-#> [15] uuid_0.1-4        digest_0.6.27     htmltools_0.5.2   pkgconfig_2.0.3   devtools_2.4.2    rcmdcheck_1.3.3   httpcode_0.3.0   
-#> [22] purrr_0.3.4       gitcreds_0.1.1    codemetar_0.3.2   processx_3.5.2    tibble_3.1.4      openssl_1.4.4     usethis_2.0.1    
-#> [29] ellipsis_0.3.2    cachem_1.0.6      withr_2.4.2       credentials_1.3.1 lazyeval_0.2.2    cli_3.0.1         magrittr_2.0.1   
-#> [36] crayon_1.4.1      memoise_2.0.0     evaluate_0.14     ps_1.6.0          fs_1.5.0          fansi_0.5.0       xml2_1.3.2       
-#> [43] parsedate_1.2.1   pkgbuild_1.2.0    tools_4.1.1       gh_1.3.0          hunspell_3.0.1    data.table_1.14.0 prettyunits_1.1.1
-#> [50] Rlabkey_2.8.0     lifecycle_1.0.0   gert_1.3.2        stringr_1.4.0     xopen_1.0.0       pingr_2.0.1       callr_3.7.0      
-#> [57] rex_1.2.0         compiler_4.1.1    covr_3.5.1        rhub_1.1.1        rlang_0.4.11      rstudioapi_0.13   sys_3.4          
-#> [64] rappdirs_0.3.3    rmarkdown_2.10    testthat_3.0.4    curl_4.3.2        rematch_1.0.1     rematch2_2.1.2    R6_2.5.1         
-#> [71] fastmap_1.1.0     utf8_1.2.2        commonmark_1.7    rprojroot_2.0.2   desc_1.3.0        stringi_1.7.4     crul_1.1.0       
-#> [78] whoami_1.3.0      Rcpp_1.0.7        vctrs_0.3.8       xfun_0.25
+#>  [1] Rcpp_1.0.8       digest_0.6.29    assertthat_0.2.1 R6_2.5.1        
+#>  [5] jsonlite_1.8.0   magrittr_2.0.2   evaluate_0.15    highr_0.9       
+#>  [9] httr_1.4.2       stringi_1.7.6    curl_4.3.2       tools_4.1.2     
+#> [13] stringr_1.4.0    Rlabkey_2.8.3    xfun_0.29        compiler_4.1.2
 ```

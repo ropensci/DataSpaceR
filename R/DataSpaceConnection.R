@@ -318,6 +318,10 @@ DataSpaceConnection <- R6Class(
           silent = !private$.config$verbose
         )),
         class(try(
+          private$.getVirusNameMappingTables(),
+          silent = !private$.config$verbose
+        )),        
+        class(try(
           private$.getAvailablePublications(),
           silent = !private$.config$verbose
         ))
@@ -446,6 +450,13 @@ DataSpaceConnection <- R6Class(
     #' DataSpace.
     virusMetadata = function() {
       private$.virusMetadata
+    },
+
+    #' @field virusNameMappingTables A list of data.table objects. This
+    #' list contains `virusMetadataAll`, `virusLabId`, and `virus_synonym`
+    #' which are described in the vignette `Virus_Name_Mapping_Tables`.
+    virusNameMappingTables = function() {
+      private$.virusNameMappingTables
     }
   ),
   private = list(
@@ -457,6 +468,7 @@ DataSpaceConnection <- R6Class(
     .mabMetaGridBase = data.table(),
     .mabFilters = list(),
     .virusMetadata = data.table(),
+    .virusNameMappingTables = list(),
     .availablePublications = data.table(),
     .cache = list(),
     .getAvailableStudies = function() {
@@ -596,6 +608,54 @@ DataSpaceConnection <- R6Class(
 
       invisible(NULL)
     },
+
+    .getVirusNameMappingTables = function(){
+      
+      virusMetadataAll <- labkey.selectRows(
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = "/CAVD/",
+        schemaName = "CDS",
+        queryName = "virus_metadata_all",
+        colNameOpt = "fieldname",
+        colSelect = c("cds_virus_id", "virus", "virus_full_name", 
+                      "virus_backbone", "virus_host_cell", "virus_plot_label", 
+                      "virus_type", "virus_species", "clade", 
+                      "neutralization_tier"),
+        method = "GET"
+      )
+      setDT(virusMetadataAll)
+      setkey(virusMetadataAll, cds_virus_id)
+      
+      virusLabId <- labkey.selectRows(
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = "/CAVD/",
+        schemaName = "CDS",
+        queryName = "virus_lab_id",
+        colNameOpt = "fieldname",
+        colSelect = c("cds_virus_id", "lab_code", "lab_virus_id",
+                      "lab_virus_id_variable_name", "harvest_date"),
+        method = "GET"
+      )
+      setDT(virusLabId)
+
+      virusSynonym <- labkey.selectRows(
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = "/CAVD/",
+        schemaName = "CDS",
+        queryName = "virus_synonym",
+        colNameOpt = "fieldname",
+        colSelect = c("cds_virus_id", "virus_synonym"),
+        method = "GET"
+      )
+      setDT(virusSynonym)
+      
+      private$.virusNameMappingTables <- list(
+        virus_metadata_all = virusMetadataAll,
+        virus_lab_id = virusLabId,
+        virus_synonym = virusSynonym
+      )
+
+    },
     .getVirusMetadata = function() {
       colSelect <- c(
         "assay_identifier", "virus", "virus_type", "neutralization_tier", "clade",
@@ -666,5 +726,5 @@ LEFT OUTER JOIN
       setnames(availablePublications, "remote_path", "remotePath")
       private$.availablePublications <- availablePublications
     }
-  )
+)
 )

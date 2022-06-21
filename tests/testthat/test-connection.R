@@ -10,6 +10,7 @@ test_that("can connect to DataSpace", {
 if ("DataSpaceConnection" %in% class(con)) {
   con_names <- c(
     ".__enclos_env__",
+    "virusNameMappingTables",
     "virusMetadata",
     "mabGrid",
     "mabGridSummary",
@@ -274,6 +275,25 @@ if ("DataSpaceConnection" %in% class(con)) {
     test_that("Check for warnings.", {
       con$filterMabGrid(using = "hxb2_location", value = c("Env", "gp160"))
       expect_true(length(warnings()) == 0)
+    })
+    
+    test_that("virus name mapping tables", {
+      expect_true(length(con$virusNameMappingTables) == 3)
+      expect_true(
+        all(
+          names(con$virusNameMappingTables) %in% c("virus_metadata_all", "virus_synonym", "virus_lab_id")
+        )
+      )
+      expect_true(
+        all(
+          sapply(con$virusNameMappingTables, \(x) "cds_virus_id" %in% names(x))
+        )
+      )
+      expect_true(
+        all(
+          sapply(con$virusNameMappingTables, \(x) "data.table" %in% class(x))
+        )
+      )
     })
   }
 }
