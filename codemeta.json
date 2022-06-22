@@ -1,22 +1,26 @@
 {
-  "@context": [
-    "https://doi.org/10.5063/schema/codemeta-2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "DataSpaceR",
-  "description": "Provides a convenient API interface to access immunological data\n    within 'the CAVD DataSpace'(<https://dataspace.cavd.org>), a data sharing \n    and discovery tool that facilitates exploration of HIV immunological data \n    from pre-clinical and clinical HIV vaccine studies.",
+  "description": "Provides a convenient API interface to access immunological data within 'the CAVD DataSpace'(<https://dataspace.cavd.org>), a data sharing and discovery tool that facilitates exploration of HIV immunological data from pre-clinical and clinical HIV vaccine studies.",
   "name": "DataSpaceR: Interface to 'the CAVD DataSpace'",
+  "relatedLink": ["https://docs.ropensci.org/DataSpaceR/", "https://CRAN.R-project.org/package=DataSpaceR"],
   "codeRepository": "https://github.com/ropensci/DataSpaceR",
   "issueTracker": "https://github.com/ropensci/DataSpaceR/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
   "runtimePlatform": "R version 4.1.1 (2021-08-10)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
     {
       "@type": "Person",
@@ -112,13 +116,13 @@
       "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "R6",
       "name": "R6",
@@ -130,7 +134,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=R6"
     },
-    {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "Rlabkey",
       "name": "Rlabkey",
@@ -143,7 +147,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=Rlabkey"
     },
-    {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "curl",
       "name": "curl",
@@ -155,7 +159,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=curl"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "httr",
       "name": "httr",
@@ -167,7 +171,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=httr"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "assertthat",
       "name": "assertthat",
@@ -179,7 +183,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=assertthat"
     },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "digest",
       "name": "digest",
@@ -191,7 +195,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=digest"
     },
-    {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "jsonlite",
       "name": "jsonlite",
@@ -203,7 +207,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=jsonlite"
     },
-    {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "data.table",
       "name": "data.table",
@@ -214,41 +218,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=data.table"
-    }
-  ],
-  "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
-  "fileSize": "264.194KB",
-  "contIntegration": ["https://github.com/ropensci/DataSpaceR/actions", "https://codecov.io/gh/ropensci/DataSpaceR/branch/main"],
-  "keywords": [
-    "r",
-    "labkey",
-    "dataspace",
-    "cavd",
-    "hiv",
-    "vaccine",
-    "r-package",
-    "rstats",
-    "hvtn",
-    "immunology",
-    "cavd-dataspace"
-  ],
-  "developmentStatus": ["https://www.repostatus.org/#active", "https://lifecycle.r-lib.org/articles/stages.html"],
-  "contributor": {},
-  "funder": {},
-  "provider": {
-    "@id": "https://cran.r-project.org",
-    "@type": "Organization",
-    "name": "Comprehensive R Archive Network (CRAN)",
-    "url": "https://cran.r-project.org"
+    },
+    "SystemRequirements": null
   },
-  "relatedLink": [
-    "https://CRAN.R-project.org/package=DataSpaceR",
-    "https://docs.ropensci.org/DataSpaceR",
-    "https://docs.ropensci.org/DataSpaceR/"
-  ],
+  "fileSize": "294.331KB",
+  "releaseNotes": "https://github.com/ropensci/DataSpaceR/blob/master/NEWS.md",
+  "readme": "https://github.com/ropensci/DataSpaceR/blob/main/README.md",
+  "contIntegration": ["https://github.com/ropensci/DataSpaceR/actions", "https://codecov.io/gh/ropensci/DataSpaceR/branch/main"],
+  "developmentStatus": ["https://www.repostatus.org/#active", "https://lifecycle.r-lib.org/articles/stages.html"],
   "review": {
     "@type": "Review",
     "url": "https://github.com/ropensci/software-review/issues/261",
     "provider": "https://ropensci.org"
-  }
+  },
+  "keywords": "cavd-dataspace"
 }

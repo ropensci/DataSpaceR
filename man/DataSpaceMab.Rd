@@ -77,6 +77,7 @@ definitions.}
 \item \href{#method-new}{\code{DataSpaceMab$new()}}
 \item \href{#method-print}{\code{DataSpaceMab$print()}}
 \item \href{#method-refresh}{\code{DataSpaceMab$refresh()}}
+\item \href{#method-getLanlMetadata}{\code{DataSpaceMab$getLanlMetadata()}}
 \item \href{#method-clone}{\code{DataSpaceMab$clone()}}
 }
 }
@@ -119,6 +120,16 @@ Print the \code{DataSpaceMab} object summary.
 Refresh the \code{DataSpaceMab} object to update datasets.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceMab$refresh()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getLanlMetadata"></a>}}
+\if{latex}{\out{\hypertarget{method-getLanlMetadata}{}}}
+\subsection{Method \code{getLanlMetadata()}}{
+Applies LANL metadata to mabs table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceMab$getLanlMetadata()}\if{html}{\out{</div>}}
 }
 
 }
