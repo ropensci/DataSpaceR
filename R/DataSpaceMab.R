@@ -47,13 +47,13 @@ DataSpaceMab <- R6Class(
     #' @param mabMixture A character vector.
     #' @param filters A list.
     #' @param config A list.
-    initialize = function(mabMixture, filters, config) {
+    initialize = function(mabMixture, mabFilters, config) {
       assert_that(!is.null(config))
 
       # set primary fields
-      private$.config <- config
-      private$.filters <- filters
       private$.mabMixture <- mabMixture
+      private$.mabFilters <- mabFilters
+      private$.config <- config
 
       # get extra fields if available
       self$refresh()
@@ -73,9 +73,9 @@ DataSpaceMab <- R6Class(
       cat("\n    -", length(unique(private$.nabMab$neutralization_tier)), "neutralization tiers")
       cat("\n    -", length(unique(private$.nabMab$clade)), "clades")
       cat("\n  Filters:")
-      if (length(private$.filters) > 0) {
-        lapply(names(private$.filters), function(x) {
-          cat("\n    - ", x, ": ", paste(private$.filters[[x]], collapse = ", "), sep = "")
+      if (length(private$.mabFilters) > 0) {
+        lapply(names(private$.mabFilters), function(x) {
+          cat("\n    - ", x, ": ", paste(private$.mabFilters[[x]], collapse = ", "), sep = "")
         })
       } else {
         cat(" NA")
@@ -88,11 +88,15 @@ DataSpaceMab <- R6Class(
     refresh = function() {
       tries <- c(
         class(try(
-          private$.getNabMabs(),
+          private$.getNabAssayData(),
           silent = !private$.config$verbose
         )),
         class(try(
-          private$.getMabs(),
+          private$.getMabMixMetadata(),
+          silent = !private$.config$verbose
+        )),
+        class(try(
+          private$.getMabMetadata(),
           silent = !private$.config$verbose
         )),
         class(try(
@@ -152,15 +156,15 @@ DataSpaceMab <- R6Class(
       private$.config
     },
 
-    #' @field studyAndMabs A data.table. The table of available mAbs by study.
-    studyAndMabs = function() {
-      unique(private$.nabMab[, .(prot, mab_mix_id, mab_mix_label, mab_mix_name_std)])
+    #' @field studyMabLabels A data.table. The table of available mAbs by study.
+    mabStudyLabels = function() {
+      private$.nabMab[,.(prot, mab_id, mab_mix_name_std, mab_mix_label)] |> unique()
     },
 
-    #' @field mabs A data.table. The table of available mAbs and their
-    #' attributes.
-    mabs = function() {
-      private$.mabs
+    #' @field nabMab A data.table. The table of mAbs and their neutralizing
+    #' measurements against viruses.
+    mabMetadata = function() {
+      private$.mabMetadata
     },
 
     #' @field nabMab A data.table. The table of mAbs and their neutralizing
@@ -185,17 +189,21 @@ DataSpaceMab <- R6Class(
       private$.variableDefinitions
     }
   ),
+
   private = list(
     .config = list(),
-    .filters = list(),
+    .mabFilters = list(),
     .mabMixture = character(),
-    .mabs = data.table(),
+    .mabMetadata = list(),
+    .mabMixMetadata = data.table(),
+    .mabs = data.table(),     
     .nabMab = data.table(),
     .studies = data.table(),
     .assays = data.table(),
     .variableDefinitions = data.table(),
-    .getNabMabs = function() {
-      filters <- private$.filters
+    
+    .getNabAssayData = function() {
+      filters <- private$.mabFilters
       if (length(filters) > 0) {
         filters <- lapply(names(filters), function(x) {
           makeFilter(c(x, "IN", paste(unique(unlist(lapply(filters[[x]], URLencode, reserved = TRUE))), collapse = ";")))
@@ -209,8 +217,7 @@ DataSpaceMab <- R6Class(
       } else {
         mabFilters <- NULL
       }
-
-      nabMab <- labkey.selectRows(
+      private$.nabMab <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "study",
@@ -218,32 +225,31 @@ DataSpaceMab <- R6Class(
         colNameOpt = "fieldname",
         colFilter = mabFilters,
         method = "GET"
-      )
-      setDT(nabMab)
-
-      private$.nabMab <- nabMab
+      ) |> 
+        setDT()
     },
-    .getMabs = function() {
-      mabs <- labkey.executeSql(
+    
+    .getMabMixMetadata = function() {
+      private$.mabMixMetadata <- labkey.executeSql(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
         sql = paste0(
-          "SELECT DISTINCT",
-          "     mabmetadata.mab_id, mabmetadata.mab_name_std, mabmetadata.mab_lanlid, mabmetadata.mab_hxb2_location, ",
-          "     mabmetadata.mab_ab_binding_type, mabmetadata.mab_isotype, mabmetadata.mab_donorid, ",
-          "     mabmetadata.mab_donor_species, mabmetadata.mab_donor_clade ",
+          "SELECT DISTINCT *",
           "FROM mabmetadata ",
           "INNER JOIN mabmix ON mabmetadata.mab_id = mabmix.mab_id ",
           "INNER JOIN mabmixmetadata on mabmix.mab_mix_id = mabmixmetadata.mab_mix_id ",
           "WHERE mab_mix_name_std IN('", paste0(unique(private$.nabMab$mab_mix_name_std), collapse = "', '"), "') "
         ),
         colNameOpt = "fieldname"
-      )
-      setDT(mabs)
-
-      private$.mabs <- mabs
+      ) |>
+        setDT()
     },
+
+    .getMabMetadata = function() {
+      private$.mabMetadata <- DataSpaceMabMetadata$new(private$.mabMixMetadata$mab_id |> unique(), private$.config)
+    },
+    
     .getStudies = function() {
       studies <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -285,6 +291,7 @@ DataSpaceMab <- R6Class(
         )]
       )
     },
+
     .getAssays = function() {
       assays <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -302,6 +309,7 @@ DataSpaceMab <- R6Class(
 
       private$.assays <- assays[, container := NULL]
     },
+
     .getVariableDefinitions = function() {
       varInfo <- labkey.getQueryDetails(
         baseUrl = private$.config$labkeyUrlBase,

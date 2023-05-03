@@ -224,6 +224,10 @@ DataSpaceConnection <- R6Class(
       DataSpaceMab$new(self$mabGridSummary$mab_mixture, private$.mabFilters, private$.config)
     },
 
+    getMabMetadata = function(){
+      DataSpaceMabMetadata$new(mabIds=c(), private$.config)
+    },
+
     #' @description
     #' Download publication data for a chosen publication.
     #' @param publicationId A character/integer. ID for the publication to
