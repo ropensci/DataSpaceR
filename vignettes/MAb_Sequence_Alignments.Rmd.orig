@@ -91,7 +91,7 @@ met
 
 Once sequences and alignments are loaded, there are several active bindings available to access those data:
 
-```{r, echo = FALSE}
+```{r, eval = FALSE}
 
 met$sequences
 met$alignments
@@ -101,9 +101,9 @@ met$runInformation
 
 ```
  
-Descriptons for the various fields in each of these objects can be found using the `variableDefinitions` active binding.
+Descriptions for the various fields in each of these objects can be found using the `variableDefinitions` active binding.
 
-```{r, echo = FALSE}
+```{r, eval = FALSE}
 
 met$variableDefinitions
 
