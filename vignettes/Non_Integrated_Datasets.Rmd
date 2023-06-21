@@ -1,7 +1,7 @@
 ---
 title: "Accessing Non-Integrated Datasets"
 author: "Helen Miller"
-date: "2022-06-15"
+date: "2023-06-21"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Non-Integrated Datasets}
@@ -25,7 +25,7 @@ vtn505 <- con$getStudy("vtn505")
 vtn505
 #> <DataSpaceStudy>
 #>   Study: vtn505
-#>   URL: https://dataspace.cavd.org/CAVD/vtn505
+#>   URL: https://dataspace-staging.cavd.org/CAVD/vtn505
 #>   Available datasets:
 #>     - Binding Ab multiplex assay
 #>     - Demographics
@@ -86,7 +86,7 @@ If you will be accessing the data at another time and don't want to have to re-d
 
 ```r
 vtn505$dataDir
-#> [1] "/tmp/RtmpoDO8Tc"
+#> [1] "/tmp/RtmpoHvQaR"
 vtn505$setDataDir(".")
 vtn505$dataDir
 #> [1] "/home/jmtaylor/Projects/DataSpaceR/vignettes"
@@ -100,31 +100,30 @@ If the dataset already exists in the specified `dataDir` or `outputDir`, it will
 
 ```r
 sessionInfo()
-#> R version 4.1.2 (2021-11-01)
+#> R version 4.2.2 Patched (2022-11-10 r83330)
 #> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Ubuntu 18.04.5 LTS
+#> Running under: Ubuntu 20.04.6 LTS
 #> 
 #> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
 #> 
 #> locale:
-#>  [1] LC_CTYPE=en_US.utf8       LC_NUMERIC=C             
-#>  [3] LC_TIME=en_US.utf8        LC_COLLATE=en_US.utf8    
-#>  [5] LC_MONETARY=en_US.utf8    LC_MESSAGES=en_US.utf8   
-#>  [7] LC_PAPER=en_US.utf8       LC_NAME=C                
-#>  [9] LC_ADDRESS=C              LC_TELEPHONE=C           
-#> [11] LC_MEASUREMENT=en_US.utf8 LC_IDENTIFICATION=C      
+#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+#>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+#> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] data.table_1.14.2 DataSpaceR_0.7.5  knitr_1.37       
+#> [1] data.table_1.14.6 DataSpaceR_0.7.6  knitr_1.42       
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.8       digest_0.6.29    assertthat_0.2.1 R6_2.5.1        
-#>  [5] jsonlite_1.8.0   magrittr_2.0.2   evaluate_0.15    highr_0.9       
-#>  [9] httr_1.4.2       stringi_1.7.6    curl_4.3.2       tools_4.1.2     
-#> [13] stringr_1.4.0    Rlabkey_2.8.3    xfun_0.29        compiler_4.1.2
+#>  [1] httr_1.4.4       compiler_4.2.2   assertthat_0.2.1 Rlabkey_2.9.1   
+#>  [5] R6_2.5.1         tools_4.2.2      curl_5.0.0       Rcpp_1.0.10     
+#>  [9] digest_0.6.31    jsonlite_1.8.4   xfun_0.39        evaluate_0.20
 ```

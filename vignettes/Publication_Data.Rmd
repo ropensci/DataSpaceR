@@ -1,7 +1,7 @@
 ---
 title: "Accessing Publication Data"
 author: "Helen Miller"
-date: "2022-06-15"
+date: "2023-06-21"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Publication Data}
@@ -38,13 +38,13 @@ library(data.table)
 con <- connectDS()
 con
 #> <DataSpaceConnection>
-#>   URL: https://dataspace.cavd.org
-#>   User: jmtaylor@scharp.org
-#>   Available studies: 273
-#>     - 77 studies with data
-#>     - 5049 subjects
-#>     - 423195 data points
-#>   Available groups: 3
+#>   URL: https://dataspace-staging.cavd.org
+#>   User: jmtaylor@fredhutch.org
+#>   Available studies: 371
+#>     - 78 studies with data
+#>     - 5073 subjects
+#>     - 439831 data points
+#>   Available groups: 4
 #>   Available publications: 1530
 #>     - 12 publications with data
 ```
@@ -102,7 +102,7 @@ knitr::kable(head(pubs_with_study_data[, -"link"]))
 
 |publication_id |first_author      |all_authors                                                                                                                                                                                                                                                                                                                                                         |title                                                                                                                                         |journal            |publication_date |pubmed_id |related_studies                                                                |studies_with_data |publication_data_available |
 |:--------------|:-----------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------|:------------------|:----------------|:---------|:------------------------------------------------------------------------------|:-----------------|:--------------------------|
-|1540           |Andersen-Nissen E |Andersen-Nissen E, Fiore-Gartland A, Ballweber Fleming L, Carpp LN, Naidoo AF, Harper MS, Voillet V, Grunenberg N, Laher F, Innes C, Bekker L-G, Kublin JG, Huang Y, Ferrari G, Tomaras GD, Gray G, Gilbert PB, McElrath MJ                                                                                                                                         |Innate immune signatures to a partially-efficacious HIV vaccine predict correlates of HIV-1 infection risk                                    |PLOS Pathog        |2021             |NA        |vtn097                                                                         |vtn097            |TRUE                       |
+|1540           |Andersen-Nissen E |Andersen-Nissen E, Fiore-Gartland A, Ballweber Fleming L, Carpp LN, Naidoo AF, Harper MS, Voillet V, Grunenberg N, Laher F, Innes C, Bekker L-G, Kublin JG, Huang Y, Ferrari G, Tomaras GD, Gray G, Gilbert PB, McElrath MJ                                                                                                                                         |Innate immune signatures to a partially-efficacious HIV vaccine predict correlates of HIV-1 infection risk                                    |PLOS Pathog        |2021             |33720973  |vtn097                                                                         |vtn097            |TRUE                       |
 |213            |Andrasik MP       |Andrasik MP, Yoon R, Mooney J, Broder G, Bolton M, Votto T, Davis-Vogel A; HVTN 505 study team; NIAID HIV Vaccine Trials Network                                                                                                                                                                                                                                    |Exploring barriers and facilitators to participation of male-to-female transgender persons in preventive HIV vaccine clinical trials.         |Prev Sci           |2014 Jun         |23446435  |vtn505                                                                         |vtn505            |FALSE                      |
 |218            |Andrasik MP       |Andrasik MP, Karuna ST, Nebergall M, Koblin BA, Kublin JG; NIAID HIV Vaccine Trials Network                                                                                                                                                                                                                                                                         |Behavioral risk assessment in HIV Vaccine Trials Network (HVTN) clinical trials: A qualitative study exploring HVTN staff perspectives        |Vaccine            |2013 Sep 13      |23859840  |vtn069, vtn404, vtn502, vtn503, vtn504, vtn505, vtn802, vtn903, vtn906, vtn907 |vtn505            |FALSE                      |
 |225            |Andrasik MP       |Andrasik MP, Chandler C, Powell B, Humes D, Wakefield S, Kripke K, Eckstein D                                                                                                                                                                                                                                                                                       |Bridging the divide: HIV prevention research and Black men who have sex with men                                                              |Am J Public Health |2014 Apr         |24524520  |vtn505                                                                         |vtn505            |FALSE                      |
@@ -134,7 +134,7 @@ rouphael2019_study <- con$getStudy(related_studies)
 rouphael2019_study
 #> <DataSpaceStudy>
 #>   Study: vtn105
-#>   URL: https://dataspace.cavd.org/CAVD/vtn105
+#>   URL: https://dataspace-staging.cavd.org/CAVD/vtn105
 #>   Available datasets:
 #>     - Binding Ab multiplex assay
 #>     - Demographics
@@ -162,7 +162,7 @@ knitr::kable(head(pubs_with_data[, -"link"]))
 
 |publication_id |first_author      |all_authors                                                                                                                                                                                                                                                                                                                                                                                                                               |title                                                                                                                                                                              |journal         |publication_date |pubmed_id |related_studies |studies_with_data |publication_data_available |
 |:--------------|:-----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------|:----------------|:---------|:---------------|:-----------------|:--------------------------|
-|1540           |Andersen-Nissen E |Andersen-Nissen E, Fiore-Gartland A, Ballweber Fleming L, Carpp LN, Naidoo AF, Harper MS, Voillet V, Grunenberg N, Laher F, Innes C, Bekker L-G, Kublin JG, Huang Y, Ferrari G, Tomaras GD, Gray G, Gilbert PB, McElrath MJ                                                                                                                                                                                                               |Innate immune signatures to a partially-efficacious HIV vaccine predict correlates of HIV-1 infection risk                                                                         |PLOS Pathog     |2021             |NA        |vtn097          |vtn097            |TRUE                       |
+|1540           |Andersen-Nissen E |Andersen-Nissen E, Fiore-Gartland A, Ballweber Fleming L, Carpp LN, Naidoo AF, Harper MS, Voillet V, Grunenberg N, Laher F, Innes C, Bekker L-G, Kublin JG, Huang Y, Ferrari G, Tomaras GD, Gray G, Gilbert PB, McElrath MJ                                                                                                                                                                                                               |Innate immune signatures to a partially-efficacious HIV vaccine predict correlates of HIV-1 infection risk                                                                         |PLOS Pathog     |2021             |33720973  |vtn097          |vtn097            |TRUE                       |
 |136            |Bekker LG         |Bekker LG, Moodie Z, Grunenberg N, Laher F, Tomaras GD, Cohen KW, Allen M, Malahleha M, Mngadi K, Daniels B, Innes C, Bentley C, Frahm N, Morris DE, Morris L, Mkhize NN, Montefiori DC, Sarzotti-Kelsoe M, Grant S, Yu C, Mehra VL, Pensiero MN, Phogat S, DiazGranados CA, Barnett SW, Kanesa-thasan N, Koutsoukos M, Michael NL, Robb ML, Kublin JG, Gilbert PB, Corey L, Gray GE, McElrath MJ on behalf of the HVTN 100 Protocol Team |A phase 1/2 HIV-1 vaccine trial of a Subtype C ALVAC-HIV and Bivalent Subtype C gp120/MF59 vaccine regimen in low risk HIV uninfected South African adults                         |Lancet HIV      |2018 Jul         |29898870  |mrv144, vtn100  |NA                |TRUE                       |
 |1466           |Cram JA           |Cram JA, Fiore-Gartland AJ, Srinivasan S, Karuna S, Pantaleo G, Tomaras GD, Fredricks DN, Kublin JG                                                                                                                                                                                                                                                                                                                                       |Human gut microbiota is associated with HIV-reactive immunoglobulin at baseline and following HIV vaccination                                                                      |PLoS One        |2019             |31869338  |vtn096          |NA                |TRUE                       |
 |80             |Fong Y            |Fong Y, Shen X, Ashley VC, Deal A, Seaton KE, Yu C, Grant SP, Ferrari G, deCamp AC, Bailer RT, Koup RA, Montefiori D, Haynes BF, Sarzotti-Kelsoe M, Graham BS, Carpp LN, Hammer SM, Sobieszczyk M, Karuna S, Swann E, DeJesus E, Mulligan M, Frank I, Buchbinder S, Novak RM, McElrath MJ, Kalams S, Keefer M, Frahm NA, Janes HE, Gilbert PB, Tomaras GD                                                                                 |Modification of the association between T-Cell immune responses and human immunodeficiency virus type 1 infection risk by vaccine-induced antibody responses in the HVTN 505 trial |J Infect Dis    |2018 Mar 28      |29325070  |vtn505          |vtn505            |TRUE                       |
@@ -235,31 +235,30 @@ This publication also includes analysis scripts used for the publication, which 
 
 ```r
 sessionInfo()
-#> R version 4.1.2 (2021-11-01)
+#> R version 4.2.2 Patched (2022-11-10 r83330)
 #> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Ubuntu 18.04.5 LTS
+#> Running under: Ubuntu 20.04.6 LTS
 #> 
 #> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
 #> 
 #> locale:
-#>  [1] LC_CTYPE=en_US.utf8       LC_NUMERIC=C             
-#>  [3] LC_TIME=en_US.utf8        LC_COLLATE=en_US.utf8    
-#>  [5] LC_MONETARY=en_US.utf8    LC_MESSAGES=en_US.utf8   
-#>  [7] LC_PAPER=en_US.utf8       LC_NAME=C                
-#>  [9] LC_ADDRESS=C              LC_TELEPHONE=C           
-#> [11] LC_MEASUREMENT=en_US.utf8 LC_IDENTIFICATION=C      
+#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+#>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+#> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] data.table_1.14.2 DataSpaceR_0.7.5  knitr_1.37       
+#> [1] data.table_1.14.6 DataSpaceR_0.7.6  knitr_1.42       
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.8       digest_0.6.29    assertthat_0.2.1 R6_2.5.1        
-#>  [5] jsonlite_1.8.0   magrittr_2.0.2   evaluate_0.15    highr_0.9       
-#>  [9] httr_1.4.2       stringi_1.7.6    curl_4.3.2       tools_4.1.2     
-#> [13] stringr_1.4.0    Rlabkey_2.8.3    xfun_0.29        compiler_4.1.2
+#>  [1] httr_1.4.4       compiler_4.2.2   assertthat_0.2.1 Rlabkey_2.9.1   
+#>  [5] R6_2.5.1         tools_4.2.2      curl_5.0.0       Rcpp_1.0.10     
+#>  [9] digest_0.6.31    jsonlite_1.8.4   xfun_0.39        evaluate_0.20
 ```

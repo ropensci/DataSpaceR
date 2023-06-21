@@ -114,38 +114,6 @@ DataSpaceMab <- R6Class(
       )
 
       invisible(!"try-error" %in% tries)
-    },
-
-    #' @description
-    #' Applies LANL metadata to mabs table.
-    getLanlMetadata = function(){
-      checkList <- function(x){
-        if(any(c("list", "data.frame") %in% class(x))){
-          lapply(x, function(y){
-            if("data.frame" %in% class(y)) {
-              setDT(y)
-              checkList(y)
-            } else {
-              checkList(y)
-            }
-          })
-        }
-      }
-      pullForLanlId <- function(lanl_id){
-        url <- paste0("https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?id=", lanl_id)
-        if(is.na(lanl_id)) return(NA)
-        res <- httr::GET(url)
-        if(res$status == 200){
-          json <- fromJSON(content(res, as="text")[[1]])
-          json[["epitopes"]] <- data.table(json[["epitopes"]])
-          json$source <- url
-          lapply(json$epitopes, checkList)
-          return(json)
-        } else {
-          return(paste0("No LANL metadata found at '", url, "'."))
-        }
-      }
-      private$.mabs[, lanl_metadata := lapply(mab_lanlid, pullForLanlId)]
     }
 
   ),
@@ -158,7 +126,7 @@ DataSpaceMab <- R6Class(
 
     #' @field studyMabLabels A data.table. The table of available mAbs by study.
     mabStudyLabels = function() {
-      private$.nabMab[,.(prot, mab_id, mab_mix_name_std, mab_mix_label)] |> unique()
+      private$.nabMab[,.(prot, mab_mix_id, mab_mix_name_std, mab_mix_label)] |> unique()
     },
 
     #' @field nabMab A data.table. The table of mAbs and their neutralizing
@@ -247,7 +215,7 @@ DataSpaceMab <- R6Class(
     },
 
     .getMabMetadata = function() {
-      private$.mabMetadata <- DataSpaceMabMetadata$new(private$.mabMixMetadata$mab_id |> unique(), private$.config)
+      private$.mabMetadata <- DataSpaceMabMetadata$new(mabIds=private$.mabMixMetadata$mab_id |> unique(), config=private$.config)
     },
     
     .getStudies = function() {

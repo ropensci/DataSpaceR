@@ -243,6 +243,14 @@ isFromMabGrid <- function(column) {
   column %in% c("mab_mix_name_std", "virus", "clade", "neutralization_tier", "titer_curve_ic50", "study")
 }
 
+truncatePrintable <- function(text, len = 70) {
+    if( nchar(text) > len ){
+        paste0( substr(text, 1, len), "..." )
+    } else {
+        text
+    }
+}
+
 #' @importFrom Rlabkey makeFilter
 #' @export
 Rlabkey::makeFilter

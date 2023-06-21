@@ -1,7 +1,7 @@
 ---
 title: "Using The Virus Name Mapping Tables"
 author: "Jason Taylor"
-date: "2022-06-15"
+date: "2023-06-21"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using The Virus Name Mapping Tables}
@@ -73,28 +73,28 @@ Find standard names using the combination of the `virus_synonym` and `virus_meta
 ```r
 vnm$virus_synonym[grepl("A10", virus_synonym)]
 #>     cds_virus_id                                      virus_synonym
-#>  1:       cds_23                  19715820_A10_H2 [SG3Δenv] 293T/17
-#>  2:       cds_23                                    19715820_A10_H2
-#>  3:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17
-#>  4:      cds_389                           AA104aRH5-40061v3c8.LucR
-#>  5:      cds_389                 AA104aRH5-40061.v3c8.LucR.T2A.ecto
-#>  6:      cds_389             AA104aRH5-40061v3c8.LucR (IMC) 293T/17
-#>  7:      cds_389               HIV AA104aRH5-40061v3c8.LucR/293T/17
-#>  8:      cds_390                           AA107awg8-40061v3c8.LucR
+#>  1:       cds_23                                    19715820_A10_H2
+#>  2:       cds_23                  19715820_A10_H2 [SG3Δenv] 293T/17
+#>  3:      cds_389             AA104aRH5-40061v3c8.LucR (IMC) 293T/17
+#>  4:      cds_389                 AA104aRH5-40061.v3c8.LucR.T2A.ecto
+#>  5:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17
+#>  6:      cds_389               HIV AA104aRH5-40061v3c8.LucR/293T/17
+#>  7:      cds_390             AA107awg8-40061v3c8.LucR (IMC) 293T/17
+#>  8:      cds_390                 AA107awg8-40061.v3c8.LucR.T2A.ecto
 #>  9:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17
 #> 10:      cds_390               HIV AA107awg8-40061v3c8.LucR/293T/17
-#> 11:      cds_390             AA107awg8-40061v3c8.LucR (IMC) 293T/17
-#> 12:      cds_390                 AA107awg8-40061.v3c8.LucR.T2A.ecto
-#> 13:      cds_471                                      HIV AA104aRH5
-#> 14:      cds_471                                          AA104aRH5
-#> 15:      cds_471                        AA104aRH5 [SG3Δenv] 293T/17
-#> 16:      cds_471                      HIV AA104aRH5[SG3Δenv]293T/17
-#> 17:      cds_472                        AA107awg8 [SG3Δenv] 293T/17
-#> 18:      cds_472                                      HIV AA107awg8
-#> 19:      cds_472                      HIV AA107awg8[SG3Δenv]293T/17
-#> 20:      cds_472                                          AA107awg8
-#> 21:      cds_665                                       ME067_A10_15
-#> 22:      cds_665                                       Me067_A10_15
+#> 11:      cds_471                                          AA104aRH5
+#> 12:      cds_471                    AA104aRH5 [SG3<94>~env] 293T/17
+#> 13:      cds_471                        AA104aRH5 [SG3Δenv] 293T/17
+#> 14:      cds_471                                      HIV AA104aRH5
+#> 15:      cds_471                  HIV AA104aRH5[SG3<94>~env]293T/17
+#> 16:      cds_472                                          AA107awg8
+#> 17:      cds_472                    AA107awg8 [SG3<94>~env] 293T/17
+#> 18:      cds_472                        AA107awg8 [SG3Δenv] 293T/17
+#> 19:      cds_472                                      HIV AA107awg8
+#> 20:      cds_472                  HIV AA107awg8[SG3<94>~env]293T/17
+#> 21:      cds_665                                       Me067_A10_15
+#> 22:      cds_665                                       ME067_A10_15
 #> 23:      cds_665                                       ME067_A10-15
 #> 24:      cds_665                     ME067_A10-15 [SG3Δenv] 293T/17
 #>     cds_virus_id                                      virus_synonym
@@ -126,16 +126,16 @@ vsn[grepl("A10", virus_synonym)]
 #>  4:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto
 #>  5:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto
 #>  6:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto
-#>  7:      cds_389 AA104aRH5-40061.v3c8.LucR.T2A.ecto
+#>  7:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
 #>  8:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
 #>  9:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
 #> 10:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
-#> 11:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
-#> 12:      cds_390 AA107awg8-40061.v3c8.LucR.T2A.ecto
+#> 11:      cds_471                          AA104aRH5
+#> 12:      cds_471                          AA104aRH5
 #> 13:      cds_471                          AA104aRH5
 #> 14:      cds_471                          AA104aRH5
 #> 15:      cds_471                          AA104aRH5
-#> 16:      cds_471                          AA104aRH5
+#> 16:      cds_472                          AA107awg8
 #> 17:      cds_472                          AA107awg8
 #> 18:      cds_472                          AA107awg8
 #> 19:      cds_472                          AA107awg8
@@ -152,16 +152,16 @@ vsn[grepl("A10", virus_synonym)]
 #>  4: AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
 #>  5: AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
 #>  6: AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
-#>  7: AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#>  7: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
 #>  8: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
 #>  9: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
 #> 10: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
-#> 11: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
-#> 12: AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17           <NA>
+#> 11:                        AA104aRH5 [SG3Δenv] 293T/17        SG3Δenv
+#> 12:                        AA104aRH5 [SG3Δenv] 293T/17        SG3Δenv
 #> 13:                        AA104aRH5 [SG3Δenv] 293T/17        SG3Δenv
 #> 14:                        AA104aRH5 [SG3Δenv] 293T/17        SG3Δenv
 #> 15:                        AA104aRH5 [SG3Δenv] 293T/17        SG3Δenv
-#> 16:                        AA104aRH5 [SG3Δenv] 293T/17        SG3Δenv
+#> 16:                        AA107awg8 [SG3Δenv] 293T/17        SG3Δenv
 #> 17:                        AA107awg8 [SG3Δenv] 293T/17        SG3Δenv
 #> 18:                        AA107awg8 [SG3Δenv] 293T/17        SG3Δenv
 #> 19:                        AA107awg8 [SG3Δenv] 293T/17        SG3Δenv
@@ -182,8 +182,8 @@ vsn[grepl("A10", virus_synonym)]
 #>  8:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
 #>  9:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
 #> 10:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
-#> 11:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
-#> 12:         293T/17             <NA>   Chimeric IMC           HIV CRF01_AE
+#> 11:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
+#> 12:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
 #> 13:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
 #> 14:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
 #> 15:         293T/17             <NA> Env Pseudotype           HIV CRF01_AE
@@ -198,28 +198,28 @@ vsn[grepl("A10", virus_synonym)]
 #> 24:         293T/17             <NA> Env Pseudotype           HIV        C
 #>     virus_host_cell virus_plot_label     virus_type virus_species    clade
 #>     neutralization_tier                                      virus_synonym
-#>  1:                   2                  19715820_A10_H2 [SG3Δenv] 293T/17
-#>  2:                   2                                    19715820_A10_H2
-#>  3:                <NA> AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17
-#>  4:                <NA>                           AA104aRH5-40061v3c8.LucR
-#>  5:                <NA>                 AA104aRH5-40061.v3c8.LucR.T2A.ecto
-#>  6:                <NA>             AA104aRH5-40061v3c8.LucR (IMC) 293T/17
-#>  7:                <NA>               HIV AA104aRH5-40061v3c8.LucR/293T/17
-#>  8:                <NA>                           AA107awg8-40061v3c8.LucR
+#>  1:                   2                                    19715820_A10_H2
+#>  2:                   2                  19715820_A10_H2 [SG3Δenv] 293T/17
+#>  3:                <NA>             AA104aRH5-40061v3c8.LucR (IMC) 293T/17
+#>  4:                <NA>                 AA104aRH5-40061.v3c8.LucR.T2A.ecto
+#>  5:                <NA> AA104aRH5-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17
+#>  6:                <NA>               HIV AA104aRH5-40061v3c8.LucR/293T/17
+#>  7:                <NA>             AA107awg8-40061v3c8.LucR (IMC) 293T/17
+#>  8:                <NA>                 AA107awg8-40061.v3c8.LucR.T2A.ecto
 #>  9:                <NA> AA107awg8-40061.v3c8.LucR.T2A.ecto (ChIMC) 293T/17
 #> 10:                <NA>               HIV AA107awg8-40061v3c8.LucR/293T/17
-#> 11:                <NA>             AA107awg8-40061v3c8.LucR (IMC) 293T/17
-#> 12:                <NA>                 AA107awg8-40061.v3c8.LucR.T2A.ecto
-#> 13:                <NA>                                      HIV AA104aRH5
-#> 14:                <NA>                                          AA104aRH5
-#> 15:                <NA>                        AA104aRH5 [SG3Δenv] 293T/17
-#> 16:                <NA>                      HIV AA104aRH5[SG3Δenv]293T/17
-#> 17:                <NA>                        AA107awg8 [SG3Δenv] 293T/17
-#> 18:                <NA>                                      HIV AA107awg8
-#> 19:                <NA>                      HIV AA107awg8[SG3Δenv]293T/17
-#> 20:                <NA>                                          AA107awg8
-#> 21:                   2                                       ME067_A10_15
-#> 22:                   2                                       Me067_A10_15
+#> 11:                <NA>                                          AA104aRH5
+#> 12:                <NA>                    AA104aRH5 [SG3<94>~env] 293T/17
+#> 13:                <NA>                        AA104aRH5 [SG3Δenv] 293T/17
+#> 14:                <NA>                                      HIV AA104aRH5
+#> 15:                <NA>                  HIV AA104aRH5[SG3<94>~env]293T/17
+#> 16:                <NA>                                          AA107awg8
+#> 17:                <NA>                    AA107awg8 [SG3<94>~env] 293T/17
+#> 18:                <NA>                        AA107awg8 [SG3Δenv] 293T/17
+#> 19:                <NA>                                      HIV AA107awg8
+#> 20:                <NA>                  HIV AA107awg8[SG3<94>~env]293T/17
+#> 21:                   2                                       Me067_A10_15
+#> 22:                   2                                       ME067_A10_15
 #> 23:                   2                                       ME067_A10-15
 #> 24:                   2                     ME067_A10-15 [SG3Δenv] 293T/17
 #>     neutralization_tier                                      virus_synonym

@@ -1,0 +1,110 @@
+---
+title: "Using the MAb Metadata, Sequences, and Alignments"
+author: "Jason Taylor"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using the MAb Metadata, Sequences, and Alignments}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+table {
+    max-width: 100%;
+    max-height: 600px;
+    overflow: scroll;
+}
+thead{
+    position: sticky;
+    top: 0px;
+    background-color: #fff;
+}
+</style>
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
+labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Purpose
+
+The purpose of this feature is to offer users sequences and sequence alignments precomputed from V-Quest and IgBLAST.
+
+## Our sources
+
+The sequences presented here have been aquired from the Los Alamos National Laboratory (LANL) and select publications.
+
+## Usage caveats
+
+STUB
+
+## Understanding the `mabMetadata` object
+
+## Tutorial for using sequence and alignment data
+
+Connect to DataSpace via the R API.
+
+```{r connect}
+library(DataSpaceR)
+con <- connectDS()
+```
+
+Access metadata for a subset of neutralizing antibody assay (NAb) data...
+
+```{r}
+
+con$filterMabGrid("mab_mixture", "VRC01")
+mab <- con$getMab()
+mab$mabMetadata$loadAlignments()
+met <- mab$mabMetadata
+met
+
+```
+
+...or from all available metadata.
+
+```{r}
+
+met <- con$getMabMetadata()
+met$loadAlignments()
+met 
+
+```
+
+As shown above, the metadata object does not contain sequences and alignments by default but must be loaded to the object manually.
+
+The `loadAlignements` method can also take a charactor vector argument of which mAbs to load sequences and alignments for. In the example below we load sequence and alignment data for all the mAbs where `mab_donor_clade` is listed as `A`.
+
+```{r}
+
+met <- con$getMabMetadata()
+mabIds <- met$mabMetadata[mab_donor_clade == "A" & sequence_available == TRUE, mab_id]
+met$loadAlignments(mabIds)
+met 
+
+```
+
+Once sequences and alignments are loaded, there are several active bindings available to access those data:
+
+```{r, echo = FALSE}
+
+met$sequences
+met$alignments
+met$topMatches
+met$alleleSequences
+met$runInformation
+
+```
+ 
+Descriptons for the various fields in each of these objects can be found using the `variableDefinitions` active binding.
+
+```{r, echo = FALSE}
+
+met$variableDefinitions
+
+```

@@ -9,3 +9,4 @@ knit("vignettes/Monoconal_Antibody_Data.Rmd.orig", "vignettes/Monoconal_Antibody
 knit("vignettes/Non_Integrated_Datasets.Rmd.orig", "vignettes/Non_Integrated_Datasets.Rmd")
 knit("vignettes/Publication_Data.Rmd.orig", "vignettes/Publication_Data.Rmd")
 knit("vignettes/Virus_Name_Mapping_Tables.Rmd.orig", "vignettes/Virus_Name_Mapping_Tables.Rmd")
+knit("vignettes/MAb_Sequence_Alignments.Rmd.orig", "vignettes/MAb_Sequence_Alignments.Rmd")
