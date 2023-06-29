@@ -1,7 +1,7 @@
 ---
 title: "Using the MAb Metadata, Sequences, and Alignments"
 author: "Jason Taylor"
-date: "2023-06-21"
+date: "2023-06-29"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using the MAb Metadata, Sequences, and Alignments}
@@ -135,5 +135,20 @@ Descriptions for the various fields in each of these objects can be found using 
 ```r
 
 met$variableDefinitions
+
+```
+
+A FASTA file can be exported from a DataSpaceMabMetadata object after alignments are loaded with the `loadAlignments()` method. By default, sequence headers are generated from DataSpace mAb metadata however, the original headers from the sequence source can be used instead by toggling the `orginalHeaders` argument.
+
+
+```r
+
+fasta <- mab$getFastaFromSequences()
+writeLines(fasta, "<export_location.fasta>")
+
+## or
+
+fasta <- mab$getFastaFromSequences(orginalHeaders = TRUE)
+writeLines(fasta, "<export_location.fasta>")
 
 ```
