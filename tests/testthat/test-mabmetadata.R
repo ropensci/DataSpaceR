@@ -146,4 +146,7 @@ test_that(
   }
 )
 
-## tests on mab metadata called from connection object
+test_that("Check variable definitions loaded correctly",
+{
+  expect_true(all(unique(met$variableDefinitions$name) %in% c("mabMetadata","topMatches","alignments","sequences","alleleSequences","runInformation")))
+})   

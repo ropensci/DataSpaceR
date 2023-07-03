@@ -447,7 +447,7 @@ private = list(
       }) |>
         rbindlist() |>
         setnames(c("queryName", "fieldName"), c("name", "field_name"))
-      private$.variableDefinitions <- varInfo[, .(query_name, field_name, caption, description)]
+      private$.variableDefinitions <- varInfo[, .(name, field_name, caption, description)]
       
   })
 )
