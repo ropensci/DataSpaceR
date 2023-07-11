@@ -191,7 +191,7 @@ DataSpaceMabMetadata <- R6Class(
         schemaName = "cds",
         queryName = "lineage_sequence_germline",
         colNameOpt = "fieldname",
-        colSelect = "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application",
+        colSelect = "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,preferred_status,run_application",
         colFilter = rbind(private$.mabAlignFilter, private$.lineageFilter),
         method = "GET"
       ) |> setDT(),

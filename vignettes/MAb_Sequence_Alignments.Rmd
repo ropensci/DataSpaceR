@@ -1,7 +1,7 @@
 ---
 title: "Using the MAb Metadata, Sequences, and Alignments"
 author: "Jason Taylor"
-date: "2023-06-29"
+date: "2023-07-11"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using the MAb Metadata, Sequences, and Alignments}
