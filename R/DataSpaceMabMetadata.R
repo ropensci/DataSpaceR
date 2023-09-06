@@ -23,7 +23,7 @@
 #' mabMeta$loadAlignments()
 #'
 #' # Or just a subset of the alignments for the metadata extracted so far
-#' mabMeta$loadAlignments(mabAlignmentIds = "cds_mab_32")
+#' mabMeta$loadAlignments(mabIds = "cds_mab_32")
 #' 
 #' # Inspect the `topMatches` field
 #' mabMeta$topMatches
@@ -67,7 +67,7 @@ DataSpaceMabMetadata <- R6Class(
       cat("\n  URL:", private$.config$labkeyUrlBase)
       cat("\n  User:", private$.config$labkeyUserEmail)
       cat("\n  Summary:")
-      cat("\n    -", length(unique(private$.mabMetadata$mab_name_std)), "mabs")
+      cat("\n    -", length(unique(private$.mabMetadata$mab_name_std)), "mAbs")
       cat("\n  MAbs in metadata: ")
       cat("\n    ", truncatePrintable(paste(private$.mabNames, collapse = ", ")))
       cat("\n  MAb sequences available:")
@@ -79,7 +79,7 @@ DataSpaceMabMetadata <- R6Class(
       cat("\n    ",
       {
         if(nrow(private$.sequences) == 0){
-          "No mAbs loaded. Please run `loadAlignments()` to load sequences and alignments."
+          "No mAbs sequences loaded. Please run `loadAlignments()` to load sequences and alignments."
         } else {
           truncatePrintable(
             paste(
@@ -147,23 +147,23 @@ DataSpaceMabMetadata <- R6Class(
     private$.mabMetadata[, lanl_metadata := lapply(mab_lanlid, pullForLanlId)]
   },
 
-  loadAlignments = function(mabAlignmentIds=c()){
+  loadAlignments = function(mabIds = c()){
 
-    if(length(mabAlignmentIds) != 0){
+    if(length(mabIds) != 0){
 
-      if(!all(grepl("^cds_mab_[0-9]+$", mabAlignmentIds)))
-        stop("All `mabAlignmentIds` must be in the format `^cds_mab_[0-9]+$`")
+      if(!all(grepl("^cds_mab_[0-9]+$", mabIds)))
+        stop("All `mabIds` must be in the format `^cds_mab_[0-9]+$`")
 
-      if(all(!(mabAlignmentIds %in% private$.mabSequence$mab_id)))
-        stop("None of the `mabAlignmentIds` elements provided exist in database.")
+      if(all(!(mabIds %in% private$.mabSequence$mab_id)))
+        stop("None of the `mabIds` elements provided exist in database.")
 
-      if(!all(mabAlignmentIds %in% private$.mabSequence$mab_id))
-        message("Note: At least one element of `mabAlignmentIds` is not available.")
+      if(!all(mabIds %in% private$.mabSequence$mab_id))
+        message("Note: At least one element of `mabIds` is not available.")
 
       if(length(private$.mabIds) != 0){
         private$.mabAlignmentIds <- private$.mabIds[private$.mabIds %in% mabAlignmentIds]
       } else {
-        private$.mabAlignmentIds <- mabAlignmentIds
+        private$.mabAlignmentIds <- mabIds
       }
       
     } else {
@@ -175,14 +175,10 @@ DataSpaceMabMetadata <- R6Class(
 
     if(length(private$.mabAlignmentIds) == 0){
       private$.mabAlignFilter <- NULL
-      ## private$.seqAlignFilter <- NULL
     } else {
       private$.mabAlignFilter <- makeFilter(c("mab_id", "IN", paste(private$.mabAlignmentIds, collapse=";")))
-      ## private$.seqAlignFilter <- makeFilter(c("sequence_id", "IN", paste(private$.seqAlignmentIds, collapse = ";")))
     }
     
-    ## private$.seqAlignmentIds <- private$.mabSequence[mab_id %in% private$.mabAlignmentIds, sequence_id]    
-
     private$.topMatches <-  merge(
       private$.mabMetadata[,-c("sequence_available", "lineage_available")],
       labkey.selectRows(
