@@ -95,7 +95,7 @@ Once sequences and alignments are loaded, there are several active bindings avai
 
 met$sequences
 met$alignments
-met$topMatches
+met$topCalls
 met$alleleSequences
 met$runInformation
 

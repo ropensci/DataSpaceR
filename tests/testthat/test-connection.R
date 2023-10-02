@@ -268,7 +268,7 @@ if ("DataSpaceConnection" %in% class(con)) {
       mab <- con$getMab()
       expect_true(nrow(mab$nabMab) > 0)
 
-      con <- try(connectDS(), silent = TRUE)
+      con <- try(connectDS(onStaging=onStaging), silent = TRUE)
       mab <- con$getMab()
       expect_true(nrow(mab$nabMab) > 0)
     })

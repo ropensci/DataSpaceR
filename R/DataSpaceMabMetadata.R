@@ -25,8 +25,8 @@
 #' # Or just a subset of the alignments for the metadata extracted so far
 #' mabMeta$loadAlignments(mabIds = "cds_mab_32")
 #' 
-#' # Inspect the `topMatches` field
-#' mabMeta$topMatches
+#' # Inspect the `topCalls` field
+#' mabMeta$topCalls
 #'
 #' }
 #'
@@ -161,7 +161,7 @@ DataSpaceMabMetadata <- R6Class(
         message("Note: At least one element of `mabIds` is not available.")
 
       if(length(private$.mabIds) != 0){
-        private$.mabAlignmentIds <- private$.mabIds[private$.mabIds %in% mabAlignmentIds]
+        private$.mabAlignmentIds <- private$.mabIds[private$.mabIds %in% mabIds]
       } else {
         private$.mabAlignmentIds <- mabIds
       }
@@ -179,7 +179,7 @@ DataSpaceMabMetadata <- R6Class(
       private$.mabAlignFilter <- makeFilter(c("mab_id", "IN", paste(private$.mabAlignmentIds, collapse=";")))
     }
     
-    private$.topMatches <-  merge(
+    private$.topCalls <-  merge(
       private$.mabMetadata[,-c("sequence_available", "lineage_available")],
       labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -225,7 +225,7 @@ DataSpaceMabMetadata <- R6Class(
     
     alleleFilter <- makeFilter(
       c(
-        "allele", "IN", paste(unique(private$.topMatches$allele), collapse = ";")
+        "allele", "IN", paste(unique(private$.topCalls$allele), collapse = ";")
       )
     )
     
@@ -304,10 +304,10 @@ active = list(
     private$.mabMetadata
   },
   
-  #' @field topMatches A data.table. A table of top allele matches from both IgBLAST and V-Quest.  
-  topMatches = function() {
-    if(length(private$.topMatches) != 0){
-      return(private$.topMatches)
+  #' @field topCalls A data.table. A table of top allele matches from both IgBLAST and V-Quest.  
+  topCalls = function() {
+    if(length(private$.topCalls) != 0){
+      return(private$.topCalls)
     }
     message("Please run `loadAlignments()` to access top matches.");
   },
@@ -369,7 +369,7 @@ private = list(
   .mabAlignFilter = character(),
   .seqAlignFilter = character(),
   .lineageFilter = character(),
-  .topMatches = data.table(),
+  .topCalls = data.table(),
   .alignments = data.table(),
   .sequences = data.table(),
   .alleleSequences = data.table(),
@@ -387,8 +387,12 @@ private = list(
       colFilter = private$.mabFilter,
       method = "GET"
     ) |>
+      suppressWarnings() |> 
       setDT()    
 
+    if(nrow(mabSequence) == 0)
+      mabSequence <- data.table(mab_id = character(), sequence_id = character(), lineage = logical())
+    
     mabMetadata <- labkey.selectRows(
       baseUrl = private$.config$labkeyUrlBase,
       folderPath = "/CAVD",
@@ -420,7 +424,7 @@ private = list(
     varInfo <- lapply(
       list(
         c("mabMetadata"    , "mabMetadata"                    , "mab_id,sequence_id,lineage,mab_name_std,mab_lanlid,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade"),
-        c("topMatches"     , "lineage_sequence_germline"      , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
+        c("topCalls"     , "lineage_sequence_germline"      , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
         c("alignments"     , "lineage_alignment"              , ""),
         c("sequences"      , "antibody_sequence_header_source", ""),
         c("alleleSequences", "allele_sequence"                , "allele,allele_sequence_nt"),

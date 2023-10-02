@@ -198,20 +198,20 @@ DataSpaceMab <- R6Class(
     },
     
     .getMabMixMetadata = function() {
+      
       private$.mabMixMetadata <- labkey.executeSql(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
         sql = paste0(
           "SELECT DISTINCT *",
-          "FROM mabmetadata ",
-          "INNER JOIN mabmix ON mabmetadata.mab_id = mabmix.mab_id ",
-          "INNER JOIN mabmixmetadata on mabmix.mab_mix_id = mabmixmetadata.mab_mix_id ",
+          "FROM mabmixmabmeta ",
           "WHERE mab_mix_name_std IN('", paste0(unique(private$.nabMab$mab_mix_name_std), collapse = "', '"), "') "
         ),
         colNameOpt = "fieldname"
       ) |>
         setDT()
+
     },
 
     .getMabMetadata = function() {
