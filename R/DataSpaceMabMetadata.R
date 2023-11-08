@@ -301,7 +301,12 @@ active = list(
   mabMetadata = function(){
     private$.mabMetadata
   },
-  
+
+  #' @field mabMix A data.table. The table of mAb mixture IDs and mAb IDs for merging data reported as mAb mixures and mAb metadata.
+  mabMix = function(){
+    private$.mabMix
+  },
+
   #' @field topCalls A data.table. A table of top allele matches from both IgBLAST and V-Quest.  
   topCalls = function() {
     if(length(private$.topCalls) != 0){
@@ -363,6 +368,7 @@ private = list(
   .seqAlignmentIds = character(),
   .mabMetadata = data.table(),
   .mabSequence = data.table(),
+  .mabMix = data.table(),
   .mabFilter = character(),
   .mabAlignFilter = character(),
   .seqAlignFilter = character(),
@@ -402,6 +408,18 @@ private = list(
       method = "GET"
     ) |> setDT()
 
+    mabMix <- labkey.selectRows(
+      baseUrl = private$.config$labkeyUrlBase, 
+      folderPath = "/CAVD", 
+      schemaName = "CDS", 
+      queryName = "MAbMix", 
+      viewName = "", 
+      colSelect = "mab_mix_id,mab_id", 
+      colNameOpt = "fieldname",
+      colFilter = private$.mabFilter,
+      method = "GET"
+    ) |> setDT()
+    
     mabMetadata <- merge(
       mabMetadata,
       mabSequence[,.(sequence_available = TRUE, lineage_available = any(lineage)), mab_id],
@@ -413,6 +431,7 @@ private = list(
 
     private$.mabMetadata <- mabMetadata
     private$.mabSequence <- mabSequence
+    private$.mabMix   <- mabMix
     private$.mabNames <- unique(mabMetadata$mab_name_std)
     private$.seqIds   <- unique(private$.mabSequence$sequence_id)
     
