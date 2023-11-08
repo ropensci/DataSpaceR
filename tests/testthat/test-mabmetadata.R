@@ -64,7 +64,7 @@ testMabMetaDataOnFacet <- function(met, nMembers){
 ## test alignment data from mab metadata called from mab object without subset of mab_ids to loadAlignments
 
 library(DataSpaceR)
-con <- connectDS(onStaging = T)
+con <- connectDS(onStaging = onStaging)
 
 con$resetMabGrid()
 con$filterMabGrid("mab_mixture", "VRC01")
@@ -137,11 +137,6 @@ test_that(
       )
 
     expect_true(tabs |> unlist() |> is.null() |> all())
-
-    expect_message(
-      con$getMabMetadata(lineage = T),
-      "^Note: When `lineage` is TRUE.+"
-    )
     
   }
 )
@@ -150,3 +145,6 @@ test_that("Check variable definitions loaded correctly",
 {
   expect_true(all(unique(met$variableDefinitions$name) %in% c("mabMetadata","topCalls","alignments","sequences","alleleSequences","runInformation")))
 })   
+
+# test that when a mab without a sequence is queried from the grid, loadAlignments fails gracefully.
+# test getting lineage sequences from loadAlignments methods

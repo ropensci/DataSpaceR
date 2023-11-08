@@ -40,13 +40,11 @@ DataSpaceMabMetadata <- R6Class(
     #' @param mabMixture A character vector.
     #' @param mabFilters A list.
     #' @param config A list.
-    initialize = function(mabIds, lineage=FALSE, config) {
+    initialize = function(mabIds, config) {
       assert_that(!is.null(config))
 
       ## set primary fields
       private$.mabIds <- mabIds
-      private$.lineageFilter <- makeFilter(c("lineage", "EQUALS", tolower(as.character(lineage))))
-      if(lineage) message("Note: When `lineage` is TRUE, only lineage sequences are able to be extracted from DataSpace. Large amounts of system memory are recommended when accessing those data.")
       if(length(mabIds) > 0) {
         private$.mabFilter <- makeFilter(c("mab_id", "IN", paste(mabIds, collapse = ";")))
       } else {
@@ -147,8 +145,8 @@ DataSpaceMabMetadata <- R6Class(
     private$.mabMetadata[, lanl_metadata := lapply(mab_lanlid, pullForLanlId)]
   },
 
-  loadAlignments = function(mabIds = c()){
-
+  loadAlignments = function(mabIds = c(), lineage=FALSE){
+    private$.lineageFilter <- makeFilter(c("lineage", "EQUALS", tolower(as.character(lineage))))
     if(length(mabIds) != 0){
 
       if(!all(grepl("^cds_mab_[0-9]+$", mabIds)))
@@ -414,7 +412,7 @@ private = list(
     mabMetadata[is.na(lineage_available), lineage_available:=FALSE]
 
     private$.mabMetadata <- mabMetadata
-    private$.mabSequence <- mabSequence[lineage == as.logical(gsub(".+=([a-z])", "\\1", private$.lineageFilter))]
+    private$.mabSequence <- mabSequence
     private$.mabNames <- unique(mabMetadata$mab_name_std)
     private$.seqIds   <- unique(private$.mabSequence$sequence_id)
     
@@ -424,7 +422,7 @@ private = list(
     varInfo <- lapply(
       list(
         c("mabMetadata"    , "mabMetadata"                    , "mab_id,sequence_id,lineage,mab_name_std,mab_lanlid,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade"),
-        c("topCalls"     , "lineage_sequence_germline"      , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
+        c("topCalls"       , "lineage_sequence_germline"      , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
         c("alignments"     , "lineage_alignment"              , ""),
         c("sequences"      , "antibody_sequence_header_source", ""),
         c("alleleSequences", "allele_sequence"                , "allele,allele_sequence_nt"),

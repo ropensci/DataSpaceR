@@ -1,10 +1,10 @@
 ---
-title: "Using the MAb Metadata, Sequences, and Alignments"
+title: "Accessing CDS BGLAD"
 author: "Jason Taylor"
-date: "2023-07-11"
+date: "2023-11-07"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using the MAb Metadata, Sequences, and Alignments}
+  %\VignetteIndexEntry{Accessing CDS BGLAD.}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,7 +23,6 @@ thead{
 </style>
 
 
-
 ## Purpose
 
 The purpose of this feature is to offer users sequences and sequence alignments precomputed from V-Quest and IgBLAST.
@@ -36,7 +35,28 @@ The sequences presented here have been aquired from the Los Alamos National Labo
 
 STUB
 
-## Understanding the `mabMetadata` object
+## Understanding the `DataSpaceMabMetadata` object
+
+DataSpace associates germline alignments with unique heavy and light chain sequences and each of is assigned a unique ID. Separately, metadata for antibodies is tracked in DataSpace in the `mabmetadata` table, where each antibody is also given a unique ID. Sequences and antibody metadata can then be associated with each other via a keyed relationship in the `antibody_sequence` table. In this way CDS treats antibody sequences as antibody metadata, which is why we have chosen to build this R API so that alignment data and sequences are loaded by request to a `DataSpaceMabMetadata` object. 
+
+The `DataSpaceMabMetadata` object can be created multiple ways. 
+
+* via a `DataSpaceConnection` object
+* via a `DataSpaceMab` object
+
+The easiest way to access antibody metadata, including sequences and metadata is through the `DataSpaceConnection` object.
+
+### Accessing BGLAD via a `DataSpaceConnection` object
+
+Like all DataSpaceR connections, one must have an account first and have properly set up their netrc file.
+
+```r
+library(DataSpaceR)
+
+con <- connectDS()
+met <- con$getMabMetadata()
+```
+
 
 ## Tutorial for using sequence and alignment data
 

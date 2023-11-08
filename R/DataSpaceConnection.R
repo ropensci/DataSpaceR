@@ -224,8 +224,8 @@ DataSpaceConnection <- R6Class(
       DataSpaceMab$new(self$mabGridSummary$mab_mixture, private$.mabFilters, private$.config)
     },
 
-    getMabMetadata = function(mabIds = c(), lineage = FALSE){
-      DataSpaceMabMetadata$new(mabIds=mabIds, lineage=lineage, config=private$.config)
+    getMabMetadata = function(mabIds = c()){
+      DataSpaceMabMetadata$new(mabIds=mabIds, config=private$.config)
     },
 
     #' @description
