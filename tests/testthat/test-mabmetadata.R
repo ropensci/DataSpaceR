@@ -108,6 +108,26 @@ testMabMetaDataOnFacet(met, 1)
 met$loadAlignments(c("cds_mab_2", "cds_mab_36"))
 testMabMetaDataOnFacet(met, 2)
 
+# test getting lineage sequences from loadAlignments methods
+# test that when a mab without a sequence is queried from the grid, loadAlignments fails gracefully.
+
+test_that(
+    "Check loading lineage alignment datasets",
+    {
+        
+        met <- con$getMabMetadata()
+        met$mabMetadata[sequence_available == TRUE]
+        met$loadAlignments("cds_mab_54", lineage = T)
+        
+        expect_true(met$sequences[,unique(mab_id)] == "cds_mab_54")
+
+        expect_error(
+            met$loadAlignments("cds_mab_1", lineage = T)
+        )
+        
+    })
+
+
 ## test that all messsages and stops are triggered when expected
 
 test_that(
@@ -145,6 +165,3 @@ test_that("Check variable definitions loaded correctly",
 {
   expect_true(all(unique(met$variableDefinitions$name) %in% c("mabMetadata","topCalls","alignments","sequences","alleleSequences","runInformation")))
 })   
-
-# test that when a mab without a sequence is queried from the grid, loadAlignments fails gracefully.
-# test getting lineage sequences from loadAlignments methods

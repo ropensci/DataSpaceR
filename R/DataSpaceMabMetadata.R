@@ -145,8 +145,8 @@ DataSpaceMabMetadata <- R6Class(
     private$.mabMetadata[, lanl_metadata := lapply(mab_lanlid, pullForLanlId)]
   },
 
-  loadAlignments = function(mabIds = c(), lineage=FALSE){
-    private$.lineageFilter <- makeFilter(c("lineage", "EQUALS", tolower(as.character(lineage))))
+  loadAlignments = function(mabIds = c(), lineage = FALSE){
+
     if(length(mabIds) != 0){
 
       if(!all(grepl("^cds_mab_[0-9]+$", mabIds)))
@@ -176,6 +176,18 @@ DataSpaceMabMetadata <- R6Class(
     } else {
       private$.mabAlignFilter <- makeFilter(c("mab_id", "IN", paste(private$.mabAlignmentIds, collapse=";")))
     }
+
+    if(lineage == TRUE){
+      if(
+        private$.mabMetadata[
+          mab_id %in% private$.mabAlignmentIds & lineage_available == lineage
+        ] |> nrow() == 0
+      ){
+          stop("No lineage sequences available for this selection. `mabMetadata` has no records where `lineage_available == TRUE`.")
+      }
+    }
+      
+    private$.lineageFilter <- makeFilter(c("lineage", "EQUALS", tolower(as.character(lineage))))
     
     private$.topCalls <-  merge(
       private$.mabMetadata[,-c("sequence_available", "lineage_available")],
