@@ -222,7 +222,7 @@ writeLines(fasta, "<export_location.fasta>")
 
 # Merging neutralizing antibody assay data to sequences and alignments
 
-To allow merging of neutralizing antibody assay data to BGLAD tables we have provided a `mabMix` object. This object provides a key map from `mabMix`.
+To allow merging of neutralizing antibody assay data to BGLAD tables we have provided a `mabMix` object. This object provides a key to map from `mabMix`, the `mab_mix_id` field.
 
 ```r
 library(DataSpaceR)
