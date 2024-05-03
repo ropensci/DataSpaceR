@@ -1,10 +1,10 @@
 ---
-title: "Accessing CDS BGLAD"
+title: "Accessing CDS DAASH"
 author: "Jason Taylor"
 date: "2023-11-07"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Accessing CDS BGLAD.}
+  %\VignetteIndexEntry{Accessing CDS DAASH.}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,6 +23,7 @@ thead{
 </style>
 
 
+
 ## Purpose
 
 The purpose of this feature is to offer users sequences and sequence alignments precomputed from V-Quest and IgBLAST.
@@ -37,18 +38,20 @@ STUB
 
 ## Understanding the `DataSpaceMabMetadata` object
 
-DataSpace associates germline alignments with unique heavy and light chain sequences and each of is assigned a unique ID. Separately, metadata for antibodies is tracked in DataSpace in the `mabmetadata` table, where each antibody is also given a unique ID. Sequences and antibody metadata can then be associated with each other via a keyed relationship in the `antibody_sequence` table. In this way CDS treats antibody sequences as antibody metadata, which is why we have chosen to build this R API so that alignment data and sequences are loaded by request to a `DataSpaceMabMetadata` object. 
+DataSpace maintains sequences and antibody metadata in two separate tables, allowing for unique IDs for antibodies and both heavy and light chain sequences. Sequence and antibody metadata can then be associated with each other via a keyed relationship. In this way CDS treats antibody sequences as antibody metadata, where sequences for antibodies can be retrieved via DSR's `DataSpaceMabMetadata` object. 
 
-The `DataSpaceMabMetadata` object can be created multiple ways. 
+A `DataSpaceMabMetadata` object can be created multiple ways. 
 
 * via a `DataSpaceConnection` object
 * via a `DataSpaceMab` object
 
 The easiest way to access antibody metadata, including sequences and metadata is through the `DataSpaceConnection` object.
 
-### Accessing BGLAD via a `DataSpaceConnection` object
+### Accessing DAASH via a `DataSpaceConnection` object
 
-Like all DataSpaceR connections, one must have an account first and have properly set up their netrc file.
+Like all DataSpaceR connections, the user must have an account and have properly configured their `netrc` file. See the vignette "Introduction to DataSpaceR" for more details how to do so. 
+
+Once credentials are properly estabilished, a `DataSpaceMabMetadata` object can be created as follows:
 
 ```r
 library(DataSpaceR)
@@ -57,84 +60,114 @@ con <- connectDS()
 met <- con$getMabMetadata()
 ```
 
+This object contains metadata for all antibodies queried via the `getMabMetadata()` method. If no antibody IDs are passed to that method, the object will contain metadata for all the antibodies tracked in DataSpace, as in the example presented in the object displayed above.
 
-## Tutorial for using sequence and alignment data
+### Accessing DAASH via a `DataSpaceMab` object
 
-Connect to DataSpace via the R API.
+When accessing mAb data, a `DataSpaceMabMetadata` object is automatically attached to the `DataSpaceMab` object. See the vignette "Accessing Monoclonal Antibody Data" for more details how to retrieve mAb data using DataSpaceR.
 
+```r
+mab <- con$getMab()
+mab$mabMetadata                                                                             
+<DataSpaceMabMetadata>                                                                        
+  URL: https://dataspace-staging.cavd.org                                                     
+  User: jmtaylor@fredhutch.org                                                                
+  Summary:                                                                                    
+    - 158 mAbs                                                                                
+  MAbs in metadata:                                                                           
+     PGT128, 4E10, b12, Ab530039kappa, Ab530039L, Ab530057, mAb 1.1, mAb 10...                
+  MAb sequences available:                                                                    
+     PGT128, b12, PGDM1400, PG16, CH27, CH28, CH31, PG9, PGT121, PGT123, PG...                
+  MAb sequences loaded:                                                                       
+     No mAbs sequences loaded. Please run `loadAlignments()` to load sequences and alignments.
+```
+
+# Using the `DataSpaceMabMetadata` object
+
+By default the `DataSpaceMabMetadata` object does not have sequences or alignments added, as noted by the "MAb sequences loaded" section of the printed object.
+
+```r
+met
+<DataSpaceMabMetadata>
+  URL: https://dataspace.cavd.org
+  User: jmtaylor@scharp.org
+  Summary:
+    - 932 mAbs
+  MAbs in metadata: 
+     PGT128, 4E10, AB-000440-1, AB-000441-1, AB-000442-1, AB-000443-1, AB-0...
+  MAb sequences available:
+     PGT128, b12, PGDM1400, PG16, CH27, CH28, CH31, CH58, CH59, PG9, PGT121...
+  MAb sequences loaded:
+     No mAbs sequences loaded. Please run `loadAlignments()` to load sequences and alignments.
+```
+
+Sequences are loaded use the `loadAlignments` method of the object.
 
 ```r
 library(DataSpaceR)
 con <- connectDS()
-```
-
-Access metadata for a subset of neutralizing antibody assay (NAb) data...
-
-
-```r
-
-con$filterMabGrid("mab_mixture", "VRC01")
-mab <- con$getMab()
-mab$mabMetadata$loadAlignments()
-met <- mab$mabMetadata
-met
-#> <DataSpaceMabMetadata>
-#>   URL: https://dataspace-staging.cavd.org
-#>   User: jmtaylor@fredhutch.org
-#>   Summary:
-#>     - 1 mabs
-#>   MAbs in metadata: 
-#>      VRC01
-#>   MAb sequences available:
-#>      VRC01
-#>   MAb sequences loaded:
-#>      VRC01
-```
-
-...or from all available metadata.
-
-
-```r
-
 met <- con$getMabMetadata()
 met$loadAlignments()
-met 
-#> <DataSpaceMabMetadata>
-#>   URL: https://dataspace-staging.cavd.org
-#>   User: jmtaylor@fredhutch.org
-#>   Summary:
-#>     - 932 mabs
-#>   MAbs in metadata: 
-#>      PGT128, 4E10, AB-000440-1, AB-000441-1, AB-000442-1, AB-000443-1, AB-0...
-#>   MAb sequences available:
-#>      PGT128, b12, PGDM1400, PG16, CH27, CH28, CH31, CH58, CH59, PG9, PGT121...
-#>   MAb sequences loaded:
-#>      PGT128, b12, PGDM1400, PG16, CH27, CH28, CH31, CH58, CH59, PG9, PGT121...
 ```
 
-As shown above, the metadata object does not contain sequences and alignments by default but must be loaded to the object manually.
-
-The `loadAlignements` method can also take a charactor vector argument of which mAbs to load sequences and alignments for. In the example below we load sequence and alignment data for all the mAbs where `mab_donor_clade` is listed as `A`.
-
+Once that method is called, the printed `DataSpaceMabMetadata` object now indicates that sequences have been loaded. 
 
 ```r
-
-met <- con$getMabMetadata()
-mabIds <- met$mabMetadata[mab_donor_clade == "A" & sequence_available == TRUE, mab_id]
-met$loadAlignments(mabIds)
-met 
-#> <DataSpaceMabMetadata>
-#>   URL: https://dataspace-staging.cavd.org
-#>   User: jmtaylor@fredhutch.org
-#>   Summary:
-#>     - 932 mabs
-#>   MAbs in metadata: 
-#>      PGT128, 4E10, AB-000440-1, AB-000441-1, AB-000442-1, AB-000443-1, AB-0...
-#>   MAb sequences available:
-#>      PGT128, b12, PGDM1400, PG16, CH27, CH28, CH31, CH58, CH59, PG9, PGT121...
-#>   MAb sequences loaded:
-#>      CH31, PGT121, PGT123, CH01, PGC14, VRC-CH30, VRC-CH32, VRC-CH33, VRC-C...
+met
+<DataSpaceMabMetadata>
+  URL: https://dataspace.cavd.org
+  User: jmtaylor@scharp.org
+  Summary:
+    - 932 mAbs
+  MAbs in metadata: 
+     PGT128, 4E10, AB-000440-1, AB-000441-1, AB-000442-1, AB-000443-1, AB-0...
+  MAb sequences available:
+     PGT128, b12, PGDM1400, PG16, CH27, CH28, CH31, CH58, CH59, PG9, PGT121...
+  MAb sequences loaded:
+     PGT128, b12, PGDM1400, PG16, CH27, CH28, CH31, CH58, CH59, PG9, PGT121...
 ```
+
+Sequences and alignments both can be accessed from the same object now using several active binding endpoints.
+
+| Dataset           | Description                                                                                                 |
+|-------------------|------------------------------------------|
+| `sequences`       | BCR neucleotide sequences, cds mAb IDs, and source information.                                             |
+| `alignments`      | Alignment information in an AIRR compatible schema .                                                        |
+| `topCalls`        | Top scoring germline alleles identified by both V-Quest and IgBLAST in long form.                           |
+| `alleleSequences` | Allele sequences for all germlines alleles identified for the antibodies queried form DataSpace.            |
+| `runInformation`  | Information regarding the alignment application settings, allele database, and date the alignment was made. |
+
+To access one of these active bindings, call it from the `DataSpaceMabMetadata` object the sequences were loaded to, for example:
+
+```r
+met$alignments
+```
+
+## Refine antibody sequence and alignment retrieval
+
+From a `DataSpaceMabMetadata` object, specific sequences from DataSpace can be queried, rather than the entire database. To load a specific sequence, a character vector of `mab_id` values is required. The `mab_id` values can be pulled from the `DataSpaceMabMeta` object itself by calling the `mabMetadata` active binding's `mab_id` field. The `mabMetadata` active binding can be queried using any of the fields found in that table and the `mab_id`s from that query can be used to retrieve sequence and alignment information.
+
+Below is an example of how to load specific MPER binding antibody sequences and alignments.
+
+```r
+met$loadAlignments(
+        met$mabMetadata[grepl("MPER", mab_ab_binding_type)]$mab_id
+    )
+```
+
+Lineage sequences for a given bnAb are sequences from the same donor that are inferred to be clonally related to the bnAb. DAASH provides these sequences for some monoclonal antibodies found in the application. Which antibodies lineage sequences are available for can be queried from the `mabMetadata` table using the `lineage_available` field.
+
+```r
+met$mabMetadata[lineage_available == TRUE]
+```
+
+Lineage sequences can amount to 1000s of sequences for each antibody. For this reason, lineage seqeuences are loaded using a specific argument to the `loadAlignments` method.
+
+```r
+met$loadAlignments("cds_mab_36", lineage = TRUE)
+```
+
+# Exploring the `DataSpaceMabMetadata` DAASH objects
 
 Once sequences and alignments are loaded, there are several active bindings available to access those data:
 
@@ -148,7 +181,17 @@ met$alleleSequences
 met$runInformation
 
 ```
- 
+
+These objects are explained below.
+
+| Dataset           | Description                                                                                                 |
+|-------------------|------------------------------------------|
+| `sequences`       | BCR neucleotide sequences, cds mAb IDs, and source information.                                             |
+| `alignments`      | Alignment information in an AIRR compatible schema .                                                        |
+| `topCalls`        | Top scoring germline alleles identified by both V-Quest and IgBLAST in long form.                           |
+| `alleleSequences` | Allele sequences for all germlines alleles identified for the antibodies queried form DataSpace.            |
+| `runInformation`  | Information regarding the alignment application settings, allele database, and date the alignment was made. |
+
 Descriptions for the various fields in each of these objects can be found using the `variableDefinitions` active binding.
 
 
@@ -171,4 +214,45 @@ writeLines(fasta, "<export_location.fasta>")
 fasta <- mab$getFastaFromSequences(orginalHeaders = TRUE)
 writeLines(fasta, "<export_location.fasta>")
 
+```
+
+# Merging neutralizing antibody assay data to sequences and alignments
+
+To allow merging of neutralizing antibody assay data to DAASH tables we have provided a `mabMix` object. This object provides a key to map from `mabMix`, the `mab_mix_id` field.
+
+```r
+library(DataSpaceR)
+con <- connectDS(onStaging = T)
+
+mab <- con$getMab()
+mab$mabMetadata$loadAlignments()
+
+## mab$mabMetadata$mabMix provides THE `mab_id` to `mab_mix_id` map
+## use to merge sequence data to neutralizing antibody data
+## this table can be merged to any of the DAASH tables via `mab_id`
+nmData <-
+  merge(
+    mab$nabMab,
+    merge(
+      mab$mabMetadata$mabMix,
+      mab$mabMetadata$mabMetadata[sequence_available == TRUE],
+      by = "mab_id"
+    ),
+    by = "mab_mix_id"
+  )
+```
+
+NAb mAb assay summary only data can be produced with the following:
+
+```r
+nmData[,-c(
+        "specimen_concentration_id",
+        "percent_neutralization",
+        "neutralization_plus_minus",
+        "min_well_value",
+        "max_well_value",
+        "mean_well_value",
+        "well_std_dev",
+        "mab_concentration"
+      )] |> unique()
 ```

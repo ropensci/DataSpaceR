@@ -1,7 +1,7 @@
 ---
 title: "Accessing Publication Data"
 author: "Helen Miller"
-date: "2023-06-21"
+date: "2024-05-03"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Publication Data}
@@ -40,12 +40,12 @@ con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace-staging.cavd.org
 #>   User: jmtaylor@fredhutch.org
-#>   Available studies: 371
+#>   Available studies: 387
 #>     - 78 studies with data
 #>     - 5073 subjects
 #>     - 439831 data points
-#>   Available groups: 4
-#>   Available publications: 1530
+#>   Available groups: 17
+#>   Available publications: 1730
 #>     - 12 publications with data
 ```
 
@@ -58,14 +58,16 @@ knitr::kable(head(con$availablePublications[, -"link"]))
 
 
 
-|publication_id |first_author  |all_authors                                                                                                                                                                                                                                                              |title                                                                                                                                            |journal                     |publication_date |pubmed_id |related_studies |studies_with_data |publication_data_available |
-|:--------------|:-------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------|:----------------|:---------|:---------------|:-----------------|:--------------------------|
-|1006           |Abbink P      |Abbink P, Maxfield LF, Ng'ang'a D, Borducchi EN, Iampietro MJ, Bricault CA, Teigler JE, Blackmore S, Parenteau L, Wagh K, Handley SA, Zhao G, Virgin HW, Korber B, Barouch DH                                                                                            |Construction and evaluation of novel rhesus monkey adenovirus vaccine vectors                                                                    |J Virol                     |2015 Feb         |25410856  |NA              |NA                |FALSE                      |
-|1303           |Abbott RK     |Abbott RK, Lee JH, Menis S, Skog P, Rossi M, Ota T, Kulp DW, Bhullar D, Kalyuzhniy O, Havenar-Daughton C, Schief WR, Nemazee D, Crotty S                                                                                                                                 |Precursor frequency and affinity determine B Cell competitive fitness in germinal centers, tested with germline-targeting HIV vaccine immunogens |Immunity                    |2018 Jan 16      |29287996  |NA              |NA                |FALSE                      |
-|1136           |Abu-Raddad LJ |Abu-Raddad LJ, Boily MC, Self S, Longini IM Jr                                                                                                                                                                                                                           |Analytic insights into the population level impact of imperfect prophylactic HIV vaccines                                                        |J Acquir Immune Defic Syndr |2007 Aug 1       |17554215  |NA              |NA                |FALSE                      |
-|1485           |Abu-Raddad LJ |Abu-Raddad LJ, Barnabas RV, Janes H, Weiss HA, Kublin JG, Longini IM Jr, Wasserheit JN, HIV Viral Load Working Group                                                                                                                                                     |Have the explosive HIV epidemics in sub-Saharan Africa been driven by higher community viral load?                                               |AIDS                        |2013 Mar 27      |23196933  |NA              |NA                |FALSE                      |
-|842            |Acharya P     |Acharya P, Tolbert WD, Gohain N, Wu X, Yu L, Liu T, Huang W, Huang CC, Kwon YD, Louder RK, Luongo TS, McLellan JS, Pancera M, Yang Y, Zhang B, Flinko R, Foulke JS Jr, Sajadi MM, Kamin-Lewis R, Robinson JE, Martin L, Kwong PD, Guan Y, DeVico AL, Lewis GK, Pazgier M |Structural definition of an antibody-dependent cellular cytotoxicity response implicated in reduced risk for HIV-1 infection                     |J Virol                     |2014 Nov         |25165110  |NA              |NA                |FALSE                      |
-|1067           |Ackerman ME   |Ackerman ME, Mikhailova A, Brown EP, Dowell KG, Walker BD, Bailey-Kellogg C, Suscovich TJ, Alter G                                                                                                                                                                       |Polyfunctional HIV-specific antibody responses are associated with spontaneous HIV control                                                       |PLOS Pathog                 |2016 Jan         |26745376  |NA              |NA                |FALSE                      |
+|publication_id |first_author  |all_authors                                                                                                                                                                   |title                                                                                                                                            |journal                     |publication_date |pubmed_id |related_studies |studies_with_data |publication_data_available |
+|:--------------|:-------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------|:----------------|:---------|:---------------|:-----------------|:--------------------------|
+|1006           |Abbink P      |Abbink P, Maxfield LF, Ng'ang'a D, Borducchi EN, Iampietro MJ, Bricault CA, Teigler JE, Blackmore S, Parenteau L, Wagh K, Handley SA, Zhao G, Virgin HW, Korber B, Barouch DH |Construction and evaluation of novel rhesus monkey adenovirus vaccine vectors                                                                    |J Virol                     |2015 Feb         |25410856  |NA              |NA                |FALSE                      |
+|1303           |Abbott RK     |Abbott RK, Lee JH, Menis S, Skog P, Rossi M, Ota T, Kulp DW, Bhullar D, Kalyuzhniy O, Havenar-Daughton C, Schief WR, Nemazee D, Crotty S                                      |Precursor frequency and affinity determine B Cell competitive fitness in germinal centers, tested with germline-targeting HIV vaccine immunogens |Immunity                    |2018 Jan 16      |29287996  |NA              |NA                |FALSE                      |
+|1635           |Abernathy ME  |Abernathy ME, Gristick HB, Vielmetter J, Keeffe JR, Gnanapragasam PNP, Lee YE, Escolano A, Gautam R, Seaman MS, Martin MA, Nussenzweig MC, Bjorkman PJ                        |Antibody elicited by HIV-1 immunogen vaccination in macaques displaces env fusion peptide and destroys a neutralizing epitope                    |NPJ Vaccines                |2021 Oct 25      |34697307  |NA              |NA                |FALSE                      |
+|1636           |Abernathy ME  |Abernathy ME, Dam KMA, Esswein SR, Jette CA, Bjorkman PJ                                                                                                                      |How antibodies recognize pathogenic viruses: Structural correlates of antibody neutralization of HIV-1, SARS-CoV-2, and Zika                     |Viruses                     |2021 Oct 19      |34696536  |NA              |NA                |FALSE                      |
+|1136           |Abu-Raddad LJ |Abu-Raddad LJ, Boily MC, Self S, Longini IM Jr                                                                                                                                |Analytic insights into the population level impact of imperfect prophylactic HIV vaccines                                                        |J Acquir Immune Defic Syndr |2007 Aug 1       |17554215  |NA              |NA                |FALSE                      |
+|1485           |Abu-Raddad LJ |Abu-Raddad LJ, Barnabas RV, Janes H, Weiss HA, Kublin JG, Longini IM Jr, Wasserheit JN, HIV Viral Load Working Group                                                          |Have the explosive HIV epidemics in sub-Saharan Africa been driven by higher community viral load?                                               |AIDS                        |2013 Mar 27      |23196933  |NA              |NA                |FALSE                      |
+
+
 
 This table summarizes all publications, providing some information like first author, journal where it was published, and title as a `data.table`. It also includes a pubmed url where available under `link`. Related studies under `related_studies`, and related studies with data available under `studies_with_data`.  We can use `data.table` methods to filter and sort this table to browse available publications.
 
@@ -79,15 +81,20 @@ knitr::kable(vtn096_pubs[, -"link"])
 
 
 
-|publication_id |first_author |all_authors                                                                                                                                                                                                                                                 |title                                                                                                                                                                              |journal              |publication_date |pubmed_id |related_studies        |studies_with_data |publication_data_available |
-|:--------------|:------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------|:----------------|:---------|:----------------------|:-----------------|:--------------------------|
-|1466           |Cram JA      |Cram JA, Fiore-Gartland AJ, Srinivasan S, Karuna S, Pantaleo G, Tomaras GD, Fredricks DN, Kublin JG                                                                                                                                                         |Human gut microbiota is associated with HIV-reactive immunoglobulin at baseline and following HIV vaccination                                                                      |PLoS One             |2019             |31869338  |vtn096                 |NA                |TRUE                       |
-|250            |Huang Y      |Huang Y, DiazGranados C, Janes H, Huang Y, deCamp A, Metch B, Grant S, Sanchez B, Phogat S,  Koutsoukos M, Kanesa-Thasan N, Bourguignon P, Collard A, Buchbinder S, Tomaras GD, McElrath J, Gray G, Kublin J, Corey L, Gilbert PB                           |Selection of HIV vaccine candidates for concurrent testing in an efficacy trial                                                                                                    |Curr Opin Virol      |2016 Jan 28      |26827165  |mrv144, vtn096         |NA                |FALSE                      |
-|267            |Huang Y      |Huang Y, Zhang L, Janes H, Frahm N, Isaacs A, Kim JH, Montefiori D, McElrath MJ, Tomaras GD, Gilbert PB                                                                                                                                                     |Predictors of durable immune responses six months after the last vaccination in preventive HIV vaccine trials                                                                      |Vaccine              |2017 Feb 22      |28131393  |mrv144, vtn096, vtn205 |NA                |FALSE                      |
-|268            |Huang Y      |Huang Y, Gilbert P, Fu R, Janes H                                                                                                                                                                                                                           |Statistical methods for down-selection of treatment regimens based on multiple endpoints, with application to HIV vaccine trials                                                   |Biostatistics        |2017 Apr 1       |27649715  |mrv144, vtn096         |NA                |FALSE                      |
-|1392           |Pantaleo G   |Pantaleo G, Janes H, Karuna S, Grant S, Ouedraogo GL, Allen M, Tomaras GD, Frahm N, Montefiori DC, Ferrari G, Ding S, Lee C, Robb ML, Esteban M, Wagner R, Bart PA, Rettby N, McElrath MJ, Gilbert PB, Kublin JG, Corey L, NIAID HIV Vaccine Trials Network |Safety and immunogenicity of a multivalent HIV vaccine comprising envelope protein with either DNA or NYVAC vectors (HVTN 096): a phase 1b, double-blind, placebo-controlled trial |Lancet HIV           |2019 Oct 7       |31601541  |mrv144, vtn096, vtn100 |NA                |TRUE                       |
-|1420           |Westling T   |Westling T, Juraska M, Seaton KE, Tomaras GD, Gilbert PB, Janes H                                                                                                                                                                                           |Methods for comparing durability of immune responses between vaccine regimens in early-phase trials                                                                                |Stat Methods Med Res |2019 Jan 9       |30623732  |vtn094, vtn096         |NA                |FALSE                      |
-|281            |Yates NL     |Yates NL, deCamp AC, Korber BT, Liao HX, Irene C, Pinter A, Peacock J, Harris LJ, Sawant S, Hraber P, Shen X, Rerks-Ngarm S, Pitisuttithum P, Nitayapan S, Berman PW, Robb ML, Pantaleo G, Zolla-Pazner S, Haynes BF, Alam SM, Montefiori DC, Tomaras GD    |HIV-1 envelope glycoproteins from diverse clades differentiate antibody responses and durability among vaccinees                                                                   |J Virol              |2018 Mar 28      |29386288  |mrv144, vtn096         |NA                |FALSE                      |
+|publication_id |first_author       |all_authors                                                                                                                                                                                                                                                                                                                                                                                                |title                                                                                                                                                                              |journal              |publication_date |pubmed_id |related_studies                                                                                                                                                                                                                                                                                                                                                                                                                                 |studies_with_data |publication_data_available |
+|:--------------|:------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------|:----------------|:---------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------|:--------------------------|
+|1466           |Cram JA            |Cram JA, Fiore-Gartland AJ, Srinivasan S, Karuna S, Pantaleo G, Tomaras GD, Fredricks DN, Kublin JG                                                                                                                                                                                                                                                                                                        |Human gut microbiota is associated with HIV-reactive immunoglobulin at baseline and following HIV vaccination                                                                      |PLoS One             |2019             |31869338  |vtn096                                                                                                                                                                                                                                                                                                                                                                                                                                          |NA                |TRUE                       |
+|250            |Huang Y            |Huang Y, DiazGranados C, Janes H, Huang Y, deCamp A, Metch B, Grant S, Sanchez B, Phogat S,  Koutsoukos M, Kanesa-Thasan N, Bourguignon P, Collard A, Buchbinder S, Tomaras GD, McElrath J, Gray G, Kublin J, Corey L, Gilbert PB                                                                                                                                                                          |Selection of HIV vaccine candidates for concurrent testing in an efficacy trial                                                                                                    |Curr Opin Virol      |2016 Jan 28      |26827165  |mrv144, vtn096                                                                                                                                                                                                                                                                                                                                                                                                                                  |NA                |FALSE                      |
+|267            |Huang Y            |Huang Y, Zhang L, Janes H, Frahm N, Isaacs A, Kim JH, Montefiori D, McElrath MJ, Tomaras GD, Gilbert PB                                                                                                                                                                                                                                                                                                    |Predictors of durable immune responses six months after the last vaccination in preventive HIV vaccine trials                                                                      |Vaccine              |2017 Feb 22      |28131393  |mrv144, vtn096, vtn205                                                                                                                                                                                                                                                                                                                                                                                                                          |NA                |FALSE                      |
+|268            |Huang Y            |Huang Y, Gilbert P, Fu R, Janes H                                                                                                                                                                                                                                                                                                                                                                          |Statistical methods for down-selection of treatment regimens based on multiple endpoints, with application to HIV vaccine trials                                                   |Biostatistics        |2017 Apr 1       |27649715  |mrv144, vtn096                                                                                                                                                                                                                                                                                                                                                                                                                                  |NA                |FALSE                      |
+|1728           |Mayer-Blackwell K  |Mayer-Blackwell K, Johnson AM, Potchen N, Minot SS, Heptinstall J, Seaton K, Sawant S, Shen X, Tomaras GD, Fiore-Gartland A, Kublin JG                                                                                                                                                                                                                                                                     |Multi-trial analysis of HIV-1 envelope gp41-reactive antibodies among global recipients of candidate HIV-1 vaccines                                                                |Front Immunol        |2022             |36311720  |mrv144, vtn096, vtn097, vtn098, vtn100, vtn106, vtn107, vtn111, vtn122, vtn204, vtn205, vtn505                                                                                                                                                                                                                                                                                                                                                  |vtn097, vtn505    |FALSE                      |
+|1392           |Pantaleo G         |Pantaleo G, Janes H, Karuna S, Grant S, Ouedraogo GL, Allen M, Tomaras GD, Frahm N, Montefiori DC, Ferrari G, Ding S, Lee C, Robb ML, Esteban M, Wagner R, Bart PA, Rettby N, McElrath MJ, Gilbert PB, Kublin JG, Corey L, NIAID HIV Vaccine Trials Network                                                                                                                                                |Safety and immunogenicity of a multivalent HIV vaccine comprising envelope protein with either DNA or NYVAC vectors (HVTN 096): a phase 1b, double-blind, placebo-controlled trial |Lancet HIV           |2019 Oct 7       |31601541  |mrv144, vtn096, vtn100                                                                                                                                                                                                                                                                                                                                                                                                                          |NA                |TRUE                       |
+|1761           |Seaton KE          |Seaton KE, Deal A, Han X, Li SS, Clayton A, Heptinstall J, Duerr A, Allen MA, Shen X, Sawant S, Yates NL, Spearman P, Churchyard G, Goepfert PA, Maenza J, Gray G, Pantaleo G, Polakowski L, Robinson HL, Grant S,  Randhawa AK, Huang Y, Morgan C, Grunenberg N, Karuna S, Gilbert PB, McElrath MJ, Huang Y, Tomaras GD, NIAID HIV Vaccine Trials Network (HVTN) 076, 088, 086, 096, 097, 205 Study Teams |Meta-analysis of HIV-1 vaccine elicited mucosal antibodies in humans                                                                                                               |NPJ Vaccines         |2021 Apr 15      |33859204  |vtn076, vtn086, vtn088, vtn096, vtn097, vtn205                                                                                                                                                                                                                                                                                                                                                                                                  |vtn097            |FALSE                      |
+|1753           |Stranix-Chibanda L |Stranix-Chibanda L, Yu C, Brewinski Isaacs M, Allen M, Andriesen J, Walsh SR                                                                                                                                                                                                                                                                                                                               |A retrospective analysis of incident pregnancy in Phase 1 and 2a HIV-1 vaccine study participants does not support concern for adverse pregnancy or birth outcomes                 |BMC Infect Dis       |2021 Aug 11      |34380464  |vtn026, vtn039, vtn040, vtn041, vtn042, vtn044, vtn045, vtn048, vtn049, vtn050, vtn052, vtn054, vtn055, vtn056, vtn057, vtn059, vtn060, vtn063, vtn064, vtn065, vtn067, vtn068, vtn069, vtn070, vtn071, vtn072, vtn073, vtn073E, vtn076, vtn077, vtn078, vtn080, vtn082, vtn083, vtn084, vtn085, vtn086, vtn087, vtn088, vtn090, vtn092, vtn094, vtn096, vtn097, vtn098, vtn100, vtn105, vtn106, vtn110, vtn111, vtn112, vtn203, vtn204, vtn205 |vtn097, vtn105    |FALSE                      |
+|1420           |Westling T         |Westling T, Juraska M, Seaton KE, Tomaras GD, Gilbert PB, Janes H                                                                                                                                                                                                                                                                                                                                          |Methods for comparing durability of immune responses between vaccine regimens in early-phase trials                                                                                |Stat Methods Med Res |2019 Jan 9       |30623732  |vtn094, vtn096                                                                                                                                                                                                                                                                                                                                                                                                                                  |NA                |FALSE                      |
+|281            |Yates NL           |Yates NL, deCamp AC, Korber BT, Liao HX, Irene C, Pinter A, Peacock J, Harris LJ, Sawant S, Hraber P, Shen X, Rerks-Ngarm S, Pitisuttithum P, Nitayapan S, Berman PW, Robb ML, Pantaleo G, Zolla-Pazner S, Haynes BF, Alam SM, Montefiori DC, Tomaras GD                                                                                                                                                   |HIV-1 envelope glycoproteins from diverse clades differentiate antibody responses and durability among vaccinees                                                                   |J Virol              |2018 Mar 28      |29386288  |mrv144, vtn096                                                                                                                                                                                                                                                                                                                                                                                                                                  |NA                |FALSE                      |
+
+
 
 
 or publications that have related studies with integrated data in DataSpace:
@@ -109,6 +116,8 @@ knitr::kable(head(pubs_with_study_data[, -"link"]))
 |226            |Arnold MP         |Arnold MP, Andrasik M, Landers S, Karuna S, Mimiaga MJ, Wakefield S, Mayer K, Buchbinder S, Koblin BA                                                                                                                                                                                                                                                               |Sources of racial/ethnic differences in HIV vaccine trial awareness: Exposure, attention, or both?                                            |Am J Public Health |2014 Aug         |24922153  |vtn505                                                                         |vtn505            |FALSE                      |
 |7              |Asbach B          |Asbach B, Kliche A, Köstler J, Perdiguero B, Esteban M, Jacobs BL, Montefiori DC, LaBranche CC, Yates NL, Tomaras GD, Ferrari G, Foulds KE, Roederer M, Landucci G, Forthal DN, Seaman MS, Hawkins N, Self SG, Sato A, Gottardo R, Phogat S, Tartaglia J, Barnett SW, Burke B, Cristillo AD, Weiss DE, Francis J, Galmin L, Ding S, Heeney JL, Pantaleo G, Wagner R |Potential to streamline heterologous DNA prime and NYVAC/protein boost HIV vaccine regimens in rhesus macaques by employing improved antigens |J Virol            |2016 Mar 28      |26865719  |cvd277, cvd281                                                                 |cvd277, cvd281    |FALSE                      |
 
+
+
 We can also use this information to connect to related studies and pull integrated data. Say we are interested in this Rouphael (2019) publication:
 
 
@@ -122,6 +131,8 @@ knitr::kable(rouphael2019[, -"link"])
 |publication_id |first_author |all_authors                                                                                                                                                                                                                                                                                                                |title                                                                                         |journal       |publication_date |pubmed_id |related_studies |studies_with_data |publication_data_available |
 |:--------------|:------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------|:-------------|:----------------|:---------|:---------------|:-----------------|:--------------------------|
 |1390           |Rouphael NG  |Rouphael NG, Morgan C, Li SS, Jensen R, Sanchez B, Karuna S, Swann E, Sobieszczyk ME, Frank I, Wilson GJ, Tieu HV, Maenza J, Norwood A, Kobie J, Sinangil F, Pantaleo G, Ding S, McElrath MJ, De Rosa SC, Montefiori DC, Ferrari G, Tomaras GD, Keefer MC, HVTN 105 Protocol Team and the NIAID HIV Vaccine Trials Network |DNA priming and gp120 boosting induces HIV-specific antibodies in a randomized clinical trial |J Clin Invest |2019 Sep 30      |31566579  |vtn105          |vtn105            |TRUE                       |
+
+
 
 We can find this publication in the available publications table, determine related studies, and pull data for those studies where available.
 
@@ -169,6 +180,8 @@ knitr::kable(head(pubs_with_data[, -"link"]))
 |79             |Hammer SM         |Hammer SC, Sobieszczyk ME, Janes H, Karuna ST, Mulligan MJ, Grove D, Koblin BA, Buchbinder SP, Keefer MC, Tomaras GD, Frahm N, Hural J, Anude C, Graham BS, Enama ME, Adams E, DeJesus E, Novak RM, Frank I, Bentley C, Ramirez S, Fu R, Koup RA, Mascola JR, Nabel GJ, Montefiori DC, Kublin J, McElrath MJ, Corey L, Gilbert PB                                                                                                         |Efficacy trial of a DNA/rAd5 HIV-1 preventive vaccine                                                                                                                              |N Engl J Med    |2013 Nov 28      |24099601  |vtn505          |vtn505            |TRUE                       |
 |1467           |Hosseinipour MC   |Hosseinipour MC, Innes C, Naidoo S, Mann P, Hutter J, Ramjee G, Sebe M, Maganga L, Herce ME, deCamp AC, Marshall K, Dintwe O, Andersen-Nissen E, Tomaras GD, Mkhize N, Morris L, Jensen R, Miner MD, Pantaleo G, Ding S, Van Der Meeren O, Barnett SW, McElrath MJ, Corey L, Kublin JG                                                                                                                                                    |Phase 1 HIV vaccine trial to evaluate the safety and immunogenicity of HIV subtype C DNA and MF59-adjuvanted subtype C Env protein                                                 |Clin Infect Dis |2020 Jan 4       |31900486  |vtn111          |NA                |TRUE                       |
 
+
+
 Data for a publication can be accessed through `DataSpaceR` with `con$downloadPublicationData()`. The publication ID must be specified, as found under `publication_id` in `con$availablePublications`. The file is presented as a zip file. The `unzip` argument gives us the option whether to unzip this file. By default, the file will be unzipped. You may also specify the directory to download the file. By default, it will be saved to your `Downloads` directory. This function invisibly returns the paths to the downloaded files.
 
 Here, we download data for publication with ID 1461 (Westling, 2020), and view the resulting downloads.
@@ -177,9 +190,8 @@ Here, we download data for publication with ID 1461 (Westling, 2020), and view t
 ```r
 publicationDataFiles <- con$downloadPublicationData("1461", outputDir = tempdir(), unzip = TRUE, verbose = TRUE)
 basename(publicationDataFiles)
-#> [1] "causal.isoreg.fns.R"           "CD.SuperLearner.R"            
-#> [3] "cd4_analysis.R"                "cd4_data.csv"                 
-#> [5] "cd8_analysis.R"                "cd8_data.csv"                 
+#> [1] "causal.isoreg.fns.R"           "CD.SuperLearner.R"             "cd4_analysis.R"               
+#> [4] "cd4_data.csv"                  "cd8_analysis.R"                "cd8_data.csv"                 
 #> [7] "README.txt"                    "Westling_1461_file_format.pdf"
 ```
 
@@ -189,42 +201,32 @@ All zip files will include a file format document as a PDF, as well as a README.
 ```r
 cd4 <- fread(publicationDataFiles[grepl("cd4_data", publicationDataFiles)])
 cd4
-#>       pub_id age    sex      bmi   prot num_vacc dose response sexFemale
-#>   1: 069-071  23   Male 33.31000 vtn069        3  4.0        0         0
-#>   2: 069-068  20 Female 32.74000 vtn069        3  4.0        1         1
-#>   3: 069-020  19   Male 20.24000 vtn069        3  4.0        0         0
-#>   4: 069-008  19   Male 29.98000 vtn069        3  4.0        0         0
-#>   5: 069-058  27   Male 31.48000 vtn069        3  4.0        0         0
-#>  ---                                                                    
-#> 368: 100-182  36 Female 24.32323 vtn100        4  1.5        0         1
-#> 369: 100-034  20   Male 25.15590 vtn100        4  1.5        1         0
-#> 370: 100-115  20   Male 22.94812 vtn100        4  1.5        1         0
-#> 371: 100-144  19   Male 20.95661 vtn100        4  1.5        0         0
-#> 372: 100-189  24   Male 19.03114 vtn100        4  1.5        1         0
-#>      studyHVTN052 studyHVTN068 studyHVTN069 studyHVTN204 studyHVTN100 vacc_type
-#>   1:            0            0            1            0            0   VRC4or6
-#>   2:            0            0            1            0            0   VRC4or6
-#>   3:            0            0            1            0            0   VRC4or6
-#>   4:            0            0            1            0            0   VRC4or6
-#>   5:            0            0            1            0            0   VRC4or6
-#>  ---                                                                           
-#> 368:            0            0            0            0            1   VRC4or6
-#> 369:            0            0            0            0            1   VRC4or6
-#> 370:            0            0            0            0            1   VRC4or6
-#> 371:            0            0            0            0            1   VRC4or6
-#> 372:            0            0            0            0            1   VRC4or6
-#>      vacc_typeSinglePlasmid vacc_typeVRC4or6
-#>   1:                      0                1
-#>   2:                      0                1
-#>   3:                      0                1
-#>   4:                      0                1
-#>   5:                      0                1
-#>  ---                                        
-#> 368:                      0                1
-#> 369:                      0                1
-#> 370:                      0                1
-#> 371:                      0                1
-#> 372:                      0                1
+#>       pub_id   age    sex      bmi   prot num_vacc  dose response sexFemale studyHVTN052 studyHVTN068
+#>       <char> <int> <char>    <num> <char>    <int> <num>    <int>     <int>        <int>        <int>
+#>   1: 069-071    23   Male 33.31000 vtn069        3   4.0        0         0            0            0
+#>   2: 069-068    20 Female 32.74000 vtn069        3   4.0        1         1            0            0
+#>   3: 069-020    19   Male 20.24000 vtn069        3   4.0        0         0            0            0
+#>   4: 069-008    19   Male 29.98000 vtn069        3   4.0        0         0            0            0
+#>   5: 069-058    27   Male 31.48000 vtn069        3   4.0        0         0            0            0
+#>  ---                                                                                                 
+#> 368: 100-182    36 Female 24.32323 vtn100        4   1.5        0         1            0            0
+#> 369: 100-034    20   Male 25.15590 vtn100        4   1.5        1         0            0            0
+#> 370: 100-115    20   Male 22.94812 vtn100        4   1.5        1         0            0            0
+#> 371: 100-144    19   Male 20.95661 vtn100        4   1.5        0         0            0            0
+#> 372: 100-189    24   Male 19.03114 vtn100        4   1.5        1         0            0            0
+#>      studyHVTN069 studyHVTN204 studyHVTN100 vacc_type vacc_typeSinglePlasmid vacc_typeVRC4or6
+#>             <int>        <int>        <int>    <char>                  <int>            <int>
+#>   1:            1            0            0   VRC4or6                      0                1
+#>   2:            1            0            0   VRC4or6                      0                1
+#>   3:            1            0            0   VRC4or6                      0                1
+#>   4:            1            0            0   VRC4or6                      0                1
+#>   5:            1            0            0   VRC4or6                      0                1
+#>  ---                                                                                         
+#> 368:            0            0            1   VRC4or6                      0                1
+#> 369:            0            0            1   VRC4or6                      0                1
+#> 370:            0            0            1   VRC4or6                      0                1
+#> 371:            0            0            1   VRC4or6                      0                1
+#> 372:            0            0            1   VRC4or6                      0                1
 ```
 
 This publication also includes analysis scripts used for the publication, which can allow users to reproduce the analysis and results.
@@ -235,30 +237,39 @@ This publication also includes analysis scripts used for the publication, which 
 
 ```r
 sessionInfo()
-#> R version 4.2.2 Patched (2022-11-10 r83330)
-#> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Ubuntu 20.04.6 LTS
+#> R version 4.4.0 (2024-04-24)
+#> Platform: x86_64-pc-linux-gnu
+#> Running under: Ubuntu 22.04.4 LTS
 #> 
 #> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
 #> 
 #> locale:
-#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-#>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-#> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8       
+#>  [4] LC_COLLATE=en_US.UTF-8     LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                  LC_ADDRESS=C              
+#> [10] LC_TELEPHONE=C             LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+#> 
+#> time zone: America/Los_Angeles
+#> tzcode source: system (glibc)
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] data.table_1.14.6 DataSpaceR_0.7.6  knitr_1.42       
+#> [1] data.table_1.15.4 DataSpaceR_0.7.6  knitr_1.46       
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] httr_1.4.4       compiler_4.2.2   assertthat_0.2.1 Rlabkey_2.9.1   
-#>  [5] R6_2.5.1         tools_4.2.2      curl_5.0.0       Rcpp_1.0.10     
-#>  [9] digest_0.6.31    jsonlite_1.8.4   xfun_0.39        evaluate_0.20
+#>  [1] utf8_1.2.4        stringi_1.8.3     digest_0.6.35     magrittr_2.0.3    evaluate_0.23    
+#>  [6] pkgload_1.3.4     fastmap_1.1.1     jsonlite_1.8.8    processx_3.8.4    pkgbuild_1.4.4   
+#> [11] sessioninfo_1.2.2 urlchecker_1.0.1  ps_1.7.6          promises_1.3.0    httr_1.4.7       
+#> [16] purrr_1.0.2       fansi_1.0.6       cli_3.6.2         shiny_1.8.1.1     rlang_1.1.3      
+#> [21] ellipsis_0.3.2    remotes_2.5.0     cachem_1.0.8      devtools_2.4.5    tools_4.4.0      
+#> [26] memoise_2.0.1     httpuv_1.6.15     curl_5.2.1        assertthat_0.2.1  vctrs_0.6.5      
+#> [31] Rlabkey_3.2.1     R6_2.5.1          mime_0.12         lifecycle_1.0.4   stringr_1.5.1    
+#> [36] fs_1.6.4          htmlwidgets_1.6.4 usethis_2.2.3     miniUI_0.1.1.1    pkgconfig_2.0.3  
+#> [41] callr_3.7.6       pillar_1.9.0      later_1.3.2       glue_1.7.0        profvis_0.3.8    
+#> [46] Rcpp_1.0.12       xfun_0.43         tibble_3.2.1      xtable_1.8-4      htmltools_0.5.8.1
+#> [51] compiler_4.4.0
 ```

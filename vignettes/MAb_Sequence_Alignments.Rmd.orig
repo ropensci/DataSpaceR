@@ -1,10 +1,10 @@
 ---
-title: "Accessing CDS BGLAD"
+title: "Accessing CDS DAASH"
 author: "Jason Taylor"
 date: "2023-11-07"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Accessing CDS BGLAD.}
+  %\VignetteIndexEntry{Accessing CDS DAASH.}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -54,7 +54,7 @@ A `DataSpaceMabMetadata` object can be created multiple ways.
 
 The easiest way to access antibody metadata, including sequences and metadata is through the `DataSpaceConnection` object.
 
-### Accessing BGLAD via a `DataSpaceConnection` object
+### Accessing DAASH via a `DataSpaceConnection` object
 
 Like all DataSpaceR connections, the user must have an account and have properly configured their `netrc` file. See the vignette "Introduction to DataSpaceR" for more details how to do so. 
 
@@ -69,7 +69,7 @@ met <- con$getMabMetadata()
 
 This object contains metadata for all antibodies queried via the `getMabMetadata()` method. If no antibody IDs are passed to that method, the object will contain metadata for all the antibodies tracked in DataSpace, as in the example presented in the object displayed above.
 
-### Accessing BGLAD via a `DataSpaceMab` object
+### Accessing DAASH via a `DataSpaceMab` object
 
 When accessing mAb data, a `DataSpaceMabMetadata` object is automatically attached to the `DataSpaceMab` object. See the vignette "Accessing Monoclonal Antibody Data" for more details how to retrieve mAb data using DataSpaceR.
 
@@ -162,7 +162,7 @@ met$loadAlignments(
     )
 ```
 
-Lineage sequences for a given bnAb are sequences from the same donor that are inferred to be clonally related to the bnAb. BGLAD provides these sequences for some monoclonal antibodies found in the application. Which antibodies lineage sequences are available for can be queried from the `mabMetadata` table using the `lineage_available` field.
+Lineage sequences for a given bnAb are sequences from the same donor that are inferred to be clonally related to the bnAb. DAASH provides these sequences for some monoclonal antibodies found in the application. Which antibodies lineage sequences are available for can be queried from the `mabMetadata` table using the `lineage_available` field.
 
 ```r
 met$mabMetadata[lineage_available == TRUE]
@@ -174,7 +174,7 @@ Lineage sequences can amount to 1000s of sequences for each antibody. For this r
 met$loadAlignments("cds_mab_36", lineage = TRUE)
 ```
 
-# Exploring the `DataSpaceMabMetadata` BGLAD objects
+# Exploring the `DataSpaceMabMetadata` DAASH objects
 
 Once sequences and alignments are loaded, there are several active bindings available to access those data:
 
@@ -222,7 +222,7 @@ writeLines(fasta, "<export_location.fasta>")
 
 # Merging neutralizing antibody assay data to sequences and alignments
 
-To allow merging of neutralizing antibody assay data to BGLAD tables we have provided a `mabMix` object. This object provides a key to map from `mabMix`, the `mab_mix_id` field.
+To allow merging of neutralizing antibody assay data to DAASH tables we have provided a `mabMix` object. This object provides a key to map from `mabMix`, the `mab_mix_id` field.
 
 ```r
 library(DataSpaceR)
@@ -233,7 +233,7 @@ mab$mabMetadata$loadAlignments()
 
 ## mab$mabMetadata$mabMix provides THE `mab_id` to `mab_mix_id` map
 ## use to merge sequence data to neutralizing antibody data
-## this table can be merged to any of the BGLAD tables via `mab_id`
+## this table can be merged to any of the DAASH tables via `mab_id`
 nmData <-
   merge(
     mab$nabMab,

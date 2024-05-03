@@ -1,7 +1,7 @@
 ---
 title: "Introduction to DataSpaceR"
 author: "Ju Yeong Kim"
-date: "2023-06-21"
+date: "2024-05-03"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to DataSpaceR}
@@ -75,17 +75,18 @@ We'll be looking at study `cvd256`. If you want to use a different study, change
 
 ```r
 library(DataSpaceR)
+#> By exporting data from the CAVD DataSpace, you agree to be bound by the Terms of Use available on the CAVD DataSpace sign-in page at https://dataspace.cavd.org
 con <- connectDS()
 con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace-staging.cavd.org
 #>   User: jmtaylor@fredhutch.org
-#>   Available studies: 371
+#>   Available studies: 387
 #>     - 78 studies with data
 #>     - 5073 subjects
 #>     - 439831 data points
-#>   Available groups: 4
-#>   Available publications: 1530
+#>   Available groups: 17
+#>   Available publications: 1730
 #>     - 12 publications with data
 ```
 
@@ -98,14 +99,16 @@ knitr::kable(head(con$availableStudies))
 
 
 
-|study_name |short_name                   |title                                                                                                                                                                                                                                                               |type               |status   |stage            |species            |start_date |strategy                             |network |data_availability |ni_data_availability |
-|:----------|:----------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|:--------|:----------------|:------------------|:----------|:------------------------------------|:-------|:-----------------|:--------------------|
-|cor01      |NA                           |The correlate of risk targeted intervention study (CORTIS):  A randomized, partially-blinded, clinical trial of isoniazid and rifapentine (3HP) therapy to prevent pulmonary tuberculosis in high-risk individuals identified by a transcriptomic correlate of risk |Phase III          |Inactive |Assays Completed |Human              |NA         |NA                                   |GHDC    |NA                |NA                   |
-|cvd232     |Parks_RV_232                 |​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.                                                                                                                                                                           |Pre-Clinical NHP   |Inactive |Assays Completed |Rhesus macaque     |2009-11-24 |Vector vaccines (viral or bacterial) |CAVD    |NA                |NA                   |
-|cvd234     |Zolla-Pazner_Mab_test1 Study |Zolla-Pazner_Mab_Test1                                                                                                                                                                                                                                              |Antibody Screening |Inactive |Assays Completed |Non-Organism Study |2009-02-03 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
-|cvd235     |mAbs potency                 |Weiss mAbs potency                                                                                                                                                                                                                                                  |Antibody Screening |Inactive |Assays Completed |Non-Organism Study |2008-08-21 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
-|cvd236     |neutralization assays        |neutralization assays                                                                                                                                                                                                                                               |Antibody Screening |Active   |In Progress      |Non-Organism Study |2009-02-03 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
-|cvd238     |Gallo_PA_238                 |HIV-1 neutralization responses in chronically infected individuals                                                                                                                                                                                                  |Antibody Screening |Inactive |Assays Completed |Non-Organism Study |2009-01-08 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
+|study_name |short_name                   |title                                                                                                                                                                                                                                                               |type                      |status   |stage           |species            |start_date |strategy                             |network |data_availability |ni_data_availability |
+|:----------|:----------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------|:--------|:---------------|:------------------|:----------|:------------------------------------|:-------|:-----------------|:--------------------|
+|cor01      |NA                           |The correlate of risk targeted intervention study (CORTIS):  A randomized, partially-blinded, clinical trial of isoniazid and rifapentine (3HP) therapy to prevent pulmonary tuberculosis in high-risk individuals identified by a transcriptomic correlate of risk |Phase III                 |Inactive |Assays complete |Human              |NA         |NA                                   |GHDC    |NA                |NA                   |
+|cvd232     |Parks_RV_232                 |​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.                                                                                                                                                                           |Pre-Clinical NHP          |Inactive |Assays complete |Rhesus macaque     |2009-11-24 |Vector vaccines (viral or bacterial) |CAVD    |NA                |NA                   |
+|cvd234     |Zolla-Pazner_Mab_test1 Study |Zolla-Pazner_Mab_Test1                                                                                                                                                                                                                                              |Antibody Characterization |Inactive |Assays complete |Non-organism study |2009-02-03 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
+|cvd235     |mAbs potency                 |Weiss mAbs potency                                                                                                                                                                                                                                                  |Antibody Characterization |Inactive |Assays complete |Non-organism study |2008-08-21 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
+|cvd236     |neutralization assays        |neutralization assays                                                                                                                                                                                                                                               |Antibody Characterization |Active   |In progess      |Non-organism study |2009-02-03 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
+|cvd238     |Gallo_PA_238                 |HIV-1 neutralization responses in chronically infected individuals                                                                                                                                                                                                  |Antibody Characterization |Inactive |Assays complete |Non-organism study |2009-01-08 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
+
+
 
 `con$availableStudies` shows the available studies in the CAVD DataSpace. Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
 
@@ -138,6 +141,8 @@ knitr::kable(cvd256$availableDatasets)
 |Demographics |Demographics               |  121|TRUE       |
 |NAb          |Neutralizing antibody      | 1419|TRUE       |
 
+
+
 ```r
 knitr::kable(cvd256$treatmentArm)
 ```
@@ -148,6 +153,8 @@ knitr::kable(cvd256$treatmentArm)
 |:-------------|:--------|:---------|:--------|:-------------|:---------------|--------:|:-----------------------------------------------------------------------------------------------------|
 |cvd256-NA-A-A |NA       |A         |A        |Vaccine       |Group A Vaccine |      168|DNA-C 4 mg administered IM at weeks 0, 4, and 8 AND NYVAC-C 10^7pfu/mL administered IM at week 24     |
 |cvd256-NA-B-B |NA       |B         |B        |Vaccine       |Group B Vaccine |      168|DNA-C 4 mg administered IM at weeks 0 and 4 AND NYVAC-C 10^7pfu/mL administered IM at weeks 20 and 24 |
+
+
 
 Available datasets and treatment arm information for the connection can be accessed by `availableDatasets` and `treatmentArm`.
 
@@ -162,17 +169,15 @@ NAb <- cvd256$getDataset("NAb")
 dim(NAb)
 #> [1] 1419   33
 colnames(NAb)
-#>  [1] "participant_id"      "participant_visit"   "visit_day"          
-#>  [4] "assay_identifier"    "summary_level"       "specimen_type"      
-#>  [7] "antigen"             "antigen_type"        "virus"              
-#> [10] "virus_type"          "virus_insert_name"   "clade"              
-#> [13] "neutralization_tier" "tier_clade_virus"    "target_cell"        
-#> [16] "initial_dilution"    "titer_ic50"          "titer_ic80"         
-#> [19] "response_call"       "nab_lab_source_key"  "lab_code"           
-#> [22] "exp_assayid"         "titer_id50"          "titer_id80"         
-#> [25] "nab_response_id50"   "nab_response_id80"   "slope"              
-#> [28] "vaccine_matched"     "study_prot"          "virus_full_name"    
-#> [31] "virus_species"       "virus_host_cell"     "virus_backbone"
+#>  [1] "participant_id"      "participant_visit"   "visit_day"           "assay_identifier"   
+#>  [5] "summary_level"       "specimen_type"       "antigen"             "antigen_type"       
+#>  [9] "virus"               "virus_type"          "virus_insert_name"   "clade"              
+#> [13] "neutralization_tier" "tier_clade_virus"    "target_cell"         "initial_dilution"   
+#> [17] "titer_ic50"          "titer_ic80"          "response_call"       "nab_lab_source_key" 
+#> [21] "lab_code"            "exp_assayid"         "titer_id50"          "titer_id80"         
+#> [25] "nab_response_id50"   "nab_response_id80"   "slope"               "vaccine_matched"    
+#> [29] "study_prot"          "virus_full_name"     "virus_species"       "virus_host_cell"    
+#> [33] "virus_backbone"
 ```
 
 The *cvd256* object is an [`R6`](https://cran.r-project.org/package=R6) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
@@ -220,6 +225,8 @@ knitr::kable(cvd256$getDatasetDescription("NAb"))
 |virus_species       |Virus species                               |Text (String)        |A classification for virus species using informal taxonomy.                                                                                                               |
 |virus_type          |Virus type                                  |Text (String)        |The type of virus used in the construction of the nAb antigen.                                                                                                            |
 |visit_day           |Visit Day                                   |Integer              |Target study day defined for a study visit. Study days are relative to Day 0, where Day 0 is typically defined as enrollment and/or first injection.                      |
+
+
 
 To get only a subset of the data and speed up the download, filters can be passed to `getDataset`. The filters are created using the `makeFilter` function of the `Rlabkey` package.
 
@@ -275,6 +282,8 @@ knitr::kable(cavd$availableDatasets)
 |NAb          |Neutralizing antibody           |  52582|TRUE       |
 |PKMAb        |PK MAb                          |   3217|TRUE       |
 
+
+
 In all-study connection, `getDataset` will combine the requested datasets. Note that in most cases, the datasets will have too many subjects for quick data transfer, making filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
 
 
@@ -284,24 +293,18 @@ human <- cavd$getDataset("Demographics", colFilter = conFilter)
 dim(human)
 #> [1] 3142   36
 colnames(human)
-#>  [1] "subject_id"                      "subject_visit"                  
-#>  [3] "species"                         "subspecies"                     
-#>  [5] "sexatbirth"                      "race"                           
-#>  [7] "ethnicity"                       "country_enrollment"             
-#>  [9] "circumcised_enrollment"          "bmi_enrollment"                 
-#> [11] "agegroup_range"                  "agegroup_enrollment"            
-#> [13] "age_enrollment"                  "study_label"                    
-#> [15] "study_start_date"                "study_first_enr_date"           
-#> [17] "study_fu_complete_date"          "study_public_date"              
-#> [19] "study_network"                   "study_last_vaccination_day"     
-#> [21] "study_type"                      "study_part"                     
-#> [23] "study_group"                     "study_arm"                      
-#> [25] "study_arm_summary"               "study_arm_coded_label"          
-#> [27] "study_randomization"             "study_product_class_combination"
-#> [29] "study_product_combination"       "study_short_name"               
-#> [31] "study_grant_pi_name"             "study_strategy"                 
-#> [33] "study_prot"                      "genderidentity"                 
-#> [35] "studycohort"                     "bmi_category"
+#>  [1] "subject_id"                      "subject_visit"                   "species"                        
+#>  [4] "subspecies"                      "sexatbirth"                      "race"                           
+#>  [7] "ethnicity"                       "country_enrollment"              "circumcised_enrollment"         
+#> [10] "bmi_enrollment"                  "agegroup_range"                  "agegroup_enrollment"            
+#> [13] "age_enrollment"                  "study_label"                     "study_start_date"               
+#> [16] "study_first_enr_date"            "study_fu_complete_date"          "study_public_date"              
+#> [19] "study_network"                   "study_last_vaccination_day"      "study_type"                     
+#> [22] "study_part"                      "study_group"                     "study_arm"                      
+#> [25] "study_arm_summary"               "study_arm_coded_label"           "study_randomization"            
+#> [28] "study_product_class_combination" "study_product_combination"       "study_short_name"               
+#> [31] "study_grant_pi_name"             "study_strategy"                  "study_prot"                     
+#> [34] "genderidentity"                  "studycohort"                     "bmi_category"
 ```
 
 Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
@@ -328,6 +331,21 @@ knitr::kable(con$availableGroups)
 |      226|HVTN 505 case control polyfunctionality and BAMA |HVTN 505 case control polyfunctionality and BAMA |Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-Delta (single Env antigen) in case control cohort |drienna    |TRUE   | 170|vtn505                                 |
 |      227|HVTN 505 case control                            |HVTN 505 case control                            |HVTN 505 subjects in analysis of case control cohort                                                         |drienna    |TRUE   | 189|vtn505                                 |
 |      229|human ics                                        |human ics                                        |human studies with ICS data                                                                                  |jmtaylor   |FALSE  | 499|vtn097, vtn505, vtn105, cvd579, cvd264 |
+|      241|CAVD 650                                         |CAVD 650                                         |No description given.                                                                                        |binalp     |TRUE   |  20|cvd650                                 |
+|      243|test cvd345 group                                |test cvd345 group                                |Testing group feature                                                                                        |drienna    |TRUE   | 101|cvd345                                 |
+|      255|test CAVD 264 not shared then shared             |test CAVD 264 not shared then shared             |test what happens when you change share status on groups                                                     |drienna    |TRUE   |  45|cvd264                                 |
+|      258|test CAVD 316 shared then not shared with edits  |test CAVD 316 shared then not shared with edits  |what happens when you edit a shared group and change to not shared                                           |drienna    |TRUE   |  18|cvd316                                 |
+|      261|test CAVD 323 shared then not shared with edits  |test CAVD 323 shared then not shared with edits  |try to repro in Firefox                                                                                      |drienna    |TRUE   |  34|cvd323                                 |
+|      264|test CAVD 392 shared then not                    |test CAVD 392 shared then not                    |test                                                                                                         |drienna    |TRUE   |  41|cvd392                                 |
+|      266|Jason 239                                        |Jason 239                                        |No description given.                                                                                        |jmtaylor   |FALSE  |  38|cvd239                                 |
+|      267|Jason 240                                        |Jason 240                                        |test                                                                                                         |jmtaylor   |FALSE  |  22|cvd239                                 |
+|      269|Jason 242                                        |Jason 242                                        |test                                                                                                         |jmtaylor   |FALSE  |   7|cvd242                                 |
+|      271|Jason 256                                        |Jason 256                                        |NA                                                                                                           |jmtaylor   |FALSE  | 121|cvd256                                 |
+|      272|test CAVD 380                                    |test CAVD 380                                    |test                                                                                                         |drienna    |TRUE   |  18|cvd380                                 |
+|      277|test CAVD 411 shared not shared                  |test CAVD 411 shared not shared                  |test                                                                                                         |drienna    |TRUE   |  24|cvd411                                 |
+|      279|test CAVD 371                                    |test CAVD 371                                    |test                                                                                                         |drienna    |TRUE   |  52|cvd371                                 |
+
+
 
 To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to the "NYVAC durability comparison" group which has group ID 220 by `getGroup`.
 
@@ -377,6 +395,8 @@ knitr::kable(head(con$virusMetadata))
 |NAB MAB          |cds_4        |0077.v1.c16  |Env Pseudotype |2                   |C     |0               |0077.v1.c16 [SG3Δenv] 293T/17  |0077.v1.c16      |HIV           |293T/17         |SG3Δenv        |NA                   |
 |NAB              |cds_252      |00836-2.5    |Env Pseudotype |1B                  |C     |0               |00836-2.5 [SG3Δenv] 293T/17    |NA               |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
 |NAB MAB          |cds_5        |0260.v5.c1   |Env Pseudotype |2                   |A     |0               |0260.v5.c1 [SG3Δenv] 293T/17   |0260.V5.C1       |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
+
+
 
 ## Access monoclonal antibody data
 
@@ -451,30 +471,39 @@ The followings are the tables of all fields and methods that work on `DataSpaceC
 
 ```r
 sessionInfo()
-#> R version 4.2.2 Patched (2022-11-10 r83330)
-#> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Ubuntu 20.04.6 LTS
+#> R version 4.4.0 (2024-04-24)
+#> Platform: x86_64-pc-linux-gnu
+#> Running under: Ubuntu 22.04.4 LTS
 #> 
 #> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
 #> 
 #> locale:
-#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-#>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-#> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8       
+#>  [4] LC_COLLATE=en_US.UTF-8     LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                  LC_ADDRESS=C              
+#> [10] LC_TELEPHONE=C             LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+#> 
+#> time zone: America/Los_Angeles
+#> tzcode source: system (glibc)
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] data.table_1.14.6 DataSpaceR_0.7.6  knitr_1.42       
+#> [1] DataSpaceR_0.7.6 knitr_1.46      
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] httr_1.4.4       compiler_4.2.2   assertthat_0.2.1 Rlabkey_2.9.1   
-#>  [5] R6_2.5.1         tools_4.2.2      curl_5.0.0       Rcpp_1.0.10     
-#>  [9] digest_0.6.31    jsonlite_1.8.4   xfun_0.39        evaluate_0.20
+#>  [1] utf8_1.2.4        stringi_1.8.3     digest_0.6.35     magrittr_2.0.3    evaluate_0.23    
+#>  [6] pkgload_1.3.4     fastmap_1.1.1     jsonlite_1.8.8    processx_3.8.4    pkgbuild_1.4.4   
+#> [11] sessioninfo_1.2.2 urlchecker_1.0.1  ps_1.7.6          promises_1.3.0    httr_1.4.7       
+#> [16] purrr_1.0.2       fansi_1.0.6       cli_3.6.2         shiny_1.8.1.1     rlang_1.1.3      
+#> [21] ellipsis_0.3.2    remotes_2.5.0     cachem_1.0.8      devtools_2.4.5    tools_4.4.0      
+#> [26] memoise_2.0.1     httpuv_1.6.15     curl_5.2.1        assertthat_0.2.1  vctrs_0.6.5      
+#> [31] Rlabkey_3.2.1     R6_2.5.1          mime_0.12         lifecycle_1.0.4   stringr_1.5.1    
+#> [36] fs_1.6.4          htmlwidgets_1.6.4 usethis_2.2.3     miniUI_0.1.1.1    pkgconfig_2.0.3  
+#> [41] callr_3.7.6       pillar_1.9.0      later_1.3.2       data.table_1.15.4 glue_1.7.0       
+#> [46] profvis_0.3.8     Rcpp_1.0.12       xfun_0.43         tibble_3.2.1      xtable_1.8-4     
+#> [51] htmltools_0.5.8.1 compiler_4.4.0
 ```
