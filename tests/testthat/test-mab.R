@@ -70,7 +70,7 @@ test_that("test mab object results", {
   mab <- con$getMab()
   expect_true(all(mab$assays$prot %in% c("cvd409", "cvd425")))
   expect_true(all(mab$nabMab$virus %in% c("MN.3", "PVO.4", "TH023.6", "Ce0682_E4", "SHIV_C3", "SHIV_C4", "SHIV_C5")))
-  expect_true(all(mab$studies$species %in% c("Non-Organism Study")))
+  expect_true(all(mab$studies$species %in% c("Non-organism study")))
   expect_true(all(mab$mabMetadata$mabMetadata$mab_mix_name_std %in% c("CH27")))
   expect_true(nrow(mab$variableDefinitions) == 51)
   expect_true(ncol(mab$variableDefinitions) == 3)

@@ -244,11 +244,25 @@ isFromMabGrid <- function(column) {
 }
 
 truncatePrintable <- function(text, len = 70) {
-    if( nchar(text) > len ){
-        paste0( substr(text, 1, len), "..." )
-    } else {
-        text
-    }
+  if( nchar(text) > len ){
+    paste0( substr(text, 1, len), "..." )
+  } else {
+    text
+  }
+}
+
+nt2aa <- function(nt){
+  codon <- fread(system.file("aa_lookup.csv", package="DataSpaceR"))
+  aa <- Map(\(sequence){
+    end <- seq(3, nchar(sequence), 3)
+    sta <- seq(1, nchar(sequence), 3)[seq_len(length(end))]    
+    nts <- Map(substr, sequence, sta, end) |>
+      unlist() |>
+      (\(.) data.table(nt=., ord=1:length(.)))() |>
+      merge(codon)
+    return(nts[order(ord),]$aa |> paste(collapse=""))
+  }, nt) |> unlist()
+  return(aa)
 }
 
 #' @importFrom Rlabkey makeFilter

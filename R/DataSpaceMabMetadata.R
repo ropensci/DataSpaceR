@@ -231,8 +231,8 @@ DataSpaceMabMetadata <- R6Class(
       )
     ) |>
       setDT() |>
-      ( \(.) .[,-"lineage"] )()
-    
+      ( \(.) .[,-"lineage"][,sequence_aa := nt2aa(sequence_nt)] )()
+
     alleleFilter <- makeFilter(
       c(
         "allele", "IN", paste(unique(private$.topCalls$allele), collapse = ";")
@@ -265,16 +265,28 @@ DataSpaceMabMetadata <- R6Class(
     private$.runInformation[,run_information:=lapply(gsub("\"\"", "\"", run_information), fromJSON)]
   },
   
-  getFastaFromSequences = function(originalHeaders = F){
+  getFastaFromSequences = function(seqIds=NULL, sequenceType="nt", originalHeaders=FALSE){
     if(length(private$.sequences) == 0) stop("Please run `loadAlignments()` to access fasta file for sequences available.")
 
+    if(is.null(seqIds))
+        seqs <- copy(private$.sequences)
+    else
+        seqs <- private$.sequences[sequence_id %in% seqIds]
+
+    if(sequenceType == "nt")
+        seqs[, sequence := sequence_nt]
+    else if(sequenceType == "aa")
+        seqs[, sequence := sequence_aa]
+    else
+        stop("`sequenceType` provided is not valid. Use `aa` for amino acid or `nt` for nucleotide.")
+    
     if(originalHeaders){
-      fastaParse <- private$.sequences[,.(header, sequence_nt)]
+      fastaParse <- seqs[,.(header, sequence)]
     } else {
       fastaParse <-
         merge(
           private$.mabMetadata,
-          private$.sequences[,.(mab_id, locus, sequence_id, sequence_nt)] |> unique()
+          seqs[,.(mab_id, locus, sequence_id, sequence)] |> unique()
         ) |>
         ( \(.) .[, .(
           header =
@@ -282,7 +294,7 @@ DataSpaceMabMetadata <- R6Class(
               mab_name_std, mab_id, sequence_id, mab_isotype, mab_donor_species, locus,
               sep = "|"
             ),
-          sequence_nt
+          sequence
         )] )()
     }
     

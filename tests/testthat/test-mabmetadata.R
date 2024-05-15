@@ -29,12 +29,12 @@ testMabMetaDataOnFacet <- function(met, nMembers){
   )
 
   test_that(
-    "All loadAlignement objects have the correct column names",
+    "All loadAlignment objects have the correct column names",
     {
       colList <- list(
         "alignments"      = c("mab_id","mab_name_std","mab_lanlid","sequence_id","locus","stop_codon","vj_in_frame","productive","rev_comp","complete_vdj","v_call","d_call","j_call","sequence_alignment","germline_alignment","sequence_alignment_aa","germline_alignment_aa","v_alignment_start","v_alignment_end","d_alignment_start","d_alignment_end","j_alignment_start","j_alignment_end","v_sequence_alignment","v_sequence_alignment_aa","v_germline_alignment","v_germline_alignment_aa","d_sequence_alignment","d_sequence_alignment_aa","d_germline_alignment","d_germline_alignment_aa","j_sequence_alignment","j_sequence_alignment_aa","j_germline_alignment","j_germline_alignment_aa","fwr1","fwr1_aa","cdr1","cdr1_aa","fwr2","fwr2_aa","cdr2","cdr2_aa","fwr3","fwr3_aa","fwr4","fwr4_aa","cdr3","cdr3_aa","junction","junction_length","junction_aa","junction_aa_length","v_score","d_score","j_score","v_cigar","d_cigar","j_cigar","v_support","d_support","j_support","v_identity","d_identity","j_identity","v_sequence_start","v_sequence_end","v_germline_start","v_germline_end","d_sequence_start","d_sequence_end","d_germline_start","d_germline_end","j_sequence_start","j_sequence_end","j_germline_start","j_germline_end","fwr1_start","fwr1_end","cdr1_start","cdr1_end","fwr2_start","fwr2_end","cdr2_start","cdr2_end","fwr3_start","fwr3_end","fwr4_start","fwr4_end","cdr3_start","cdr3_end","np1","np1_length","np2","np2_length","run_application"),
-        "topCalls"      = c("mab_id","mab_name_std","mab_lanlid","mab_hxb2_location","mab_ab_binding_type","mab_isotype","mab_donorid","mab_donor_species","mab_donor_clade","allele","sequence_id","percent_identity","matches","alignment_length","score","preferred_status","run_application"),
-        "sequences"       = c("mab_id","sequence_id","locus","header","source","sequence_nt"),
+        "topCalls"        = c("mab_id","mab_name_std","mab_lanlid","mab_hxb2_location","mab_ab_binding_type","mab_isotype","mab_donorid","mab_donor_species","mab_donor_clade","allele","sequence_id","percent_identity","matches","alignment_length","score","preferred_status","run_application"),
+        "sequences"       = c("mab_id","sequence_id","locus","header","source","sequence_nt", "sequence_aa"),
         "runInformation"  = c("run_application","run_information"),
         "allele_sequence" = c("allele", "allele_sequence_nt")
       )
@@ -112,21 +112,16 @@ testMabMetaDataOnFacet(met, 2)
 # test that when a mab without a sequence is queried from the grid, loadAlignments fails gracefully.
 
 test_that(
-    "Check loading lineage alignment datasets",
-    {
-        
-        met <- con$getMabMetadata()
-        met$mabMetadata[sequence_available == TRUE]
-        met$loadAlignments("cds_mab_54", lineage = T)
-        
-        expect_true(met$sequences[,unique(mab_id)] == "cds_mab_54")
-
-        expect_error(
-            met$loadAlignments("cds_mab_1", lineage = T)
-        )
-        
-    })
-
+  "Check loading lineage alignment datasets",
+  {        
+    met <- con$getMabMetadata()
+    met$mabMetadata[sequence_available == TRUE]
+    met$loadAlignments("cds_mab_54", lineage = T)        
+    expect_true(met$sequences[,unique(mab_id)] == "cds_mab_54")
+    expect_error(
+      met$loadAlignments("cds_mab_1", lineage = T)
+    )        
+  })
 
 ## test that all messsages and stops are triggered when expected
 
@@ -163,5 +158,23 @@ test_that(
 
 test_that("Check variable definitions loaded correctly",
 {
+  expect_true(all(unique(met$variableDefinitions$name) %in% c("mabMetadata","topCalls","alignments","sequences","alleleSequences","runInformation")))
+})   
+
+
+test_that("Check aa conversion and fasta export",
+{
+
+  aa <- "QVQLVQSGGQMKKPGESMRISCRASGYEFI"
+
+  con <- connectDS(onStaging=onStaging)
+  met <- con$getMabMetadata()
+  met$loadAlignments("cds_mab_36")
+
+  seqaa <- met$sequences[locus == "IGH"]$sequence_aa |>
+    unique()
+
+  expect_true(length(seqaa) == 1)
+  expect_true(identical(substring(seqaa, 1, 30), aa)) 
   expect_true(all(unique(met$variableDefinitions$name) %in% c("mabMetadata","topCalls","alignments","sequences","alleleSequences","runInformation")))
 })   
