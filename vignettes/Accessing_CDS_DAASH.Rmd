@@ -22,14 +22,7 @@ thead{
 }
 </style>
 
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
-STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
-labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+
 
 ## Purpose
 
@@ -86,7 +79,7 @@ mab$mabMetadata
   MAb sequences available:                                                                    
      PGT128, b12, PGDM1400, PG16, CH27, CH28, CH31, PG9, PGT121, PGT123, PG...                
   MAb sequences loaded:                                                                       
-     No mAbs sequences loaded. Please run `loadAlignments()` to load sequences and alignments.
+     No mAbs sequences loaded. Please run `loadDaash()` to load sequences and alignments.
 ```
 
 # Using the `DataSpaceMabMetadata` object
@@ -105,16 +98,16 @@ met
   MAb sequences available:
      PGT128, b12, PGDM1400, PG16, CH27, CH28, CH31, CH58, CH59, PG9, PGT121...
   MAb sequences loaded:
-     No mAbs sequences loaded. Please run `loadAlignments()` to load sequences and alignments.
+     No mAbs sequences loaded. Please run `loadDaash()` to load sequences and alignments.
 ```
 
-Sequences are loaded use the `loadAlignments` method of the object.
+Sequences are loaded use the `loadDaash` method of the object.
 
 ```r
 library(DataSpaceR)
 con <- connectDS()
 met <- con$getMabMetadata()
-met$loadAlignments()
+met$loadDaash()
 ```
 
 Once that method is called, the printed `DataSpaceMabMetadata` object now indicates that sequences have been loaded. 
@@ -157,7 +150,7 @@ From a `DataSpaceMabMetadata` object, specific sequences from DataSpace can be q
 Below is an example of how to load specific MPER binding antibody sequences and alignments.
 
 ```r
-met$loadAlignments(
+met$loadDaash(
         met$mabMetadata[grepl("MPER", mab_ab_binding_type)]$mab_id
     )
 ```
@@ -168,17 +161,18 @@ Lineage sequences for a given bnAb are sequences from the same donor that are in
 met$mabMetadata[lineage_available == TRUE]
 ```
 
-Lineage sequences can amount to 1000s of sequences for each antibody. For this reason, lineage seqeuences are loaded using a specific argument to the `loadAlignments` method.
+Lineage sequences can amount to 1000s of sequences for each antibody. For this reason, lineage seqeuences are loaded using a specific argument to the `loadDaash` method.
 
 ```r
-met$loadAlignments("cds_mab_36", lineage = TRUE)
+met$loadDaash("cds_mab_36", lineage = TRUE)
 ```
 
 # Exploring the `DataSpaceMabMetadata` DAASH objects
 
 Once sequences and alignments are loaded, there are several active bindings available to access those data:
 
-```{r, eval = FALSE}
+
+```r
 
 met$sequences
 met$alignments
@@ -200,15 +194,17 @@ These objects are explained below.
 
 Descriptions for the various fields in each of these objects can be found using the `variableDefinitions` active binding.
 
-```{r, eval = FALSE}
+
+```r
 
 met$variableDefinitions
 
 ```
 
-A FASTA file can be exported from a DataSpaceMabMetadata object after alignments are loaded with the `loadAlignments()` method. By default, sequence headers are generated from DataSpace mAb metadata however, the original headers from the sequence source can be used instead by toggling the `orginalHeaders` argument.
+A FASTA file can be exported from a DataSpaceMabMetadata object after alignments are loaded with the `loadDaash()` method. By default, sequence headers are generated from DataSpace mAb metadata however, the original headers from the sequence source can be used instead by toggling the `orginalHeaders` argument.
 
-```{r, eval = FALSE}
+
+```r
 
 fasta <- mab$getFastaFromSequences()
 writeLines(fasta, "<export_location.fasta>")
@@ -229,7 +225,7 @@ library(DataSpaceR)
 con <- connectDS(onStaging = T)
 
 mab <- con$getMab()
-mab$mabMetadata$loadAlignments()
+mab$mabMetadata$loadDaash()
 
 ## mab$mabMetadata$mabMix provides THE `mab_id` to `mab_mix_id` map
 ## use to merge sequence data to neutralizing antibody data

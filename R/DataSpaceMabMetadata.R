@@ -20,10 +20,10 @@
 #' mabMeta <- con$getMabMetadata()
 #'
 #' # Load all alignments
-#' mabMeta$loadAlignments()
+#' mabMeta$loadDaash()
 #'
 #' # Or just a subset of the alignments for the metadata extracted so far
-#' mabMeta$loadAlignments(mabIds = "cds_mab_32")
+#' mabMeta$loadDaash(mabIds = "cds_mab_32")
 #' 
 #' # Inspect the `topCalls` field
 #' mabMeta$topCalls
@@ -77,7 +77,7 @@ DataSpaceMabMetadata <- R6Class(
       cat("\n    ",
       {
         if(nrow(private$.sequences) == 0){
-          "No mAbs sequences loaded. Please run `loadAlignments()` to load sequences and alignments."
+          "No mAbs sequences loaded. Please run `loadDaash()` to load sequences and alignments."
         } else {
           truncatePrintable(
             paste(
@@ -145,7 +145,7 @@ DataSpaceMabMetadata <- R6Class(
     private$.mabMetadata[, lanl_metadata := lapply(mab_lanlid, pullForLanlId)]
   },
 
-  loadAlignments = function(mabIds = c(), lineage = FALSE){
+  loadDaash = function(mabIds = c(), lineage = FALSE){
 
     if(length(mabIds) != 0){
 
@@ -266,7 +266,7 @@ DataSpaceMabMetadata <- R6Class(
   },
   
   getFastaFromSequences = function(seqIds=NULL, sequenceType="nt", originalHeaders=FALSE){
-    if(length(private$.sequences) == 0) stop("Please run `loadAlignments()` to access fasta file for sequences available.")
+    if(length(private$.sequences) == 0) stop("Please run `loadDaash()` to access fasta file for sequences available.")
 
     if(is.null(seqIds))
         seqs <- copy(private$.sequences)
@@ -336,7 +336,7 @@ active = list(
     if(length(private$.topCalls) != 0){
       return(private$.topCalls)
     }
-    message("Please run `loadAlignments()` to access top matches.");
+    message("Please run `loadDaash()` to access top matches.");
   },
 
   #' @field alignments A data.table. The table of alignments of germline genes to a given sequence.
@@ -345,7 +345,7 @@ active = list(
     if(length(private$.alignments) != 0){
       return(private$.alignments)
     }
-    message("Please run `loadAlignments()` to access alignments.")
+    message("Please run `loadDaash()` to access alignments.")
   },
 
   #' @field  A data.table. The table of information concerning the runs from the two alignment tools.
@@ -354,7 +354,7 @@ active = list(
     if(length(private$.sequences) != 0){
       return(private$.sequences)
     }
-    message("Please run `loadAlignments()` to access sequences.")
+    message("Please run `loadDaash()` to access sequences.")
   },
 
   
@@ -364,7 +364,7 @@ active = list(
     if(length(private$.alleleSequences) != 0){
       return(private$.alleleSequences)
     }
-    message("Please run `loadAlignments()` to access allele sequences.")
+    message("Please run `loadDaash()` to access allele sequences.")
   },
 
   #' @field  A data.table. The table of information concerning the runs from the two alignment tools.
@@ -373,7 +373,7 @@ active = list(
     if(length(private$.runInformation) != 0){
       return(private$.runInformation)
     }
-    message("Please run `loadAlignments()` to access run info.")
+    message("Please run `loadDaash()` to access run info.")
   },
   
   #' @field variableDefinitions A data.table. The table of variable definitions for the metadata.

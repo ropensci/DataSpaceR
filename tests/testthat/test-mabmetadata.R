@@ -61,7 +61,7 @@ testMabMetaDataOnFacet <- function(met, nMembers){
   )
 }
 
-## test alignment data from mab metadata called from mab object without subset of mab_ids to loadAlignments
+## test alignment data from mab metadata called from mab object without subset of mab_ids to loadDaash
 
 library(DataSpaceR)
 con <- connectDS(onStaging = onStaging)
@@ -70,24 +70,24 @@ con$resetMabGrid()
 con$filterMabGrid("mab_mixture", "VRC01")
 mab <- con$getMab()
 met <- mab$mabMetadata
-met$loadAlignments()
+met$loadDaash()
 
 testMabMetaDataOnFacet(met, 1)
 
-## test alignment data from mab metadata called from mab object with subset of mab_ids to loadAlignments
+## test alignment data from mab metadata called from mab object with subset of mab_ids to loadDaash
 
 con$resetMabGrid()
 con$filterMabGrid("mab_mixture", c("VRC01", "PGT121", "PGDM1400"))
 mab <- con$getMab()
 met <- mab$mabMetadata
-met$loadAlignments(c("cds_mab_36", "cds_mab_26"))
+met$loadDaash(c("cds_mab_36", "cds_mab_26"))
 testMabMetaDataOnFacet(met, 2)
 
 ## check that this can be chaged and still get the correct number of records in each object
-met$loadAlignments("cds_mab_36")
+met$loadDaash("cds_mab_36")
 testMabMetaDataOnFacet(met, 1)
 
-met$loadAlignments(c("cds_mab_36", "cds_mab_2"))
+met$loadDaash(c("cds_mab_36", "cds_mab_2"))
 testMabMetaDataOnFacet(met, 2)
 
 ## test alignment data from mab metadata called from connection object
@@ -100,26 +100,26 @@ test_that(
   }
 )
 
-## test query of loadAlignments on mab metadata from connection object
+## test query of loadDaash on mab metadata from connection object
 
-met$loadAlignments("cds_mab_36")
+met$loadDaash("cds_mab_36")
 testMabMetaDataOnFacet(met, 1)
 
-met$loadAlignments(c("cds_mab_2", "cds_mab_36"))
+met$loadDaash(c("cds_mab_2", "cds_mab_36"))
 testMabMetaDataOnFacet(met, 2)
 
-# test getting lineage sequences from loadAlignments methods
-# test that when a mab without a sequence is queried from the grid, loadAlignments fails gracefully.
+# test getting lineage sequences from loadDaash methods
+# test that when a mab without a sequence is queried from the grid, loadDaash fails gracefully.
 
 test_that(
   "Check loading lineage alignment datasets",
   {        
     met <- con$getMabMetadata()
     met$mabMetadata[sequence_available == TRUE]
-    met$loadAlignments("cds_mab_54", lineage = T)        
+    met$loadDaash("cds_mab_54", lineage = T)        
     expect_true(met$sequences[,unique(mab_id)] == "cds_mab_54")
     expect_error(
-      met$loadAlignments("cds_mab_1", lineage = T)
+      met$loadDaash("cds_mab_1", lineage = T)
     )        
   })
 
@@ -128,13 +128,13 @@ test_that(
 test_that(
   "Check that when passing bad values to loadAlignment, the proper messages and errors are thrown.",
   {
-    expect_error(met$loadAlignments("test"))
-    expect_error(met$loadAlignments("cds_mab_"))
-    expect_error(met$loadAlignments("cds_mab_abc"))
-    expect_error(met$loadAlignments("cds_mab_abc"))
-    expect_error(met$loadAlignments(c("cds_mab_100000000", "cds_mab_100000001")), "None of the `mabIds` elements provided exist in database.")
+    expect_error(met$loadDaash("test"))
+    expect_error(met$loadDaash("cds_mab_"))
+    expect_error(met$loadDaash("cds_mab_abc"))
+    expect_error(met$loadDaash("cds_mab_abc"))
+    expect_error(met$loadDaash(c("cds_mab_100000000", "cds_mab_100000001")), "None of the `mabIds` elements provided exist in database.")
     expect_message(
-      met$loadAlignments(c("cds_mab_36", "cds_mab_100000000")),
+      met$loadDaash(c("cds_mab_36", "cds_mab_100000000")),
       "Note: At least one element of `mabIds` is not available."
     )
 
@@ -148,7 +148,7 @@ test_that(
       "alleleSequences"
     ) |>
       lapply(
-        \(tab) expect_message(met[[tab]], "^Please run \\`loadAlignments\\(\\)\\` to access.+$")
+        \(tab) expect_message(met[[tab]], "^Please run \\`loadDaash\\(\\)\\` to access.+$")
       )
 
     expect_true(tabs |> unlist() |> is.null() |> all())
@@ -169,7 +169,7 @@ test_that("Check aa conversion and fasta export",
 
   con <- connectDS(onStaging=onStaging)
   met <- con$getMabMetadata()
-  met$loadAlignments("cds_mab_36")
+  met$loadDaash("cds_mab_36")
 
   seqaa <- met$sequences[locus == "IGH"]$sequence_aa |>
     unique()

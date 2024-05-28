@@ -252,14 +252,16 @@ truncatePrintable <- function(text, len = 70) {
 }
 
 nt2aa <- function(nt){
+  nt <- toupper(nt)
   codon <- fread(system.file("aa_lookup.csv", package="DataSpaceR"))
   aa <- Map(\(sequence){
     end <- seq(3, nchar(sequence), 3)
-    sta <- seq(1, nchar(sequence), 3)[seq_len(length(end))]    
+    sta <- seq(1, nchar(sequence), 3)[seq_len(length(end))]
     nts <- Map(substr, sequence, sta, end) |>
       unlist() |>
       (\(.) data.table(nt=., ord=1:length(.)))() |>
-      merge(codon)
+      merge(codon, all.x = T) |>
+      (\(.) .[is.na(aa), aa:="X"])()
     return(nts[order(ord),]$aa |> paste(collapse=""))
   }, nt) |> unlist()
   return(aa)
