@@ -21,6 +21,7 @@ if ("DataSpaceConnection" %in% class(con)) {
     "clone",
     "refresh",
     "downloadPublicationData",
+    "getDonorMetadata",
     "getMabMetadata",
     "getMab",
     "resetMabGrid",

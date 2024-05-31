@@ -234,7 +234,7 @@ DataSpaceConnection <- R6Class(
     #' @description
     #' Create a \code{\link{DataSpaceDonorMetadata}} object.
     #` @param manIds cds_mab_id values to generate object with. No values fetches all available.
-    getDonorMetadata = function(mabIds = c()){
+    getDonorMetadata = function(donorIds = c()){
       DataSpaceDonorMetadata$new(donorIds=donorIds, config=private$.config)
     },
     

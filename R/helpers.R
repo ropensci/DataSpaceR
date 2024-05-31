@@ -337,12 +337,18 @@ fetchDaash <- function(filter, config){
       method = "GET"
     ) |> setDT()
 
-  seqFilter <- makeFilter(
-    c(
-      "sequence_id", "IN", paste(unique(daash$sequences$sequence_id), collapse = ";")
-    )
-  ) 
+  limit <- 200
+  sids <- unique(daash$sequences$sequence_id)
+  srts <- seq(1, length(sids), limit)
+  ends <- shift(seq(0, length(sids), limit), fill = length(sids), type="lead")
 
+  seqFilters <- Map(\(srt, end){
+    c("sequence_id", "IN", paste(sids[srt:end], collapse = ";")) |> makeFilter()
+  }, srts, ends)
+
+  if(length(seqFilters) > 1)
+    message(paste0("Presently querying ", length(sids), " sequences. This may take some time.."))
+  
   seqs <- daash$sequences[,.(mab_id,donor_id,sequence_id,mab_name_std,donor_code)] |> unique()
 
   daash$topCalls <-
@@ -360,8 +366,8 @@ fetchDaash <- function(filter, config){
       ) |> setDT(),
       by = "sequence_id"
     )
-  
-  daash$alignments <-
+
+  daash$alignments <- Map(\(seqFilter) {
     merge(
       seqs,
       labkey.selectRows(
@@ -376,7 +382,9 @@ fetchDaash <- function(filter, config){
       ) |> setDT(),
       by = "sequence_id"
     )
-  
+  }, seqFilters) |>
+    rbindlist() 
+
   alleleFilter <- makeFilter(
     c(
       "allele", "IN", paste(unique(daash$topCalls$allele), collapse = ";")

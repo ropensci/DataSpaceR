@@ -48,16 +48,23 @@ mab$nabMab
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{studyMabLabels}}{A data.table. The table of available mAbs by study.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{config}}{A list. Stores configuration of the connection object such
 as URL, path and username.}
 
-\item{\code{studyAndMabs}}{A data.table. The table of available mAbs by study.}
+\item{\code{studyMabLabels}}{A data.table. The table of available mAbs by study.}
 
-\item{\code{mabs}}{A data.table. The table of available mAbs and their
-attributes.}
+\item{\code{nabMab}}{A data.table. The table of mAbs and their neutralizing
+measurements against viruses.}
 
 \item{\code{nabMab}}{A data.table. The table of mAbs and their neutralizing
 measurements against viruses.}
@@ -74,21 +81,20 @@ definitions.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{DataSpaceMab$new()}}
-\item \href{#method-print}{\code{DataSpaceMab$print()}}
-\item \href{#method-refresh}{\code{DataSpaceMab$refresh()}}
-\item \href{#method-getLanlMetadata}{\code{DataSpaceMab$getLanlMetadata()}}
-\item \href{#method-clone}{\code{DataSpaceMab$clone()}}
+\item \href{#method-DataSpaceMab-new}{\code{DataSpaceMab$new()}}
+\item \href{#method-DataSpaceMab-print}{\code{DataSpaceMab$print()}}
+\item \href{#method-DataSpaceMab-refresh}{\code{DataSpaceMab$refresh()}}
+\item \href{#method-DataSpaceMab-clone}{\code{DataSpaceMab$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-DataSpaceMab-new"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceMab-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize \code{DataSpaceMab} object.
 See \code{\link{DataSpaceConnection}}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceMab$new(mabMixture, filters, config)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceMab$new(mabMixture, mabFilters, config)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -96,16 +102,16 @@ See \code{\link{DataSpaceConnection}}.
 \describe{
 \item{\code{mabMixture}}{A character vector.}
 
-\item{\code{filters}}{A list.}
-
 \item{\code{config}}{A list.}
+
+\item{\code{filters}}{A list.}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-DataSpaceMab-print"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceMab-print}{}}}
 \subsection{Method \code{print()}}{
 Print the \code{DataSpaceMab} object summary.
 \subsection{Usage}{
@@ -114,8 +120,8 @@ Print the \code{DataSpaceMab} object summary.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-refresh"></a>}}
-\if{latex}{\out{\hypertarget{method-refresh}{}}}
+\if{html}{\out{<a id="method-DataSpaceMab-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceMab-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 Refresh the \code{DataSpaceMab} object to update datasets.
 \subsection{Usage}{
@@ -124,18 +130,8 @@ Refresh the \code{DataSpaceMab} object to update datasets.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getLanlMetadata"></a>}}
-\if{latex}{\out{\hypertarget{method-getLanlMetadata}{}}}
-\subsection{Method \code{getLanlMetadata()}}{
-Applies LANL metadata to mabs table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceMab$getLanlMetadata()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-DataSpaceMab-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceMab-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

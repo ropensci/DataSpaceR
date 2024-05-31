@@ -12,7 +12,7 @@
 #' @author Ju Yeong Kim
 #' @importFrom R6 R6Class
 #' @importFrom assertthat assert_that is.number
-#' @importFrom data.table data.table setDT := rbindlist setorder setkey setkeyv
+#' @importFrom data.table data.table setDT := rbindlist setorder setkey setkeyv shift
 NULL
 
 # Global Variables
