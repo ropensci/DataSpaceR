@@ -133,10 +133,10 @@ There are several metadata fields that can be exported in the mAb object.
 names(mab)
 ```
 
-DataSpaceR can also fetch and add metadata associated with downloaded mAbs via the `getLanlMetadata` method that is associated with the `DataSpaceMab` object.
+DataSpaceR can also fetch and add metadata associated with downloaded mAbs via the `loadLanlMetadata` method that is associated with the `DataSpaceMab` object.
 
 ```{r}
-mab$getLanlMetadata()
+mab$loadLanlMetadata()
 ```
 
 The LANL metadata can now be found at the `mabs$lanl_metadata` variable. This is a list column and its structure can very depending on what data LANL has collected.

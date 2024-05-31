@@ -204,11 +204,11 @@ names(mab)
 #>  [9] "clone"               "refresh"             "print"               "initialize"
 ```
 
-DataSpaceR can also fetch and add metadata associated with downloaded mAbs via the `getLanlMetadata` method that is associated with the `DataSpaceMab` object.
+DataSpaceR can also fetch and add metadata associated with downloaded mAbs via the `loadLanlMetadata` method that is associated with the `DataSpaceMab` object.
 
 
 ```r
-mab$getLanlMetadata()
+mab$loadLanlMetadata()
 #> Error in eval(expr, envir, enclos): attempt to apply non-function
 ```
 

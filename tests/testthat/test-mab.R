@@ -82,7 +82,7 @@ test_that("test lanl metadata merge and duplicates in mab table", {
   con$filterMabGrid("mab_mixture", "PGT128")
   mab <- con$getMab()
   expect_true(nrow(mab$mabMetadata$mabMetadata) == 1)
-  mab$mabMetadata$getLanlMetadata()
+  mab$mabMetadata$loadLanlMetadata()
   expect_true(class(mab$mabMetadata$mabMetadata$lanl_metadata) == "list")
   expect_true(length(mab$mabMetadata$mabMetadata$lanl_metadata[[1]]) == 4)
   expect_true(names(mab$mabMetadata$mabMetadata$lanl_metadata[[1]])[1] == "epitopes")

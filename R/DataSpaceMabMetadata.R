@@ -37,18 +37,23 @@ DataSpaceMabMetadata <- R6Class(
     #' @description
     #' Initialize \code{DataSpaceMabMetadata} object.
     #' See \code{\link{DataSpaceConnection}}.
-    #' @param mabMixture A character vector.
-    #' @param mabFilters A list.
+    #' @param mabIds A character vector of cds mab ids.
     #' @param config A list.
     initialize = function(mabIds, config) {
       assert_that(!is.null(config))
 
+      checkMabIdFormat(mabIds)
+
       ## set primary fields
       private$.mabIds <- mabIds
       if(length(mabIds) > 0) {
-        private$.mabFilter <- makeFilter(c("mab_id", "IN", paste(mabIds, collapse = ";")))
+        private$.mabFilter <- makeFilter(
+          c("mab_id", "IN", paste(mabIds, collapse = ";"))
+        )
       } else {
-        private$.mabFilter <- NULL
+        private$.mabFilter <- makeFilter(
+          c("mab_id", "NOT_EQUAL", "NULL")
+        )
       }
       private$.config <- config
 
@@ -76,12 +81,12 @@ DataSpaceMabMetadata <- R6Class(
       cat("\n  MAb sequences loaded:")
       cat("\n    ",
       {
-        if(nrow(private$.sequences) == 0){
+        if(length(private$.daash) == 0){
           "No mAbs sequences loaded. Please run `loadDaash()` to load sequences and alignments."
         } else {
           truncatePrintable(
             paste(
-              private$.mabMetadata[mab_id %in% private$.sequences$mab_id, mab_name_std],
+              private$.mabMetadata[mab_id %in% private$.daash$sequences$mab_id, mab_name_std],
               collapse=", "
             )
           )
@@ -90,405 +95,242 @@ DataSpaceMabMetadata <- R6Class(
 
       cat("\n")
 
+    },
+
+    #' @description
+    #' Refresh the \code{DataSpaceMabMetadata} object to update datasets.
+    refresh = function() {
+      private$.getMabMetadata()
+      private$.getVariableDefinitions()
+    },
+
+  #' @description
+  #' Applies LANL metadata to mabMetadata table.
+  loadLanlMetadata = function(){
+    private$.mabMetadata[, lanl_metadata := lapply(mab_lanl_id, fetchLanlMetadata)]
+  },
+
+  getFastaFromSequences = function(seqIds=NULL, sequenceType="nt", originalHeaders=FALSE){
+    sequences <- copy(private$.daash$sequences)
+    sequences[, cds_header:=paste(sequence_id, mab_id, donor_id, mab_name_std, donor_code, collapse="|")]
+    generateFasta(sequences, seqIds, sequenceType, originalHeaders)
   },
 
   #' @description
-  #' Refresh the \code{DataSpaceMabMetadata} object to update datasets.
-  refresh = function() {
-    tries <- c(
-      class(try(
-        private$.getMabMetadata(),
-        silent = !private$.config$verbose
-      )),
-      class(try(
-        private$.getMabSequence(),
-        silent = !private$.config$verbose
-      )),
-      class(try(
-        private$.getVariableDefinitions(),
-        silent = !private$.config$verbose
-      ))
-
-    )
-    invisible(!"try-error" %in% tries)
-  },
-
-  #' @description
-  #' Applies LANL metadata to mabs table.
-  getLanlMetadata = function(){
-    checkList <- function(x){
-      if(any(c("list", "data.frame") %in% class(x))){
-        lapply(x, function(y){
-          if("data.frame" %in% class(y)) {
-            setDT(y)
-            checkList(y)
-          } else {
-            checkList(y)
-          }
-        })
-      }
-    }
-    pullForLanlId <- function(lanl_id){
-      url <- paste0("https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?id=", lanl_id)
-      if(is.na(lanl_id)) return(NA)
-      res <- httr::GET(url)
-      if(res$status == 200){
-        json <- fromJSON(content(res, as="text")[[1]])
-        json[["epitopes"]] <- data.table(json[["epitopes"]])
-        json$source <- url
-        lapply(json$epitopes, checkList)
-        return(json)
-      } else {
-        return(paste0("No LANL metadata found at '", url, "'."))
-      }
-    }
-    private$.mabMetadata[, lanl_metadata := lapply(mab_lanlid, pullForLanlId)]
-  },
-
-  loadDaash = function(mabIds = c(), lineage = FALSE){
-
+  #' Applies DAASH tables to the this object
+  loadDaash = function(mabIds=c(), filter=NULL){
     if(length(mabIds) != 0){
 
-      if(!all(grepl("^cds_mab_[0-9]+$", mabIds)))
-        stop("All `mabIds` must be in the format `^cds_mab_[0-9]+$`")
-
+      checkMabIdFormat(mabIds)
+      
       if(all(!(mabIds %in% private$.mabSequence$mab_id)))
-        stop("None of the `mabIds` elements provided exist in database.")
-
+        stop("None of the `mabIds` elements provided are found in this object.")
+      if(all(private$.mabSequence[mab_id %in% mabIds, is.na(sequence_id)]))
+        stop("No sequences are available for the `mabIds` provided")
+      
+      if(any(private$.mabSequence[mab_id %in% mabIds, is.na(sequence_id)]))
+        message("Note: Some sequences are not available for the `mabIds` provided")
       if(!all(mabIds %in% private$.mabSequence$mab_id))
-        message("Note: At least one element of `mabIds` is not available.")
+        message("Note: At least one element of `mabIds` is not available in this object.")
 
       if(length(private$.mabIds) != 0){
-        private$.mabAlignmentIds <- private$.mabIds[private$.mabIds %in% mabIds]
+        private$.daashMabIds <- private$.mabIds[private$.mabIds %in% mabIds]
       } else {
-        private$.mabAlignmentIds <- mabIds
+        private$.daashMabIds <- mabIds
       }
       
     } else {
       if(length(private$.mabIds) != 0){
-        private$.mabAlignmentIds <- private$.mabIds
+        private$.daashMabIds <- private$.mabIds
       }
       
     }
 
-    if(length(private$.mabAlignmentIds) == 0){
-      private$.mabAlignFilter <- NULL
+    if(length(private$.daashMabIds) == 0){
+      private$.mabDaashFilter <- NULL
     } else {
-      private$.mabAlignFilter <- makeFilter(c("mab_id", "IN", paste(private$.mabAlignmentIds, collapse=";")))
+      private$.mabDaashFilter <- makeFilter(c("mab_id", "IN", paste(private$.daashMabIds, collapse=";")))
     }
+    
+    daashFilter <- rbind(private$.mabFilter, private$.mabDaashFilter, filter) |> unique()
+    private$.daash <- fetchDaash(daashFilter, private$.config)
+   
+  }
+  
+  ),
 
-    if(lineage == TRUE){
-      if(
-        private$.mabMetadata[
-          mab_id %in% private$.mabAlignmentIds & lineage_available == lineage
-        ] |> nrow() == 0
-      ){
-          stop("No lineage sequences available for this selection. `mabMetadata` has no records where `lineage_available == TRUE`.")
+  active = list(
+    #' @field config A list. Stores configuration of the connection object such
+    #' as URL, path and username.
+    config = function() {
+      private$.config
+    },
+
+    #' @field mabMetadata A data.table. The table of the basic metadata from a mab metadata filter.
+    mabMetadata = function(){
+      private$.mabMetadata
+    },
+
+    #' @field mabMix A data.table. The table of mAb mixture IDs and mAb IDs for merging data reported as mAb mixures and mAb metadata.
+    mabMix = function(){
+      private$.mabMix
+    },
+
+    #' @field topCalls A data.table. A table of top allele matches from both IgBLAST and V-Quest.  
+    topCalls = function() {
+      if(length(private$.daash) != 0){
+        return(private$.daash$topCalls)
       }
+      message("Please run `loadDaash()` to access top matches.");
+    },
+
+    #' @field alignments A data.table. The table of alignments of germline genes to a given sequence.
+    #' attributes.
+    alignments = function() {
+      if(length(private$.daash) != 0){
+        return(private$.daash$alignments)
+      }
+      message("Please run `loadDaash()` to access alignments.")
+    },
+
+    #' @field  A data.table. The table of information concerning the runs from the two alignment tools.
+    #' measurements against viruses.
+    sequences = function() {
+      if(length(private$.daash) != 0){
+        return(private$.daash$sequences)
+      }
+      message("Please run `loadDaash()` to access sequences.")
+    },
+    
+    #' @field  A data.table. The table of allele sequences from reported allele matches.
+    #' measurements against viruses.
+    alleleSequences = function() {
+      if(length(private$.daash) != 0){
+        return(private$.daash$alleleSequences)
+      }
+      message("Please run `loadDaash()` to access allele sequences.")
+    },
+
+    #' @field  A data.table. The table of information concerning the runs from the two alignment tools.
+    #' measurements against viruses.
+    runInformation = function() {
+      if(length(private$.daash) != 0){
+        return(private$.daash$runInformation)
+      }
+      message("Please run `loadDaash()` to access run info.")
+    },
+    
+    #' @field variableDefinitions A data.table. The table of variable definitions for the metadata.
+    #' definitions.
+    variableDefinitions = function() {
+      private$.variableDefinitions
     }
-      
-    private$.lineageFilter <- makeFilter(c("lineage", "EQUALS", tolower(as.character(lineage))))
+  ),
+
+  private = list(
+    .config = list(),
+    .mabNames = character(),
+    .mabIds = character(),
+    .daashMabIds = character(),
+    .mabDaashFilter = character(),
+    .mabMetadata = data.table(),
+    .mabSequence = data.table(),
+    .mabMix = data.table(),
+    .mabFilter = character(),
+    .daash = list(),
+    .variableDefinitions = data.table(),
     
-    private$.topCalls <-  merge(
-      private$.mabMetadata[,-c("sequence_available", "lineage_available")],
-      labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = "/CAVD",
-        schemaName = "cds",
-        queryName = "lineage_sequence_germline",
-        colNameOpt = "fieldname",
-        colSelect = "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,preferred_status,run_application",
-        colFilter = rbind(private$.mabAlignFilter, private$.lineageFilter),
-        method = "GET"
-      ) |> setDT(),
-      by = "mab_id"
-    )[order(run_application, mab_name_std, allele)]
-    
-    private$.alignments <- merge(
-      private$.mabMetadata[,.(mab_name_std, mab_id, mab_lanlid)],
-      labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = "/CAVD",
-        schemaName = "cds",
-        queryName = "lineage_alignment",
-        colNameOpt = "fieldname",
-        colFilter = rbind(private$.mabAlignFilter, private$.lineageFilter),
-        method = "GET"
-      ) |> setDT(),
-      by = "mab_id"
-    )[order(run_application, mab_name_std), -"lineage"]
+    .getMabMetadata = function() {
 
-    private$.sequences <- merge(
-      private$.alignments[,.(mab_id, sequence_id, locus)] |> unique(),
-      labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = "/CAVD",
-        schemaName = "cds",
-        queryName = "antibody_sequence_header_source",
-        colNameOpt = "fieldname",
-        colFilter = rbind(private$.mabAlignFilter, private$.lineageFilter),
-        method = "GET"
-      )
-    ) |>
-      setDT() |>
-      ( \(.) .[,-"lineage"][,sequence_aa := nt2aa(sequence_nt)] )()
-
-    alleleFilter <- makeFilter(
-      c(
-        "allele", "IN", paste(unique(private$.topCalls$allele), collapse = ";")
-      )
-    )
-    
-    private$.alleleSequences <- labkey.selectRows(
-      baseUrl = private$.config$labkeyUrlBase,
-      folderPath = "/CAVD",
-      schemaName = "cds",
-      queryName = "allele_sequence",
-      colNameOpt = "fieldname",
-      colSelect = "allele,allele_sequence_nt",
-      colFilter = alleleFilter,
-      method = "GET"
-    ) |>
-      setDT()
-
-    private$.runInformation <- labkey.selectRows(
-      baseUrl = private$.config$labkeyUrlBase,
-      folderPath = "/CAVD",
-      schemaName = "cds",
-      queryName = "alignment_run",
-      colSelect = "run_application,run_information",
-      colNameOpt = "fieldname",
-      method = "GET"
-    ) |>
-      setDT()
-
-    private$.runInformation[,run_information:=lapply(gsub("\"\"", "\"", run_information), fromJSON)]
-  },
-  
-  getFastaFromSequences = function(seqIds=NULL, sequenceType="nt", originalHeaders=FALSE){
-    if(length(private$.sequences) == 0) stop("Please run `loadDaash()` to access fasta file for sequences available.")
-
-    if(is.null(seqIds))
-        seqs <- copy(private$.sequences)
-    else
-        seqs <- private$.sequences[sequence_id %in% seqIds]
-
-    if(sequenceType == "nt")
-        seqs[, sequence := sequence_nt]
-    else if(sequenceType == "aa")
-        seqs[, sequence := sequence_aa]
-    else
-        stop("`sequenceType` provided is not valid. Use `aa` for amino acid or `nt` for nucleotide.")
-    
-    if(originalHeaders){
-      fastaParse <- seqs[,.(header, sequence)]
-    } else {
-      fastaParse <-
-        merge(
-          private$.mabMetadata,
-          seqs[,.(mab_id, locus, sequence_id, sequence)] |> unique()
-        ) |>
-        ( \(.) .[, .(
-          header =
-            paste(
-              mab_name_std, mab_id, sequence_id, mab_isotype, mab_donor_species, locus,
-              sep = "|"
-            ),
-          sequence
-        )] )()
-    }
-    
-    lines <- apply(fastaParse, 1, \(l) {
-      header <- l[1]
-      sets <- nchar(l[2]) %/% 60
-      c(
-        ifelse(!grepl("^>", header), paste0(">", header), header), 
-        sapply( 1:sets, \(set) substr(l[2], (set - 1) * 60 + 1, set * 60) ),
-        substr(l[2], sets * 60 + 1, nchar(l[2]))
-      )
-    }) |> unlist()
-    names(lines) <- NULL
-    return(lines)
-    
-  }
-  
-),
-
-active = list(
-  #' @field config A list. Stores configuration of the connection object such
-  #' as URL, path and username.
-  config = function() {
-    private$.config
-  },
-
-  #' @field mabMetadata A data.table. The table of the basic metadata from a mab metadata filter.
-  mabMetadata = function(){
-    private$.mabMetadata
-  },
-
-  #' @field mabMix A data.table. The table of mAb mixture IDs and mAb IDs for merging data reported as mAb mixures and mAb metadata.
-  mabMix = function(){
-    private$.mabMix
-  },
-
-  #' @field topCalls A data.table. A table of top allele matches from both IgBLAST and V-Quest.  
-  topCalls = function() {
-    if(length(private$.topCalls) != 0){
-      return(private$.topCalls)
-    }
-    message("Please run `loadDaash()` to access top matches.");
-  },
-
-  #' @field alignments A data.table. The table of alignments of germline genes to a given sequence.
-  #' attributes.
-  alignments = function() {
-    if(length(private$.alignments) != 0){
-      return(private$.alignments)
-    }
-    message("Please run `loadDaash()` to access alignments.")
-  },
-
-  #' @field  A data.table. The table of information concerning the runs from the two alignment tools.
-  #' measurements against viruses.
-  sequences = function() {
-    if(length(private$.sequences) != 0){
-      return(private$.sequences)
-    }
-    message("Please run `loadDaash()` to access sequences.")
-  },
-
-  
-  #' @field  A data.table. The table of allele sequences from reported allele matches.
-  #' measurements against viruses.
-  alleleSequences = function() {
-    if(length(private$.alleleSequences) != 0){
-      return(private$.alleleSequences)
-    }
-    message("Please run `loadDaash()` to access allele sequences.")
-  },
-
-  #' @field  A data.table. The table of information concerning the runs from the two alignment tools.
-  #' measurements against viruses.
-  runInformation = function() {
-    if(length(private$.runInformation) != 0){
-      return(private$.runInformation)
-    }
-    message("Please run `loadDaash()` to access run info.")
-  },
-  
-  #' @field variableDefinitions A data.table. The table of variable definitions for the metadata.
-  #' definitions.
-  variableDefinitions = function() {
-    private$.variableDefinitions
-  }
-),
-
-private = list(
-  .config = list(),
-  .mabNames = character(),
-  .mabIds = character(),
-  .seqIds = character(),
-  .mabAlignmentIds = character(),
-  .seqAlignmentIds = character(),
-  .mabMetadata = data.table(),
-  .mabSequence = data.table(),
-  .mabMix = data.table(),
-  .mabFilter = character(),
-  .mabAlignFilter = character(),
-  .seqAlignFilter = character(),
-  .lineageFilter = character(),
-  .topCalls = data.table(),
-  .alignments = data.table(),
-  .sequences = data.table(),
-  .alleleSequences = data.table(),
-  .runInformation = data.table(),
-  .variableDefinitions = data.table(),
-  
-  .getMabMetadata = function() {
-    mabSequence <- labkey.selectRows(
-      baseUrl = private$.config$labkeyUrlBase,
-      folderPath = "/CAVD",
-      schemaName = "cds",
-      queryName = "antibody_sequence",
-      colSelect = "mab_id,sequence_id,lineage",
-      colNameOpt = "fieldname",
-      colFilter = private$.mabFilter,
-      method = "GET"
-    ) |>
-      suppressWarnings() |> 
-      setDT()    
-
-    if(nrow(mabSequence) == 0)
-      mabSequence <- data.table(mab_id = character(), sequence_id = character(), lineage = logical())
-    
-    mabMetadata <- labkey.selectRows(
-      baseUrl = private$.config$labkeyUrlBase,
-      folderPath = "/CAVD",
-      schemaName = "cds",
-      queryName = "MAbMetadata",
-      colSelect = "mab_id,mab_name_std,mab_lanlid,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade",
-      colNameOpt = "fieldname",
-      colFilter = private$.mabFilter,
-      method = "GET"
-    ) |> setDT()
-
-    mabMix <- labkey.selectRows(
-      baseUrl = private$.config$labkeyUrlBase, 
-      folderPath = "/CAVD", 
-      schemaName = "CDS", 
-      queryName = "MAbMix", 
-      viewName = "", 
-      colSelect = "mab_mix_id,mab_id", 
-      colNameOpt = "fieldname",
-      colFilter = private$.mabFilter,
-      method = "GET"
-    ) |> setDT()
-    
-    mabMetadata <- merge(
-      mabMetadata,
-      mabSequence[,.(sequence_available = TRUE, lineage_available = any(lineage)), mab_id],
-      all.x = TRUE
-    )
-
-    mabMetadata[is.na(sequence_available), sequence_available:=FALSE]
-    mabMetadata[is.na(lineage_available), lineage_available:=FALSE]
-
-    private$.mabMetadata <- mabMetadata
-    private$.mabSequence <- mabSequence
-    private$.mabMix   <- mabMix
-    private$.mabNames <- unique(mabMetadata$mab_name_std)
-    private$.seqIds   <- unique(private$.mabSequence$sequence_id)
-    
-  },
-  .getVariableDefinitions = function() {
-
-    varInfo <- lapply(
-      list(
-        c("mabMetadata"    , "mabMetadata"                    , "mab_id,sequence_id,lineage,mab_name_std,mab_lanlid,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade"),
-        c("topCalls"       , "lineage_sequence_germline"      , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
-        c("alignments"     , "lineage_alignment"              , ""),
-        c("sequences"      , "antibody_sequence_header_source", ""),
-        c("alleleSequences", "allele_sequence"                , "allele,allele_sequence_nt"),
-        c("runInformation" , "alignment_run"                  , "run_application,run_information")
-      ), \(.) {
-        labkey.getQueryDetails(
+      suppressWarnings({
+        mabMetadata <- labkey.selectRows(
           baseUrl = private$.config$labkeyUrlBase,
           folderPath = "/CAVD",
           schemaName = "CDS",
-          queryName = .[2]
-        ) |>
-          setDT() |>
-          ( \(tab) {
-            if(nchar(.[3]) != 0)
-              tab[fieldName %in% ( strsplit(.[3], ",") |> unlist() ), ]
-            tab <- tab[fieldName != "container",]
-            return(tab[,queryName:=.[1]])
-          }
-          )()        
-      }) |>
+          queryName = "mab_metadata",
+          colSelect = "mab_id,mab_name_std,mab_lanl_id,mab_hxb2_location,mab_ab_binding_type,mab_isotype",
+          colNameOpt = "fieldname",
+          colFilter = private$.mabFilter,
+          method = "GET"
+        ) |> setDT()
+      })
+
+      if(nrow(mabMetadata) == 0){
+        stop("None of the `mabIds` elements provided are found in the database.")
+      }
+      
+      donorMabSequence <- labkey.selectRows(
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "donor_mab_sequence",
+        colSelect = "donor_id,mab_id,sequence_id",
+        colNameOpt = "fieldname",
+        colFilter = private$.mabFilter, 
+        method = "GET"
+      ) |>
+        suppressWarnings() |> 
+        setDT()    
+
+      mabMix <- labkey.selectRows(
+        baseUrl = private$.config$labkeyUrlBase, 
+        folderPath = "/CAVD", 
+        schemaName = "CDS", 
+        queryName = "MAbMix", 
+        viewName = "", 
+        colSelect = "mab_mix_id,mab_id", 
+        colNameOpt = "fieldname",
+        colFilter = private$.mabFilter,
+        method = "GET"
+      ) |> setDT()
+      
+      mabMetaSequence <- merge(
+        mabMetadata,
+        donorMabSequence,
+        by = "mab_id",
+        all.x = TRUE
+      ) |> (\(.){
+        .[!is.na(sequence_id), sequence_available:=TRUE ]
+        .[ is.na(sequence_id), sequence_available:=FALSE]
+        .[,`:=`(sequence_id = NULL, donor_id = NULL)]
+        unique(.)
+      })()
+      
+      private$.mabMetadata <- mabMetaSequence
+      private$.mabSequence <- donorMabSequence[,.(mab_id, sequence_id)] |> unique()
+      private$.mabMix   <- mabMix
+      private$.mabNames <- unique(mabMetadata$mab_name_std)
+      
+    },
+    .getVariableDefinitions = function() {
+
+      varInfo <- lapply(
+        list(
+          c("mabMetadata"    , "mabMetadata"                    , "mab_id,sequence_id,mab_name_std,mab_lanlid,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade"),
+          c("topCalls"       , "sequence_germline"              , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
+          c("alignments"     , "alignment"                      , ""),
+          c("sequences"      , "antibody_sequence_header_source", ""),
+          c("alleleSequences", "allele_sequence"                , "allele,allele_sequence_nt"),
+          c("runInformation" , "alignment_run"                  , "run_application,run_information")
+        ), \(.) {
+          labkey.getQueryDetails(
+            baseUrl = private$.config$labkeyUrlBase,
+            folderPath = "/CAVD",
+            schemaName = "CDS",
+            queryName = .[2]
+          ) |>
+            setDT() |>
+            ( \(tab) {
+              if(nchar(.[3]) != 0)
+                tab[fieldName %in% ( strsplit(.[3], ",") |> unlist() ), ]
+              tab <- tab[fieldName != "container",]
+              return(tab[,queryName:=.[1]])
+            }
+            )()        
+        }) |>
         rbindlist() |>
         setnames(c("queryName", "fieldName"), c("name", "field_name"))
       private$.variableDefinitions <- varInfo[, .(name, field_name, caption, description)]
       
-  })
+    })
 )

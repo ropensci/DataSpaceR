@@ -224,10 +224,20 @@ DataSpaceConnection <- R6Class(
       DataSpaceMab$new(self$mabGridSummary$mab_mixture, private$.mabFilters, private$.config)
     },
 
+    #' @description
+    #' Create a \code{\link{DataSpaceMabMetadata}} object.
+    #` @param manIds cds_mab_id values to generate object with. No values fetches all available. 
     getMabMetadata = function(mabIds = c()){
       DataSpaceMabMetadata$new(mabIds=mabIds, config=private$.config)
     },
 
+    #' @description
+    #' Create a \code{\link{DataSpaceDonorMetadata}} object.
+    #` @param manIds cds_mab_id values to generate object with. No values fetches all available.
+    getDonorMetadata = function(mabIds = c()){
+      DataSpaceDonorMetadata$new(donorIds=donorIds, config=private$.config)
+    },
+    
     #' @description
     #' Download publication data for a chosen publication.
     #' @param publicationId A character/integer. ID for the publication to
