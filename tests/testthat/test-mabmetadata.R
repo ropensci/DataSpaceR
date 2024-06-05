@@ -1,20 +1,20 @@
 context("DataSpaceMabMetadata")
 
-testMabMetaDataOnFacet <- function(met, nMembers){
-  seqIdLen <- met$sequences$mab_id |> unique() |> length()
+testMetadataOnFacet <- function(metadata, nMembers){
+  seqIdLen <- metadata$sequences$mab_id |> unique() |> length()
   
   test_that(
     "Sequence table has the correct number of mab members",
     {
-      expect_true(nMembers == met$sequences$mab_id |> unique() |> length())
+      expect_true(nMembers == metadata$sequences$mab_id |> unique() |> length())
     }
   )
 
   test_that(
-    "All loadAlignment objects have the correct number of members.",
+    "All loadDaash objects have the correct number of members.",
     {
-      expect_true( met$alignments$mab_id |> unique() |> length() == nMembers )
-      expect_true( met$topCalls$mab_id |> unique() |> length() == nMembers )
+      expect_true( metadata$alignments$mab_id |> unique() |> length() == nMembers )
+      expect_true( metadata$topCalls$mab_id |> unique() |> length() == nMembers )
       expect_true( seqIdLen <= nMembers * 2 & seqIdLen >= nMembers )      
     }
   )
@@ -23,7 +23,7 @@ testMabMetaDataOnFacet <- function(met, nMembers){
     "Allele sequence table has no more members that the alignment data.",
     {
       expect_true(
-        all(sort(unique(met$topCalls$allele)) == sort(unique(met$alleleSequences$allele)))
+        all(sort(unique(metadata$topCalls$allele)) == sort(unique(metadata$alleleSequences$allele)))
       )
     }
   )
@@ -40,7 +40,7 @@ testMabMetaDataOnFacet <- function(met, nMembers){
       )
 
       for(nm in names(colList))
-        expect_true(all(colList[[nm]] == names(met[[nm]])), info = paste(nm, "does not match expected names."))
+        expect_true(all(colList[[nm]] == names(metadata[[nm]])), info = paste(nm, "does not match expected names."))
     }
   )
 
@@ -50,8 +50,8 @@ testMabMetaDataOnFacet <- function(met, nMembers){
       expect_true(
         all(
           list(
-            met$getFastaFromSequences(),
-            met$getFastaFromSequences(originalHeaders = TRUE)
+            metadata$getFastaFromSequences(),
+            metadata$getFastaFromSequences(originalHeaders = TRUE)
           ) |>
             lapply( \(.) seqIdLen <= ( grep("^>.+", .) |> length()) ) |>
             unlist()
@@ -74,7 +74,7 @@ test_that(
     met <- mab$mabMetadata
     met$loadDaash()
 
-    testMabMetaDataOnFacet(met, 1)
+    testMetadataOnFacet(met, 1)
 
     ## "Test alignment data from mab metadata called from mab object with subset of mab_ids to loadDaash",
     con$resetMabGrid()
@@ -83,14 +83,14 @@ test_that(
     met <- mab$mabMetadata
     met$loadDaash(c("cds_mab_36", "cds_mab_26"))
 
-    testMabMetaDataOnFacet(met, 2)
+    testMetadataOnFacet(met, 2)
 
     ## "Check that mab ids and still get the correct number of records in each object.",
     met$loadDaash("cds_mab_36")
-    testMabMetaDataOnFacet(met, 1)        
+    testMetadataOnFacet(met, 1)        
     met$loadDaash(c("cds_mab_36", "cds_mab_2"))
 
-    testMabMetaDataOnFacet(met, 2)
+    testMetadataOnFacet(met, 2)
 
     ## "Check that mab metadata object pulled from connection is for all data and not what is filtered in the grid.",
     conMet <- con$getMabMetadata()
@@ -104,19 +104,18 @@ test_that(
 
     ## test query of loadDaash on mab metadata from connection object
     met$loadDaash("cds_mab_36")
-    testMabMetaDataOnFacet(met, 1)
+    testMetadataOnFacet(met, 1)
 
     met$loadDaash(c("cds_mab_2", "cds_mab_36"))
-    testMabMetaDataOnFacet(met, 2)
+    testMetadataOnFacet(met, 2)
 
     ## check when a incorrect mab_id is passed to getMabMetadata
     expect_error(met <- con$getMabMetadata(c("cds_mab_36", "123")))
-    testMabMetaDataOnFacet(met, 2)
+    testMetadataOnFacet(met, 2)
 
     ## test that all messsages and stops are triggered when expected
     expect_error(met$loadDaash("test"))
     expect_error(met$loadDaash("cds_mab_"))
-    expect_error(met$loadDaash("cds_mab_abc"))
     expect_error(met$loadDaash("cds_mab_abc"))
     expect_error(met$loadDaash(c("cds_mab_100000000", "cds_mab_100000001")), "None of the `mabIds` elements provided are found in this object.")
     expect_message(
@@ -142,3 +141,57 @@ test_that(
     ## "Check variable definitions loaded correctly"
     expect_true(all(unique(met$variableDefinitions$name) %in% c("mabMetadata","topCalls","alignments","sequences","alleleSequences","runInformation")))
 })   
+
+## disabled while CDS database is being updated
+## test_that(
+##   "Test DataSpaceDonorMetadata object",
+##   {
+
+##     library(DataSpaceR)
+##     con <- connectDS(onStaging = onStaging)
+      
+##     ## "Check malformed mab ids passed to getDonorMetadata"
+##     expect_error(con$getDonorMetadata("123"), "All `donorIds` must be in the format")
+##     expect_error(con$getDonorMetadata("cds_donor_-1"))
+##     expect_error(con$getDonorMetadata("abc"))
+##     expect_error(con$getDonorMetadata("cds_donor_10000000000"))
+
+##     ## test query of loadDaash on mab metadata from connection object
+##     met$loadDaash("cds_donor_1")
+##     testDonorMetaDataOnFacet(met, 1)
+
+##     met$loadDaash(c("cds_donor_2", "cds_donor_3"))
+##     testDonorMetaDataOnFacet(met, 2)
+
+##     ## check when a incorrect donor_id is passed to getDonorMetadata
+##     expect_error(met <- con$getDonorMetadata(c("cds_donor_4", "123")))
+##     testDonorMetaDataOnFacet(met, 2)
+
+##     ## test that all messsages and stops are triggered when expected
+##     expect_error(met$loadDaash("test"))
+##     expect_error(met$loadDaash("cds_donor_"))
+##     expect_error(met$loadDaash("cds_donor_abc"))
+##     expect_error(met$loadDaash(c("cds_donor_100000000", "cds_donor_100000001")), "None of the `donorIds` elements provided are found in this object.")
+##     expect_message(
+##       met$loadDaash(c("cds_donor_36", "cds_donor_100000000")),
+##       "Note: At least one element of `donorIds` is not available."
+##     )
+
+##     met <- con$getDonorMetadata()
+
+##     tabs <- c(
+##       "alignments",    
+##       "topCalls",    
+##       "sequences",     
+##       "runInformation",
+##       "alleleSequences"
+##     ) |>
+##       lapply(
+##         \(tab) expect_message(met[[tab]], "^Please run \\`loadDaash\\(\\)\\` to access.+$")
+##       )
+
+##     expect_true(tabs |> unlist() |> is.null() |> all())
+
+##     ## "Check variable definitions loaded correctly"
+##     expect_true(all(unique(met$variableDefinitions$name) %in% c("donorMetadata","topCalls","alignments","sequences","alleleSequences","runInformation")))
+## })   

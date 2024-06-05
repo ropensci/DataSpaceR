@@ -101,9 +101,8 @@ DataSpaceDonorMetadata <- R6Class(
   loadDaash = function(donorIds=c(), filter=NULL){
     if(length(donorIds) != 0){
 
-      ## donor_id not implemented to use this format yet
-      ## if(!all(grepl("^cds_donor_[0-9]+$", donorIds)))
-      ##   stop("All `donorIds` must be in the format `^cds_donor_[0-9]+$`")
+      if(!all(grepl("^cds_donor_[0-9]+$", donorIds)))
+        stop("All `donorIds` must be in the format `^cds_donor_[0-9]+$`")
 
       if(all(!(donorIds %in% private$.donorSequence$donor_id)))
         stop("None of the `donorIds` elements provided are found in this object.")
