@@ -439,6 +439,7 @@ DataSpaceConnection <- R6Class(
           ,
           .(
             mab_mix_id = mab_mix_id,
+            mab_id = mab_id,
             mab_mixture = mab_mix_name_std,
             donor_species = mab_donor_species,
             hxb2_location = mab_hxb2_location,
@@ -453,11 +454,11 @@ DataSpaceConnection <- R6Class(
       # left join mabGrid with mabMetaGrid
       mabGrid <- merge(
         mabGridBase,
-        mabMetaGridBase[, .(mab_mix_id, donor_species, hxb2_location, isotype)],
+        mabMetaGridBase[, .(mab_mix_id, mab_id, donor_species, hxb2_location, isotype)],
         allow.cartesian = TRUE
       )
 
-      mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, virus, clade, tier, curve_ic50, study)]
+      mabGrid[, .(mab_mixture, mab_mix_id, mab_id, donor_species, isotype, hxb2_location, virus, clade, tier, curve_ic50, study)]
     },
 
     #' @field virusMetadata A data.table. Metadata about all viruses in the

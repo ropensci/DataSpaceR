@@ -64,6 +64,16 @@ test_that("test mab object", {
   expect_equal(length(setdiff(mab$mab_mix_name_std, c("PGT128", "PGT121", "PGT125"))), 0)
 })
 
+test_that("try all mabGrid field filters", {
+  vals <- con$mabGrid[1,] |> as.list()
+  for(i in length(vals)) {
+    field <- names(vals)[[i]]
+    val <- vals[[i]]
+    con$filterMabGrid(field, val)
+    con$resetMabGrid()
+  }
+})
+
 test_that("test mab object results", {
   con$resetMabGrid()
   con$filterMabGrid("mab_mixture", "CH27")
