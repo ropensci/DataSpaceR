@@ -455,10 +455,12 @@ DataSpaceConnection <- R6Class(
       mabGrid <- merge(
         mabGridBase,
         mabMetaGridBase[, .(mab_mix_id, mab_id, donor_species, hxb2_location, isotype)],
+        by = "mab_mix_id",
         allow.cartesian = TRUE
-      )
+      ) |>
+        merge(private$.mabDonor, by = "mab_id", all.x = TRUE)
 
-      mabGrid[, .(mab_mixture, mab_mix_id, mab_id, donor_species, isotype, hxb2_location, virus, clade, tier, curve_ic50, study)]
+      mabGrid[, .(mab_mixture, mab_mix_id, mab_id, donor_id, donor_species, isotype, hxb2_location, virus, clade, tier, curve_ic50, study)]
     },
 
     #' @field virusMetadata A data.table. Metadata about all viruses in the
@@ -479,6 +481,7 @@ DataSpaceConnection <- R6Class(
     .availableStudies = data.table(),
     .stats = data.table(),
     .availableGroups = data.table(),
+    .mabDonor = data.table(),
     .mabGridBase = data.table(),
     .mabMetaGridBase = data.table(),
     .mabFilters = list(),
@@ -595,6 +598,14 @@ DataSpaceConnection <- R6Class(
       private$.availableGroups <- availableGroups
     },
     .getMabGrid = function() {
+      mabDonor <- labkey.selectRows(
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "mab_donor",
+        colNameOpt = "fieldname",
+        method = "GET"
+      )
       mabGridBase <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
@@ -612,12 +623,15 @@ DataSpaceConnection <- R6Class(
         method = "GET"
       )
 
+      setDT(mabDonor)
       setDT(mabGridBase)
       setDT(mabMetaGridBase)
 
+      private$.mabDonor <- mabDonor
       private$.mabGridBase <- mabGridBase
       private$.mabMetaGridBase <- mabMetaGridBase
       private$.mabFilters <- list()
+      private$.cache$mabDonor <- copy(mabDonor)
       private$.cache$mabGridBase <- copy(mabGridBase)
       private$.cache$mabMetaGridBase <- copy(mabMetaGridBase)
 

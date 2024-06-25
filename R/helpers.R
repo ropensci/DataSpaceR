@@ -304,6 +304,14 @@ fetchLanlMetadata <- function(lanl_id){
   url <- paste0("https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?id=", lanl_id)
   if(is.na(lanl_id)) return(NA)
   res <- httr::GET(url)
+
+  timeout <- 0
+  while(res$status != 200 & timeout <= 5){
+    Sys.sleep(1)
+    timeout <- timeout + 1
+    res <- httr::GET(url)
+  }
+  
   if(res$status == 200){
     json <- fromJSON(content(res, as="text")[[1]])
     json[["epitopes"]] <- data.table(json[["epitopes"]])

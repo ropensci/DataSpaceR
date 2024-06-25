@@ -201,11 +201,11 @@ if ("DataSpaceConnection" %in% class(con)) {
     })
 
     test_that("`resetMabGrid`", {
-      oriCnt <- nrow(con$mabGridSummary)
+      countRow <- nrow(con$mabGridSummary)
       con$filterMabGrid("mab_mixture", c("mAb 96"))
-      expect_true(oriCnt > nrow(con$mabGridSummary))
+      expect_true(countRow > nrow(con$mabGridSummary))
       con$resetMabGrid()
-      expect_true(oriCnt == nrow(con$mabGridSummary))
+      expect_true(countRow == nrow(con$mabGridSummary))
     })
 
     test_that("Test `filterMab` errors, warnings, and subsetting.", {
