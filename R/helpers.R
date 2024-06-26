@@ -421,6 +421,17 @@ fetchDaash <- function(filter, config){
     method = "GET"
   ) |>
     setDT()
+
+  daash$alignments[,total_score:=Map(sum, v_score, d_score, j_score, MoreArgs=list(na.rm=T))]
+  jScoreOrder <- which(names(daash$alignments) == "j_score")
+  data.table::setcolorder(
+    daash$alignments,
+    c(
+      names(daash$alignments)[1:jScoreOrder],
+      "total_score",
+      names(daash$alignments)[(jScoreOrder+1):(ncol(daash$alignments)-1)]
+    )
+  )
   
   daash$runInformation[,run_information:=lapply(gsub("\"\"", "\"", run_information), fromJSON)]
 

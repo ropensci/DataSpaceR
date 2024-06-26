@@ -602,7 +602,7 @@ DataSpaceConnection <- R6Class(
         baseUrl = private$.config$labkeyUrlBase,
         folderPath = "/CAVD",
         schemaName = "CDS",
-        queryName = "mab_donor",
+        queryName = "donor_mab",
         colNameOpt = "fieldname",
         method = "GET"
       )
