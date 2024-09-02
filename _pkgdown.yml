@@ -1,4 +1,7 @@
+url: https://docs.ropensci.org/DataSpaceR/
+
 template:
+  bootstrap: 5
   params:
     bootswatch: simplex
     ganalytics: UA-111116186-1
@@ -7,10 +10,13 @@ home:
   strip_header: true
 
 navbar:
-  right:
-    - icon: fa-globe
+  structure:
+    left:  [intro, reference, articles, tutorials, news]
+    right: [search, github, globe, twitter, lightswitch]
+  components:
+    globe:
+      icon: fa-globe
       href: https://dataspace.cavd.org
-    - icon: fa-twitter
+    twitter:
+      icon: fa-twitter
       href: https://twitter.com/CAVDDataSpace
-    - icon: fa-github
-      href: https://github.com/ropensci/DataSpaceR
