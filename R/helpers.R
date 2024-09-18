@@ -372,7 +372,8 @@ fetchDaash <- function(filter, config){
         colFilter = filter,
         method = "GET"
       ) |> setDT(),
-      by = "sequence_id"
+      by = "sequence_id",
+      allow.cartesian = TRUE # a sequence can be found in multiple mabs due to bispecificity
     )
 
   daash$alignments <- Map(\(seqFilter) {
@@ -388,7 +389,8 @@ fetchDaash <- function(filter, config){
         colFilter = seqFilter,
         method = "GET"
       ) |> setDT(),
-      by = "sequence_id"
+      by = "sequence_id",
+      allow.cartesian = TRUE # a sequence can be found in multiple mabs due to bispecificity
     )
   }, seqFilters) |>
     rbindlist() 

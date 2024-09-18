@@ -249,21 +249,21 @@ DataSpaceMabMetadata <- R6Class(
     
     .getMabMetadata = function() {
 
-      suppressWarnings({
-        mabMetadata <- labkey.selectRows(
-          baseUrl = private$.config$labkeyUrlBase,
-          folderPath = "/CAVD",
-          schemaName = "CDS",
-          queryName = "mab_metadata",
-          colSelect = "mab_id,mab_name_std,mab_lanl_id,mab_hxb2_location,mab_ab_binding_type,mab_isotype",
-          colNameOpt = "fieldname",
-          colFilter = private$.mabFilter,
-          method = "GET"
-        ) |> setDT()
-      })
+      mabMetadata <- labkey.selectRows(
+        baseUrl = private$.config$labkeyUrlBase,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "mab_metadata",
+        colSelect = "mab_id,mab_name_std,mab_lanl_id,mab_hxb2_location,mab_ab_binding_type,mab_isotype",
+        colNameOpt = "fieldname",
+        colFilter = private$.mabFilter,
+        method = "GET"
+      ) |>
+        suppressWarnings() |>
+        setDT()
 
       if(nrow(mabMetadata) == 0){
-        stop("None of the `mabIds` elements provided are found in the database.")
+        stop("None of the `mabIds` arguments provided are found in the database.")
       }
       
       donorMabSequence <- labkey.selectRows(
@@ -299,7 +299,7 @@ DataSpaceMabMetadata <- R6Class(
       ) |> (\(.){
         .[!is.na(sequence_id), sequence_available:=TRUE ]
         .[ is.na(sequence_id), sequence_available:=FALSE]
-        .[,`:=`(sequence_id = NULL, donor_id = NULL)]
+        .[,`:=`(sequence_id = NULL)]
         unique(.)
       })()
 
