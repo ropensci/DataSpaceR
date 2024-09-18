@@ -295,6 +295,20 @@ DataSpaceMabMetadata <- R6Class(
         .[,`:=`(sequence_id = NULL, donor_id = NULL)]
         unique(.)
       })()
+
+      checkDaash <- c(
+        "mabMetaSequence",
+        "mabMix",
+        "donorMabSequence"
+      )
+      for(ck in checkDaash)
+        if(nrow(get(ck)) == 0)
+          stop(
+            sprintf(
+              "Something went wrong. Contact `dataspace.support@scharp.org` for assistance: `%s` is empty",
+              ck
+            )
+          )
       
       private$.mabMetadata <- mabMetaSequence
       private$.mabSequence <- donorMabSequence[,.(mab_id, sequence_id)] |> unique()
@@ -306,12 +320,12 @@ DataSpaceMabMetadata <- R6Class(
 
       varInfo <- lapply(
         list(
-          c("mabMetadata"    , "mabMetadata"                    , "mab_id,sequence_id,mab_name_std,mab_lanlid,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade"),
-          c("topCalls"       , "sequence_germline"              , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
-          c("alignments"     , "alignment"                      , ""),
-          c("sequences"      , "antibody_sequence_header_source", ""),
-          c("alleleSequences", "allele_sequence"                , "allele,allele_sequence_nt"),
-          c("runInformation" , "alignment_run"                  , "run_application,run_information")
+          c("mabMetadata"    , "mabMetadata"                     , "mab_id,sequence_id,mab_name_std,mab_lanlid,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade"),
+          c("topCalls"       , "sequence_germline"               , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
+          c("alignments"     , "alignment"                       , ""),
+          c("sequences"      , "donor_mab_sequence_header_source", ""),
+          c("alleleSequences", "allele_sequence"                 , "allele,allele_sequence_nt"),
+          c("runInformation" , "alignment_run"                   , "run_application,run_information")
         ), \(.) {
           labkey.getQueryDetails(
             baseUrl = private$.config$labkeyUrlBase,

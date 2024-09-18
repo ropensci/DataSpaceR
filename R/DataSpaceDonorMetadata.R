@@ -35,7 +35,7 @@ DataSpaceDonorMetadata <- R6Class(
     #' @param config A list.
     initialize = function(donorIds, config) {
       assert_that(!is.null(config))
-
+      private$.ckDonorIds(donorIds)
       ## set primary fields
       private$.donorIds <- donorIds
       if(length(donorIds) > 0) {
@@ -78,7 +78,7 @@ DataSpaceDonorMetadata <- R6Class(
         } else {
           truncatePrintable(
             paste(
-              private$.donorMetadata[donor_id %in% private$.daash$sequences$donor_id, donor_code],
+              private$.donorMetadata[donor_id %in% private$.daash$sequences$donor_id, donor_code] |> unique(),
               collapse=", "
             )
           )
@@ -96,20 +96,20 @@ DataSpaceDonorMetadata <- R6Class(
       private$.getVariableDefinitions()
   },
 
+  getFastaFromSequences = function(seqIds=NULL, sequenceType="nt", originalHeaders=FALSE){
+    sequences <- copy(private$.daash$sequences)
+    sequences[, cds_header:=paste(sequence_id, mab_id, donor_id, mab_name_std, donor_code, collapse="|")]
+    generateFasta(sequences, seqIds, sequenceType, originalHeaders)
+  },
+
   #' @description
   #' Applies DAASH tables to the this object
   loadDaash = function(donorIds=c(), filter=NULL){
     if(length(donorIds) != 0){
 
-      if(!all(grepl("^cds_donor_[0-9]+$", donorIds)))
-        stop("All `donorIds` must be in the format `^cds_donor_[0-9]+$`")
-
-      if(all(!(donorIds %in% private$.donorSequence$donor_id)))
-        stop("None of the `donorIds` elements provided are found in this object.")
-
-      if(!all(donorIds %in% private$.donorSequence$donor_id))
-        message("Note: At least one element of `donorIds` is not available in this object.")
-
+      private$.ckDonorIds(donorIds)
+      private$.ckDonorRec(donorIds)
+      
       if(length(private$.donorIds) != 0){
         private$.daashDonorIds <- private$.donorIds[private$.donorIds %in% donorIds]
       } else {
@@ -211,7 +211,6 @@ DataSpaceDonorMetadata <- R6Class(
     .donorFilter = character(),
     .daash = list(),
     .variableDefinitions = data.table(),
-    
     .getDonorMetadata = function() {
 
       suppressWarnings({
@@ -220,16 +219,15 @@ DataSpaceDonorMetadata <- R6Class(
           folderPath = "/CAVD",
           schemaName = "CDS",
           queryName = "donor_metadata",
-          ## colSelect = "",
+          colSelect = "donor_id,donor_lanl_id,donor_code,donor_species,donor_clade",
           colNameOpt = "fieldname",
           colFilter = private$.donorFilter,
           method = "GET"
         ) |> setDT()
       })
 
-      if(nrow(donorMetadata) == 0){
-        stop("None of the `donorIds` elements provided are found in the database.")
-      }
+      if(nrow(donorMetadata) == 0)
+        stop("`donorIds` returned an empty metadata table. That ID may not be found in DataSpace or is incorrectly formatted.")
       
       donorMabSequence <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase,
@@ -254,6 +252,20 @@ DataSpaceDonorMetadata <- R6Class(
         .[ is.na(sequence_id), sequence_available:=FALSE]
         unique(.)
       })()
+
+      checkDaash <- c(
+        "donorMetadata",
+        "donorMabSequence",
+        "donorMetaSequence"
+      )
+      for(ck in checkDaash)
+        if(nrow(get(ck)) == 0)
+          stop(
+            sprintf(
+              "Something went wrong. Contact support@dataspace.cavd.org for assistance: `%s` is empty",
+              ck
+            )
+          )
       
       private$.donorMetadata <- donorMetaSequence
       private$.donorSequence <- donorMabSequence[,.(donor_id, sequence_id)] |> unique()
@@ -264,12 +276,12 @@ DataSpaceDonorMetadata <- R6Class(
 
       varInfo <- lapply(
         list(
-          c("donorMetadata"  , "donor_metadata"                 , "mab_id,sequence_id,donor_id,donor_lanl_id,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade"),
-          c("topCalls"       , "sequence_germline"              , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
-          c("alignments"     , "alignment"                      , ""),
-          c("sequences"      , "antibody_sequence_header_source", ""),
-          c("alleleSequences", "allele_sequence"                , "allele,allele_sequence_nt"),
-          c("runInformation" , "alignment_run"                  , "run_application,run_information")
+          c("donorMetadata"  , "donor_metadata"                  , "mab_id,sequence_id,donor_id,donor_lanl_id,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade"),
+          c("topCalls"       , "sequence_germline"               , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
+          c("alignments"     , "alignment"                       , ""),
+          c("sequences"      , "donor_mab_sequence_header_source", ""),
+          c("alleleSequences", "allele_sequence"                 , "allele,allele_sequence_nt"),
+          c("runInformation" , "alignment_run"                   , "run_application,run_information")
         ), \(.) {
           labkey.getQueryDetails(
             baseUrl = private$.config$labkeyUrlBase,
@@ -290,5 +302,16 @@ DataSpaceDonorMetadata <- R6Class(
         setnames(c("queryName", "fieldName"), c("name", "field_name"))
       private$.variableDefinitions <- varInfo[, .(name, field_name, caption, description)]
       
+    },
+    .ckDonorIds = function(donorIds){
+      if(!all(grepl("^cds_donor_[0-9]+$", donorIds)))
+        stop("All `donorIds` must be in the format `^cds_donor_[0-9]+$`")
+    },
+    .ckDonorRec = function(donorIds){
+      if(all(!(donorIds %in% private$.donorSequence$donor_id)))
+        stop("None of the `donorIds` elements provided are found in this object.")
+      
+      if(!all(donorIds %in% private$.donorSequence$donor_id))
+        warning("Note: At least one element of `donorIds` is not available in this object.")
     })
 )
