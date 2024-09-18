@@ -36,20 +36,6 @@ donorMeta$topCalls
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 }
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{A}}{data.table. The table of information concerning the runs from the two alignment tools.
-measurements against viruses.}
-
-\item{\code{A}}{data.table. The table of allele sequences from reported allele matches.
-measurements against viruses.}
-
-\item{\code{A}}{data.table. The table of information concerning the runs from the two alignment tools.
-measurements against viruses.}
-}
-\if{html}{\out{</div>}}
-}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
@@ -63,13 +49,13 @@ as URL, path and username.}
 \item{\code{alignments}}{A data.table. The table of alignments of germline genes to a given sequence.
 attributes.}
 
-\item{\code{A}}{data.table. The table of information concerning the runs from the two alignment tools.
+\item{\code{sequences}}{A data.table. The table of information concerning the runs from the two alignment tools.
 measurements against viruses.}
 
-\item{\code{A}}{data.table. The table of allele sequences from reported allele matches.
+\item{\code{alleleSequences}}{A data.table. The table of allele sequences from reported allele matches.
 measurements against viruses.}
 
-\item{\code{A}}{data.table. The table of information concerning the runs from the two alignment tools.
+\item{\code{runInformation}}{A data.table. The table of information concerning the runs from the two alignment tools.
 measurements against viruses.}
 
 \item{\code{variableDefinitions}}{A data.table. The table of variable definitions for the metadata.
@@ -83,6 +69,7 @@ definitions.}
 \item \href{#method-DataSpaceDonorMetadata-new}{\code{DataSpaceDonorMetadata$new()}}
 \item \href{#method-DataSpaceDonorMetadata-print}{\code{DataSpaceDonorMetadata$print()}}
 \item \href{#method-DataSpaceDonorMetadata-refresh}{\code{DataSpaceDonorMetadata$refresh()}}
+\item \href{#method-DataSpaceDonorMetadata-getFastaFromSequences}{\code{DataSpaceDonorMetadata$getFastaFromSequences()}}
 \item \href{#method-DataSpaceDonorMetadata-loadDaash}{\code{DataSpaceDonorMetadata$loadDaash()}}
 \item \href{#method-DataSpaceDonorMetadata-clone}{\code{DataSpaceDonorMetadata$clone()}}
 }
@@ -128,6 +115,31 @@ Refresh the \code{DataSpaceDonorMetadata} object to update datasets.
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataSpaceDonorMetadata-getFastaFromSequences"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceDonorMetadata-getFastaFromSequences}{}}}
+\subsection{Method \code{getFastaFromSequences()}}{
+Return a fasta file for available daash sequences that have been loaded.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDonorMetadata$getFastaFromSequences(
+  seqIds = NULL,
+  sequenceType = "nt",
+  originalHeaders = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{seqIds}}{character CDS Sequence IDs, found in the `sequence_id` column of the donorMetadata table in a DataSpaceDonorMetadata object. These are in the format "cds_seq_###".}
+
+\item{\code{sequenceType}}{character What type of fasta file to return: nt = nucleotide, aa = amino acid.}
+
+\item{\code{originalHeaders}}{boolean T/F if the original fasta headers should be provided, or}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDonorMetadata-loadDaash"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceDonorMetadata-loadDaash}{}}}
 \subsection{Method \code{loadDaash()}}{
@@ -136,6 +148,15 @@ Applies DAASH tables to the this object
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceDonorMetadata$loadDaash(donorIds = c(), filter = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{donorIds}}{character CDS Donor IDs, found in the `donor_id` column of the donorMetadata table in a DataSpaceDonorMetadata object. These are in the format "cds_donor_###".}
+
+\item{\code{filter}}{character An additional filter to add to the query for getting daash results. This any valid filter for the view `donor_mab_sequence_header_source`, a view found on the DataSpace LabKey server.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDonorMetadata-clone"></a>}}

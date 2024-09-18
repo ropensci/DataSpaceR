@@ -48,23 +48,15 @@ mab$nabMab
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 }
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{studyMabLabels}}{A data.table. The table of available mAbs by study.}
-}
-\if{html}{\out{</div>}}
-}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{config}}{A list. Stores configuration of the connection object such
 as URL, path and username.}
 
-\item{\code{studyMabLabels}}{A data.table. The table of available mAbs by study.}
+\item{\code{mabStudyLabels}}{A data.table. The table of available mAbs by study.}
 
-\item{\code{nabMab}}{A data.table. The table of mAbs and their neutralizing
-measurements against viruses.}
+\item{\code{mabMetadata}}{A data.table. A table of mAbs with metadata.}
 
 \item{\code{nabMab}}{A data.table. The table of mAbs and their neutralizing
 measurements against viruses.}
@@ -102,9 +94,9 @@ See \code{\link{DataSpaceConnection}}.
 \describe{
 \item{\code{mabMixture}}{A character vector.}
 
-\item{\code{config}}{A list.}
+\item{\code{mabFilters}}{A list.}
 
-\item{\code{filters}}{A list.}
+\item{\code{config}}{A list.}
 }
 \if{html}{\out{</div>}}
 }

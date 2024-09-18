@@ -110,6 +110,11 @@ DataSpaceMabMetadata <- R6Class(
     private$.mabMetadata[, lanl_metadata := lapply(mab_lanl_id, fetchLanlMetadata)]
   },
 
+  #' @description
+  #' Return a fasta file for available daash sequences that have been loaded.
+  #' @param seqIds character CDS Sequence IDs, found in the `sequence_id` column of the donorMetadata table in a DataSpaceDonorMetadata object. These are in the format "cds_seq_###".
+  #' @param sequenceType character What type of fasta file to return: nt = nucleotide, aa = amino acid.
+  #' @param originalHeaders boolean T/F if the original fasta headers should be provided, or 
   getFastaFromSequences = function(seqIds=NULL, sequenceType="nt", originalHeaders=FALSE){
     sequences <- copy(private$.daash$sequences)
     sequences[, cds_header:=paste(sequence_id, mab_id, donor_id, mab_name_std, donor_code, collapse="|")]
@@ -118,6 +123,8 @@ DataSpaceMabMetadata <- R6Class(
 
   #' @description
   #' Applies DAASH tables to the this object
+  #' @param mabIds character CDS MAb IDs, found in the `mab_id` column of the mabMetadata table in a DataSpaceMabMetadata object. These are in the format "cds_mab_###".
+  #' @param filter character An additional filter to add to the query for getting daash results. This any valid filter for the view `donor_mab_sequence_header_source`, a view found on the DataSpace LabKey server.
   loadDaash = function(mabIds=c(), filter=NULL){
     if(length(mabIds) != 0){
 
@@ -193,7 +200,7 @@ DataSpaceMabMetadata <- R6Class(
       message("Please run `loadDaash()` to access alignments.")
     },
 
-    #' @field  A data.table. The table of information concerning the runs from the two alignment tools.
+    #' @field sequences A data.table. The table of information concerning the runs from the two alignment tools.
     #' measurements against viruses.
     sequences = function() {
       if(length(private$.daash) != 0){
@@ -202,7 +209,7 @@ DataSpaceMabMetadata <- R6Class(
       message("Please run `loadDaash()` to access sequences.")
     },
     
-    #' @field  A data.table. The table of allele sequences from reported allele matches.
+    #' @field alleleSequences A data.table. The table of allele sequences from reported allele matches.
     #' measurements against viruses.
     alleleSequences = function() {
       if(length(private$.daash) != 0){
@@ -211,7 +218,7 @@ DataSpaceMabMetadata <- R6Class(
       message("Please run `loadDaash()` to access allele sequences.")
     },
 
-    #' @field  A data.table. The table of information concerning the runs from the two alignment tools.
+    #' @field runInformation A data.table. The table of information concerning the runs from the two alignment tools.
     #' measurements against viruses.
     runInformation = function() {
       if(length(private$.daash) != 0){

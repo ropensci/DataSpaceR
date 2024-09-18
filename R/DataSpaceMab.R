@@ -45,7 +45,7 @@ DataSpaceMab <- R6Class(
     #' Initialize \code{DataSpaceMab} object.
     #' See \code{\link{DataSpaceConnection}}.
     #' @param mabMixture A character vector.
-    #' @param filters A list.
+    #' @param mabFilters A list.
     #' @param config A list.
     initialize = function(mabMixture, mabFilters, config) {
       assert_that(!is.null(config))
@@ -124,13 +124,12 @@ DataSpaceMab <- R6Class(
       private$.config
     },
 
-    #' @field studyMabLabels A data.table. The table of available mAbs by study.
+    #' @field mabStudyLabels A data.table. The table of available mAbs by study.
     mabStudyLabels = function() {
       private$.nabMab[,.(prot, mab_mix_id, mab_mix_name_std, mab_mix_label)] |> unique()
     },
 
-    #' @field nabMab A data.table. The table of mAbs and their neutralizing
-    #' measurements against viruses.
+    #' @field mabMetadata A data.table. A table of mAbs with metadata.
     mabMetadata = function() {
       private$.mabMetadata
     },

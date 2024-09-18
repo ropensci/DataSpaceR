@@ -42,20 +42,6 @@ mabMeta$topCalls
 \seealso{
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 }
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{A}}{data.table. The table of information concerning the runs from the two alignment tools.
-measurements against viruses.}
-
-\item{\code{A}}{data.table. The table of allele sequences from reported allele matches.
-measurements against viruses.}
-
-\item{\code{A}}{data.table. The table of information concerning the runs from the two alignment tools.
-measurements against viruses.}
-}
-\if{html}{\out{</div>}}
-}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
@@ -71,13 +57,13 @@ as URL, path and username.}
 \item{\code{alignments}}{A data.table. The table of alignments of germline genes to a given sequence.
 attributes.}
 
-\item{\code{A}}{data.table. The table of information concerning the runs from the two alignment tools.
+\item{\code{sequences}}{A data.table. The table of information concerning the runs from the two alignment tools.
 measurements against viruses.}
 
-\item{\code{A}}{data.table. The table of allele sequences from reported allele matches.
+\item{\code{alleleSequences}}{A data.table. The table of allele sequences from reported allele matches.
 measurements against viruses.}
 
-\item{\code{A}}{data.table. The table of information concerning the runs from the two alignment tools.
+\item{\code{runInformation}}{A data.table. The table of information concerning the runs from the two alignment tools.
 measurements against viruses.}
 
 \item{\code{variableDefinitions}}{A data.table. The table of variable definitions for the metadata.
@@ -151,6 +137,7 @@ Applies LANL metadata to mabMetadata table.
 \if{html}{\out{<a id="method-DataSpaceMabMetadata-getFastaFromSequences"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceMabMetadata-getFastaFromSequences}{}}}
 \subsection{Method \code{getFastaFromSequences()}}{
+Return a fasta file for available daash sequences that have been loaded.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceMabMetadata$getFastaFromSequences(
   seqIds = NULL,
@@ -159,6 +146,17 @@ Applies LANL metadata to mabMetadata table.
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{seqIds}}{character CDS Sequence IDs, found in the `sequence_id` column of the donorMetadata table in a DataSpaceDonorMetadata object. These are in the format "cds_seq_###".}
+
+\item{\code{sequenceType}}{character What type of fasta file to return: nt = nucleotide, aa = amino acid.}
+
+\item{\code{originalHeaders}}{boolean T/F if the original fasta headers should be provided, or}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceMabMetadata-loadDaash"></a>}}
@@ -169,6 +167,15 @@ Applies DAASH tables to the this object
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceMabMetadata$loadDaash(mabIds = c(), filter = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{mabIds}}{character CDS MAb IDs, found in the `mab_id` column of the mabMetadata table in a DataSpaceMabMetadata object. These are in the format "cds_mab_###".}
+
+\item{\code{filter}}{character An additional filter to add to the query for getting daash results. This any valid filter for the view `donor_mab_sequence_header_source`, a view found on the DataSpace LabKey server.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceMabMetadata-clone"></a>}}

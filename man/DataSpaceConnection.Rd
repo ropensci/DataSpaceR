@@ -213,6 +213,15 @@ Create a \code{\link{DataSpaceMabMetadata}} object.
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getMabMetadata(mabIds = c())}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{mabIds}}{cds_mab_id values to generate object with. No values fetches all available.}
+
+\item{\code{config}}{DataSpaceRConnection config object}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-getDonorMetadata"></a>}}
@@ -223,6 +232,15 @@ Create a \code{\link{DataSpaceDonorMetadata}} object.
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getDonorMetadata(donorIds = c())}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{donorIds}}{cds_donor_id values to generate object with. No values fetches all available.}
+
+\item{\code{config}}{DataSpaceRConnection config object}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-downloadPublicationData"></a>}}

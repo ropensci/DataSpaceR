@@ -226,14 +226,16 @@ DataSpaceConnection <- R6Class(
 
     #' @description
     #' Create a \code{\link{DataSpaceMabMetadata}} object.
-    #` @param manIds cds_mab_id values to generate object with. No values fetches all available. 
+    #' @param mabIds cds_mab_id values to generate object with. No values fetches all available.
+    #' @param config DataSpaceRConnection config object
     getMabMetadata = function(mabIds = c()){
       DataSpaceMabMetadata$new(mabIds=mabIds, config=private$.config)
     },
 
     #' @description
     #' Create a \code{\link{DataSpaceDonorMetadata}} object.
-    #` @param manIds cds_mab_id values to generate object with. No values fetches all available.
+    #' @param donorIds cds_donor_id values to generate object with. No values fetches all available.
+    #' @param config DataSpaceRConnection config object
     getDonorMetadata = function(donorIds = c()){
       DataSpaceDonorMetadata$new(donorIds=donorIds, config=private$.config)
     },
@@ -246,10 +248,8 @@ DataSpaceConnection <- R6Class(
     #' data.
     #' @param unzip A logical. If TRUE, unzip publication data to outputDir.
     #' @param verbose A logical. Default TRUE.
-    downloadPublicationData = function(publicationId,
-                                       outputDir = getwd(),
-                                       unzip = TRUE,
-                                       verbose = TRUE) {
+    downloadPublicationData = function(publicationId, outputDir = getwd(), unzip = TRUE, verbose = TRUE) {
+        
       assert_that(
         dir.exists(outputDir),
         msg = paste0(outputDir, " is not a directory")
