@@ -327,7 +327,7 @@ DataSpaceMabMetadata <- R6Class(
 
       varInfo <- lapply(
         list(
-          c("mabMetadata"    , "mabMetadata"                     , "mab_id,sequence_id,mab_name_std,mab_lanlid,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade"),
+          c("mabMetadata"    , "mab_metadata"                    , "mab_id,sequence_id,mab_name_std,mab_lanlid,mab_hxb2_location,mab_ab_binding_type,mab_isotype,mab_donorid,mab_donor_species,mab_donor_clade"),
           c("topCalls"       , "sequence_germline"               , "mab_id,allele,sequence_id,percent_identity,matches,alignment_length,score,run_application"),
           c("alignments"     , "alignment"                       , ""),
           c("sequences"      , "donor_mab_sequence_header_source", ""),
