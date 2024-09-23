@@ -94,7 +94,7 @@ checkNetrc <- function(netrcFile = getNetrcPath(),
   machine <- ifelse(onStaging, STAGING, PRODUCTION)
   if (length(grep(paste0("machine\\s", machine), lines)) == 0) {
     stop(
-      "No entry found for '", machine, "' in '", netrcFile, "'.",
+      "No entry found for '", machine, "' in '", netrcFile, "'. Do you have an account at '", machine, "' and have you updated you netrc file? See '?writeNetrc'.",
       call. = FALSE
     )
   }
