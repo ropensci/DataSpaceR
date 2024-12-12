@@ -279,6 +279,9 @@ DataSpaceMabMetadata <- R6Class(
         suppressWarnings() |> 
         setDT()    
 
+      if(nrow(donorMabSequence) == 0)
+        stop("CDS table `donor_mab_sequence` returned zero records.")
+
       mabMix <- labkey.selectRows(
         baseUrl = private$.config$labkeyUrlBase, 
         folderPath = "/CAVD", 
