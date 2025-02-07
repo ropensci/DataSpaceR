@@ -671,7 +671,8 @@ DataSpaceConnection <- R6Class(
         colSelect = colSelect,
         colNameOpt = "fieldname",
         method = "GET"
-      )
+      ) |> suppressWarnings() # Rlabkey version 3.4.1 returns warnings for GROUP_CONCAT field in sql expressions
+
       setDT(virusMetadata)
       setkey(virusMetadata, virus)
 
@@ -719,7 +720,7 @@ LEFT OUTER JOIN
         schemaName = "CDS",
         sql = sqlQuery,
         colNameOpt = "fieldname"
-      )
+      ) |> suppressWarnings() # Rlabkey version 3.4.1 returns warnings for GROUP_CONCAT field in sql expressions
 
       setDT(availablePublications)
       setorder(availablePublications, "first_author")
