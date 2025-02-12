@@ -87,10 +87,22 @@ test_that("test lanl metadata merge and duplicates in mab table", {
   con$resetMabGrid()
   con$filterMabGrid("mab_mixture", "PGT128")
   mab <- con$getMab()
-  expect_true(nrow(mab$mabs) == 1)
-  mab$getLanlMetadata()
-  expect_true(class(mab$mabs$lanl_metadata) == "list")
-  expect_true(length(mab$mabs$lanl_metadata[[1]]) == 4)
-  expect_true(names(mab$mabs$lanl_metadata[[1]])[1] == "epitopes")
-  expect_true("data.table" %in% class(mab$mabs$lanl_metadata[[1]]$epitopes$binding_type[[1]]))
+
+  res <- tryCatch(
+  {
+    mab$getLanlMetadata()
+    expect_true(nrow(mab$mabMetadata$mabMetadata) == 1)
+  },
+  error = \(e) return(e$message)
+  )
+  
+  if( grepl("error verifying the LANL SSL certificate. No metadata was retrieved.", res) ){
+    TRUE
+  } else {
+    expect_true(class(mab$mabMetadata$mabMetadata$lanl_metadata) == "list")
+    expect_true(length(mab$mabMetadata$mabMetadata$lanl_metadata[[1]]) == 4)
+    expect_true(names(mab$mabMetadata$mabMetadata$lanl_metadata[[1]])[1] == "epitopes")
+    expect_true("data.table" %in% class(mab$mabMetadata$mabMetadata$lanl_metadata[[1]]$epitopes$binding_type[[1]]))
+  }
+
 })

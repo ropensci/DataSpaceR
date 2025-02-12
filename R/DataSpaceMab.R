@@ -127,21 +127,7 @@ DataSpaceMab <- R6Class(
           })
         }
       }
-      pullForLanlId <- function(lanl_id){
-        url <- paste0("https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?id=", lanl_id)
-        if(is.na(lanl_id)) return(NA)
-        res <- httr::GET(url, httr::config(ssl_verifypeer = FALSE, ssl_verifyhost = FALSE))
-        if(res$status == 200){
-          json <- fromJSON(content(res, as="text")[[1]])
-          json[["epitopes"]] <- data.table(json[["epitopes"]])
-          json$source <- url
-          lapply(json$epitopes, checkList)
-          return(json)
-        } else {
-          return(paste0("No LANL metadata found at '", url, "'."))
-        }
-      }
-      private$.mabs[, lanl_metadata := lapply(mab_lanl_id, pullForLanlId)]
+      private$.mabs[, lanl_metadata := lapply(mab_lanl_id, fetchLanlMetadata)]
     }
 
   ),
