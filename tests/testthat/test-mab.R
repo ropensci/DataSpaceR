@@ -75,7 +75,7 @@ test_that("test mab object results", {
   expect_true(all(sapply(mab$studyAndMabs, function(x) !is.na(x))))
   expect_true(all(mab$assays$prot %in% c("cvd409", "cvd425")))
   expect_true(all(mab$nabMab$virus %in% c("MN.3", "PVO.4", "TH023.6", "Ce0682_E4", "SHIV_C3", "SHIV_C4", "SHIV_C5")))
-  expect_true(all(mab$studies$species %in% c("Non-Organism Study")))
+  expect_true(all(mab$studies$species %in% c("Non-organism study")))
   expect_true(all(mab$studyAndMabs$mab_mix_name_std %in% c("CH27")))
   expect_true(nrow(mab$variableDefinitions) == 51)
   expect_true(ncol(mab$variableDefinitions) == 3)
@@ -87,10 +87,21 @@ test_that("test lanl metadata merge and duplicates in mab table", {
   con$resetMabGrid()
   con$filterMabGrid("mab_mixture", "PGT128")
   mab <- con$getMab()
-  expect_true(nrow(mab$mabs) == 1)
-  mab$getLanlMetadata()
-  expect_true(class(mab$mabs$lanl_metadata) == "list")
-  expect_true(length(mab$mabs$lanl_metadata[[1]]) == 4)
-  expect_true(names(mab$mabs$lanl_metadata[[1]])[1] == "epitopes")
-  expect_true("data.table" %in% class(mab$mabs$lanl_metadata[[1]]$epitopes$binding_type[[1]]))
+
+  res <- tryCatch(
+  {
+    mab$getLanlMetadata()
+    expect_true(nrow(mab$mabs) == 1)
+  },
+  error = \(e) return(e$message)
+  )
+  if( grepl("error verifying the LANL SSL certificate. No metadata was retrieved.", res) ){
+    TRUE
+  } else {
+    expect_true(class(mab$mabs$lanl_metadata) == "list")
+    expect_true(length(mab$mabs$lanl_metadata[[1]]) == 4)
+    expect_true(names(mab$mabs$lanl_metadata[[1]])[1] == "epitopes")
+    expect_true("data.table" %in% class(mab$mabs$lanl_metadata[[1]]$epitopes$binding_type[[1]]))
+  }
+
 })

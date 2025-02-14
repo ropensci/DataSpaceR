@@ -74,16 +74,16 @@ definitions.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{DataSpaceMab$new()}}
-\item \href{#method-print}{\code{DataSpaceMab$print()}}
-\item \href{#method-refresh}{\code{DataSpaceMab$refresh()}}
-\item \href{#method-getLanlMetadata}{\code{DataSpaceMab$getLanlMetadata()}}
-\item \href{#method-clone}{\code{DataSpaceMab$clone()}}
+\item \href{#method-DataSpaceMab-new}{\code{DataSpaceMab$new()}}
+\item \href{#method-DataSpaceMab-print}{\code{DataSpaceMab$print()}}
+\item \href{#method-DataSpaceMab-refresh}{\code{DataSpaceMab$refresh()}}
+\item \href{#method-DataSpaceMab-getLanlMetadata}{\code{DataSpaceMab$getLanlMetadata()}}
+\item \href{#method-DataSpaceMab-clone}{\code{DataSpaceMab$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-DataSpaceMab-new"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceMab-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize \code{DataSpaceMab} object.
 See \code{\link{DataSpaceConnection}}.
@@ -104,8 +104,8 @@ See \code{\link{DataSpaceConnection}}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-DataSpaceMab-print"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceMab-print}{}}}
 \subsection{Method \code{print()}}{
 Print the \code{DataSpaceMab} object summary.
 \subsection{Usage}{
@@ -114,8 +114,8 @@ Print the \code{DataSpaceMab} object summary.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-refresh"></a>}}
-\if{latex}{\out{\hypertarget{method-refresh}{}}}
+\if{html}{\out{<a id="method-DataSpaceMab-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceMab-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 Refresh the \code{DataSpaceMab} object to update datasets.
 \subsection{Usage}{
@@ -124,8 +124,8 @@ Refresh the \code{DataSpaceMab} object to update datasets.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getLanlMetadata"></a>}}
-\if{latex}{\out{\hypertarget{method-getLanlMetadata}{}}}
+\if{html}{\out{<a id="method-DataSpaceMab-getLanlMetadata"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceMab-getLanlMetadata}{}}}
 \subsection{Method \code{getLanlMetadata()}}{
 Applies LANL metadata to mabs table.
 \subsection{Usage}{
@@ -134,8 +134,8 @@ Applies LANL metadata to mabs table.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-DataSpaceMab-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceMab-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -663,15 +663,18 @@ DataSpaceConnection <- R6Class(
         "virus_host_cell", "virus_backbone", "panel_names"
       )
 
-      virusMetadata <- labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = "/CAVD/",
-        schemaName = "CDS",
-        queryName = "nabAntigenWithPanelMeta",
-        colSelect = colSelect,
-        colNameOpt = "fieldname",
-        method = "GET"
-      )
+      virusMetadata <- suppressWarnings(
+          labkey.selectRows(
+            baseUrl = private$.config$labkeyUrlBase,
+            folderPath = "/CAVD/",
+            schemaName = "CDS",
+            queryName = "nabAntigenWithPanelMeta",
+            colSelect = colSelect,
+            colNameOpt = "fieldname",
+            method = "GET"
+          )
+        ) # Rlabkey version 3.4.1 returns warnings for GROUP_CONCAT field in sql expressions
+
       setDT(virusMetadata)
       setkey(virusMetadata, virus)
 
@@ -713,13 +716,15 @@ LEFT OUTER JOIN
   ON pd.publication_id = publication.id
 "
 
-      availablePublications <- labkey.executeSql(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = "/CAVD/",
-        schemaName = "CDS",
-        sql = sqlQuery,
-        colNameOpt = "fieldname"
-      )
+      availablePublications <- suppressWarnings(
+        labkey.executeSql(
+          baseUrl = private$.config$labkeyUrlBase,
+          folderPath = "/CAVD/",
+          schemaName = "CDS",
+          sql = sqlQuery,
+          colNameOpt = "fieldname"
+        )
+      ) # Rlabkey version 3.4.1 returns warnings for GROUP_CONCAT field in sql expressions
 
       setDT(availablePublications)
       setorder(availablePublications, "first_author")

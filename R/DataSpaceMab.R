@@ -127,21 +127,7 @@ DataSpaceMab <- R6Class(
           })
         }
       }
-      pullForLanlId <- function(lanl_id){
-        url <- paste0("https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?id=", lanl_id)
-        if(is.na(lanl_id)) return(NA)
-        res <- httr::GET(url)
-        if(res$status == 200){
-          json <- fromJSON(content(res, as="text")[[1]])
-          json[["epitopes"]] <- data.table(json[["epitopes"]])
-          json$source <- url
-          lapply(json$epitopes, checkList)
-          return(json)
-        } else {
-          return(paste0("No LANL metadata found at '", url, "'."))
-        }
-      }
-      private$.mabs[, lanl_metadata := lapply(mab_lanlid, pullForLanlId)]
+      private$.mabs[, lanl_metadata := lapply(mab_lanl_id, fetchLanlMetadata)]
     }
 
   ),
@@ -229,14 +215,15 @@ DataSpaceMab <- R6Class(
         folderPath = "/CAVD",
         schemaName = "CDS",
         sql = paste0(
-          "SELECT DISTINCT",
-          "     mabmetadata.mab_id, mabmetadata.mab_name_std, mabmetadata.mab_lanlid, mabmetadata.mab_hxb2_location, ",
-          "     mabmetadata.mab_ab_binding_type, mabmetadata.mab_isotype, mabmetadata.mab_donorid, ",
-          "     mabmetadata.mab_donor_species, mabmetadata.mab_donor_clade ",
-          "FROM mabmetadata ",
-          "INNER JOIN mabmix ON mabmetadata.mab_id = mabmix.mab_id ",
-          "INNER JOIN mabmixmetadata on mabmix.mab_mix_id = mabmixmetadata.mab_mix_id ",
-          "WHERE mab_mix_name_std IN('", paste0(unique(private$.nabMab$mab_mix_name_std), collapse = "', '"), "') "
+          "SELECT DISTINCT ",
+          "     mm.mab_id, mm.mab_name_std, mm.mab_lanl_id, mm.mab_hxb2_location, ",
+          "     mm.mab_ab_binding_type, mm.mab_isotype, ",
+          "     dm.donor_species, dm.donor_clade ",
+          "FROM mab_metadata AS mm ",
+          "INNER JOIN mabmix ON mm.mab_id = mabmix.mab_id ",
+          "INNER JOIN mabmixmetadata ON mabmix.mab_mix_id = mabmixmetadata.mab_mix_id ",
+          "LEFT JOIN donor_metadata AS dm ON dm.donor_id = mm.donor_id ",
+          "WHERE mab_mix_name_std IN('", paste0(unique(private$.nabMab$mab_mix_name_std), collapse = "', '"), "');"
         ),
         colNameOpt = "fieldname"
       )
