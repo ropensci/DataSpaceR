@@ -68,21 +68,21 @@ which are described in the vignette `Virus_Name_Mapping_Tables`.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{DataSpaceConnection$new()}}
-\item \href{#method-print}{\code{DataSpaceConnection$print()}}
-\item \href{#method-getStudy}{\code{DataSpaceConnection$getStudy()}}
-\item \href{#method-getGroup}{\code{DataSpaceConnection$getGroup()}}
-\item \href{#method-filterMabGrid}{\code{DataSpaceConnection$filterMabGrid()}}
-\item \href{#method-resetMabGrid}{\code{DataSpaceConnection$resetMabGrid()}}
-\item \href{#method-getMab}{\code{DataSpaceConnection$getMab()}}
-\item \href{#method-downloadPublicationData}{\code{DataSpaceConnection$downloadPublicationData()}}
-\item \href{#method-refresh}{\code{DataSpaceConnection$refresh()}}
-\item \href{#method-clone}{\code{DataSpaceConnection$clone()}}
+\item \href{#method-DataSpaceConnection-new}{\code{DataSpaceConnection$new()}}
+\item \href{#method-DataSpaceConnection-print}{\code{DataSpaceConnection$print()}}
+\item \href{#method-DataSpaceConnection-getStudy}{\code{DataSpaceConnection$getStudy()}}
+\item \href{#method-DataSpaceConnection-getGroup}{\code{DataSpaceConnection$getGroup()}}
+\item \href{#method-DataSpaceConnection-filterMabGrid}{\code{DataSpaceConnection$filterMabGrid()}}
+\item \href{#method-DataSpaceConnection-resetMabGrid}{\code{DataSpaceConnection$resetMabGrid()}}
+\item \href{#method-DataSpaceConnection-getMab}{\code{DataSpaceConnection$getMab()}}
+\item \href{#method-DataSpaceConnection-downloadPublicationData}{\code{DataSpaceConnection$downloadPublicationData()}}
+\item \href{#method-DataSpaceConnection-refresh}{\code{DataSpaceConnection$refresh()}}
+\item \href{#method-DataSpaceConnection-clone}{\code{DataSpaceConnection$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-DataSpaceConnection-new"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize a \code{DataSpaceConnection} object.
 See \code{\link{connectDS}}.
@@ -118,8 +118,8 @@ A new `DataSpaceConnection` object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-DataSpaceConnection-print"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-print}{}}}
 \subsection{Method \code{print()}}{
 Print the \code{DataSpaceConnection} object.
 \subsection{Usage}{
@@ -128,8 +128,8 @@ Print the \code{DataSpaceConnection} object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getStudy"></a>}}
-\if{latex}{\out{\hypertarget{method-getStudy}{}}}
+\if{html}{\out{<a id="method-DataSpaceConnection-getStudy"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-getStudy}{}}}
 \subsection{Method \code{getStudy()}}{
 Create a \code{\link{DataSpaceStudy}} object.
 \subsection{Usage}{
@@ -145,8 +145,8 @@ Create a \code{\link{DataSpaceStudy}} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getGroup"></a>}}
-\if{latex}{\out{\hypertarget{method-getGroup}{}}}
+\if{html}{\out{<a id="method-DataSpaceConnection-getGroup"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-getGroup}{}}}
 \subsection{Method \code{getGroup()}}{
 Create a \code{\link{DataSpaceStudy}} object.
 \subsection{Usage}{
@@ -162,8 +162,8 @@ Create a \code{\link{DataSpaceStudy}} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-filterMabGrid"></a>}}
-\if{latex}{\out{\hypertarget{method-filterMabGrid}{}}}
+\if{html}{\out{<a id="method-DataSpaceConnection-filterMabGrid"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-filterMabGrid}{}}}
 \subsection{Method \code{filterMabGrid()}}{
 Filter rows in the mAb grid by specifying the values to keep in the
 columns found in the \code{mabGrid} field. It takes the column and the
@@ -183,8 +183,8 @@ values and filters the underlying tables.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetMabGrid"></a>}}
-\if{latex}{\out{\hypertarget{method-resetMabGrid}{}}}
+\if{html}{\out{<a id="method-DataSpaceConnection-resetMabGrid"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-resetMabGrid}{}}}
 \subsection{Method \code{resetMabGrid()}}{
 Reset the mAb grid to the unfiltered state.
 \subsection{Usage}{
@@ -193,8 +193,8 @@ Reset the mAb grid to the unfiltered state.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getMab"></a>}}
-\if{latex}{\out{\hypertarget{method-getMab}{}}}
+\if{html}{\out{<a id="method-DataSpaceConnection-getMab"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-getMab}{}}}
 \subsection{Method \code{getMab()}}{
 Create a \code{\link{DataSpaceMab}} object.
 \subsection{Usage}{
@@ -203,8 +203,8 @@ Create a \code{\link{DataSpaceMab}} object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-downloadPublicationData"></a>}}
-\if{latex}{\out{\hypertarget{method-downloadPublicationData}{}}}
+\if{html}{\out{<a id="method-DataSpaceConnection-downloadPublicationData"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-downloadPublicationData}{}}}
 \subsection{Method \code{downloadPublicationData()}}{
 Download publication data for a chosen publication.
 \subsection{Usage}{
@@ -233,8 +233,8 @@ data.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-refresh"></a>}}
-\if{latex}{\out{\hypertarget{method-refresh}{}}}
+\if{html}{\out{<a id="method-DataSpaceConnection-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 Refresh the connection object to update available studies and groups.
 \subsection{Usage}{
@@ -243,8 +243,8 @@ Refresh the connection object to update available studies and groups.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-DataSpaceConnection-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

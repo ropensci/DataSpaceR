@@ -81,19 +81,19 @@ connection.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{DataSpaceStudy$new()}}
-\item \href{#method-print}{\code{DataSpaceStudy$print()}}
-\item \href{#method-getDataset}{\code{DataSpaceStudy$getDataset()}}
-\item \href{#method-clearCache}{\code{DataSpaceStudy$clearCache()}}
-\item \href{#method-getDatasetDescription}{\code{DataSpaceStudy$getDatasetDescription()}}
-\item \href{#method-setDataDir}{\code{DataSpaceStudy$setDataDir()}}
-\item \href{#method-refresh}{\code{DataSpaceStudy$refresh()}}
-\item \href{#method-clone}{\code{DataSpaceStudy$clone()}}
+\item \href{#method-DataSpaceStudy-new}{\code{DataSpaceStudy$new()}}
+\item \href{#method-DataSpaceStudy-print}{\code{DataSpaceStudy$print()}}
+\item \href{#method-DataSpaceStudy-getDataset}{\code{DataSpaceStudy$getDataset()}}
+\item \href{#method-DataSpaceStudy-clearCache}{\code{DataSpaceStudy$clearCache()}}
+\item \href{#method-DataSpaceStudy-getDatasetDescription}{\code{DataSpaceStudy$getDatasetDescription()}}
+\item \href{#method-DataSpaceStudy-setDataDir}{\code{DataSpaceStudy$setDataDir()}}
+\item \href{#method-DataSpaceStudy-refresh}{\code{DataSpaceStudy$refresh()}}
+\item \href{#method-DataSpaceStudy-clone}{\code{DataSpaceStudy$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-DataSpaceStudy-new"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceStudy-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize \code{DataSpaceStudy} class.
 See \code{\link{DataSpaceConnection}}.
@@ -117,8 +117,8 @@ as URL, path and username.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-DataSpaceStudy-print"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceStudy-print}{}}}
 \subsection{Method \code{print()}}{
 Print \code{DataSpaceStudy} class.
 \subsection{Usage}{
@@ -127,8 +127,8 @@ Print \code{DataSpaceStudy} class.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getDataset"></a>}}
-\if{latex}{\out{\hypertarget{method-getDataset}{}}}
+\if{html}{\out{<a id="method-DataSpaceStudy-getDataset"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceStudy-getDataset}{}}}
 \subsection{Method \code{getDataset()}}{
 Get a dataset from the connection.
 \subsection{Usage}{
@@ -170,8 +170,8 @@ used.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clearCache"></a>}}
-\if{latex}{\out{\hypertarget{method-clearCache}{}}}
+\if{html}{\out{<a id="method-DataSpaceStudy-clearCache"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceStudy-clearCache}{}}}
 \subsection{Method \code{clearCache()}}{
 Clear \code{cache}. Remove downloaded datasets.
 \subsection{Usage}{
@@ -180,8 +180,8 @@ Clear \code{cache}. Remove downloaded datasets.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getDatasetDescription"></a>}}
-\if{latex}{\out{\hypertarget{method-getDatasetDescription}{}}}
+\if{html}{\out{<a id="method-DataSpaceStudy-getDatasetDescription"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceStudy-getDatasetDescription}{}}}
 \subsection{Method \code{getDatasetDescription()}}{
 Get variable information.
 \subsection{Usage}{
@@ -200,8 +200,8 @@ Accepts the value in either the "name" or "label" field from \code{availableData
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setDataDir"></a>}}
-\if{latex}{\out{\hypertarget{method-setDataDir}{}}}
+\if{html}{\out{<a id="method-DataSpaceStudy-setDataDir"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceStudy-setDataDir}{}}}
 \subsection{Method \code{setDataDir()}}{
 Set default directory to download non-integrated datasets. If no
 \code{dataDir} is set, a tmp directory will be used.
@@ -218,8 +218,8 @@ Set default directory to download non-integrated datasets. If no
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-refresh"></a>}}
-\if{latex}{\out{\hypertarget{method-refresh}{}}}
+\if{html}{\out{<a id="method-DataSpaceStudy-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceStudy-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 Refresh the study object to update available datasets and treatment info.
 \subsection{Usage}{
@@ -228,8 +228,8 @@ Refresh the study object to update available datasets and treatment info.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-DataSpaceStudy-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceStudy-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

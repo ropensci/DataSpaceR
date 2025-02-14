@@ -243,6 +243,50 @@ isFromMabGrid <- function(column) {
   column %in% c("mab_mix_name_std", "virus", "clade", "neutralization_tier", "titer_curve_ic50", "study")
 }
 
+fetchLanlMetadata <- function(lanl_id){
+
+  checkList <- function(x){
+    if(any(c("list", "data.frame") %in% class(x))){
+      lapply(x, function(y){
+        if("data.frame" %in% class(y)) {
+          setDT(y)
+          checkList(y)
+        } else {
+          checkList(y)
+        }
+      })
+    }
+  }
+
+  if(is.na(lanl_id)) return(NA)
+  url <- paste0("https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?id=", lanl_id)
+
+  res <- tryCatch({
+    httr::GET(url)
+  }, error = \(e) {
+    if(grepl("SSL certificate problem: unable to get local issuer certificate", e$message))
+      stop("There was an error verifying the LANL SSL certificate. No metadata was retrieved.")
+  })
+
+  timeout <- 0
+  while(res$status != 200 & timeout <= 5){
+    Sys.sleep(1)
+    timeout <- timeout + 1
+    res <- httr::GET(url)
+  }
+  
+  if(res$status == 200){
+    json <- fromJSON(content(res, as="text")[[1]])
+    json[["epitopes"]] <- data.table(json[["epitopes"]])
+    json$source <- url
+    lapply(json$epitopes, checkList)
+    return(json)
+  } else {
+    return(paste0("No LANL metadata found at '", url, "'."))
+  }
+
+}
+
 #' @importFrom Rlabkey makeFilter
 #' @export
 Rlabkey::makeFilter
