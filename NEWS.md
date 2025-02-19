@@ -1,3 +1,8 @@
+# DataSpaceR 0.7.7
+
+* Fixed issues querying mab and donor information.
+* Added workarounds for errors and warnings when trying to verify certs and querying the database with GROUP_CONCAT operations.
+
 # DataSpaceR 0.7.6
 
 * Add new feature adding LANL metadata to NAb mAb data pulls.

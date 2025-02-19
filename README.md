@@ -6,7 +6,7 @@
 <!-- badges: start -->
 [![R build
 status](https://github.com/ropensci/DataSpaceR/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/DataSpaceR/actions)
-[![codecov](https://codecov.io/gh/ropensci/DataSpaceR/branch/main/graph/badge.svg)](https://codecov.io/gh/ropensci/DataSpaceR/branch/main)
+[![codecov](https://app.codecov.io/gh/ropensci/DataSpaceR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/DataSpaceR/branch/main)
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/DataSpaceR)](https://cran.r-project.org/package=DataSpaceR)
 [![Project Status: Active – The project has reached a stable, usable
