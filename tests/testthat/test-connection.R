@@ -286,12 +286,12 @@ if ("DataSpaceConnection" %in% class(con)) {
       )
       expect_true(
         all(
-          sapply(con$virusNameMappingTables, \(x) "cds_virus_id" %in% names(x))
+          sapply(con$virusNameMappingTables, function(x) "cds_virus_id" %in% names(x))
         )
       )
       expect_true(
         all(
-          sapply(con$virusNameMappingTables, \(x) "data.table" %in% class(x))
+          sapply(con$virusNameMappingTables, function(x) "data.table" %in% class(x))
         )
       )
     })

@@ -263,7 +263,7 @@ fetchLanlMetadata <- function(lanl_id){
 
   res <- tryCatch({
     httr::GET(url)
-  }, error = \(e) {
+  }, error = function(e) {
     if(grepl("SSL certificate problem: unable to get local issuer certificate", e$message))
       stop("There was an error verifying the LANL SSL certificate. No metadata was retrieved.")
   })

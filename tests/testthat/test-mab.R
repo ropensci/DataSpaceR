@@ -93,8 +93,9 @@ test_that("test lanl metadata merge and duplicates in mab table", {
     mab$getLanlMetadata()
     expect_true(nrow(mab$mabs) == 1)
   },
-  error = \(e) return(e$message)
+  error = function(e) return(e$message)
   )
+  
   if( grepl("error verifying the LANL SSL certificate. No metadata was retrieved.", res) ){
     TRUE
   } else {
