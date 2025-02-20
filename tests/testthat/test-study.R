@@ -318,10 +318,6 @@ test_study <- function(study, datasets, niDatasets = c(), groupId = NULL, groupL
   }
 }
 
-# test_study(
-#   study = "",
-#   datasets = c("BAMA", "ICS", "ELISPOT", "Demographics", "NAb", "PKMAb")
-# )
 test_study(
   study = "cvd277",
   datasets = c(
@@ -332,15 +328,7 @@ test_study(
     "Neutralizing antibody"
   )
 )
-test_study(
-  study = "cvd408",
-  datasets = c(
-    "Binding Ab multiplex assay",
-    "Intracellular Cytokine Staining",
-    "Demographics",
-    "Neutralizing antibody"
-  )
-)
+
 test_study(
   study = "cvd446",
   datasets = c(
@@ -349,38 +337,7 @@ test_study(
   ),
   niDatasets = c("Demographics (Supplemental)")
 )
-test_study(
-  study = "vtn505",
-  datasets = c(
-    "Binding Ab multiplex assay",
-    "Intracellular Cytokine Staining",
-    "Demographics",
-    "Neutralizing antibody"
-  ),
-  niDatasets = c(
-    "ADCP",
-    "Demographics (Supplemental)",
-    "Fc Array"
-  )
-)
 
-# test_study(
-#   study = "cvd812",
-#   datasets = c(),
-#   niDatasets = c("NAB Ig")
-# )
-test_study(
-  study = "",
-  datasets = c(
-    "Binding Ab multiplex assay",
-    "Intracellular Cytokine Staining",
-    "Enzyme-Linked ImmunoSpot",
-    "Demographics",
-    "Neutralizing antibody"
-  ),
-  groupId = 220,
-  groupLabel = c("NYVAC_durability" = "NYVAC durability comparison")
-)
 test_study(
   study = "",
   datasets = c(
