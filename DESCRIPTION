@@ -1,11 +1,12 @@
 Package: DataSpaceR
 Type: Package
 Title: Interface to 'the CAVD DataSpace'
-Version: 0.7.7
+Version: 1.0.0
 Authors@R: c(person("Ju Yeong", "Kim", role = "aut"),
              person("Sean", "Hughes", role = "rev"),
              person("Jason", "Taylor", email = "jmtaylor@fredhutch.org", role = c("aut", "cre")),
              person("Helen", "Miller", role = "aut"),
+             person("Kellie", "MacPhee", role = "rev"),
              person("CAVD DataSpace", email = "dataspace.support@scharp.org", role = "cph"))
 Description: Provides a convenient API interface to access immunological data
     within 'the CAVD DataSpace'(<https://dataspace.cavd.org>), a data sharing 
@@ -15,6 +16,8 @@ URL: https://docs.ropensci.org/DataSpaceR/, https://github.com/ropensci/DataSpac
 BugReports: https://github.com/ropensci/DataSpaceR/issues
 License: GPL-3
 Encoding: UTF-8
+Depends:
+    R (>= 4.2.0)
 Imports:
     utils,
     R6,
@@ -29,7 +32,6 @@ Suggests:
     testthat,
     covr,
     knitr,
-    pryr,
     rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 7.3.2
