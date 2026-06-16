@@ -89,12 +89,12 @@ checkNetrc <- function(netrcFile = getNetrcPath(),
     )
   }
 
-  lines <- readLines(netrcFile)
-  lines <- gsub("http.*//", "", lines)
-  machine <- ifelse(onStaging, STAGING, PRODUCTION)
-  if (length(grep(paste0("machine\\s", machine), lines)) == 0) {
+  netrc <- readNetrc(netrcFile)
+
+  server <- ifelse(onStaging, STAGING, PRODUCTION)
+  if(nrow(netrc[machine == server]) == 0) {
     stop(
-      "No entry found for '", machine, "' in '", netrcFile, "'.",
+      "No entry found for '", server, "' in '", netrcFile, "'. Do you have an account at '", server, "' and have you updated you netrc file? See '?writeNetrc'.",
       call. = FALSE
     )
   }

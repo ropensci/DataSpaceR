@@ -9,21 +9,25 @@
 #' \dontrun{
 #' # Create a connection (Initiate a DataSpaceConnection object)
 #' con <- connectDS()
-#' con
 #'
-#' # Connect to cvd408
-#' # https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Study/cvd408?q=408
-#' cvd408 <- con$getStudy("cvd408")
+#' # View available data
 #'
-#' # Connect to all studies
-#' cvd <- con$getStudy("cvd408")
+#' con$availableStudies
+#' con$availableGroups
+#' con$availablePublications
+#' con$availableMabs
+#' con$availableMabMixtures
+#' con$availableDonors
+#' con$availableViruses
 #'
-#' # Connect to the NYVAC durability comparison group
-#' # https://dataspace.cavd.org/cds/CAVD/app.view#group/groupsummary/220
-#' nyvac <- con$getGroup(220)
+#' # Pass an available object to a "get" method to get data
 #'
-#' # Refresh the connection object to update available studies and groups
-#' con$refresh()
+#' cvd408 <- con$availableStudies[study_id == "cvd408"] |>
+#'   con$getStudies()
+#'
+#' cd4Mabs <- con$availableMabs[grepl("CD4bs", mab_ab_binding_type)] |>
+#'   con$getMabs()
+#'
 #' }
 #'
 #' @importFrom jsonlite fromJSON
@@ -89,7 +93,7 @@ DataSpaceConnection <- R6Class(
       checkCredential(labkeyUrlBase, verbose)
 
       # set primary fields
-      private$.config <-
+      private$.shared$.config <-
         list(
           labkeyUrlBase = labkeyUrlBase,
           labkeyUserEmail = labkeyUserEmail,
@@ -108,226 +112,171 @@ DataSpaceConnection <- R6Class(
     #' Print the \code{DataSpaceConnection} object.
     print = function() {
       cat("<DataSpaceConnection>")
-      cat("\n  URL:", private$.config$labkeyUrlBase)
-      cat("\n  User:", private$.config$labkeyUserEmail)
-      cat("\n  Available studies:", private$.stats$studies)
+      cat("\n  URL:", private$.shared$.config$labkeyUrlBase)
+      cat("\n  User:", private$.shared$.config$labkeyUserEmail)
+      cat("\n  Available Studies:", private$.stats$studies)
       cat("\n    -", private$.stats$subjectlevelstudies, "studies with data")
       cat("\n    -", private$.stats$subjects, "subjects")
       cat("\n    -", private$.stats$datacount, "data points")
-      cat("\n  Available groups:", nrow(private$.availableGroups))
-      cat("\n  Available publications:", nrow(private$.availablePublications))
-      cat("\n    -", sum(private$.availablePublications$publication_data_available), "publications with data")
+      cat("\n  Available Groups:", nrow(self$availableGroups))
+      cat("\n  Available Publications:", nrow(self$availablePublications))
+      cat("\n    -", sum(self$availablePublications$publication_data_available), "publications with data")
+      cat("\n  Available Connection objects:")
+      cat(paste0("\n    - ", DataSpaceConnection$active |> names() |> cleanReservedDataSpaceR6()), sep = "")
+      cat("\n  Available Connection methods:")
+      cat(paste0("\n    - ", DataSpaceConnection$public_methods |> names() |> cleanReservedDataSpaceR6()), sep = "")
       cat("\n")
     },
 
     #' @description
-    #' Create a \code{\link{DataSpaceStudy}} object.
-    #' @param studyName A character. Name of the study to retrieve.
-    getStudy = function(studyName) {
-      if (studyName != "") {
-        studyInfo <- as.list(
-          private$.availableStudies[.(study_name)]
-        )
-      } else {
-        studyInfo <- NULL
-      }
+    #' Create a `DataSpaceStudies` object.
+    #' @param availableStudies an `availableStudies` object, or a vector of `study_id` values.
+    getStudies = function(availableStudies = self$availableStudies) {
+      if(is.character(availableStudies))
+        availableStudies <- self$availableStudies[study_id %in% availableStudies]
+      if(!"availableStudies" %in% class(availableStudies))
+        stop("Argument must be `character` or `availableStudies`.")
+      if(nrow(availableStudies) == 0)
+        stop("No vaild `availableStudies`, or `study_id` vector passed.")
 
-      DataSpaceStudy$new(studyName, private$.config, NULL, studyInfo)
+      DataSpaceStudies$new(availableStudies[,study_id])
     },
 
     #' @description
-    #' Create a \code{\link{DataSpaceStudy}} object.
-    #' @param groupId An integer. ID of the group to retrieve.
-    getGroup = function(groupId) {
-      assert_that(
-        is.number(groupId),
-        msg = "groupId should be an integer."
-      )
-      assert_that(
-        groupId %in% private$.availableGroups$group_id,
-        msg = paste(groupId, "is not a valid group ID. See `group_id` field in `availableGroups`.")
-      )
+    #' Create a `DataSpaceGroups` object.
+    #' @param availableGroups an `availableGroups` object, or a vector of `group id` values.
+    getGroups = function(availableGroups = self$availableGroups) {
+      if(is.numeric(availableGroups))
+        availableGroups <- self$availableGroups[group_id %in% availableGroups]
+      if(!"availableGroups" %in% class(availableGroups))
+        stop("Argument must be `numeric` or `avilableGroups`.")
+      if(nrow(availableGroups) == 0)
+        stop("No vaild `availableGroups`, or `group_id` vector passed.")
 
-      group <- private$.availableGroups[.(groupId), label]
-      names(group) <- private$.availableGroups[.(groupId), original_label]
-
-      DataSpaceStudy$new("", private$.config, group, NULL)
+      DataSpaceGroups$new(availableGroups[,group_id])
     },
 
     #' @description
-    #' Filter rows in the mAb grid by specifying the values to keep in the
-    #' columns found in the \code{mabGrid} field. It takes the column and the
-    #' values and filters the underlying tables.
-    #' @param using A character. Name of the column to filter.
-    #' @param value A character vector. Values to keep in the mAb grid.
-    filterMabGrid = function(using, value) {
-      assertColumn(using, self)
-
-      column <- switchColumn(using)
-      gridBase <- ifelse(
-        isFromMabGrid(column),
-        ".mabGridBase",
-        ".mabMetaGridBase"
-      )
-
-      if (!all(value %in% private[[gridBase]][[column]])) {
-        missingValue <- unique(value[!value %in% private[[gridBase]][[column]]])
-        value <- unique(value[value %in% private[[gridBase]][[column]]])
-        if (length(missingValue) > 3) {
-          msgText <- paste(c(missingValue[c(1, 2, 3)], "and others"), collapse = ", ")
-        } else {
-          msgText <- paste(missingValue, collapse = ", ")
-        }
-        assert_that(length(value) != 0, msg = paste0(msgText, " set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found."))
-        warning(msgText, " set to the `value` argument is/are not found in the column set in the `using` argument.\nOnly returning values found.")
-      }
-      if (isFromMabGrid(column)) {
-        private$.mabGridBase <- private$.mabGridBase[
-          get(column) %in% value
+    #' Create a `DataSpaceMabs` object.
+    #' @param availableMabs an `availableMabs` or
+    #' `availableMabMixtures` object, or a vector of `mab id` values. `mab_id` values are
+    #' inferred from `availableMabMixtures` objects.
+    #' @param includeMixtures Whether or not to include mab mixtures. "yes", "no", or "only"
+    #' are valid. The default, "yes", will return any available mAb mixtures for any mAb passed here.
+    getMabs = function(availableMabs = self$availableMabs, includeMixtures = "yes"){
+      if(is.character(availableMabs))
+        availableMabs <- self$availableMabs[
+          mab_id %in% c(
+            private$.shared$.mabMix[mab_mix_id %in% availableMabs, mab_id],
+            private$.shared$.mabMix[mab_id %in% availableMabs, mab_id]
+          )
         ]
 
-        if (column == "mab_mix_name_std") {
-          private$.mabMetaGridBase <- private$.mabMetaGridBase[
-            get(column) %in% value
-          ]
-        }
-      } else {
-        private$.mabMetaGridBase <- private$.mabMetaGridBase[
-          ,
-          valid := any(get(column) %in% value, na.rm = TRUE),
-          by = mab_mix_name_std
-        ][valid == TRUE]
-        private$.mabGridBase <- private$.mabGridBase[
-          mab_mix_name_std %in% private$.mabMetaGridBase$mab_mix_name_std
-        ]
+      if(!any(class(availableMabs) %in% c("availableMabs", "availableMabMixtures")))
+        stop("Argument must be `character`, `availableMabs`, or `availableMabMixtures`.")
+
+      if(length(includeMixtures) != 1 || (!includeMixtures %in% c("yes", "no", "only")))
+        stop("`includeMixtures` must by 1 of 3 values: 'yes', 'no', or 'only'.")
+
+      if(nrow(availableMabs) == 0)
+        stop("No mAbs available from `availableMabs` argument.")
+
+      if("availableMabMixtures" %in% class(availableMabs)){
+        message("All mabs in all mixtures passed with be returned.")
+        availableMabs <-
+          merge(availableMabs, private$.shared$.mabMix, by= "mab_mix_id")
       }
 
-      # cache filter
-      private$.mabFilters[[column]] <- c(private$.mabFilters[[column]], value)
-
-      invisible(self)
+      DataSpaceMabs$new(availableMabs[,unique(mab_id)], includeMixtures)
     },
 
     #' @description
-    #' Reset the mAb grid to the unfiltered state.
-    resetMabGrid = function() {
-      private$.mabGridBase <- private$.cache$mabGridBase
-      private$.mabMetaGridBase <- private$.cache$mabMetaGridBase
-      private$.mabFilters <- list()
+    #' Create a `DataSpaceDonors` object.
+    #' @param availableDonors an `availableDonors` object, or a vector of `donor_id` values.
+    getDonors = function(availableDonors = self$availableDonors){
+      if(is.character(availableDonors))
+        availableGroups <- self$availableDonors[donor_id %in% availableDonors]
 
-      invisible(self)
+      if(!"availableDonors" %in% class(self$availableDonors))
+        stop("Argument must be `character` or `availableDonors`.")
+
+      if(nrow(availableDonors) == 0)
+        stop("No donors available from `availableDonors` argument.")
+
+      DataSpaceDonors$new(availableDonors[,unique(donor_id)])
     },
 
     #' @description
-    #' Create a \code{\link{DataSpaceMab}} object.
-    getMab = function() {
-      DataSpaceMab$new(self$mabGridSummary$mab_mixture, private$.mabFilters, private$.config)
+    #' Create a `DataSpaceDaash` object.
+    #' @param availableDaash an `availableMabs`, or `availableDonors` object, or a vector of `sequnce_id` values.
+    getDaash = function(availableDaash = NULL){
+      DataSpaceDaash$new(availableDaash)
     },
 
     #' @description
-    #' Download publication data for a chosen publication.
-    #' @param publicationId A character/integer. ID for the publication to
-    #' download data for.
-    #' @param outputDir A character. Path to directory to download publication
-    #' data.
-    #' @param unzip A logical. If TRUE, unzip publication data to outputDir.
-    #' @param verbose A logical. Default TRUE.
-    downloadPublicationData = function(publicationId,
-                                       outputDir = getwd(),
-                                       unzip = TRUE,
-                                       verbose = TRUE) {
-      assert_that(
-        dir.exists(outputDir),
-        msg = paste0(outputDir, " is not a directory")
-      )
-      assert_that(
-        publicationId %in% private$.availablePublications$publication_id,
-        msg = paste0(publicationId, " is not a valid publication ID. See the `publication_id` field in `availablePublications`.")
-      )
-      assert_that(
-        private$.availablePublications[publication_id == publicationId]$publication_data_available,
-        msg = paste0("No publication data available for publication ", publicationId)
-      )
-      assert_that(is.logical(verbose))
+    #' Download study related publication datasets.
+    #' @param availablePublications an `availablePublications` object or a vector of `publication_id` values.
+    #' @param downloadDir A character. Optional, specifies directory to download nonstandard datasets.
+    #' Default is use to the R session temp directory
+    downloadPublicationData = function(availablePublications = NULL, downloadDir = tempdir()){
 
-      remotePath <- private$.availablePublications[publication_id == publicationId]$remotePath
-      fileName <- basename(remotePath)
-      localZipPath <- file.path(outputDir, fileName)
-      fullOutputDir <- file.path(outputDir, gsub(".zip", "", fileName))
-      if (verbose) message("downloading ", fileName, " to ", outputDir, " ...")
+      if(is.character(availablePublications))
+        availablePublications <- self$availablePublications[publication_id == availablePublications]
 
-      # Use getStudyDocumentUrl.view to download
-      getStudyDocumentUrl <- paste0(
-        private$.config$labkeyUrlBase,
-        "/cds/CAVD/getStudyDocument.view?",
-        "&documentId=", private$.availablePublications[publication_id == publicationId]$document_id,
-        "&filename=", gsub("/", "%2F", remotePath),
-        "&publicAccess=true"
+      if(!"availablePublications" %in% class(availablePublications))
+        stop("Argument must be `character` or `availablePublications`.")
+
+      if(nrow(availablePublications) == 0)
+        stop("No datasets to download from `availablePublications`.")
+
+      availablePublications <- private$.shared$.availablePublications[
+        publication_id %in% availablePublications$publication_id
+      ]
+
+      downloadDocument <- invisible(
+        availablePublications |>
+          downloadDocuments(downloadDir)
       )
 
-      # Use labkey.webdav.getByUrl which includes filesystem and permissions checks
-      ret <- Rlabkey:::labkey.webdav.getByUrl(getStudyDocumentUrl, localFilePath = localZipPath, overwrite = TRUE)
-      if (!is.null(ret) && !is.na(ret) && ret == FALSE) {
-        success <- FALSE
-        stop("failed to download ", fileName)
-      } else {
-        success <- file.exists(localZipPath)
-        if (!success) stop("failed to download to", localZipPath)
-      }
+      message("Publications have been downloaded to `", downloadDir, "`.")
+      if(any(!downloadDocument$success))
+        warning("Not all publication ids successfully downloaded: ", paste(downloadDocument[success == FALSE, publication_id]))
 
-      if (verbose) {
-        message("File Contents: ")
-        fileContents <- capture.output(unzip(localZipPath, list = TRUE))
-        message(paste0(fileContents, collapse = "\n"))
-      }
+      return(invisible(downloadDocument$destination))
 
-      if (unzip) {
-        if (verbose) message("unzipping ", fileName, " to ", fullOutputDir)
-        unzippedFiles <- unzip(localZipPath, exdir = fullOutputDir)
-        unlink(localZipPath)
-        # Return vector of file paths
-        return(invisible(unzippedFiles))
-      }
-
-      # Return path of zip file
-      invisible(localZipPath)
     },
+
+    #' @description
+    #' Defunct. Use `getStudies`.
+    getStudy      = function() .Defunct("getStudies"),
+
+    #' @description
+    #' Defunct. Use `getGroups`.
+    getGroup      = function() .Defunct("getGroups"),
+
+    #' @description
+    #' Defunct. Use `getMabs`.
+    getMab        = function() .Defunct("getMabs"),
+
+    #' @description
+    #' Defunct. Use `availableMabs`.
+    filterMabGrid = function() .Defunct("availableMabs"),
+
+    #' @description
+    #' Defunct. Use `availableMabs`.
+    resetMabGrid  = function() .Defunct("availableMabs"),
 
     #' @description
     #' Refresh the connection object to update available studies and groups.
     refresh = function() {
-      tries <- c(
-        class(try(
-          private$.getAvailableStudies(),
-          silent = !private$.config$verbose
-        )),
-        class(try(
-          private$.getStats(),
-          silent = !private$.config$verbose
-        )),
-        class(try(
-          private$.getAvailableGroups(),
-          silent = !private$.config$verbose
-        )),
-        class(try(
-          private$.getMabGrid(),
-          silent = !private$.config$verbose
-        )),
-        class(try(
-          private$.getVirusMetadata(),
-          silent = !private$.config$verbose
-        )),
-        class(try(
-          private$.getVirusNameMappingTables(),
-          silent = !private$.config$verbose
-        )),        
-        class(try(
-          private$.getAvailablePublications(),
-          silent = !private$.config$verbose
-        ))
-      )
-
-      invisible(!"try-error" %in% tries)
+      private$.loadAll()
+      private$.studyIds       <- private$.shared$.availableStudies$study_id
+      private$.groupIds       <- private$.shared$.availableGroups$group_id
+      private$.donorIds       <- private$.shared$.donorMetadata$donor_id
+      private$.mabIds         <- private$.shared$.mabMetadata$mab_id
+      private$.mabMixIds      <- private$.shared$.mabMix$mab_mix_id
+      private$.publicationIds <- private$.shared$.availablePublications$publication_id
+      NULL
     }
   ),
   active = list(
@@ -335,153 +284,137 @@ DataSpaceConnection <- R6Class(
     #' @field config A list. Stores configuration of the connection object such as
     #' URL, path and username.
     config = function() {
-      private$.config
+      private$.shared$.config
     },
 
-    #' @field availableStudies A data.table. The table of available studies.
+    #' @field availableStudies A data.tabl of available studies.
     availableStudies = function() {
-      private$.availableStudies
+      private$.shared$.availableStudies[study_id %in% private$.studyIds]
     },
 
-    #' @field availableGroups A data.table. The table of available groups.
+    #' @field availableGroups A data.table of available groups.
     availableGroups = function() {
-      private$.availableGroups
+      private$.shared$.availableGroups[group_id %in% private$.groupIds]
     },
 
-    #' @field availablePublications A data.table. The table of available
-    #' publications.
+    #' @field availableMabs A data.table of available mAbs.
+    availableMabs = function() {
+      private$.shared$.availableMabs[
+        mab_id %in% private$.mabIds
+      ]
+    },
+
+    #' @field availableMabMixtures A data.table. Metadata of available
+    #' mAb mixtures.
+    availableMabMixtures = function(){
+      private$.shared$.availableMabMixtures[
+        mab_mix_id %in% private$.mabMixIds
+      ]
+    },
+
+    #' @field availableDonors A data.table. Metadata about all mAb
+    #' donors in the DataSpace.
+    availableDonors = function(){
+      private$.shared$.availableDonors[
+        donor_id %in% private$.donorIds
+      ]
+    },
+
+    #' @field availableViruses A data.table of metadata about all virsues
+    #' in the DataSpace and virus name synonyms. 
+    availableViruses = function(){
+      private$.shared$.availableViruses
+    },
+
+    #' @field availablePublications A data.table of available
+    #' publications metadata and available datasets.
     availablePublications = function() {
-      private$.availablePublications[, !c("document_id", "remotePath")]
-    },
-
-    #' @field mabGridSummary A data.table. The filtered grid with updated
-    #' \code{n_} columns and \code{geometric_mean_curve_ic50}.
-    mabGridSummary = function() {
-      mabGridBase <- copy(private$.mabGridBase)
-      mabMetaGridBase <- copy(private$.mabMetaGridBase)
-      mabGridBase[
-        ,
-        `:=`(
-          mab_mixture = mab_mix_name_std,
-          n_viruses = length(unique(virus)),
-          n_clades = length(unique(clade[!is.na(clade)])),
-          n_tiers = length(unique(neutralization_tier[!is.na(neutralization_tier)])),
-          geometric_mean_curve_ic50 = as.numeric({
-            if (all(titer_curve_ic50 %in% c(-Inf, Inf))) {
-              NA
-            } else {
-              exp(mean(log(as.numeric(titer_curve_ic50[!titer_curve_ic50 %in% c(-Inf, Inf)]))))
-            }
-          }),
-          n_studies = length(unique(study))
-        ),
-        by = mab_mix_name_std
+      private$.shared$.availablePublications[
+        publication_id %in% private$.publicationIds,
+        -c("url", "remote_path", "document_id")
       ]
-
-      mabGrid <- unique(mabGridBase[, .(mab_mixture, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)])
-      setkey(mabGrid, mab_mixture)
-
-      mabMetaGridBase[
-        ,
-        `:=`(
-          mab_mixture = mab_mix_name_std,
-          donor_species = paste(sort(unique(mab_donor_species[!is.na(mab_donor_species)])), collapse = ", "),
-          hxb2_location = paste(sort(unique(mab_hxb2_location[!is.na(mab_hxb2_location)])), collapse = ", "),
-          isotype = paste(sort(unique(mab_isotype[!is.na(mab_isotype)])), collapse = ", ")
-        ),
-        by = mab_mix_name_std
-      ]
-      mabMetaGrid <- unique(mabMetaGridBase[, .(mab_mixture, donor_species, isotype, hxb2_location)])
-      setkey(mabMetaGrid, mab_mixture)
-
-      # left join mabGrid with mabMetaGrid
-      mabGrid <- mabGrid[mabMetaGrid, nomatch = 0]
-
-      mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, n_viruses, n_clades, n_tiers, geometric_mean_curve_ic50, n_studies)]
     },
 
-    #' @field mabGrid A data.table. The filtered mAb grid.
-    mabGrid = function() {
-      mabGridBase <- copy(private$.mabGridBase)
-      mabMetaGridBase <- copy(private$.mabMetaGridBase)
-
-      mabGridBase <- unique(
-        mabGridBase[
-          ,
-          .(
-            mab_mix_id = mab_mix_id,
-            mab_mixture = mab_mix_name_std,
-            virus = virus,
-            clade = clade,
-            tier = neutralization_tier,
-            curve_ic50 = titer_curve_ic50,
-            study = study
-          )
-        ]
-      )
-
-      mabMetaGridBase <- unique(
-        mabMetaGridBase[
-          ,
-          .(
-            mab_mix_id = mab_mix_id,
-            mab_mixture = mab_mix_name_std,
-            donor_species = mab_donor_species,
-            hxb2_location = mab_hxb2_location,
-            isotype = mab_isotype
-          ),
-        ]
-      )
-
-      setkey(mabGridBase, mab_mix_id)
-      setkey(mabMetaGridBase, mab_mix_id)
-
-      # left join mabGrid with mabMetaGrid
-      mabGrid <- merge(
-        mabGridBase,
-        mabMetaGridBase[, .(mab_mix_id, donor_species, hxb2_location, isotype)],
-        allow.cartesian = TRUE
-      )
-
-      mabGrid[, .(mab_mixture, donor_species, isotype, hxb2_location, virus, clade, tier, curve_ic50, study)]
-    },
-
-    #' @field virusMetadata A data.table. Metadata about all viruses in the
-    #' DataSpace.
-    virusMetadata = function() {
-      private$.virusMetadata
-    },
-
-    #' @field virusNameMappingTables A list of data.table objects. This
-    #' list contains `virusMetadataAll`, `virusLabId`, and `virus_synonym`
-    #' which are described in the vignette `Virus_Name_Mapping_Tables`.
+    #' @field virusNameMappingTables A list of data.tables containing virus name mappings.
     virusNameMappingTables = function() {
       private$.virusNameMappingTables
-    }
+    },
+
+    #' @field mabGridSummary Defunct. Use `availableMabs`.
+    mabGridSummary = function() stop("Defunct. Use `availableMabs`."),
+
+    #' @field mabGrid Defunct. Use `availableMabs`.
+    mabGrid        = function() stop("Defunct. Use `availableMabs`."),
+
+    #' @field virusMetadata Defunct. Use `virusNameMappingTables`.
+    virusMetadata  = function() stop("Defunct. Use `virusNameMappingTables`.")
+
   ),
   private = list(
-    .config = list(),
-    .availableStudies = data.table(),
-    .stats = data.table(),
-    .availableGroups = data.table(),
-    .mabGridBase = data.table(),
-    .mabMetaGridBase = data.table(),
-    .mabFilters = list(),
-    .virusMetadata = data.table(),
+    .studyIds       = character(),
+    .groupIds       = character(),
+    .donorIds       = character(),
+    .mabIds         = character(),
+    .mabMixIds      = character(),
+    .publicationIds = character(),
+    .shared         = new.env(),
+
     .virusNameMappingTables = list(),
-    .availablePublications = data.table(),
-    .cache = list(),
-    .getAvailableStudies = function() {
-      colSelect <- c(
-        "study_name", "short_name", "title", "type", "status",
-        "stage", "species", "start_date", "strategy",
-        "network", "data_availability"
-      )
+
+    .stats = data.table(),
+
+    .loadAll = function() {
+
+      private$.loadSharedMetadata()
+      private$.loadAvailableStudies()
+      private$.loadAvailableGroups()
+      private$.loadAvailableDonors()
+      private$.loadAvailableMabs()
+      private$.loadAvailableMabMixtures()
+      private$.loadAvailableViruses()
+      private$.loadAvailablePublications()
+      private$.loadStats()
+
+    },
+    .loadAvailableStudies = function() {
+
+      study <- labkey.selectRows(
+        baseUrl = private$.shared$.config$labkeyUrlBase,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "study",
+        colSelect = c(
+          "study_name", "short_name", "title", "type", "status",
+          "stage", "species", "start_date", "strategy",
+          "network"
+        ),
+        colNameOpt = "fieldname",
+        method = "GET"
+      ) |>
+        setDT() |>
+        setnames("study_name", "study_id")
+
+      studyassay <- labkey.selectRows(
+        baseUrl = private$.shared$.config$labkeyUrlBase,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "studyassay",
+        colNameOpt = "fieldname",
+        colSelect = c("prot", "assay_identifier", "assay_status"),
+        method = "GET"
+      ) |>
+        setDT() |>
+        setnames("prot", "study_id") |>
+        _[
+          assay_identifier %in% c("NAB", "NAB MAB", "PK MAB", "BAMA", "ICS", "IFNg ELS", "BCR sequencing") &
+            assay_status == "Data added to DataSpace",
+        ] |>
+        _[,.(data_availability = paste(sort(assay_identifier), collapse = ", ")), by = .(study_id)]
 
       niData <- setDT(
         merge(
           labkey.selectRows(
-            baseUrl = private$.config$labkeyUrlBase,
+            baseUrl = private$.shared$.config$labkeyUrlBase,
             folderPath = "/CAVD",
             schemaName = "CDS",
             queryName = "document",
@@ -489,7 +422,7 @@ DataSpaceConnection <- R6Class(
             colSelect = c("document_id", "label", "filename", "document_type", "assay_identifier")
           ),
           labkey.selectRows(
-            baseUrl = private$.config$labkeyUrlBase,
+            baseUrl = private$.shared$.config$labkeyUrlBase,
             folderPath = "/CAVD",
             schemaName = "CDS",
             queryName = "studydocument",
@@ -498,62 +431,36 @@ DataSpaceConnection <- R6Class(
           ),
           by = "document_id"
         )
-      )[document_type == "Non-Integrated Assay"][, .(ni_data_availability = paste(label, collapse = ", ")), by = "prot"]
+      )[document_type == "Non-Integrated Assay"
+        ][, .(ni_data_availability = paste(label, collapse = ", ")), by = "prot"] |>
+        setnames("prot", "study_id")
 
-      setnames(niData, "prot", "study_name")
+      study <- study |>
+        merge(studyassay, all.x = TRUE) |>
+        merge(niData, all.x = TRUE)
 
-      availableStudies <- labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = "/CAVD",
-        schemaName = "CDS",
-        queryName = "study",
-        colSelect = colSelect,
-        colNameOpt = "fieldname",
-        method = "GET"
-      )
+      private$.shared$.availableStudies <- study
+      class(private$.shared$.availableStudies) <- c(class(private$.shared$.availableStudies), "availableStudies")
 
-      setDT(availableStudies)
-      setkey(availableStudies, study_name)
-
-      availableStudies <- merge(availableStudies, niData, all.x = TRUE)
-      availableStudies[, data_availability := gsub("This study has assay data \\(", "", gsub("\\) in the DataSpace\\.", "", data_availability))]
-
-      private$.availableStudies <- availableStudies
     },
-    .getStats = function() {
-      stats <- labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = "/CAVD",
-        schemaName = "CDS",
-        queryName = "ds_properties",
-        colNameOpt = "fieldname",
-        method = "GET"
+    .loadAvailableGroups = function() {
+
+      response <- labkey.get(
+        paste0(
+          private$.shared$.config$labkeyUrlBase,
+          "/participant-group",
+          "/CAVD",
+          "/browseParticipantGroups.api?",
+          "distinctCatgories=false&",
+          "type=participantGroup&",
+          "includeUnassigned=false&",
+          "includeParticipantIds=false"
+        )
       )
 
-      setDT(stats)
+      parsed <- jsonlite::fromJSON(response, simplifyDataFrame = FALSE)
 
-      private$.stats <- stats
-    },
-    .getAvailableGroups = function() {
-      participantGroupApi <- paste0(
-        private$.config$labkeyUrlBase,
-        "/participant-group",
-        "/CAVD",
-        "/browseParticipantGroups.api?",
-        "distinctCatgories=false&",
-        "type=participantGroup&",
-        "includeUnassigned=false&",
-        "includeParticipantIds=false"
-      )
-
-      # execute via Rlabkey's standard GET function
-      response <- labkey.get(participantGroupApi)
-
-      # parse JSON response via jsonlite's fromJSON parsing function
-      parsed <- fromJSON(response, simplifyDataFrame = FALSE)
-
-      # construct a data.table for each group
-      groupsList <- lapply(parsed$groups, function(group) {
+      private$.shared$.availableGroups <- lapply(parsed$groups, function(group) {
         data.table(
           group_id = group$id,
           label = group$label,
@@ -566,68 +473,153 @@ DataSpaceConnection <- R6Class(
           created_by = group$createdBy$displayValue,
           shared = group$category$shared,
           n = length(group$category$participantIds),
-          studies = list(unique(substr(group$category$participantIds, 1, 6)))
+          studies = paste((unique(substr(group$category$participantIds, 1, 6))), collapse = ", ")
         )
-      })
+      }) |>
+        rbindlist() |>
+        setorder(group_id) |>
+        setkey(group_id)
 
-      # merge the list to data.table
-      availableGroups <- rbindlist(groupsList)
+      class(private$.shared$.availableGroups) <- c(class(private$.shared$.availableGroups), "availableGroups")
 
-      # set order by id
-      setorder(availableGroups, group_id)
-      setkey(availableGroups, group_id)
-
-      private$.availableGroups <- availableGroups
     },
-    .getMabGrid = function() {
-      mabGridBase <- labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = "/CAVD",
-        schemaName = "CDS",
-        queryName = "mAbGridBase",
-        colNameOpt = "fieldname",
-        method = "GET"
-      )
-      mabMetaGridBase <- labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
-        folderPath = "/CAVD",
-        schemaName = "CDS",
-        queryName = "mAbMetaGridBase",
-        colNameOpt = "fieldname",
-        method = "GET"
-      )
+    .loadAvailableDonors = function() {
 
-      setDT(mabGridBase)
-      setDT(mabMetaGridBase)
+      donors <-
+        merge(
+          private$.shared$.donorMetadata,
+          private$.shared$.donorMabSequence,
+          by = "donor_id",
+          all.x = TRUE
+        ) |>
+        merge(
+          private$.shared$.mabMetadata,
+          by = "mab_id",
+          all.x = TRUE
+        )
 
-      private$.mabGridBase <- mabGridBase
-      private$.mabMetaGridBase <- mabMetaGridBase
-      private$.mabFilters <- list()
-      private$.cache$mabGridBase <- copy(mabGridBase)
-      private$.cache$mabMetaGridBase <- copy(mabMetaGridBase)
+      donors[, `:=`(
+        mab_count = length(na.omit(unique(mab_id))),
+        sequence_count = length(na.omit(unique(sequence_id)))
+      ), donor_id]
 
-      invisible(NULL)
+      donors[, lineage_sequences_available := ifelse(
+        donor_id %in% private$.shared$.donorMabSequence[is.na(mab_id), .N, donor_id]$donor_id,
+        TRUE,
+        FALSE
+      )]
+
+      private$.shared$.availableDonors <-
+        donors[,c(names(private$.shared$.donorMetadata), "lineage_sequences_available", grep("_count", names(donors), value = TRUE)), with = FALSE] |>
+        unique()
+
+      class(private$.shared$.availableDonors) <- c(class(private$.shared$.availableDonors), "availableDonors")
+
     },
+    .loadAvailableMabs = function() {
 
-    .getVirusNameMappingTables = function(){
-      
+      concatField <- function(field)
+        ifelse(all(is.na(field)), NA, paste(na.omit(sort(unique(unlist(strsplit(field, ", "))))), collapse = ", ")) |>
+          as.character()
+
+      private$.shared$.availableMabs <-
+        private$.shared$.mabMetadata |>
+        merge(
+          private$.shared$.mabMix,
+          by = "mab_id",
+          all.x = TRUE
+        ) |>
+        merge(
+          private$.shared$.mabStudies,
+          all.x = TRUE,
+          by = "mab_mix_id"
+        ) |>
+        merge(
+          private$.shared$.donorMabSequence,
+          by = "mab_id",
+          all.x = TRUE
+        ) |>
+        _[, sequences_available := !is.na(sequence_id)] |>
+        _[,-c("sequence_id", "mab_mix_id")] |>
+        unique() |>
+        _[, `:=`(
+          studies_available = concatField(studies_available),
+          assays_available  = concatField(assays_available)
+        ), mab_id] |>
+        unique()
+
+      class(private$.shared$.availableMabs) <- c(class(private$.shared$.availableMabs), "availableMabs")
+    
+    },
+    .loadAvailableMabMixtures = function() {
+
+      private$.shared$.availableMabMixtures <- private$.shared$.mabMixMetadata[
+       ,
+         .(
+           mab_mix_name_std = mab_mix_label,
+           mab_mix_name_other = paste0(
+             mab_mix_name_std[mab_mix_name_std != mab_mix_label],
+             na.omit(mab_mix_name_other),
+             collapse = ", "
+           ),
+           mab_mix_type
+         ), mab_mix_id] |>
+        merge(
+          private$.shared$.mabNeutralization[
+           ,
+             .(
+               virus_count = length(virus),
+               titer_50_geomean = 10^(mean(log10(ifelse(titer_curve_ic50 %in% c(Inf, -Inf), -1, titer_curve_ic50)), na.rm = T)) |> suppressWarnings()
+             ),
+             mab_mix_id
+          ],
+          by = "mab_mix_id",
+          all.x = TRUE
+        ) |>
+          unique()
+
+      class(private$.shared$.availableMabMixtures) <- c(class(private$.shared$.availableMabMixtures), "availableMabMixtures")
+
+    },
+    .loadAvailableViruses = function() {
+
+      virusMetadata <- suppressWarnings(
+        labkey.selectRows(
+          baseUrl = private$.shared$.config$labkeyUrlBase,
+          folderPath = "/CAVD/",
+          schemaName = "CDS",
+          queryName = "nabAntigenWithPanelMeta",
+          colNameOpt = "fieldname",
+          method = "GET"
+        )
+      ) |> # Rlabkey version 3.4.1 returns warnings for GROUP_CONCAT field in sql expressions
+        setDT() |>
+        setcolorder(
+          c(
+            "assay_identifier", "cds_virus_id", "virus", "virus_type", "neutralization_tier", "clade",
+            "antigen_control", "virus_full_name", "virus_name_other", "virus_species",
+            "virus_host_cell", "virus_backbone", "panel_names"
+          )
+        ) |>
+        setkey(cds_virus_id)
+
       virusMetadataAll <- labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
+        baseUrl = private$.shared$.config$labkeyUrlBase,
         folderPath = "/CAVD/",
         schemaName = "CDS",
         queryName = "virus_metadata_all",
         colNameOpt = "fieldname",
-        colSelect = c("cds_virus_id", "virus", "virus_full_name", 
-                      "virus_backbone", "virus_host_cell", "virus_plot_label", 
-                      "virus_type", "virus_species", "clade", 
+        colSelect = c("cds_virus_id", "virus", "virus_full_name",
+                      "virus_backbone", "virus_host_cell", "virus_plot_label",
+                      "virus_type", "virus_species", "clade",
                       "neutralization_tier"),
         method = "GET"
-      )
-      setDT(virusMetadataAll)
-      setkey(virusMetadataAll, cds_virus_id)
-      
+      ) |>
+        setDT() |>
+        setkey(cds_virus_id)
+
       virusLabId <- labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
+        baseUrl = private$.shared$.config$labkeyUrlBase,
         folderPath = "/CAVD/",
         schemaName = "CDS",
         queryName = "virus_lab_id",
@@ -635,101 +627,172 @@ DataSpaceConnection <- R6Class(
         colSelect = c("cds_virus_id", "lab_code", "lab_virus_id",
                       "lab_virus_id_variable_name", "harvest_date"),
         method = "GET"
-      )
-      setDT(virusLabId)
+      ) |>
+        setDT() |>
+        setkey(cds_virus_id)
 
       virusSynonym <- labkey.selectRows(
-        baseUrl = private$.config$labkeyUrlBase,
+        baseUrl = private$.shared$.config$labkeyUrlBase,
         folderPath = "/CAVD/",
         schemaName = "CDS",
         queryName = "virus_synonym",
         colNameOpt = "fieldname",
         colSelect = c("cds_virus_id", "virus_synonym"),
         method = "GET"
-      )
-      setDT(virusSynonym)
-      
+      ) |>
+        setDT() |>
+        setkey(cds_virus_id)
+
       private$.virusNameMappingTables <- list(
         virus_metadata_all = virusMetadataAll,
         virus_lab_id = virusLabId,
         virus_synonym = virusSynonym
       )
 
-    },
-    .getVirusMetadata = function() {
-      colSelect <- c(
-        "assay_identifier", "cds_virus_id", "virus", "virus_type", "neutralization_tier", "clade",
-        "antigen_control", "virus_full_name", "virus_name_other", "virus_species",
-        "virus_host_cell", "virus_backbone", "panel_names"
+      private$.shared$.availableViruses <- merge(
+        virusMetadataAll,
+        virusSynonym[
+          !virus_synonym %in% virusMetadataAll$virus &
+            !virus_synonym %in% virusMetadataAll$virus_full_name,
+          .(virus_name_other=paste(virus_synonym, collapse = ", ")),
+          by = cds_virus_id
+        ],
+        all.x = TRUE
       )
 
-      virusMetadata <- suppressWarnings(
-          labkey.selectRows(
-            baseUrl = private$.config$labkeyUrlBase,
-            folderPath = "/CAVD/",
-            schemaName = "CDS",
-            queryName = "nabAntigenWithPanelMeta",
-            colSelect = colSelect,
-            colNameOpt = "fieldname",
-            method = "GET"
-          )
-        ) # Rlabkey version 3.4.1 returns warnings for GROUP_CONCAT field in sql expressions
-
-      setDT(virusMetadata)
-      setkey(virusMetadata, virus)
-
-      private$.virusMetadata <- virusMetadata
     },
-    .getAvailablePublications = function() {
-      sqlQuery <-
-        "
-SELECT publication.id as publication_id, author_first as first_author, author_all as all_authors, title, journal_short journal, date publication_date,
-link, pmid as pubmed_id, related_studies, studies_with_data, filename IS NOT NULL as publication_data_available, document_id,
-filename as remote_path
-FROM publication
-LEFT OUTER JOIN
-  (
-    SELECT GROUP_CONCAT(DISTINCT prot, ', ') AS related_studies, publication_id
-    FROM studypublication
-    GROUP BY publication_id
-  ) sp
-  ON sp.publication_id = publication.id
-LEFT OUTER JOIN
-  (
-  SELECT GROUP_CONCAT(DISTINCT prot, ', ') AS studies_with_data, publication_id
-  FROM (
-    studypublication
-    LEFT OUTER JOIN
-      (
-        SELECT study_name, data_availability FROM study
-      ) sdy
-      ON sdy.study_name = prot
-    )
-  WHERE data_availability IS NOT NULL
-  GROUP BY publication_id
-  ) da
-  ON da.publication_id = publication.id
-LEFT OUTER JOIN
-  (
-    SELECT filename, document_id, publication_id from learn_publicationdata
-  ) pd
-  ON pd.publication_id = publication.id
-"
+    .loadAvailablePublications = function() {
 
-      availablePublications <- suppressWarnings(
+      pubs <- suppressWarnings(
         labkey.executeSql(
-          baseUrl = private$.config$labkeyUrlBase,
+          baseUrl = private$.shared$.config$labkeyUrlBase,
           folderPath = "/CAVD/",
           schemaName = "CDS",
-          sql = sqlQuery,
+          sql = publicationSqlCall(),
           colNameOpt = "fieldname"
         )
-      ) # Rlabkey version 3.4.1 returns warnings for GROUP_CONCAT field in sql expressions
+      ) |> # Rlabkey version 3.4.1 returns warnings for GROUP_CONCAT field in sql expressions
+        setDT() |>
+        setorder("first_author")
 
-      setDT(availablePublications)
-      setorder(availablePublications, "first_author")
-      setnames(availablePublications, "remote_path", "remotePath")
-      private$.availablePublications <- availablePublications
+      pubs[,url := paste0(
+        private$.shared$.config$labkeyUrlBase,
+        "/cds/CAVD/getStudyDocument.view?",
+        "&documentId=", document_id,
+        "&filename=", gsub("/", "%2F", remote_path),
+        "&publicAccess=true"
+      )]
+
+      class(pubs) <- c(class(pubs), "availablePublications")
+      private$.shared$.availablePublications <- pubs
+
+    },
+    .loadSharedMetadata = function() {
+
+      private$.shared$.mabMetadata <-
+        labkey.selectRows(
+          baseUrl = private$.shared$.config$labkeyUrlBase,
+          folderPath = "/CAVD",
+          schemaName = "CDS",
+          queryName = "mab_metadata",
+          colNameOpt = "fieldname",
+          method = "GET"
+        ) |>
+        setDT() |>
+        setkey("mab_id") |>
+        removeContainerId()
+
+      private$.shared$.mabNeutralization <-
+        labkey.selectRows(
+          baseUrl = private$.shared$.config$labkeyUrlBase,
+          folderPath = "/CAVD",
+          schemaName = "CDS",
+          queryName = "mAbGridBase",
+          colNameOpt = "fieldname",
+          colSelect = "mab_mix_id,virus,clade,neutralization_tier,titer_curve_ic50",
+          method = "GET"
+        ) |>
+        setDT() |>
+        setkey("mab_mix_id")
+
+      private$.shared$.donorMetadata <-
+        labkey.selectRows(
+          baseUrl = private$.shared$.config$labkeyUrlBase,
+          folderPath = "/CAVD",
+          schemaName = "CDS",
+          queryName = "donor_metadata",
+          colNameOpt = "fieldname",
+          method = "GET"
+        ) |>
+        setDT() |>
+        setkey("donor_id") |>
+        removeContainerId()
+
+      private$.shared$.donorMabSequence <- labkey.selectRows(
+        baseUrl = private$.shared$.config$labkeyUrlBase,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "donor_mab_sequence",
+        colNameOpt = "fieldname",
+        method = "GET"
+      ) |>
+        setDT() |>
+        setkey("donor_id", "mab_id", "sequence_id") |>
+        removeContainerId()
+
+      private$.shared$.mabMix <- labkey.selectRows(
+        baseUrl = private$.shared$.config$labkeyUrlBase,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "MAbMix",
+        colNameOpt = "fieldname",
+        method = "GET"
+      ) |>
+        setDT() |>
+        setkey("mab_id", "mab_mix_id") |>
+        removeContainerId()
+
+      private$.shared$.mabMixMetadata <- labkey.selectRows(
+        baseUrl = private$.shared$.config$labkeyUrlBase,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "MAbMixMetadata",
+        colNameOpt = "fieldname",
+        method = "GET"
+      ) |>
+        setDT() |>
+        setkey("mab_mix_id") |>
+        removeContainerId()
+
+      private$.shared$.mabStudies <- labkey.selectRows(
+        baseUrl = private$.shared$.config$labkeyUrlBase,
+        folderPath = "/CAVD",
+        schemaName = "study",
+        queryName = "availableMabStudies",
+        colNameOpt = "fieldname",
+        method = "GET"
+      ) |>
+        setDT() |>
+        setkey("mab_mix_id") |>
+        removeContainerId() |>
+        _[, .(
+          assays_available = paste(sort(unique(assay_id)), collapse = ", "),
+          studies_available = paste(sort(unique(prot)), collapse = ", ")
+        ), .(mab_mix_id)]
+
+    },
+    .loadStats = function() {
+
+      private$.stats <- labkey.selectRows(
+        baseUrl = private$.shared$.config$labkeyUrlBase,
+        folderPath = "/CAVD",
+        schemaName = "CDS",
+        queryName = "ds_properties",
+        colNameOpt = "fieldname",
+        method = "GET"
+      ) |>
+        setDT()
+      
     }
-)
+  )
 )
