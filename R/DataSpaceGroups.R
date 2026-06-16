@@ -1,4 +1,7 @@
-#' The DataSpaceGroups class
+#' @title  The DataSpaceGroups class
+#'
+#' @description
+#' An R6 class for DataSpace Groups data.
 #'
 #' @section Constructor:
 #' \code{DataSpaceConnection$getGroups()}

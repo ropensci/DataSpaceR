@@ -1,4 +1,7 @@
-#' The DataSpaceMab class
+#' @title  The DataSpaceMab class
+#'
+#' @description
+#' An R6 class for DataSpace MAb data.
 #'
 #' @section Constructor:
 #' \code{DataSpaceConnection$getMab()}

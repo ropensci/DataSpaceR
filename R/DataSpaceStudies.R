@@ -1,4 +1,7 @@
-#' The DataSpaceStudies class
+#' @title The DataSpaceStudies class
+#'
+#' @description
+#' An R6 class for DataSpace Study data.
 #'
 #' @section Constructor:
 #' \code{DataSpaceConnection$getStudies()}

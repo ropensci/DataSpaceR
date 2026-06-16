@@ -1,4 +1,7 @@
-#' The DataSpaceConnection class
+#' @title The DataSpaceConnection class
+#'
+#' @description
+#' An R6 class for DataSpace browsing and fetching data in DataSpace.
 #'
 #' @section Constructor:
 #' \code{\link{connectDS}}

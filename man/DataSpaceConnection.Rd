@@ -4,9 +4,7 @@
 \alias{DataSpaceConnection}
 \title{The DataSpaceConnection class}
 \description{
-The DataSpaceConnection class
-
-The DataSpaceConnection class
+An R6 class for DataSpace browsing and fetching data in DataSpace.
 }
 \section{Constructor}{
 
@@ -17,21 +15,25 @@ The DataSpaceConnection class
 \dontrun{
 # Create a connection (Initiate a DataSpaceConnection object)
 con <- connectDS()
-con
 
-# Connect to cvd408
-# https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Study/cvd408?q=408
-cvd408 <- con$getStudy("cvd408")
+# View available data
 
-# Connect to all studies
-cvd <- con$getStudy("cvd408")
+con$availableStudies
+con$availableGroups
+con$availablePublications
+con$availableMabs
+con$availableMabMixtures
+con$availableDonors
+con$availableViruses
 
-# Connect to the NYVAC durability comparison group
-# https://dataspace.cavd.org/cds/CAVD/app.view#group/groupsummary/220
-nyvac <- con$getGroup(220)
+# Pass an available object to a "get" method to get data
 
-# Refresh the connection object to update available studies and groups
-con$refresh()
+cvd408 <- con$availableStudies[study_id == "cvd408"] |>
+  con$getStudies()
+
+cd4Mabs <- con$availableMabs[grepl("CD4bs", mab_ab_binding_type)] |>
+  con$getMabs()
+
 }
 
 }
@@ -44,24 +46,31 @@ con$refresh()
 \item{\code{config}}{A list. Stores configuration of the connection object such as
 URL, path and username.}
 
-\item{\code{availableStudies}}{A data.table. The table of available studies.}
+\item{\code{availableStudies}}{A data.tabl of available studies.}
 
-\item{\code{availableGroups}}{A data.table. The table of available groups.}
+\item{\code{availableGroups}}{A data.table of available groups.}
 
-\item{\code{availablePublications}}{A data.table. The table of available
-publications.}
+\item{\code{availableMabs}}{A data.table of available mAbs.}
 
-\item{\code{mabGridSummary}}{A data.table. The filtered grid with updated
-\code{n_} columns and \code{geometric_mean_curve_ic50}.}
+\item{\code{availableMabMixtures}}{A data.table. Metadata of available
+mAb mixtures.}
 
-\item{\code{mabGrid}}{A data.table. The filtered mAb grid.}
+\item{\code{availableDonors}}{A data.table. Metadata about all mAb
+donors in the DataSpace.}
 
-\item{\code{virusMetadata}}{A data.table. Metadata about all viruses in the
-DataSpace.}
+\item{\code{availableViruses}}{A data.table of metadata about all virsues
+in the DataSpace and virus name synonyms.}
 
-\item{\code{virusNameMappingTables}}{A list of data.table objects. This
-list contains `virusMetadataAll`, `virusLabId`, and `virus_synonym`
-which are described in the vignette `Virus_Name_Mapping_Tables`.}
+\item{\code{availablePublications}}{A data.table of available
+publications metadata and available datasets.}
+
+\item{\code{virusNameMappingTables}}{A list of data.tables containing virus name mappings.}
+
+\item{\code{mabGridSummary}}{Defunct. Use `availableMabs`.}
+
+\item{\code{mabGrid}}{Defunct. Use `availableMabs`.}
+
+\item{\code{virusMetadata}}{Defunct. Use `virusNameMappingTables`.}
 }
 \if{html}{\out{</div>}}
 }
@@ -70,12 +79,17 @@ which are described in the vignette `Virus_Name_Mapping_Tables`.}
 \itemize{
 \item \href{#method-DataSpaceConnection-new}{\code{DataSpaceConnection$new()}}
 \item \href{#method-DataSpaceConnection-print}{\code{DataSpaceConnection$print()}}
+\item \href{#method-DataSpaceConnection-getStudies}{\code{DataSpaceConnection$getStudies()}}
+\item \href{#method-DataSpaceConnection-getGroups}{\code{DataSpaceConnection$getGroups()}}
+\item \href{#method-DataSpaceConnection-getMabs}{\code{DataSpaceConnection$getMabs()}}
+\item \href{#method-DataSpaceConnection-getDonors}{\code{DataSpaceConnection$getDonors()}}
+\item \href{#method-DataSpaceConnection-getDaash}{\code{DataSpaceConnection$getDaash()}}
+\item \href{#method-DataSpaceConnection-downloadPublicationData}{\code{DataSpaceConnection$downloadPublicationData()}}
 \item \href{#method-DataSpaceConnection-getStudy}{\code{DataSpaceConnection$getStudy()}}
 \item \href{#method-DataSpaceConnection-getGroup}{\code{DataSpaceConnection$getGroup()}}
+\item \href{#method-DataSpaceConnection-getMab}{\code{DataSpaceConnection$getMab()}}
 \item \href{#method-DataSpaceConnection-filterMabGrid}{\code{DataSpaceConnection$filterMabGrid()}}
 \item \href{#method-DataSpaceConnection-resetMabGrid}{\code{DataSpaceConnection$resetMabGrid()}}
-\item \href{#method-DataSpaceConnection-getMab}{\code{DataSpaceConnection$getMab()}}
-\item \href{#method-DataSpaceConnection-downloadPublicationData}{\code{DataSpaceConnection$downloadPublicationData()}}
 \item \href{#method-DataSpaceConnection-refresh}{\code{DataSpaceConnection$refresh()}}
 \item \href{#method-DataSpaceConnection-clone}{\code{DataSpaceConnection$clone()}}
 }
@@ -128,67 +142,138 @@ Print the \code{DataSpaceConnection} object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataSpaceConnection-getStudy"></a>}}
-\if{latex}{\out{\hypertarget{method-DataSpaceConnection-getStudy}{}}}
-\subsection{Method \code{getStudy()}}{
-Create a \code{\link{DataSpaceStudy}} object.
+\if{html}{\out{<a id="method-DataSpaceConnection-getStudies"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-getStudies}{}}}
+\subsection{Method \code{getStudies()}}{
+Create a `DataSpaceStudies` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getStudy(studyName)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getStudies(availableStudies = self$availableStudies)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{studyName}}{A character. Name of the study to retrieve.}
+\item{\code{availableStudies}}{an `availableStudies` object, or a vector of `study_id` values.}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataSpaceConnection-getGroups"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-getGroups}{}}}
+\subsection{Method \code{getGroups()}}{
+Create a `DataSpaceGroups` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getGroups(availableGroups = self$availableGroups)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{availableGroups}}{an `availableGroups` object, or a vector of `group id` values.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataSpaceConnection-getMabs"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-getMabs}{}}}
+\subsection{Method \code{getMabs()}}{
+Create a `DataSpaceMabs` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getMabs(
+  availableMabs = self$availableMabs,
+  includeMixtures = "yes"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{availableMabs}}{an `availableMabs` or
+`availableMabMixtures` object, or a vector of `mab id` values. `mab_id` values are
+inferred from `availableMabMixtures` objects.}
+
+\item{\code{includeMixtures}}{Whether or not to include mab mixtures. "yes", "no", or "only"
+are valid. The default, "yes", will return any available mAb mixtures for any mAb passed here.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataSpaceConnection-getDonors"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-getDonors}{}}}
+\subsection{Method \code{getDonors()}}{
+Create a `DataSpaceDonors` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getDonors(availableDonors = self$availableDonors)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{availableDonors}}{an `availableDonors` object, or a vector of `donor_id` values.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataSpaceConnection-getDaash"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-getDaash}{}}}
+\subsection{Method \code{getDaash()}}{
+Create a `DataSpaceDaash` object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getDaash(availableDaash = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{availableDaash}}{an `availableMabs`, or `availableDonors` object, or a vector of `sequnce_id` values.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataSpaceConnection-downloadPublicationData"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-downloadPublicationData}{}}}
+\subsection{Method \code{downloadPublicationData()}}{
+Download study related publication datasets.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$downloadPublicationData(
+  availablePublications = NULL,
+  downloadDir = tempdir()
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{availablePublications}}{an `availablePublications` object or a vector of `publication_id` values.}
+
+\item{\code{downloadDir}}{A character. Optional, specifies directory to download nonstandard datasets.
+Default is use to the R session temp directory}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataSpaceConnection-getStudy"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-getStudy}{}}}
+\subsection{Method \code{getStudy()}}{
+Defunct. Use `getStudies`.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getStudy()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-getGroup"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-getGroup}{}}}
 \subsection{Method \code{getGroup()}}{
-Create a \code{\link{DataSpaceStudy}} object.
+Defunct. Use `getGroups`.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getGroup(groupId)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{groupId}}{An integer. ID of the group to retrieve.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataSpaceConnection-filterMabGrid"></a>}}
-\if{latex}{\out{\hypertarget{method-DataSpaceConnection-filterMabGrid}{}}}
-\subsection{Method \code{filterMabGrid()}}{
-Filter rows in the mAb grid by specifying the values to keep in the
-columns found in the \code{mabGrid} field. It takes the column and the
-values and filters the underlying tables.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$filterMabGrid(using, value)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{using}}{A character. Name of the column to filter.}
-
-\item{\code{value}}{A character vector. Values to keep in the mAb grid.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataSpaceConnection-resetMabGrid"></a>}}
-\if{latex}{\out{\hypertarget{method-DataSpaceConnection-resetMabGrid}{}}}
-\subsection{Method \code{resetMabGrid()}}{
-Reset the mAb grid to the unfiltered state.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$resetMabGrid()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getGroup()}\if{html}{\out{</div>}}
 }
 
 }
@@ -196,41 +281,31 @@ Reset the mAb grid to the unfiltered state.
 \if{html}{\out{<a id="method-DataSpaceConnection-getMab"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-getMab}{}}}
 \subsection{Method \code{getMab()}}{
-Create a \code{\link{DataSpaceMab}} object.
+Defunct. Use `getMabs`.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getMab()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataSpaceConnection-downloadPublicationData"></a>}}
-\if{latex}{\out{\hypertarget{method-DataSpaceConnection-downloadPublicationData}{}}}
-\subsection{Method \code{downloadPublicationData()}}{
-Download publication data for a chosen publication.
+\if{html}{\out{<a id="method-DataSpaceConnection-filterMabGrid"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-filterMabGrid}{}}}
+\subsection{Method \code{filterMabGrid()}}{
+Defunct. Use `availableMabs`.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$downloadPublicationData(
-  publicationId,
-  outputDir = getwd(),
-  unzip = TRUE,
-  verbose = TRUE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$filterMabGrid()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{publicationId}}{A character/integer. ID for the publication to
-download data for.}
-
-\item{\code{outputDir}}{A character. Path to directory to download publication
-data.}
-
-\item{\code{unzip}}{A logical. If TRUE, unzip publication data to outputDir.}
-
-\item{\code{verbose}}{A logical. Default TRUE.}
 }
-\if{html}{\out{</div>}}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataSpaceConnection-resetMabGrid"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-resetMabGrid}{}}}
+\subsection{Method \code{resetMabGrid()}}{
+Defunct. Use `availableMabs`.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$resetMabGrid()}\if{html}{\out{</div>}}
 }
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-refresh"></a>}}

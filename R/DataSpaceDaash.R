@@ -1,4 +1,7 @@
-#' The DataSpaceDaash class
+#' @title The DataSpaceDAASH class
+#'
+#' @description
+#' An R6 class for DataSpace DAASH data.
 #'
 #' @section Constructor:
 #' \code{DataSpaceConnection$getDaash()}
@@ -12,13 +15,11 @@
 #'
 #' # Get the daash object using either an availableMabs or
 #' # availableDonors object.
-#' 
 #' daash <- con$availableMabs[mab_ab_binding_type %like% "CD4"] |>
 #'   con$getDaash()
 #'
 #' # To get lineage sequences, query donors, then pipe available
 #' # donors to the connection getDaash object.
-#'
 #' daash <- con$availableDonors[
 #'   lineage_sequences_available == TRUE & mab_count < 10,
 #'   ] |>
@@ -26,7 +27,7 @@
 #'
 #' # Inspect what datasets are available
 #' names(daash$datasets)
-#' 
+#'
 #' # Inspect the `topCalls` dataset
 #' daash$datasets$topCalls
 #'

@@ -1,4 +1,7 @@
-#' The DataSpaceDonors class
+#' @title The DataSpaceDonors class
+#'
+#' @description
+#' An R6 class for DataSpace MAb Donor data.
 #'
 #' @section Constructor:
 #' \code{DataSpaceConnection$getMab()}
