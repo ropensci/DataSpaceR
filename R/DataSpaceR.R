@@ -11,8 +11,14 @@
 #' @seealso \code{\link{connectDS}}
 #' @author Ju Yeong Kim
 #' @importFrom R6 R6Class
+#' @importFrom Rlabkey getSession labkey.executeSql labkey.getQueryDetails labkey.selectRows labkey.setCurlOptions labkey.webdav.get labkey.webdav.listDir lsFolders makeFilter
 #' @importFrom assertthat assert_that is.number
-#' @importFrom data.table data.table setDT := rbindlist setorder setkey setkeyv
+#' @importFrom curl has_internet nslookup
+#' @importFrom data.table %like% copy data.table fread rbindlist setDT setkey setkeyv setnames setorder setcolorder shift
+#' @importFrom digest digest
+#' @importFrom httr content GET
+#' @importFrom jsonlite fromJSON
+#' @importFrom utils getFromNamespace packageVersion unzip
 NULL
 
 # Global Variables

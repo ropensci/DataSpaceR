@@ -1,6 +1,7 @@
 ## Set STAGING to TRUE in .Renviron to run tests against staging server.
-onStaging <- identical(tolower(Sys.getenv("STAGING")), "true")
+onStaging <- identical(tolower(Sys.getenv("DSR_STAGING")), "true")
 baseUrl <- ifelse(onStaging, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
+DSR_TESTING <- as.logical(Sys.getenv("DSR_TESTING"))
 
 ## build objects for testing column names for standardized assays
 .NABNAMES <- c(
@@ -32,7 +33,7 @@ baseUrl <- ifelse(onStaging, "https://dataspace-staging.cavd.org", "https://data
   "nab_response_id80",
   "slope",
   "vaccine_matched",
-  "study_prot",
+  "study_id",
   "virus_full_name",
   "virus_species",
   "virus_host_cell",
@@ -69,7 +70,7 @@ baseUrl <- ifelse(onStaging, "https://dataspace-staging.cavd.org", "https://data
   "response_method",
   "control",
   "pooled_info",
-  "study_prot",
+  "study_id",
   "functionality_score",
   "polyfunctionality_score"
 )
@@ -100,7 +101,7 @@ baseUrl <- ifelse(onStaging, "https://dataspace-staging.cavd.org", "https://data
   "mfi_bkgd",
   "mfi_bkgd_blank",
   "auc",
-  "study_prot"
+  "study_id"
 )
 
 .ELINAMES <- c(
@@ -130,14 +131,14 @@ baseUrl <- ifelse(onStaging, "https://dataspace-staging.cavd.org", "https://data
   "lab_code",
   "exp_assayid",
   "vaccine_matched",
-  "study_prot"
+  "study_id"
 )
 
 .PKNAMES <- c(
   "participant_id",
   "participant_visit",
   "visit_day",
-  "study_prot",
+  "study_id",
   "visit_code",
   "visit_time_label",
   "hours_post_initial_infusion",

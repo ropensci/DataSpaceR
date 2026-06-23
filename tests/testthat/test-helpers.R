@@ -1,4 +1,4 @@
-context("helpers")
+context("Helpers")
 
 test_that("`getUrlBase`", {
   PRODUCTION <- "https://dataspace.cavd.org"
@@ -23,33 +23,6 @@ test_that("`getUserEmail`", {
   assign("labkey.user.email", email, envir = .GlobalEnv)
   expect_equal(DataSpaceR:::getUserEmail(url, email), email)
   suppressWarnings(rm("labkey.user.email", envir = .GlobalEnv))
-})
-
-test_that("`getUrlPath`", {
-  expect_equal(DataSpaceR:::getUrlPath(""), "/CAVD")
-  expect_equal(DataSpaceR:::getUrlPath("cvd123"), "/CAVD/cvd123")
-  expect_error(DataSpaceR:::getUrlPath(NULL), "'study' cannot be NULL.")
-
-  assign("labkey.url.path", "/CAVD", envir = .GlobalEnv)
-  expect_equal(DataSpaceR:::getUrlPath(NULL), "/CAVD")
-  expect_equal(DataSpaceR:::getUrlPath("cvd123"), "/CAVD/cvd123")
-  suppressWarnings(rm("labkey.url.path", envir = .GlobalEnv))
-})
-
-test_that("`checkStudy`", {
-  url <- "https://dataspace.cavd.org"
-  expect_null(DataSpaceR:::checkStudy("cvd232", url))
-  expect_error(DataSpaceR:::checkStudy("hello", url))
-  expect_error(DataSpaceR:::checkStudy("hello", url, verbose = TRUE))
-})
-
-test_that("`fixStudy`", {
-  study <- "cvd232"
-  url <- "https://dataspace.cavd.org"
-  path <- "/CAVD/cvd232"
-
-  expect_equal(DataSpaceR:::fixStudy(study, url, path), study)
-  expect_equal(DataSpaceR:::fixStudy(NULL, url, path), study)
 })
 
 test_that("`getNetrc`", {

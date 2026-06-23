@@ -1,7 +1,9 @@
 ---
 title: "Introduction to DataSpaceR"
-author: "Ju Yeong Kim"
-date: "2022-06-15"
+author:
+  - Ju Yeong Kim
+  - Jason Taylor
+date: "2026-06-22"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to DataSpaceR}
@@ -10,26 +12,24 @@ vignette: >
 ---
 
 <style>
-table {
-    display: block;
-    max-width: 100%;
-    max-height: 600px;
-    overflow: scroll;
-}
-thead{
-    position: sticky;
-    top: 0px;
-    background-color: #fff;
+.sourceCode{
+    overflow: clip;
 }
 </style>
 
 
 
-This package provides a thin wrapper around [Rlabkey](https://cran.r-project.org/package=Rlabkey) and connects to the the [CAVD DataSpace](https://dataspace.cavd.org) database, making it easier to fetch datasets from specific studies.
+The DataSpaceR package enables connecting to the CAVD DataSpace (CDS) database in R, making it easier to fetch datasets (NAB, BAMA, MAB, BCRseq, etc.) from specific CAVD (Collaboration for AIDS Vaccine Discovery) studies. The package is a wrapper around Rlabkey.
+
+The examples below are meant to show abridged console output and are not intended to be exhaustive. In order to view the latest and most complete data, please follow the steps below to configure and use DataSpaceR.
+
+### DataSpaceR Version 1.0 Update
+
+>There have been some significant changes to DataSpaceR for version 1.0. All instantiated objects can host data from multiple members, for example, studies can be queried in bulk rather than as individual studies. The general API is similar, but users may now pass subsets of tables showing available data to methods that fetch those data instead of passing filter objects or IDs. This new method is similar to filtering the mAb grid in previous versions, which allowed us to supersede that method for getting mAb data, using our new method for getting mAbs across all object types.
 
 ## Configuration
 
-First, go to [DataSpace](https://dataspace.cavd.org) now and set yourself up with an account.
+You will need a DataSpace account to get started. if you do not have one yet, first go to [DataSpace](https://dataspace.cavd.org) to set up your account. Note that access restrictions may be in place for certain datasets.
 
 In order to connect to the CAVD DataSpace via `DataSpaceR`, you will need a `netrc` file in your home directory that will contain a `machine` name (hostname of DataSpace), and `login` and `password`. There are two ways to create a `netrc` file.
 
@@ -38,7 +38,7 @@ In order to connect to the CAVD DataSpace via `DataSpaceR`, you will need a `net
 On your R console, create a `netrc` file using a function from `DataSpaceR`:
 
 
-```r
+``` r
 writeNetrc(
   login = "yourEmail@address.com",
   password = "yourSecretPassword",
@@ -53,8 +53,8 @@ This will create a `netrc` file in your home directory. Make sure you have a val
 ***Alternatively***, you can manually create a netrc file.
 
 * On Windows, this file should be named `_netrc`
-* On UNIX/Mac, it should be named `.netrc`
-* The file should be located in the user's home directory, and the permissions on the file should be unreadable for everybody except the owner
+* On Linux/Mac, it should be named `.netrc`
+* The file should be located in the user's home directory, and the permissions on the file should be unreadable for everybody except the owner. 
 * To determine your home directory, run `Sys.getenv("HOME")` in R
 
 The following three lines must be included in the `.netrc` or `_netrc` file either separated by white space (spaces, tabs, or newlines) or commas. Multiple such blocks can exist in one file.
@@ -67,414 +67,490 @@ password supersecretpassword
 
 See [here](https://www.labkey.org/wiki/home/Documentation/page.view?name=netrc) for more information about `netrc`.
 
+## About DataSpaceR objects 
+
+The *cvd256* object shown above is an [`R6`](https://cran.r-project.org/package=R6) class, so it behaves like a true object. Functions, that we will call "methods", like `loadAvailableDatasets()`, are members of the object, and are accessed using the `$` semantic.
+
+In DataSpaceR, `get...` methods will return an new object, and `load...` methods will add some data to an existing object. There is also the `download...` verbage used to descibe a method that will download something from DataSpace to your computer. 
+
+Users can connect to DataSpace using the `connectDS()` function described below. This will return a connection object with data and methods. All objects returned from `get...` methods from a connection object inherit the connection object's data and methods as well. This makes data operations across objects faster and more flexible.
 
 ## Initiate a connection
 
-We'll be looking at study `cvd256`. If you want to use a different study, change that string. You can instantiate multiple connections to different studies simultaneously.
+A call to connectDS instantiates the connection to DataSpace.
 
 
-```r
+``` r
 library(DataSpaceR)
 con <- connectDS()
 con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
 #>   User: jmtaylor@scharp.org
-#>   Available studies: 273
-#>     - 77 studies with data
-#>     - 5049 subjects
-#>     - 423195 data points
-#>   Available groups: 3
-#>   Available publications: 1530
-#>     - 12 publications with data
+#>   Available Studies: 397
+#>     - 79 studies with data
+#>     - 5074 subjects
+#>     - 436354 data points
+#>   Available Groups: 6
+#>   Available Publications: 1910
+#>     - 30 publications with data
+#>   Available Connection objects:
+#>     - availableDonors
+#>     - availableGroups
+#>     - availableMabMixtures
+#>     - availableMabs
+#>     - availablePublications
+#>     - availableStudies
+#>     - availableViruses
+#>     - virusNameMappingTables
+#>   Available Connection methods:
+#>     - downloadPublicationData
+#>     - getDaash
+#>     - getDonors
+#>     - getGroups
+#>     - getMabs
+#>     - getStudies
 ```
 
 The call to `connectDS` instantiates the connection. Printing the object shows where it's connected and the available studies.
 
+From here, we can choose to preview one of the available objects and/or apply one of the available connection methods. For example, the `con$availableStudies` object contains information about all the available studies in the CAVD DataSpace. Check out the [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html) DataSpaceConnection for all available fields and methods.
 
-```r
-knitr::kable(head(con$availableStudies))
+
+``` r
+con$availableStudies
+#> Key: <study_id>
+#>      study_id                   short_name
+#>        <char>                       <char>
+#>   1:    cor01                         <NA>
+#>   2:   cvd232                 Parks_RV_232
+#>   3:   cvd234 Zolla-Pazner_Mab_test1 Study
+#>   4:   cvd235                 mAbs potency
+#>   5:   cvd236        neutralization assays
+#>  ---                                      
+#> 393:   vtn910                         <NA>
+#> 394:   vtn913                         <NA>
+#> 395:   vtn914                         <NA>
+#> 396:   vtn915                         <NA>
+#> 397:     x001                         <NA>
+#>                                                                                                                                                                                                                                                                    title
+#>                                                                                                                                                                                                                                                                   <char>
+#>   1: The correlate of risk targeted intervention study (CORTIS):  A randomized, partially-blinded, clinical trial of isoniazid and rifapentine (3HP) therapy to prevent pulmonary tuberculosis in high-risk individuals identified by a transcriptomic correlate of risk
+#>   2:                                                                                                                                                                           ​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.
+#>   3:                                                                                                                                                                                                                                              Zolla-Pazner_Mab_Test1
+#>   4:                                                                                                                                                                                                                                                  Weiss mAbs potency
+#>   5:                                                                                                                                                                                                                                               neutralization assays
+#>  ---                                                                                                                                                                                                                                                                    
+#> 393:                                                                                                           A protocol to assess the persistence of vaccine-induced seropositivity in participants who received vaccine in DAIDS-funded preventive HIV vaccine trials
+#> 394:                                                                                                                                              Follow-up to an adolescent HIV vaccine preparedness study in South Africa: retention, risk behavior, and HIV incidence
+#> 395:                                                                                                   A pilot cohort study to evaluate immune responses and activation at the foreskin and rectosigmoid mucosa in Ad5 seropositive HIV-negative Step Study participants
+#> 396:                                                                                                                A prospective study evaluating the use of self-administered vaginal swabs for the detection of HIV-1 virions among 18 to 25 year-old women in Soweto
+#> 397:                                                                                                                                                                                                                                                                <NA>
+#>                           type   status                                   stage            species start_date
+#>                         <char>   <char>                                  <char>             <char>     <Date>
+#>   1:                 Phase III Inactive                         Assays complete              Human       <NA>
+#>   2:          Pre-Clinical NHP Inactive                         Assays complete     Rhesus macaque 2009-11-24
+#>   3: Antibody Characterization Inactive                         Assays complete Non-organism study 2009-02-03
+#>   4: Antibody Characterization Inactive                         Assays complete Non-organism study 2008-08-21
+#>   5: Antibody Characterization   Active                             In progress Non-organism study 2009-02-03
+#>  ---                                                                                                         
+#> 393:             Observational Inactive                      Follow up complete              Human       <NA>
+#> 394:              Preparedness Inactive Concluded, no further activity expected              Human       <NA>
+#> 395:             Developmental Inactive               Primary analysis complete              Human       <NA>
+#> 396:             Developmental Inactive                      Follow up complete              Human       <NA>
+#> 397:                      <NA>     <NA>                                    <NA>               <NA>       <NA>
+#>                                  strategy network data_availability                   ni_data_availability
+#>                                    <char>  <char>            <char>                                 <char>
+#>   1:                                 <NA>    GHDC              <NA>                                   <NA>
+#>   2: Vector vaccines (viral or bacterial)    CAVD              <NA> Microarray Data, Treatment assignments
+#>   3:         Prophylactic neutralizing Ab    CAVD              <NA>                                   <NA>
+#>   4:         Prophylactic neutralizing Ab    CAVD              <NA>                                   <NA>
+#>   5:         Prophylactic neutralizing Ab    CAVD              <NA>                                   <NA>
+#>  ---                                                                                                      
+#> 393:                                 <NA>    HVTN              <NA>                                   <NA>
+#> 394:                                 <NA>    HVTN              <NA>                                   <NA>
+#> 395:                                 <NA>    HVTN              <NA>                                   <NA>
+#> 396:                                 <NA>    HVTN              <NA>                                   <NA>
+#> 397:                                 <NA>    VISC              <NA>                                   <NA>
 ```
 
+The available connection methods can be applied to get data associated with one or more objects (e.g., studies or mAbs).  For example, we can use `con$getStudies` to create a connection to the study `cvd256`. 
 
 
-|study_name |short_name                   |title                                                                                                                                                                                                                                                               |type               |status   |stage            |species            |start_date |strategy                             |network |data_availability |ni_data_availability |
-|:----------|:----------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|:--------|:----------------|:------------------|:----------|:------------------------------------|:-------|:-----------------|:--------------------|
-|cor01      |NA                           |The correlate of risk targeted intervention study (CORTIS):  A randomized, partially-blinded, clinical trial of isoniazid and rifapentine (3HP) therapy to prevent pulmonary tuberculosis in high-risk individuals identified by a transcriptomic correlate of risk |Phase III          |Inactive |Assays Completed |Human              |NA         |NA                                   |GH-VAP  |NA                |NA                   |
-|cvd232     |Parks_RV_232                 |​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.                                                                                                                                                                           |Pre-Clinical NHP   |Inactive |Assays Completed |Rhesus macaque     |2009-11-24 |Vector vaccines (viral or bacterial) |CAVD    |NA                |NA                   |
-|cvd234     |Zolla-Pazner_Mab_test1 Study |Zolla-Pazner_Mab_Test1                                                                                                                                                                                                                                              |Antibody Screening |Inactive |Assays Completed |Non-Organism Study |2009-02-03 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
-|cvd235     |mAbs potency                 |Weiss mAbs potency                                                                                                                                                                                                                                                  |Antibody Screening |Inactive |Assays Completed |Non-Organism Study |2008-08-21 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
-|cvd236     |neutralization assays        |neutralization assays                                                                                                                                                                                                                                               |Antibody Screening |Active   |In Progress      |Non-Organism Study |2009-02-03 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
-|cvd238     |Gallo_PA_238                 |HIV-1 neutralization responses in chronically infected individuals                                                                                                                                                                                                  |Antibody Screening |Inactive |Assays Completed |Non-Organism Study |2009-01-08 |Prophylactic neutralizing Ab         |CAVD    |NA                |NA                   |
-
-`con$availableStudies` shows the available studies in the CAVD DataSpace. Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html) of `DataSpaceConnection` for all available fields and methods.
-
-
-```r
-cvd256 <- con$getStudy("cvd256")
+``` r
+cvd256 <- con$getStudies("cvd256")
 cvd256
-#> <DataSpaceStudy>
-#>   Study: cvd256
-#>   URL: https://dataspace.cavd.org/CAVD/cvd256
-#>   Available datasets:
+#> <DataSpaceStudies>
+#>   Studies: cvd256
+#>   Available integrated datasets:
 #>     - Binding Ab multiplex assay
 #>     - Demographics
 #>     - Neutralizing antibody
 #>   Available non-integrated datasets:
+#>   Available publication datasets:
+#>   Available Studies objects:
+#>     - availableDatasets
+#>     - datasets
+#>     - studies
+#>     - studyInfo
+#>     - treatmentArm
+#>     - variableDefinitions
+#>   Available Studies methods:
+#>     - loadAvailableDatasets
+#>   Available Connection objects:
+#>     - availableDonors
+#>     - availableGroups
+#>     - availableMabMixtures
+#>     - availableMabs
+#>     - availablePublications
+#>     - availableStudies
+#>     - availableViruses
+#>     - virusNameMappingTables
+#>   Available Connection methods:
+#>     - downloadPublicationData
+#>     - getDaash
+#>     - getDonors
+#>     - getGroups
+#>     - getMabs
+#>     - getStudies
 ```
 
-`con$getStudy` creates a connection to the study `cvd256`. Printing the object shows where it's connected, to what study, and the available datasets.
+Printing the object shows where it's connected, to what study, and the available datasets.
 
 
-```r
-knitr::kable(cvd256$availableDatasets)
+``` r
+cvd256$availableDatasets
+#>    study_id     dataset_type assay_identifier                assay_label
+#>      <char>           <char>           <char>                     <char>
+#> 1:   cvd256 Integrated Assay             BAMA Binding Ab multiplex assay
+#> 2:   cvd256 Integrated Assay     Demographics               Demographics
+#> 3:   cvd256 Integrated Assay              NAb      Neutralizing antibody
+cvd256$treatmentArm
+#> Key: <arm_id>
+#>    study_id        arm_id arm_part arm_group arm_name randomization     coded_label last_day
+#>      <char>        <char>   <char>    <char>   <char>        <char>          <char>    <int>
+#> 1:   cvd256 cvd256-NA-A-A       NA         A        A       Vaccine Group A Vaccine      168
+#> 2:   cvd256 cvd256-NA-B-B       NA         B        B       Vaccine Group B Vaccine      168
+#>                                                                                              description
+#>                                                                                                   <char>
+#> 1:     DNA-C 4 mg administered IM at weeks 0, 4, and 8 AND NYVAC-C 10^7pfu/mL administered IM at week 24
+#> 2: DNA-C 4 mg administered IM at weeks 0 and 4 AND NYVAC-C 10^7pfu/mL administered IM at weeks 20 and 24
 ```
-
-
-
-|name         |label                      |    n|integrated |
-|:------------|:--------------------------|----:|:----------|
-|BAMA         |Binding Ab multiplex assay | 6740|TRUE       |
-|Demographics |Demographics               |  121|TRUE       |
-|NAb          |Neutralizing antibody      | 1419|TRUE       |
-
-```r
-knitr::kable(cvd256$treatmentArm)
-```
-
-
-
-|arm_id        |arm_part |arm_group |arm_name |randomization |coded_label     | last_day|description                                                                                           |
-|:-------------|:--------|:---------|:--------|:-------------|:---------------|--------:|:-----------------------------------------------------------------------------------------------------|
-|cvd256-NA-A-A |NA       |A         |A        |Vaccine       |Group A Vaccine |      168|DNA-C 4 mg administered IM at weeks 0, 4, and 8 AND NYVAC-C 10^7pfu/mL administered IM at week 24     |
-|cvd256-NA-B-B |NA       |B         |B        |Vaccine       |Group B Vaccine |      168|DNA-C 4 mg administered IM at weeks 0 and 4 AND NYVAC-C 10^7pfu/mL administered IM at weeks 20 and 24 |
 
 Available datasets and treatment arm information for the connection can be accessed by `availableDatasets` and `treatmentArm`.
 
+You may also query `availableStudies` and pass its results to the `getStudies` method.
 
-## Fetching datasets
-
-We can grab any of the datasets listed in the connection (`availableDatasets`).
+You may also query `availableStudies` (or any of the other `availableXXX` objects) and pass its results to `getStudies` (or any of the other methods). For example, if you want all available BAMA data from studies in rhesus macaques:
 
 
-```r
-NAb <- cvd256$getDataset("NAb")
-dim(NAb)
+``` r
+macaqueBama <- con$availableStudies[
+  species == "Rhesus macaque" &  grepl("BAMA", data_availability)
+] |>
+  con$getStudies()
+```
+
+## Loading Assay Datasets
+
+We can load any of the datasets listed in the connection (`availableDatasets`). These are loaded to the study object.
+
+
+``` r
+cvd256$loadAvailableDatasets("NAb")
+dim(cvd256$datasets$NAb)
 #> [1] 1419   33
-colnames(NAb)
-#>  [1] "participant_id"      "participant_visit"   "visit_day"          
-#>  [4] "assay_identifier"    "summary_level"       "specimen_type"      
-#>  [7] "antigen"             "antigen_type"        "virus"              
-#> [10] "virus_type"          "virus_insert_name"   "clade"              
-#> [13] "neutralization_tier" "tier_clade_virus"    "target_cell"        
-#> [16] "initial_dilution"    "titer_ic50"          "titer_ic80"         
-#> [19] "response_call"       "nab_lab_source_key"  "lab_code"           
-#> [22] "exp_assayid"         "titer_id50"          "titer_id80"         
-#> [25] "nab_response_id50"   "nab_response_id80"   "slope"              
-#> [28] "vaccine_matched"     "study_prot"          "virus_full_name"    
+colnames(cvd256$datasets$NAb)
+#>  [1] "participant_id"      "participant_visit"   "visit_day"           "assay_identifier"    "summary_level"      
+#>  [6] "specimen_type"       "antigen"             "antigen_type"        "virus"               "virus_type"         
+#> [11] "virus_insert_name"   "clade"               "neutralization_tier" "tier_clade_virus"    "target_cell"        
+#> [16] "initial_dilution"    "titer_ic50"          "titer_ic80"          "response_call"       "nab_lab_source_key" 
+#> [21] "lab_code"            "exp_assayid"         "titer_id50"          "titer_id80"          "nab_response_id50"  
+#> [26] "nab_response_id80"   "slope"               "vaccine_matched"     "study_id"            "virus_full_name"    
 #> [31] "virus_species"       "virus_host_cell"     "virus_backbone"
 ```
 
-The *cvd256* object is an [`R6`](https://cran.r-project.org/package=R6) class, so it behaves like a true object. Functions (like `getDataset`) are members of the object, thus the `$` semantics to access member functions.
-
-We can get detailed variable information using `getDatasetDescription`. `getDataset` and `getDatasetDescription` accept either the `name` or `label` field listed in `availableDatasets`.
+We may also pass the `availableDatasets` object to load datasets to the studies object.
 
 
-```r
-knitr::kable(cvd256$getDatasetDescription("NAb"))
+``` r
+cvd256$availableDatasets[assay_identifier %in% c("BAMA", "Demographics")] |>
+  cvd256$loadAssayDatasets()
+#> Error: attempt to apply non-function
+
+names(
+  cvd256$datasets
+)
+#> [1] "NAb"
 ```
 
+We can view detailed variable information for all datasets loaded from the `variableDefinitions` field. 
 
 
-|fieldName           |caption                                     |type                 |description                                                                                                                                                               |
-|:-------------------|:-------------------------------------------|:--------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|ParticipantId       |Participant ID                              |Text (String)        |Subject identifier                                                                                                                                                        |
-|antigen             |Antigen name                                |Text (String)        |The name of the antigen (virus) being tested.                                                                                                                             |
-|antigen_type        |Antigen type                                |Text (String)        |The standardized term for the type of virus used in the construction of the nAb antigen.                                                                                  |
-|assay_identifier    |Assay identifier                            |Text (String)        |Name identifying assay                                                                                                                                                    |
-|clade               |Virus clade                                 |Text (String)        |The clade (gene subtype) of the virus (antigen) being tested.                                                                                                             |
-|exp_assayid         |Experimental Assay Design Code              |Integer              |Unique ID assigned to the experiment design of the assay for tracking purposes.                                                                                           |
-|initial_dilution    |Initial dilution                            |Number (Double)      |Indicates the initial specimen dilution.                                                                                                                                  |
-|lab_code            |Lab ID                                      |Text (String)        |A code indicating the lab performing the assay.                                                                                                                           |
-|nab_lab_source_key  |Data provenance                             |Integer              |Details regarding the provenance of the assay results.                                                                                                                    |
-|nab_response_ID50   |Response call ID50                          |True/False (Boolean) |Indicates if neutralization is detected based on ID50 titer.                                                                                                              |
-|nab_response_ID80   |Response call ID80                          |True/False (Boolean) |Indicates if neutralization is detected based on ID80 titer.                                                                                                              |
-|neutralization_tier |Neutralization tier                         |Text (String)        |A classification specific to HIV NAb assay design, in which an antigen is assessed for its ease of neutralization (1=most easily neutralized, 3=least easily neutralized) |
-|response_call       |Response call                               |True/False (Boolean) |Indicates if neutralization is detected.                                                                                                                                  |
-|slope               |Slope                                       |Number (Double)      |The slope calculated using the difference between 50% and 80% neutralization.                                                                                             |
-|specimen_type       |Specimen type                               |Text (String)        |The type of specimen used in the assay. For nAb assays, this is generally serum or plasma.                                                                                |
-|study_prot          |Study Protocol                              |Text (String)        |Study protocol                                                                                                                                                            |
-|summary_level       |Data summary level                          |Text (String)        |Defines the level at which the magnitude or response has been summarized (e.g. summarized at the isolate level).                                                          |
-|target_cell         |Target cell                                 |Text (String)        |The cell line used in the assay to determine infection (lack of neutralization).  Generally TZM-bl or A3R5, but can also be other cell lines or non-engineered cells.     |
-|tier_clade_virus    |Neutralization tier + Antigen clade + Virus |Text (String)        |A combination of neutralization tier, antigen clade, and virus used for filtering.                                                                                        |
-|titer_ID50          |Titer ID50                                  |Number (Double)      |The adjusted value of 50% maximal inhibitory dilution (ID50).                                                                                                             |
-|titer_ID80          |Titer ID80                                  |Number (Double)      |The adjusted value of 80% maximal inhibitory dilution (ID80).                                                                                                             |
-|titer_ic50          |Titer IC50                                  |Number (Double)      |The half maximal inhibitory concentration (IC50).                                                                                                                         |
-|titer_ic80          |Titer IC80                                  |Number (Double)      |The 80% maximal inhibitory concentration (IC80).                                                                                                                          |
-|vaccine_matched     |Antigen vaccine match indicator             |True/False (Boolean) |Indicates if the interactive part of the antigen was designed to match the immunogen in the vaccine.                                                                      |
-|virus               |Virus name                                  |Text (String)        |The term for the virus (antigen) being tested.                                                                                                                            |
-|virus_backbone      |Virus backbone                              |Text (String)        |Indicates the backbone used to generate the virus if from a different plasmid than the envelope.                                                                          |
-|virus_full_name     |Virus full name                             |Text (String)        |The full name of the virus used in the construction of the nAb antigen.                                                                                                   |
-|virus_host_cell     |Virus host cell                             |Text (String)        |The host cell used to incubate the virus stock.                                                                                                                           |
-|virus_insert_name   |Virus insert name                           |Text (String)        |The amino acid sequence inserted in the virus construct.                                                                                                                  |
-|virus_species       |Virus species                               |Text (String)        |A classification for virus species using informal taxonomy.                                                                                                               |
-|virus_type          |Virus type                                  |Text (String)        |The type of virus used in the construction of the nAb antigen.                                                                                                            |
-|visit_day           |Visit Day                                   |Integer              |Target study day defined for a study visit. Study days are relative to Day 0, where Day 0 is typically defined as enrollment and/or first injection.                      |
-
-To get only a subset of the data and speed up the download, filters can be passed to `getDataset`. The filters are created using the `makeFilter` function of the `Rlabkey` package.
-
-
-```r
-cvd256Filter <- makeFilter(c("visit_day", "EQUAL", "0"))
-NAb_day0 <- cvd256$getDataset("NAb", colFilter = cvd256Filter)
-dim(NAb_day0)
-#> [1] 709  33
+``` r
+cvd256$variableDefinitions
+#> $NAb
+#>              field_name                                     caption
+#>                  <char>                                      <char>
+#>  1:           visit_day                                   Visit Day
+#>  2:    assay_identifier                            Assay identifier
+#>  3:       summary_level                          Data summary level
+#>  4:       specimen_type                               Specimen type
+#>  5:             antigen                                Antigen name
+#>  6:        antigen_type                                Antigen type
+#>  7:               virus                                  Virus name
+#>  8:          virus_type                                  Virus type
+#>  9:   virus_insert_name                           Virus insert name
+#> 10:               clade                                 Virus clade
+#> 11: neutralization_tier                         Neutralization tier
+#> 12:    tier_clade_virus Neutralization tier + Antigen clade + Virus
+#> 13:         target_cell                                 Target cell
+#> 14:    initial_dilution                            Initial dilution
+#> 15:          titer_ic50                                  Titer IC50
+#> 16:          titer_ic80                                  Titer IC80
+#> 17:       response_call                               Response call
+#> 18:  nab_lab_source_key                             Data provenance
+#> 19:            lab_code                                      Lab ID
+#> 20:         exp_assayid              Experimental Assay Design Code
+#> 21:               slope                                       Slope
+#> 22:     vaccine_matched             Antigen vaccine match indicator
+#> 23:     virus_full_name                             Virus full name
+#> 24:       virus_species                               Virus species
+#> 25:     virus_host_cell                             Virus host cell
+#> 26:      virus_backbone                              Virus backbone
+#>              field_name                                     caption
+#>                                                                                                                                                                   description
+#>                                                                                                                                                                        <char>
+#>  1:                      Target study day defined for a study visit. Study days are relative to Day 0, where Day 0 is typically defined as enrollment and/or first injection.
+#>  2:                                                                                                                                                    Name identifying assay
+#>  3:                                                          Defines the level at which the magnitude or response has been summarized (e.g. summarized at the isolate level).
+#>  4:                                                                                The type of specimen used in the assay. For nAb assays, this is generally serum or plasma.
+#>  5:                                                                                                                             The name of the antigen (virus) being tested.
+#>  6:                                                                                  The standardized term for the type of virus used in the construction of the nAb antigen.
+#>  7:                                                                                                                            The term for the virus (antigen) being tested.
+#>  8:                                                                                                            The type of virus used in the construction of the nAb antigen.
+#>  9:                                                                                                                  The amino acid sequence inserted in the virus construct.
+#> 10:                                                                                                             The clade (gene subtype) of the virus (antigen) being tested.
+#> 11: A classification specific to HIV NAb assay design, in which an antigen is assessed for its ease of neutralization (1=most easily neutralized, 3=least easily neutralized)
+#> 12:                                                                                        A combination of neutralization tier, antigen clade, and virus used for filtering.
+#> 13:     The cell line used in the assay to determine infection (lack of neutralization).  Generally TZM-bl or A3R5, but can also be other cell lines or non-engineered cells.
+#> 14:                                                                                                                                  Indicates the initial specimen dilution.
+#> 15:                                                                                                                         The half maximal inhibitory concentration (IC50).
+#> 16:                                                                                                                          The 80% maximal inhibitory concentration (IC80).
+#> 17:                                                                                                                                  Indicates if neutralization is detected.
+#> 18:                                                                                                                    Details regarding the provenance of the assay results.
+#> 19:                                                                                                                           A code indicating the lab performing the assay.
+#> 20:                                                                                           Unique ID assigned to the experiment design of the assay for tracking purposes.
+#> 21:                                                                                             The slope calculated using the difference between 50% and 80% neutralization.
+#> 22:                                                                      Indicates if the interactive part of the antigen was designed to match the immunogen in the vaccine.
+#> 23:                                                                                                   The full name of the virus used in the construction of the nAb antigen.
+#> 24:                                                                                                               A classification for virus species using informal taxonomy.
+#> 25:                                                                                                                           The host cell used to incubate the virus stock.
+#> 26:                                                                          Indicates the backbone used to generate the virus if from a different plasmid than the envelope.
+#>                                                                                                                                                                   description
 ```
-
-See `?makeFilter` for more information on the syntax.
-
-
-## Creating a connection to all studies
-
-To fetch data from multiple studies, create a connection at the project level.
-
-
-```r
-cavd <- con$getStudy("")
-```
-
-This will instantiate a connection at the `CAVD` level. Most functions work cross study connections just like they do on single studies.
-
-You can get a list of datasets available across all studies.
-
-
-```r
-cavd
-#> <DataSpaceStudy>
-#>   Study: CAVD
-#>   URL: https://dataspace.cavd.org/CAVD
-#>   Available datasets:
-#>     - Binding Ab multiplex assay
-#>     - Demographics
-#>     - Enzyme-Linked ImmunoSpot
-#>     - Intracellular Cytokine Staining
-#>     - Neutralizing antibody
-#>     - PK MAb
-#>   Available non-integrated datasets:
-knitr::kable(cavd$availableDatasets)
-```
-
-
-
-|name         |label                           |      n|integrated |
-|:------------|:-------------------------------|------:|:----------|
-|BAMA         |Binding Ab multiplex assay      | 170320|TRUE       |
-|Demographics |Demographics                    |   5049|TRUE       |
-|ELISPOT      |Enzyme-Linked ImmunoSpot        |   5610|TRUE       |
-|ICS          |Intracellular Cytokine Staining | 195883|TRUE       |
-|NAb          |Neutralizing antibody           |  51382|TRUE       |
-|PKMAb        |PK MAb                          |   3217|TRUE       |
-
-In all-study connection, `getDataset` will combine the requested datasets. Note that in most cases, the datasets will have too many subjects for quick data transfer, making filtering of the data a necessity. The `colFilter` argument can be used here, as described in the `getDataset` section.
-
-
-```r
-conFilter <- makeFilter(c("species", "EQUAL", "Human"))
-human <- cavd$getDataset("Demographics", colFilter = conFilter)
-dim(human)
-#> [1] 3142   36
-colnames(human)
-#>  [1] "subject_id"                      "subject_visit"                  
-#>  [3] "species"                         "subspecies"                     
-#>  [5] "sexatbirth"                      "race"                           
-#>  [7] "ethnicity"                       "country_enrollment"             
-#>  [9] "circumcised_enrollment"          "bmi_enrollment"                 
-#> [11] "agegroup_range"                  "agegroup_enrollment"            
-#> [13] "age_enrollment"                  "study_label"                    
-#> [15] "study_start_date"                "study_first_enr_date"           
-#> [17] "study_fu_complete_date"          "study_public_date"              
-#> [19] "study_network"                   "study_last_vaccination_day"     
-#> [21] "study_type"                      "study_part"                     
-#> [23] "study_group"                     "study_arm"                      
-#> [25] "study_arm_summary"               "study_arm_coded_label"          
-#> [27] "study_randomization"             "study_product_class_combination"
-#> [29] "study_product_combination"       "study_short_name"               
-#> [31] "study_grant_pi_name"             "study_strategy"                 
-#> [33] "study_prot"                      "genderidentity"                 
-#> [35] "studycohort"                     "bmi_category"
-```
-
-Check out [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceStudy.html) of `DataSpaceStudy` for all available fields and methods.
-
 
 ## Connect to a saved group
 
 A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
 
-Let's say you are using the App to filter and visualize data and want to save them for later or explore in R with `DataSpaceR`. You can save a group by clicking the Save button on the Active Filter Panel.
+Using the DataSpace application, you may filter and visualize data and save them for later as a "group" using the application Active Filters dialog. You may also explore those groups in R with `DataSpaceR`
 
-We can browse available the saved groups or the curated groups by DataSpace Team via `availableGroups`.
+We can browse saved groups via `availableGroups`.
 
 
-```r
-knitr::kable(con$availableGroups)
+``` r
+con$availableGroups
+#> Key: <group_id>
+#>    group_id                              label                     original_label
+#>       <int>                             <char>                             <char>
+#> 1:      220        NYVAC durability comparison                   NYVAC_durability
+#> 2:      228     HVTN 505 case control subjects     HVTN 505 case control subjects
+#> 3:      230 HVTN 505 polyfunctionality vs BAMA HVTN 505 polyfunctionality vs BAMA
+#> 4:      256           CAVD 239 integrated data           CAVD 239 integrated data
+#> 5:      292                            testing                            testing
+#> 6:      293                           testing2                           testing2
+#>                                                                                                                  description
+#>                                                                                                                       <char>
+#> 1:                           Compare durability in 4 NHP studies using NYVAC-C (vP2010)  and NYVAC-KC-gp140 (ZM96) products.
+#> 2:                                                          Participants from HVTN 505 included in the case-control analysis
+#> 3: Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort
+#> 4:       Integrated study data for CAVD 239, including integrated assay data, demographics, and treatment group information.
+#> 5:                                                                                                                      <NA>
+#> 6:                                                                                                                      <NA>
+#>    created_by shared     n                        studies
+#>        <char> <lgcl> <int>                         <char>
+#> 1:   ehenrich   TRUE    78 cvd281, cvd434, cvd259, cvd277
+#> 2:    drienna   TRUE   189                         vtn505
+#> 3:    drienna   TRUE   170                         vtn505
+#> 4:    drienna   TRUE    38                         cvd239
+#> 5:   jmtaylor  FALSE   238                         vtn505
+#> 6:   jmtaylor  FALSE  1253                         vtn505
 ```
-
-
-
-| group_id|label                              |original_label                     |description                                                                                                               |created_by |shared |   n|studies                        |
-|--------:|:----------------------------------|:----------------------------------|:-------------------------------------------------------------------------------------------------------------------------|:----------|:------|---:|:------------------------------|
-|      220|NYVAC durability comparison        |NYVAC_durability                   |Compare durability in 4 NHP studies using NYVAC-C (vP2010)  and NYVAC-KC-gp140 (ZM96) products.                           |ehenrich   |TRUE   |  78|cvd281, cvd434, cvd259, cvd277 |
-|      228|HVTN 505 case control subjects     |HVTN 505 case control subjects     |Participants from HVTN 505 included in the case-control analysis                                                          |drienna    |TRUE   | 189|vtn505                         |
-|      230|HVTN 505 polyfunctionality vs BAMA |HVTN 505 polyfunctionality vs BAMA |Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort |drienna    |TRUE   | 170|vtn505                         |
 
 To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to the "NYVAC durability comparison" group which has group ID 220 by `getGroup`.
 
 
-```r
-nyvac <- con$getGroup(220)
+``` r
+nyvac <- con$getGroups(220)
 nyvac
-#> <DataSpaceStudy>
-#>   Group: NYVAC durability comparison
-#>   URL: https://dataspace.cavd.org/CAVD
-#>   Available datasets:
+#> <DataSpaceGroups>
+#>   Groups: NYVAC durability comparison
+#>   Available integrated datasets:
 #>     - Binding Ab multiplex assay
 #>     - Demographics
 #>     - Enzyme-Linked ImmunoSpot
 #>     - Intracellular Cytokine Staining
 #>     - Neutralizing antibody
-#>   Available non-integrated datasets:
+#>   Available Groups objects:
+#>     - datasets
+#>     - donorMetadata
+#>     - mabMetadata
+#>     - mabMix
+#>     - mabMixMetadata
+#>     - variableDefinitions
+#>   Available Connection objects:
+#>     - availableDonors
+#>     - availableGroups
+#>     - availableMabMixtures
+#>     - availableMabs
+#>     - availablePublications
+#>     - availableStudies
+#>     - availableViruses
+#>     - virusNameMappingTables
+#>   Available Connection methods:
+#>     - downloadPublicationData
+#>     - getDaash
+#>     - getDonors
+#>     - getGroups
+#>     - getMabs
+#>     - getStudies
 ```
 
-Retrieving a dataset is the same as before.
+Or passing a filtered `availableGroups` object to `getGroup`.
 
 
-```r
-NAb_nyvac <- nyvac$getDataset("NAb")
-dim(NAb_nyvac)
-#> [1] 4281   33
+``` r
+nyvac <-  con$availableGroups[label %in% c("NYVAC durability comparison")] |>
+  con$getGroups()
+nyvac
+#> <DataSpaceGroups>
+#>   Groups: NYVAC durability comparison
+#>   Available integrated datasets:
+#>     - Binding Ab multiplex assay
+#>     - Demographics
+#>     - Enzyme-Linked ImmunoSpot
+#>     - Intracellular Cytokine Staining
+#>     - Neutralizing antibody
+#>   Available Groups objects:
+#>     - datasets
+#>     - donorMetadata
+#>     - mabMetadata
+#>     - mabMix
+#>     - mabMixMetadata
+#>     - variableDefinitions
+#>   Available Connection objects:
+#>     - availableDonors
+#>     - availableGroups
+#>     - availableMabMixtures
+#>     - availableMabs
+#>     - availablePublications
+#>     - availableStudies
+#>     - availableViruses
+#>     - virusNameMappingTables
+#>   Available Connection methods:
+#>     - downloadPublicationData
+#>     - getDaash
+#>     - getDonors
+#>     - getGroups
+#>     - getMabs
+#>     - getStudies
 ```
 
-## Access Virus Metadata
+Unlike the studies object, a group object automatically loads any datasets associated with the groups retrieved from DataSpace. 
+
+
+``` r
+nyvac$datasets |>
+  names()
+#> [1] "BAMA"         "Demographics" "ELISPOT"      "ICS"          "NAb"
+```
+
+## Accessing Virus Metadata
 
 DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NAb) assays. This data can be accessed through the app on the [NAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB/antigens) and [NAb MAb antigen page](https://dataspace.cavd.org/cds/CAVD/app.view#learn/learn/Assay/NAB%20MAB/antigens).
 
-We can access this metadata in `DataSpaceR` with `con$virusMetadata`:
+We can access this metadata in `DataSpaceR` with `availableViruses`:
 
 
-```r
-knitr::kable(head(con$virusMetadata))
+``` r
+con$availableViruses
+#> Key: <cds_virus_id>
+#>      cds_virus_id          virus                  virus_full_name virus_backbone virus_host_cell virus_plot_label
+#>            <char>         <char>                           <char>         <char>          <char>           <char>
+#>   1:        cds_1   0013095-2.11   0013095-2.11 [SG3Δenv] 293T/17        SG3Δenv         293T/17     0013095-2.11
+#>   2:       cds_10     0984.V2.C2     0984.V2.C2 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
+#>   3:      cds_100 B005018-8_F6.3 B005018-8_F6.3 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
+#>   4:      cds_101 B005582-7_G7.8 B005582-7_G7.8 [SG3Δenv] 293T/17        SG3Δenv         293T/17          B005582
+#>   5:      cds_102         BaL.26         BaL.26 [SG3Δenv] 293T/17        SG3Δenv         293T/17           BaL.26
+#>  ---                                                                                                             
+#> 799:       cds_94      92BR025.9      92BR025.9 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
+#> 800:       cds_95      933.v4.c4      933.v4.c4 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
+#> 801:       cds_97    98-F4_H5_13    98-F4_H5_13 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
+#> 802:       cds_98 A07412M1.vrc12 A07412M1.vrc12 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
+#> 803:       cds_99      AC10.0.29      AC10.0.29 [SG3Δenv] 293T/17        SG3Δenv         293T/17        AC10.0.29
+#>          virus_type virus_species  clade neutralization_tier
+#>              <char>        <char> <char>              <char>
+#>   1: Env Pseudotype           HIV   <NA>                   2
+#>   2: Env Pseudotype           HIV      C                   3
+#>   3: Env Pseudotype           HIV      C                   2
+#>   4: Env Pseudotype           HIV      C                <NA>
+#>   5: Env Pseudotype           HIV      B                  1B
+#>  ---                                                        
+#> 799: Env Pseudotype           HIV      C                <NA>
+#> 800: Env Pseudotype           HIV      C                   3
+#> 801: Env Pseudotype           HIV      C                   3
+#> 802: Env Pseudotype           HIV      D                   2
+#> 803: Env Pseudotype           HIV      B                   2
+#>                                                                                                                                                           virus_name_other
+#>                                                                                                                                                                     <char>
+#>   1:                                                                                                                                                                  <NA>
+#>   2:                                                                                                                                                            0984.v2.c2
+#>   3:                                                                                                                                                                  <NA>
+#>   4:                                                                                                                                              B005582, B005582-27_G7.8
+#>   5: BaL.26_TM, Bal.26, Bal.26 [SG3<94>~env] 293T/17, Bal.26 [SG3Δenv] 293T, HIV Bal.26, HIV Bal.26[-Luc]293T, HIV Bal.26[SG3<94>~env]293T/17, SG3�~env, SHIV 1157ipd3N4.3
+#>  ---                                                                                                                                                                      
+#> 799:             92BR025.9 [SG3<94>~env] 293T, 92BR025.9 [SG3<94>~env] 293T/17, HIV 92BR025.9, HIV 92BR025.9[SG3<94>~env]293T, HIV 92BR025.9[SG3<94>~env]293T/17, SG3�~env
+#> 800:                                                                                                                                                                  <NA>
+#> 801:                                                                                                                                                           98-F4_H5-13
+#> 802:                                                                                                                                  A07412M1.vrc12---349, A07412M1_VRC12
+#> 803:                                                                    AC10.0.29 [SG3<94>~env] 293T/17, AC10.0.29---451, HIV AC10.0.29, HIV AC10.0.29[SG3<94>~env]293T/17
 ```
 
+## Accessing MAb and MAb Donor Data
 
+Connection objects can return `DataSpaceMab` and `DataSpaceDonor` objects which are used to access mAb related data. See the vignette [Accessing Monoclonal Antibody Data](Monoconal_Antibody_Data.html) for more information.
 
-|assay_identifier |cds_virus_id |virus        |virus_type     |neutralization_tier |clade |antigen_control |virus_full_name                |virus_name_other |virus_species |virus_host_cell |virus_backbone |panel_names          |
-|:----------------|:------------|:------------|:--------------|:-------------------|:-----|:---------------|:------------------------------|:----------------|:-------------|:---------------|:--------------|:--------------------|
-|NAB MAB          |cds_1        |0013095-2.11 |Env Pseudotype |2                   |NA    |0               |0013095-2.11 [SG3Δenv] 293T/17 |NA               |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
-|NAB MAB          |cds_2        |001428-2.42  |Env Pseudotype |2                   |C     |0               |001428-2.42 [SG3Δenv] 293T/17  |NA               |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
-|NAB MAB          |cds_3        |0041.v3.c18  |Env Pseudotype |2                   |C     |0               |0041.v3.c18 [SG3Δenv] 293T/17  |0041.V3.C18      |HIV           |293T/17         |SG3Δenv        |NA                   |
-|NAB MAB          |cds_4        |0077.v1.c16  |Env Pseudotype |2                   |C     |0               |0077.v1.c16 [SG3Δenv] 293T/17  |0077.v1.c16      |HIV           |293T/17         |SG3Δenv        |NA                   |
-|NAB              |cds_252      |00836-2.5    |Env Pseudotype |1B                  |C     |0               |00836-2.5 [SG3Δenv] 293T/17    |NA               |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
-|NAB MAB          |cds_5        |0260.v5.c1   |Env Pseudotype |2                   |A     |0               |0260.v5.c1 [SG3Δenv] 293T/17   |0260.V5.C1       |HIV           |293T/17         |SG3Δenv        |Tiered diverse panel |
+## Accessing DataSpace DAASH
 
-## Access monoclonal antibody data
+The Database of Annotation Antibodies for HIV-1, or DAASH for short, can be accessed though mAb objects, or donor objects, or more directly via a `DataSpaceDaash` object. See the vigette [Accessing CDS DAASH](Accessing_CDS_DAASH.html) for more information.
 
-See other vignette for a tutorial on accessing monoclonal antibody data with `DataSpaceR`:
-
-
-```r
-vignette("Monoconal_Antibody_Data")
-```
-
-## Browse and Download Publication Data
+## Accessing Publication Data
 
 DataSpace maintains a curated collection of relevant publications, which can be accessed through the [Publications page](https://dataspace.cavd.org/cds/CAVD/app.view?#learn/learn/Publication) through the app. Metadata about these publications can be accessed through `DataSpaceR` with `con$availablePublications`.
 
-See Publication Data vignette for a tutorial on accessing publication data through DataSpaceR.
+See the vignette [Accessing Publication Data](Publication_Data.html) for a tutorial on accessing publication data with DataSpaceR.
+
+## Accessing Help Files
+
+Help files for each of the objects and each's documented public methods can be accessed using the help operator:
 
 ```r
-vignette("Publication_Data")
-#> Warning: vignette 'Publication_Data' not found
+?DataSpaceConnection
+?DataSpaceStudies
+?DataSpaceGroups
+?DataSpaceMabs
+?DataSpaceDonors
+?DataSpaceDaash
 ```
 
-## Reference Tables
-
-The followings are the tables of all fields and methods that work on `DataSpaceConnection` and `DataSpaceStudy` objects and could be used as a quick reference.
-
-### `DataSpaceConnection`
-
-| Name | Description |
-| --- | --- |
-| `availableStudies` | The table of available studies. |
-| `availableGroups` | The table of available groups. |
-| `availablePublications` | The table of available publications. |
-| `mabGrid` | The filtered mAb grid. |
-| `mabGridSummary` | The summarized mAb grid with updated `n_` columns and `geometric_mean_curve_ic50`. |
-| `virusMetadata` | Metadata about all viruses in the DataSpace. |
-| `filterMabGrid` | Filter rows in the mAb grid by specifying the values to keep in the columns found in the `mabGrid` field. |
-| `resetMabGrid` | Reset the mAb grid to the unfiltered state. |
-| `getMab` | Create a `DataSpaceMab` object by filtered `mabGrid`. |
-| `getStudy` | Create a `DataSpaceStudy` object by study. |
-| `getGroup` | Create a `DataSpaceStudy` object by group. |
-| `downloadPublicationData` | Download data from a chosen publication. |
-
-
-### `DataSpaceStudy`
-
-| Name | Description |
-| --- | --- |
-| `study` | The study name. |
-| `group` | The group name. |
-| `availableDatasets` | The table of datasets available in the study object. |
-| `treatmentArm` | The table of treatment arm information for the connected study. Not available for all study connection. |
-| `dataDir` | The default target directory for downloading non-integrated datasets. |
-| `studyInfo` | Stores the information about the study. |
-| `getDataset` | Get a dataset from the connection. |
-| `getDatasetDescription` | Get variable information. |
-| `setDataDir` | Set default target directory for downloading non-integrated datasets. |
-
-### `DataSpaceMab`
-
-| Name | Description |
-| --- | --- |
-| `studyAndMabs` | The table of available mAbs by study. |
-| `mabs` | The table of available mAbs and their attributes. |
-| `nabMab` | The table of mAbs and their neutralizing measurements against viruses. |
-| `studies` | The table of available studies. |
-| `assays` | The table of assay status by study. |
-| `variableDefinitions` | The table of variable definitions. |
-
-
-## Session information
-
-
-```r
-sessionInfo()
-#> R version 4.1.2 (2021-11-01)
-#> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Ubuntu 18.04.5 LTS
-#> 
-#> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
-#> 
-#> locale:
-#>  [1] LC_CTYPE=en_US.utf8       LC_NUMERIC=C             
-#>  [3] LC_TIME=en_US.utf8        LC_COLLATE=en_US.utf8    
-#>  [5] LC_MONETARY=en_US.utf8    LC_MESSAGES=en_US.utf8   
-#>  [7] LC_PAPER=en_US.utf8       LC_NAME=C                
-#>  [9] LC_ADDRESS=C              LC_TELEPHONE=C           
-#> [11] LC_MEASUREMENT=en_US.utf8 LC_IDENTIFICATION=C      
-#> 
-#> attached base packages:
-#> [1] stats     graphics  grDevices utils     datasets  methods   base     
-#> 
-#> other attached packages:
-#> [1] data.table_1.14.2 DataSpaceR_0.7.5  knitr_1.37       
-#> 
-#> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.8       digest_0.6.29    assertthat_0.2.1 R6_2.5.1        
-#>  [5] jsonlite_1.8.0   magrittr_2.0.2   evaluate_0.15    highr_0.9       
-#>  [9] httr_1.4.2       stringi_1.7.6    curl_4.3.2       tools_4.1.2     
-#> [13] stringr_1.4.0    Rlabkey_2.8.3    xfun_0.29        compiler_4.1.2
-```

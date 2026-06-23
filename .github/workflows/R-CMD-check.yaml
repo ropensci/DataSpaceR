@@ -25,7 +25,7 @@ jobs:
           - {os: macOS-latest,   r: 'release'}
           - {os: ubuntu-latest,  r: 'release'}
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,  r: '4.0.4'}
+          - {os: ubuntu-latest,  r: '4.4.2'}
 
 
     env:

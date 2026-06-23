@@ -1,0 +1,155 @@
+---
+title: "Accessing DastaSpace DAASH"
+author:
+  - Jason Taylor
+output: rmarkdown::html_vignette
+date: "2026-06-22"
+vignette: >
+  %\VignetteIndexEntry{Accessing CDS DAASH}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+table {
+    max-width: 100%;
+    max-height: 600px;
+    overflow: scroll;
+}
+thead{
+    position: sticky;
+    top: 0px;
+    background-color: #fff;
+}
+</style>
+
+
+
+## Purpose
+
+Within DataSpace, we have a database called the “Database of Annotated Antibody Sequences for HIV-1” or “DAASH”. The purpose of DAASH is to offer users access to antibody sequences, pre-computed germline alignments and related annotations, and predicted structures for a variety of HIV-1 bNAbs (broadly neutralizing antibodies) and mAbs (monoclonal antibodies).
+
+## Data Sources and Processing for DAASH
+
+The nucleotide sequences available in DAASH have been acquired from the Los Alamos National Laboratory (LANL), GenBank, and select publications. These sequences have been run through a processing pipeline which includes applying IgBLAST using the OGRDB germline database and [insert note about where predicted structures come from].
+
+### Accessing DAASH via a `DataSpaceConnection` object
+
+Before getting started with DAASH, please review and follow the instructions in the vignette [Introduction to DataSpaceR](DataSpaceR.html) on how to set up a DataSpace connection object. In particular, as with all DataSpaceR connections, the user must have a DataSpace account set up and have properly configured their netrc file before running the code below.
+
+DAASH data can be obtained from a connection object for one or more mAbs in availableMabs, by passing either an availableMabs object or a DataSpace mab_id to the getDaash() method. In the example below we are getting DAASH data for the VRC01 mAb.
+
+
+``` r
+library(DataSpaceR)
+
+con <- connectDS()
+
+vrc01 <- con$availableMabs[mab_name_std == "VRC01"] |>
+  con$getDaash()
+```
+
+The getDaash() method can be used to obtain data on a large number of sequences (), but users are advised to restrict their search before calling getDaash() in order to reduce the time required to load the data.
+
+DAASH also stores lineage sequences for some donors, and all available sequences from a given donor can be queried using a donor_id or availableDonors object.
+
+
+``` r
+ch505 <- con$availableDonors[donor_code == "Donor CH505"] |>
+  con$getDaash()
+#> Presently querying 631 sequences.
+```
+
+A DAASH object (obtained via getDaash) has the following fields:
+
+```r
+availableStructures
+daashMetadata
+datasets
+donorMetadata
+mabMetadata
+variableDefinitions
+```
+
+Sequences and alignments both can be accessed from the `datasets` field and are loaded automatically.
+
+
+``` r
+ch505$datasets |>
+  names()
+#> [1] "topCalls"        "alignments"      "sequences"       "alleleSequences" "runInformation"  "pdbAccession"
+```
+
+| Dataset           | Description                                                                                                 |
+|-------------------|-------------------------------------------------------------------------------------------------------------|
+| `sequences`       | BCR neucleotide sequences, CDS mAb IDs, and source information.                                             |
+| `alignments`      | Alignment information in an AIRR compatible schema .                                                        |
+| `topCalls`        | Top scoring germline alleles in long form.                           |
+| `alleleSequences` | Allele sequences for all germlines alleles identified for the antibodies queried form DataSpace.            |
+| `runInformation`  | Information regarding the alignment application settings, allele database, and date the alignment was made. |
+
+To access one of these active bindings, call it from the `DataSpaceDaash` object the sequences were loaded to, for example:
+
+
+``` r
+ch505$datasets$topCalls
+#> Key: <sequence_id>
+#>        sequence_id mab_id     donor_id mab_name_std  donor_code  chain       allele percent_identity matches alignment_length
+#>             <char> <char>       <char>       <char>      <char> <char>       <char>            <num>   <int>            <int>
+#>    1: cds_seq_1551   <NA> cds_donor_44         <NA> Donor CH505    IGH  IGHD5-24*01          100.000       7                7
+#>    2: cds_seq_1551   <NA> cds_donor_44         <NA> Donor CH505    IGH     IGHJ4*02          100.000      46               46
+#>    3: cds_seq_1551   <NA> cds_donor_44         <NA> Donor CH505    IGH  IGHV4-59*01           98.276     285              290
+#>    4: cds_seq_1551   <NA> cds_donor_44         <NA> Donor CH505    IGH  IGHD3-10*01          100.000       5                5
+#>    5: cds_seq_1551   <NA> cds_donor_44         <NA> Donor CH505    IGH     IGHJ5*02          100.000      34               34
+#>   ---                                                                                                                        
+#> 8399: cds_seq_4036   <NA> cds_donor_44         <NA> Donor CH505    IGH     IGHJ6*02           84.848      28               33
+#> 8400: cds_seq_4036   <NA> cds_donor_44         <NA> Donor CH505    IGH IGHV4-59*i03           88.211     217              246
+#> 8401: cds_seq_4036   <NA> cds_donor_44         <NA> Donor CH505    IGH  IGHD3-16*02          100.000       5                5
+#> 8402: cds_seq_4036   <NA> cds_donor_44         <NA> Donor CH505    IGH     IGHJ2*01           81.818      27               33
+#> 8403: cds_seq_4036   <NA> cds_donor_44         <NA> Donor CH505    IGH  IGHV4-61*10           87.698     227              252
+#>       score  rank run_application
+#>       <num> <int>          <char>
+#>    1:  14.1     1         IgBLAST
+#>    2:  89.1     1         IgBLAST
+#>    3: 438.0     1         IgBLAST
+#>    4:  10.3     2         IgBLAST
+#>    5:  66.1     2         IgBLAST
+#>   ---                            
+#> 8399:  35.3     4         IgBLAST
+#> 8400: 294.0     4         IgBLAST
+#> 8401:  10.3     5         IgBLAST
+#> 8402:  29.5     5         IgBLAST
+#> 8403: 291.0     5         IgBLAST
+```
+
+Descriptions for the various fields in each of these objects can be found using the `variableDefinitions` active binding.
+
+
+``` r
+ch505$variableDefinitions
+```
+
+A FASTA file can be exported from a DAASH. By default, sequence headers are generated DataSpace metadata however, the original headers from the sequence source can be used instead by toggling the `orginalHeaders` argument. If no path argument is passed, the function returns the lines of the fasta file instead.
+
+
+``` r
+ch505$getFastaFromSequences(path = "mySequences.fasta")
+
+## or
+
+ch505$getFastaFromSequences(originalHeaders = TRUE, path = "mySequences.fasta")
+```
+
+# Accessing DataSpace neutralizing antibody assay data from DAASH
+
+Using the `vrc01` DAASH object created above, we can fetch any available neutralizing antibody data from DataSpace by createing a mAb object and accessing those data from that.
+
+
+``` r
+mabs <- vrc01$availableMabs |>
+  con$getMabs()
+
+mabs$datasets |>
+  names()
+#> [1] "NABMAb"
+```
