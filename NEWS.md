@@ -1,3 +1,10 @@
+# DataSpaceR 1.0.0
+
+* Removed mAb grid filtering and view methods in favor of filtering an `availableMabs` object with `data.table` syntax, allowing the `getMabs` method to fetch data using that.
+* Applied new mAb fetch and filter process to all data query methods.
+* Studies and mAbs can now be queried for multiple entries, giving each class a new name indicating so.
+* Add class and methods for querying DataSpace DAASH data.
+
 # DataSpaceR 0.7.7
 
 * Fixed issues querying mab and donor information.
