@@ -233,7 +233,9 @@ limitFilters <- function(tab, field, limit = 250){
 splitSeqFilter <- function(filter){
   seqFilters <-
       data.table(
-        sequence_id = strsplit(gsub("sequence_id~in=", "", filter[grepl("^sequence_id", filter)]), "%3B")[[1]]
+        sequence_id = strsplit(
+          gsub("^query.sequence_id~in=", "", filter[grepl("^query.sequence_id~in=", filter)]), "%3B"
+        ) |> unlist()
       ) |>
     limitFilters(field = "sequence_id")
 
@@ -264,7 +266,9 @@ fetchDaash <- function(filter, config){
       setDT() |>
       suppressWarnings()
 
-  getTopCalls <- function(filter)
+  getTopCalls <- function(filter){
+    if(any(grepl("^query.sequence_id~in", filter)))
+      filter <- filter[grepl("^query.sequence_id~in", filter)]
     labkey.selectRows(
       baseUrl = config$labkeyUrlBase,
       folderPath = "/CAVD",
@@ -277,6 +281,7 @@ fetchDaash <- function(filter, config){
     ) |>
       setDT() |>
       suppressWarnings()
+  }
 
   getPdb <- function(filter)
     labkey.selectRows(
@@ -295,12 +300,10 @@ fetchDaash <- function(filter, config){
   if(any(grepl("sequence_id~in=", filter))){
 
     seqFilters <- splitSeqFilter(filter)
-    if(Sys.getenv("DSR_TESTING") == "TRUE")
-      seqFilters <- seqFilters[1:min(length(seqFilters), 2)]
 
     filters <- lapply(
       seqFilters,
-      \(sf) c(sf, filter[!grepl("^sequence_id", filter)]) |> as.matrix()
+      \(sf) c(sf, filter[!grepl("^query.sequence_id", filter)]) |> as.matrix()
     )
 
     daash$sequences <- filters |>
