@@ -135,7 +135,7 @@ DataSpaceDaash <- R6Class(
         structures <- structures[mab_id %in% mab_id,]
       for(i in structures$mab_id){
         out <- paste0(
-          paste(self$daashMetadata[mab_id == i, .(mab_name_std, mab_id, mab_lanl_id)], collapse = "^^^"),
+          paste(self$daashMetadata[mab_id == i, .(mab_name_std, mab_id, mab_lanl_id)] |> unique(), collapse = "^^^"),
           ".pdb"
         )
         pdb <- paste0(i, ".pdb")
