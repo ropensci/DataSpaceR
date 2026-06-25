@@ -23,7 +23,9 @@ Check that there is a netrc file with a valid entry for the
 CAVD DataSpace.
 }
 \examples{
-try(checkNetrc())
+\dontrun{
+checkNetrc()
+}
 }
 \seealso{
 \code{\link{connectDS}} \code{\link{writeNetrc}}

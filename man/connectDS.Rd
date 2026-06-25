@@ -37,11 +37,6 @@ default values. These are assigned to `options`, which are then used by the
 \dontrun{
 con <- connectDS()
 }
-
-con <- try(connectDS())
-if (inherits(con, "try-error")) {
-  warning("Read README for more information on how to set up a .netrc file.")
-}
 }
 \seealso{
 \code{\link{DataSpaceConnection}}

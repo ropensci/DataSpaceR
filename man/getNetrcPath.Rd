@@ -13,5 +13,7 @@ A character vector containing the default netrc file path
 Get a default netrc file path
 }
 \examples{
+\dontrun{
 getNetrcPath()
+}
 }

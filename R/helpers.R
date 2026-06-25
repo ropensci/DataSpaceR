@@ -568,7 +568,7 @@ downloadDocuments <- function(availableDocuments, downloadDir = tempdir()) {
       ret <-
         suppressMessages(
           tryCatch(
-            Rlabkey:::labkey.webdav.getByUrl( url, localFilePath = dst, overwrite = TRUE ),
+            labkey.webdav.getByUrl( url, localFilePath = dst, overwrite = TRUE ),
             error = \(e) FALSE
           )
         )
@@ -646,4 +646,5 @@ cleanReservedDataSpaceR6 <- function(nm){
 
 labkey.getRequestOptions <- getFromNamespace("labkey.getRequestOptions", "Rlabkey")
 labkey.get <- getFromNamespace("labkey.get", "Rlabkey")
+labkey.webdav.getByUrl <- getFromNamespace("labkey.webdav.getByUrl", "Rlabkey")
 

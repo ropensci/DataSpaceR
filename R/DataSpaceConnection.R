@@ -33,10 +33,6 @@
 #'
 #' }
 #'
-#' @importFrom jsonlite fromJSON
-#' @importFrom curl has_internet nslookup
-#' @importFrom Rlabkey labkey.selectRows
-#' @importFrom data.table copy
 DataSpaceConnection <- R6Class(
   classname = "DataSpaceConnection",
   public = list(

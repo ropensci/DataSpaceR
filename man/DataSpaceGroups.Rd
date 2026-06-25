@@ -22,8 +22,7 @@ groups <- con$availableGroups[label == "NYVAC durability comparison"] |>
   con$getGroups()
 
 # Retrieving group assay data for cvd408 from
-# DataSpace is done automatically when the groups object is
-# created.
+# DataSpace is done automatically when the groups object is created.
 groups$datasets$BAMA
 
 # Get variable information of the assay dataset

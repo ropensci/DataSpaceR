@@ -17,7 +17,7 @@ BugReports: https://github.com/ropensci/DataSpaceR/issues
 License: GPL-3
 Encoding: UTF-8
 Depends:
-    R (>= 4.2.0)
+    R (>= 4.3.0)
 Imports:
     utils,
     R6,
