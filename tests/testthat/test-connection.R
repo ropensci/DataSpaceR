@@ -12,7 +12,7 @@ if ("DataSpaceConnection" %in% class(con)) {
   test_that("`DataSpaceConnection`` contains correct fields and methods", {
 
     cap_output <- capture.output(con$print())
-    expect_length(cap_output, 26)
+    expect_length(cap_output, 28)
     if (length(cap_output) == 10) {
       expect_equal(cap_output[1], "<DataSpaceConnection>")
       expect_equal(cap_output[2], paste0("  URL: ", baseUrl))
@@ -27,7 +27,7 @@ if ("DataSpaceConnection" %in% class(con)) {
     }
 
     expect_equal(
-      cap_output[11:26],
+      cap_output[11:28],
       c(
         "  Available Connection objects:",
         "    - availableDonors"          ,
@@ -37,6 +37,7 @@ if ("DataSpaceConnection" %in% class(con)) {
         "    - availablePublications"    ,
         "    - availableStudies"         ,
         "    - availableViruses"         ,
+        "    - lanlMabMetadata"          ,
         "    - virusNameMappingTables"   ,
         "  Available Connection methods:",
         "    - downloadPublicationData"  ,
@@ -44,7 +45,8 @@ if ("DataSpaceConnection" %in% class(con)) {
         "    - getDonors"                ,
         "    - getGroups"                ,
         "    - getMabs"                  ,
-        "    - getStudies"
+        "    - getStudies"               ,
+        "    - loadLanlMabMetadata"
       )
     )
   })

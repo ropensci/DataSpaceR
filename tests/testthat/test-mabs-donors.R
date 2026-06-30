@@ -93,6 +93,24 @@ test_that("DataSpaceMabs", {
     names(mixyes$datasets), c("NABMAb", "PKMAb")
   )
 
+  mabyes$loadLanlMabMetadata()
+  mixyes$loadLanlMabMetadata()
+
+  expect_warning(
+    expect_true(
+      nrow(mixyes$lanlMabMetadata) <
+      nrow(con$lanlMabMetadata)
+    ), "Not all object LANL mabs have metadata"
+  )
+
+  expect_equal(
+    lapply(mabyes$lanlMabMetadata, is.list) |>
+      unlist() |>
+      which(x=_) |>
+      length(),
+    0
+  )
+
   mabyes$loadDaash()
 
   expect_equal(
@@ -172,6 +190,12 @@ test_that("DataSpaceDonors", {
 
   expect_true(
     don$datasets$daash$sequences[,.N, mab_id][,any(is.na(mab_id)) & any(!is.na(mab_id))]
+  )
+
+  don$loadLanlMabMetadata()
+
+  expect_equal(
+    nrow(don$lanlMabMetadata), 7
   )
 
   expect_equal(

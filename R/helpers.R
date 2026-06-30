@@ -542,6 +542,122 @@ removeContainerId <- function(lk){
   )
 }
 
+
+fetchLanlMetadata <- function(lanl_id){
+
+  url <- paste0("https://www.hiv.lanl.gov/mojo/immunology/api/v1/epitope/ab?", paste0("id=", lanl_id, collapse = "&"))
+
+  res <- tryCatch({
+    httr::GET(url)
+  }, error = function(e) {
+    if(grepl("SSL certificate problem: unable to get local issuer certificate", e$message))
+      stop("There was an error verifying the LANL SSL certificate. No metadata was retrieved.")
+  })
+
+  timeout <- 0
+  while(res$status != 200 & timeout <= 5){
+    Sys.sleep(1)
+    timeout <- timeout + 1
+    res <- httr::GET(url)
+  }
+
+  if(res$status == 200){
+    json <- fromJSON(content(res, as="text")[[1]])
+    return(data.table(json[["epitopes"]]))
+  } else {
+    return(paste0("No LANL metadata found at '", url, "'."))
+  }
+
+}
+
+
+fetchProcessLanlMetadata <- function(mabMetadata){
+
+  lanlIds <- mabMetadata$mab_lanl_id |> na.omit()
+  if(length(lanlIds) == 0)
+
+  message("Fetching metadata from LANL for ", length(mabMetadata$mab_lanl_id |> na.omit()), " mAbs.")
+
+  getQueryLimits <- \(tab, field, limit = 100){
+    sids <- unique(tab[[field]]) |> na.omit()
+    srts <- seq(1, length(sids), limit)
+    ends <- shift(seq(0, length(sids), limit), fill = length(sids), type="lead") |> unique()
+    Map(\(srt, end){
+      sids[srt:end]
+    }, srts, ends)
+  }
+
+  raw <- lapply(
+    getQueryLimits(mabMetadata, "mab_lanl_id"),
+    fetchLanlMetadata
+  )
+
+  lanlMeta <- raw |>
+    rbindlist(fill = TRUE)
+
+  isolation_ref <- Map(\(cite, id) {
+    setDT(cite)
+    cite[
+      isolation_ref == TRUE,
+      .(
+        isolation_ref =
+          paste0(
+            "pubmed_id: ", pubmed_id, ", ",
+            "dio: ", doi, ", ",
+            "issn: ", issn
+          ),
+        id = id
+      )
+    ]
+  }, lanlMeta$cite, lanlMeta$id) |>
+    rbindlist()
+
+  lanlMeta <- merge(lanlMeta, isolation_ref, by = "id", all.x = TRUE)
+
+  lanlMeta[,
+           `:=`(
+             patient=NULL, cite=NULL, note=NULL, keyword=NULL, origprotein_id=NULL, subprotein_id=NULL,
+             ab_contacts = lapply(ab_contacts, \(.) {
+               ifelse(length(.) != 0, paste(., collapse = ", "), NA)
+             }) |> unlist()
+           )]
+
+  nestFill <- \(col, id){
+    fill <- lapply(col, \(col) is.null(col) || length(col) == 0) |> unlist()
+    col[fill]  <- Map(\(.) list(id = .), id[fill])
+    col[!fill] <- Map(\(., ..){ .$id <- ..; return(.) }, col[!fill], id[!fill])
+    return(col)
+  }
+
+  nestParse <- \(col, id){
+    nestFill(col, id) |>
+      Map(f = \(.) {
+        . <- .[!grepl("_id$", names(.))]
+        Map(\(.) {
+          paste(., collapse = ",")
+        }, .)
+      })
+  }
+
+  flattenNames <- lapply(lanlMeta, is.list) |>
+    unlist() |>
+    which(x=_) |>
+    names()
+
+  lanlMeta[,id := as.character(id)]
+
+  for(nm in flattenNames) {
+    hold <- nestParse(lanlMeta[[nm]], lanlMeta$id) |>
+      rbindlist(fill = TRUE) |>
+      unique()
+    lanlMeta[[nm]] <- NULL
+    lanlMeta <- merge(lanlMeta, hold, by = "id", all.x = TRUE)
+  }
+
+  return(lanlMeta)
+
+}
+
 getVarInfo <- function(assay_identifier, fields, labkeyUrlBase, schema = "study"){
   labkey.getQueryDetails(
     baseUrl = labkeyUrlBase,

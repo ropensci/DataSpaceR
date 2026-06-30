@@ -246,6 +246,43 @@ DataSpaceConnection <- R6Class(
     },
 
     #' @description
+    #' Load any available mAb metadata from LANL.
+    loadLanlMabMetadata = function(){
+
+      if(is.null(private$.mabIds)){
+        stop("This objects does not load LANL mAb metadata.")
+      } else {
+        if(!is.null(private$.shared$.lanlMabMetadata)) {
+
+          mabIds <- setdiff(
+            private$.shared$.mabMetadata[!is.na(mab_lanl_id) & mab_id %in% private$.mabIds, mab_id],
+            private$.shared$.lanlMabMetadata$mab_id
+          )
+
+        } else {
+          mabIds <- private$.mabIds
+        }
+      }
+
+      mabIds <- private$.shared$.mabMetadata[!is.na(mab_lanl_id) & mab_id %in% mabIds, mab_id]
+
+      if(length(mabIds) > 0){
+        private$.shared$.lanlMabMetadata <- rbind(
+          private$.shared$.lanlMabMetadata,
+          merge(
+            private$.shared$.mabMetadata[,.(mab_id, mab_lanl_id)],
+            fetchProcessLanlMetadata(private$.shared$.mabMetadata[mab_id %in% mabIds]),
+            by.x = "mab_lanl_id",
+            by.y = "id"
+          ),
+          fill = TRUE
+        )
+        setcolorder(private$.shared$.lanlMabMetadata, c("mab_id", "mab_lanl_id"))
+      }
+
+    },
+
+    #' @description
     #' Defunct. Use `getStudies`.
     getStudy      = function() .Defunct("getStudies"),
 
@@ -332,6 +369,22 @@ DataSpaceConnection <- R6Class(
         publication_id %in% private$.publicationIds,
         -c("url", "remote_path", "document_id")
       ]
+    },
+
+    #' @field lanlMabMetadata A data.table of mAb metadata from LANL
+    #' of mAbs found in the object
+    lanlMabMetadata = function() {
+      if(is.null(private$.shared$.lanlMabMetadata))
+        stop("No LANL mAb metadata loaded. Run the `loadLanlMetadata()` method for this object to load LANL mAb metadata.")
+
+      lanlMabs <- private$.shared$.mabMetadata[!is.na(mab_lanl_id), mab_id]
+
+      if(
+        !all(private$.mabIds[private$.mabIds %in% lanlMabs] %in% private$.shared$.lanlMabMetadata[mab_id %in% lanlMabs,mab_id])
+      )
+        warning("Not all object LANL mabs have metadata loaded from LANL. Run the `loadLanlMetadata()` method for this object to load LANL mAb metadata.")
+
+      private$.shared$.lanlMabMetadata[mab_id %in% private$.mabIds]
     },
 
     #' @field virusNameMappingTables A list of data.tables containing virus name mappings.
