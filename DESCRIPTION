@@ -1,7 +1,7 @@
 Package: DataSpaceR
 Type: Package
 Title: Interface to 'the CAVD DataSpace'
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(person("Ju Yeong", "Kim", role = "aut"),
              person("Sean", "Hughes", role = "rev"),
              person("Jason", "Taylor", email = "jmtaylor@fredhutch.org", role = c("aut", "cre")),
@@ -34,4 +34,4 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.0.0

@@ -51,7 +51,9 @@ pgt121$datasets |>
 And each dataset can be accessed in the same fashion as accessing an item in a named list.
 
 ```r
-pgt121$datasets$NABMAb
+pgt121$
+  datasets$
+  NABMAb
 ```
 
 ## View metadata concerning the mAb object

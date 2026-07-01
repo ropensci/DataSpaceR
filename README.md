@@ -1,6 +1,3 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # DataSpaceR <img src="man/figures/logo.png" align="right" />
 
 <!-- badges: start -->
@@ -21,11 +18,11 @@ This package is intended for use by immunologists, bioinformaticians, and
 statisticians in HIV vaccine research, or anyone interested in the
 analysis of HIV immunological data across assays, studies, and time.
 
-This package simplifies access to the database by taking advantage of
-the standardization of the database to hide all the
-[Rlabkey](https://cran.r-project.org/package=Rlabkey) specific code away
-from the user, and it allows the users to access the study-specific
-datasets via [an object-oriented
+This package simplifies access by taking advantage of the
+standardization of the underlying DataSpace database and wraps
+[Rlabkey](https://cran.r-project.org/package=Rlabkey) specific code
+for the user, allowing the users to access datasets via an
+[object-oriented
 paradigm](https://cran.r-project.org/package=R6/readme/README.html).
 
 ## Examples & Documentation

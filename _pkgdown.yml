@@ -11,12 +11,24 @@ home:
 
 navbar:
   structure:
-    left:  [intro, reference, articles, tutorials, news]
-    right: [search, github, globe, twitter, lightswitch]
+    left:  [articles, reference, news]
+    right: [search, github, globe]
   components:
+    articles:
+      text: Vignettes
+      menu:
+      - text: Introduction to DataSpaceR
+        href: articles/DataSpaceR.html
+      - text: Accessing Studies and Groups
+        href: articles/Studies_Groups.html
+      - text: Accessing Monoclonal Antibody Data
+        href: articles/Monoconal_Antibody_Data.html
+      - text: Accessing DataSpace DAASH
+        href: articles/DataSpace_DAASH.html
+      - text: Accessing Publication Data
+        href: articles/Publication_Data.html
+      - text: Using The Virus Name Mapping Tables
+        href: articles/Virus_Name_Mapping_Tables.html
     globe:
       icon: fa-globe
       href: https://dataspace.cavd.org
-    twitter:
-      icon: fa-twitter
-      href: https://twitter.com/CAVDDataSpace

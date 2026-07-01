@@ -1,0 +1,140 @@
+---
+title: "Accessing Studies and Groups"
+author:
+  - Ju Yeong Kim
+  - Jason Taylor
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Accessing Studies and Groups}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.sourceCode{
+    overflow: clip;
+}
+</style>
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+STAGING <- identical(tolower(Sys.getenv("STAGING")), "true")
+labkey.url.base <- ifelse(STAGING, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Initiate a connection
+
+A call to connectDS instantiates the connection to DataSpace.
+
+```{r connectDS}
+library(DataSpaceR)
+con <- connectDS()
+con
+```
+
+The call to `connectDS` instantiates the connection. Printing the object shows where it's connected and the available studies.
+
+From here, we can choose to preview one of the available objects and/or apply one of the available connection methods. For example, the `con$availableStudies` object contains information about all the available studies in the CAVD DataSpace. Check out the [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html) DataSpaceConnection for all available fields and methods.
+
+```{r availableStudies}
+con$availableStudies
+```
+
+The available connection methods can be applied to get data associated with one or more objects (e.g., studies or mAbs).  For example, we can use `con$getStudies` to create a connection to the study `cvd256`. 
+
+```{r getStudy}
+cvd256 <- con$getStudies("cvd256")
+cvd256
+```
+
+Printing the object shows where it's connected, to what study, and the available datasets.
+
+```{r other-fields}
+cvd256$availableDatasets
+cvd256$treatmentArm
+```
+
+Available datasets and treatment arm information for the connection can be accessed by `availableDatasets` and `treatmentArm`.
+
+You may also query `availableStudies` and pass its results to the `getStudies` method.
+
+You may also query `availableStudies` (or any of the other `availableXXX` objects) and pass its results to `getStudies` (or any of the other methods). For example, if you want all available BAMA data from studies in rhesus macaques:
+
+```{r multi-studies}
+macaqueBama <- con$availableStudies[
+  species == "Rhesus macaque" &  grepl("BAMA", data_availability)
+] |>
+  con$getStudies()
+```
+
+## Loading Assay Datasets
+
+We can load any of the datasets listed in the connection (`availableDatasets`). These are loaded to the study object.
+
+```{r loadAvailableDatasets}
+cvd256$loadAvailableDatasets("NAb")
+dim(cvd256$datasets$NAb)
+colnames(cvd256$datasets$NAb)
+```
+
+We may also pass the `availableDatasets` object to load datasets to the studies object.
+
+```{r}
+cvd256$availableDatasets[assay_identifier %in% c("BAMA", "Demographics")] |>
+  cvd256$loadAvailableDatasets()
+
+cvd256$datasets |>
+  names()
+```
+
+We can view detailed variable information for all datasets loaded from the `variableDefinitions` field. 
+
+```{r getVariableInfo}
+cvd256$variableDefinitions
+```
+
+## Connect to a saved group
+
+A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
+
+Using the DataSpace application, you may filter and visualize data and save them for later as a "group" using the application Active Filters dialog. You may also explore those groups in R with `DataSpaceR`
+
+We can browse saved groups via `availableGroups`.
+
+```{r availableGroups}
+con$availableGroups
+```
+
+To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to the "NYVAC durability comparison" group which has group ID 220 by `getGroup`.
+
+```{r group-connection}
+nyvac <- con$getGroups(220)
+nyvac
+```
+
+Or passing a filtered `availableGroups` object to `getGroup`.
+
+```{r group-connection-label}
+nyvac <-  con$availableGroups[label %in% c("NYVAC durability comparison")] |>
+  con$getGroups()
+nyvac
+```
+
+Unlike the studies object, a group object automatically loads any datasets associated with the groups retrieved from DataSpace. 
+
+```{r group-connection-nab}
+nyvac$datasets |>
+  names()
+```
+
+## About DataSpaceR objects 
+
+The *cvd256* object shown above is an [`R6`](https://cran.r-project.org/package=R6) class, so it behaves like a true object. Functions, that we will call "methods", like `loadAvailableDatasets()`, are members of the object, and are accessed using the `$` semantic.
+
+In DataSpaceR, `get...` methods will return an new object, and `load...` methods will add some data to an existing object. There is also the `download...` verbage used to descibe a method that will download something from DataSpace to your computer. 
+
+Users can connect to DataSpace using the `connectDS()` function described below. This will return a connection object with data and methods. All objects returned from `get...` methods from a connection object inherit the connection object's data and methods as well. This makes data operations across objects faster and more flexible.

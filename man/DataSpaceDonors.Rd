@@ -32,114 +32,123 @@ donors$loadDaash()
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 }
 \section{Super class}{
-\code{\link[DataSpaceR:DataSpaceConnection]{DataSpaceR::DataSpaceConnection}} -> \code{DataSpaceDonors}
+\code{\link[DataSpaceR:DataSpaceConnection]{DataSpaceConnection}} -> \code{DataSpaceDonors}
 }
 \section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{mabMetadata}}{A data.table of mAbs with metadata found in
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{mabMetadata}}{A data.table of mAbs with metadata found in
 the object.}
 
-\item{\code{donorMetadata}}{A data.table of donors with metadata
+    \item{\code{donorMetadata}}{A data.table of donors with metadata
 found in the object.}
 
-\item{\code{datasets}}{A list of data.table objects containing the
+    \item{\code{datasets}}{A list of data.table objects containing the
 related data loaded.}
 
-\item{\code{variableDefinitions}}{A data.table of variable definitions.}
-}
-\if{html}{\out{</div>}}
+    \item{\code{variableDefinitions}}{A data.table of variable definitions.}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-DataSpaceDonors-new}{\code{DataSpaceDonors$new()}}
-\item \href{#method-DataSpaceDonors-print}{\code{DataSpaceDonors$print()}}
-\item \href{#method-DataSpaceDonors-loadDaash}{\code{DataSpaceDonors$loadDaash()}}
-\item \href{#method-DataSpaceDonors-refresh}{\code{DataSpaceDonors$refresh()}}
-\item \href{#method-DataSpaceDonors-clone}{\code{DataSpaceDonors$clone()}}
+  \itemize{
+    \item \href{#method-DataSpaceDonors-initialize}{\code{DataSpaceDonors$new()}}
+    \item \href{#method-DataSpaceDonors-print}{\code{DataSpaceDonors$print()}}
+    \item \href{#method-DataSpaceDonors-loadDaash}{\code{DataSpaceDonors$loadDaash()}}
+    \item \href{#method-DataSpaceDonors-refresh}{\code{DataSpaceDonors$refresh()}}
+    \item \href{#method-DataSpaceDonors-clone}{\code{DataSpaceDonors$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
+\if{html}{\out{<details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="downloadPublicationData"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-downloadPublicationData'><code>DataSpaceR::DataSpaceConnection$downloadPublicationData()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="filterMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-filterMabGrid'><code>DataSpaceR::DataSpaceConnection$filterMabGrid()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDaash"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDaash'><code>DataSpaceR::DataSpaceConnection$getDaash()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDonors"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDonors'><code>DataSpaceR::DataSpaceConnection$getDonors()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroup"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroup'><code>DataSpaceR::DataSpaceConnection$getGroup()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroups"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroups'><code>DataSpaceR::DataSpaceConnection$getGroups()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMab"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMab'><code>DataSpaceR::DataSpaceConnection$getMab()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMabs"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMabs'><code>DataSpaceR::DataSpaceConnection$getMabs()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudies"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudies'><code>DataSpaceR::DataSpaceConnection$getStudies()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudy"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudy'><code>DataSpaceR::DataSpaceConnection$getStudy()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="resetMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-resetMabGrid'><code>DataSpaceR::DataSpaceConnection$resetMabGrid()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="downloadPublicationData"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-downloadPublicationData'><code>DataSpaceConnection$downloadPublicationData()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="filterMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-filterMabGrid'><code>DataSpaceConnection$filterMabGrid()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDaash"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDaash'><code>DataSpaceConnection$getDaash()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDonors"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDonors'><code>DataSpaceConnection$getDonors()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroup"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroup'><code>DataSpaceConnection$getGroup()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroups"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroups'><code>DataSpaceConnection$getGroups()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMab"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMab'><code>DataSpaceConnection$getMab()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMabs"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMabs'><code>DataSpaceConnection$getMabs()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudies"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudies'><code>DataSpaceConnection$getStudies()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudy"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudy'><code>DataSpaceConnection$getStudy()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="loadLanlMabMetadata"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-loadLanlMabMetadata'><code>DataSpaceConnection$loadLanlMabMetadata()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="resetMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-resetMabGrid'><code>DataSpaceConnection$resetMabGrid()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataSpaceDonors-new"></a>}}
-\if{latex}{\out{\hypertarget{method-DataSpaceDonors-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize \code{DataSpaceMab} object.
+\if{html}{\out{<a id="method-DataSpaceDonors-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceDonors-initialize}{}}}
+\subsection{\code{DataSpaceDonors$new()}}{
+  Initialize \code{DataSpaceMab} object.
 See \code{\link{DataSpaceConnection}}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDonors$new(donorIds)}\if{html}{\out{</div>}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDonors$new(donorIds)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{donorIds}}{a character vector of `donor_id` values.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{donorIds}}{a character vector of `donor_id` values.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDonors-print"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceDonors-print}{}}}
-\subsection{Method \code{print()}}{
-Print the \code{DataSpaceMab} object summary.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDonors$print()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceDonors$print()}}{
+  Print the \code{DataSpaceMab} object summary.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDonors$print()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDonors-loadDaash"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceDonors-loadDaash}{}}}
-\subsection{Method \code{loadDaash()}}{
-Load DAASH data to the object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDonors$loadDaash()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceDonors$loadDaash()}}{
+  Load DAASH data to the object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDonors$loadDaash()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDonors-refresh"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceDonors-refresh}{}}}
-\subsection{Method \code{refresh()}}{
-Refresh the `DataSpaceDonors` object to update datasets.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDonors$refresh()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceDonors$refresh()}}{
+  Refresh the `DataSpaceDonors` object to update datasets.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDonors$refresh()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDonors-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceDonors-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDonors$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceDonors$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDonors$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }
