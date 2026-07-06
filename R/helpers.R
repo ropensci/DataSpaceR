@@ -702,7 +702,7 @@ downloadDocuments <- function(availableDocuments, downloadDir = tempdir()) {
   if(any(availableDocuments[,!success]))
     warning("Failed to download: ", paste0(availableDocuments[success == FALSE, basename(source)], collapse = ", "))
 
-  class(availableDocuments) <- c(class(availableDocuments), "downloadDocuments")
+  attr(availableDocuments, "dsr_type") <- "downloadDocuments"
 
   return(availableDocuments)
 }

@@ -246,7 +246,7 @@ DataSpaceStudies <- R6Class(
         private$.availableIntegratedDatasets,
         private$.availableNIDatasets
       )
-      class(datasets) <- c("availableDatasets", class(datasets))
+      attr(datasets, "dsr_type") <- "availableDatasets"
       return(datasets)
     },
     

@@ -133,7 +133,7 @@ DataSpaceConnection <- R6Class(
     getStudies = function(availableStudies = self$availableStudies) {
       if(is.character(availableStudies))
         availableStudies <- self$availableStudies[study_id %in% availableStudies]
-      if(!"availableStudies" %in% class(availableStudies))
+      if(!"availableStudies" %in% attr(availableStudies, "dsr_type"))
         stop("Argument must be `character` or `availableStudies`.")
       if(nrow(availableStudies) == 0)
         stop("No vaild `availableStudies`, or `study_id` vector passed.")
@@ -147,7 +147,7 @@ DataSpaceConnection <- R6Class(
     getGroups = function(availableGroups = self$availableGroups) {
       if(is.numeric(availableGroups))
         availableGroups <- self$availableGroups[group_id %in% availableGroups]
-      if(!"availableGroups" %in% class(availableGroups))
+      if(!"availableGroups" %in% attr(availableGroups, "dsr_type"))
         stop("Argument must be `numeric` or `avilableGroups`.")
       if(nrow(availableGroups) == 0)
         stop("No vaild `availableGroups`, or `group_id` vector passed.")
@@ -171,7 +171,7 @@ DataSpaceConnection <- R6Class(
           )
         ]
 
-      if(!any(class(availableMabs) %in% c("availableMabs", "availableMabMixtures")))
+      if(!any(attr(availableMabs, "dsr_type") %in% c("availableMabs", "availableMabMixtures")))
         stop("Argument must be `character`, `availableMabs`, or `availableMabMixtures`.")
 
       if(length(includeMixtures) != 1 || (!includeMixtures %in% c("yes", "no", "only")))
@@ -180,7 +180,7 @@ DataSpaceConnection <- R6Class(
       if(nrow(availableMabs) == 0)
         stop("No mAbs available from `availableMabs` argument.")
 
-      if("availableMabMixtures" %in% class(availableMabs)){
+      if("availableMabMixtures" %in% attr(availableMabs, "dsr_type")){
         message("All mabs in all mixtures passed with be returned.")
         availableMabs <-
           merge(availableMabs, private$.shared$.mabMix, by= "mab_mix_id")
@@ -196,7 +196,7 @@ DataSpaceConnection <- R6Class(
       if(is.character(availableDonors))
         availableGroups <- self$availableDonors[donor_id %in% availableDonors]
 
-      if(!"availableDonors" %in% class(self$availableDonors))
+      if(!"availableDonors" %in% attr(self$availableDonors, "dsr_type"))
         stop("Argument must be `character` or `availableDonors`.")
 
       if(nrow(availableDonors) == 0)
@@ -222,7 +222,7 @@ DataSpaceConnection <- R6Class(
       if(is.character(availablePublications))
         availablePublications <- self$availablePublications[publication_id == availablePublications]
 
-      if(!"availablePublications" %in% class(availablePublications))
+      if(!"availablePublications" %in% attr(availablePublications, "dsr_type"))
         stop("Argument must be `character` or `availablePublications`.")
 
       if(nrow(availablePublications) == 0)
@@ -492,7 +492,7 @@ DataSpaceConnection <- R6Class(
         merge(niData, all.x = TRUE)
 
       private$.shared$.availableStudies <- study
-      class(private$.shared$.availableStudies) <- c(class(private$.shared$.availableStudies), "availableStudies")
+      attr(private$.shared$.availableStudies, "dsr_type") <- "availableStudies"
 
     },
     .loadAvailableGroups = function() {
@@ -532,7 +532,7 @@ DataSpaceConnection <- R6Class(
         setorder(group_id) |>
         setkey(group_id)
 
-      class(private$.shared$.availableGroups) <- c(class(private$.shared$.availableGroups), "availableGroups")
+      attr(private$.shared$.availableGroups, "dsr_type") <- "availableGroups"
 
     },
     .loadAvailableDonors = function() {
@@ -565,7 +565,7 @@ DataSpaceConnection <- R6Class(
         donors[,c(names(private$.shared$.donorMetadata), "lineage_sequences_available", grep("_count", names(donors), value = TRUE)), with = FALSE] |>
         unique()
 
-      class(private$.shared$.availableDonors) <- c(class(private$.shared$.availableDonors), "availableDonors")
+      attr(private$.shared$.availableDonors, "dsr_type") <- "availableDonors"
 
     },
     .loadAvailableMabs = function() {
@@ -600,7 +600,7 @@ DataSpaceConnection <- R6Class(
         ), mab_id] |>
         unique()
 
-      class(private$.shared$.availableMabs) <- c(class(private$.shared$.availableMabs), "availableMabs")
+      attr(private$.shared$.availableMabs, "dsr_type") <- "availableMabs"
     
     },
     .loadAvailableMabMixtures = function() {
@@ -630,7 +630,7 @@ DataSpaceConnection <- R6Class(
         ) |>
           unique()
 
-      class(private$.shared$.availableMabMixtures) <- c(class(private$.shared$.availableMabMixtures), "availableMabMixtures")
+      attr(private$.shared$.availableMabMixtures, "dsr_type") <- "availableMabMixtures"
 
     },
     .loadAvailableViruses = function() {
@@ -735,7 +735,7 @@ DataSpaceConnection <- R6Class(
         "&publicAccess=true"
       )]
 
-      class(pubs) <- c(class(pubs), "availablePublications")
+      attr(pubs, "dsr_type") <- "availablePublications"
       private$.shared$.availablePublications <- pubs
 
     },

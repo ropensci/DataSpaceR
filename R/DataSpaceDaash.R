@@ -43,11 +43,11 @@ DataSpaceDaash <- R6Class(
     #' @param availableDaash availableDaash an `availableMabs`, or `availableDonors` object, or a vector of `sequnce_id` values.
     #' @param config A list.
     initialize = function(availableDaash) {
-      if( "availableDonors" %in% class(availableDaash) ){
+      if( "availableDonors" %in% attr(availableDaash, "dsr_type") ){
         private$.sequenceIds <- private$.shared$.donorMabSequence[donor_id %in% availableDaash$donor_id, sequence_id]
         private$.donorIds    <- availableDaash[, unique(donor_id)]
 
-      } else if( "availableMabs" %in% class(availableDaash) ){
+      } else if( "availableMabs" %in% attr(availableDaash, "dsr_type") ){
         private$.sequenceIds <- private$.shared$.donorMabSequence[mab_id %in% availableDaash$mab_id, sequence_id]
         private$.mabIds      <- availableDaash[, unique(mab_id)]
 

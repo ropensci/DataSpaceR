@@ -23,7 +23,7 @@ test_that("DataSpaceMabs", {
   expect_true(
     nrow(mabyes$mabMetadata) > 0 &
       nrow(mabyes$mabMetadata) == nrow(mabyes$availableMabs) &
-      "availableMabs" %in% class(mabyes$mabMetadata)
+      "availableMabs" %in% attr(mabyes$mabMetadata, "dsr_type")
   )
 
   cap_out <- capture.output(mabyes$print())
@@ -146,7 +146,7 @@ test_that("DataSpaceDonors", {
   expect_true(
     nrow(don$donorMetadata) > 0 &
       nrow(don$donorMetadata) == nrow(don$availableDonors) &
-      "availableDonors" %in% class(don$donorMetadata)
+      "availableDonors" %in% attr(don$donorMetadata, "dsr_type")
   )
 
   expect_true(
