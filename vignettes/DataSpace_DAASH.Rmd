@@ -1,9 +1,9 @@
 ---
-title: "Accessing DastaSpace DAASH"
+title: "Accessing DataSpace DAASH"
 author:
   - Jason Taylor
 output: rmarkdown::html_vignette
-date: "2026-06-22"
+date: "2026-08-03"
 vignette: >
   %\VignetteIndexEntry{Accessing CDS DAASH}
   %\VignetteEngine{knitr::rmarkdown}

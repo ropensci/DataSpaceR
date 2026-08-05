@@ -41,297 +41,338 @@ cd4Mabs <- con$availableMabs[grepl("CD4bs", mab_ab_binding_type)] |>
 \code{\link{connectDS}} \code{\link{DataSpaceR-package}}
 }
 \section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{config}}{A list. Stores configuration of the connection object such as
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{config}}{A list. Stores configuration of the connection object such as
 URL, path and username.}
 
-\item{\code{availableStudies}}{A data.tabl of available studies.}
+    \item{\code{availableStudies}}{A data.tabl of available studies.}
 
-\item{\code{availableGroups}}{A data.table of available groups.}
+    \item{\code{availableGroups}}{A data.table of available groups.}
 
-\item{\code{availableMabs}}{A data.table of available mAbs.}
+    \item{\code{availableMabs}}{A data.table of available mAbs.}
 
-\item{\code{availableMabMixtures}}{A data.table. Metadata of available
+    \item{\code{availableMabMixtures}}{A data.table. Metadata of available
 mAb mixtures.}
 
-\item{\code{availableDonors}}{A data.table. Metadata about all mAb
+    \item{\code{availableDonors}}{A data.table. Metadata about all mAb
 donors in the DataSpace.}
 
-\item{\code{availableViruses}}{A data.table of metadata about all virsues
+    \item{\code{availableViruses}}{A data.table of metadata about all virsues
 in the DataSpace and virus name synonyms.}
 
-\item{\code{availablePublications}}{A data.table of available
+    \item{\code{availablePublications}}{A data.table of available
 publications metadata and available datasets.}
 
-\item{\code{virusNameMappingTables}}{A list of data.tables containing virus name mappings.}
+    \item{\code{lanlMabMetadata}}{A data.table of mAb metadata from LANL
+of mAbs found in the object}
 
-\item{\code{mabGridSummary}}{Defunct. Use `availableMabs`.}
+    \item{\code{virusNameMappingTables}}{A list of data.tables containing virus name mappings.}
 
-\item{\code{mabGrid}}{Defunct. Use `availableMabs`.}
+    \item{\code{mabGridSummary}}{Defunct. Use `availableMabs`.}
 
-\item{\code{virusMetadata}}{Defunct. Use `virusNameMappingTables`.}
-}
-\if{html}{\out{</div>}}
+    \item{\code{mabGrid}}{Defunct. Use `availableMabs`.}
+
+    \item{\code{virusMetadata}}{Defunct. Use `virusNameMappingTables`.}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-DataSpaceConnection-new}{\code{DataSpaceConnection$new()}}
-\item \href{#method-DataSpaceConnection-print}{\code{DataSpaceConnection$print()}}
-\item \href{#method-DataSpaceConnection-getStudies}{\code{DataSpaceConnection$getStudies()}}
-\item \href{#method-DataSpaceConnection-getGroups}{\code{DataSpaceConnection$getGroups()}}
-\item \href{#method-DataSpaceConnection-getMabs}{\code{DataSpaceConnection$getMabs()}}
-\item \href{#method-DataSpaceConnection-getDonors}{\code{DataSpaceConnection$getDonors()}}
-\item \href{#method-DataSpaceConnection-getDaash}{\code{DataSpaceConnection$getDaash()}}
-\item \href{#method-DataSpaceConnection-downloadPublicationData}{\code{DataSpaceConnection$downloadPublicationData()}}
-\item \href{#method-DataSpaceConnection-getStudy}{\code{DataSpaceConnection$getStudy()}}
-\item \href{#method-DataSpaceConnection-getGroup}{\code{DataSpaceConnection$getGroup()}}
-\item \href{#method-DataSpaceConnection-getMab}{\code{DataSpaceConnection$getMab()}}
-\item \href{#method-DataSpaceConnection-filterMabGrid}{\code{DataSpaceConnection$filterMabGrid()}}
-\item \href{#method-DataSpaceConnection-resetMabGrid}{\code{DataSpaceConnection$resetMabGrid()}}
-\item \href{#method-DataSpaceConnection-refresh}{\code{DataSpaceConnection$refresh()}}
-\item \href{#method-DataSpaceConnection-clone}{\code{DataSpaceConnection$clone()}}
-}
+  \itemize{
+    \item \href{#method-DataSpaceConnection-initialize}{\code{DataSpaceConnection$new()}}
+    \item \href{#method-DataSpaceConnection-print}{\code{DataSpaceConnection$print()}}
+    \item \href{#method-DataSpaceConnection-getStudies}{\code{DataSpaceConnection$getStudies()}}
+    \item \href{#method-DataSpaceConnection-getGroups}{\code{DataSpaceConnection$getGroups()}}
+    \item \href{#method-DataSpaceConnection-getMabs}{\code{DataSpaceConnection$getMabs()}}
+    \item \href{#method-DataSpaceConnection-getDonors}{\code{DataSpaceConnection$getDonors()}}
+    \item \href{#method-DataSpaceConnection-getDaash}{\code{DataSpaceConnection$getDaash()}}
+    \item \href{#method-DataSpaceConnection-downloadPublicationData}{\code{DataSpaceConnection$downloadPublicationData()}}
+    \item \href{#method-DataSpaceConnection-loadLanlMabMetadata}{\code{DataSpaceConnection$loadLanlMabMetadata()}}
+    \item \href{#method-DataSpaceConnection-getStudy}{\code{DataSpaceConnection$getStudy()}}
+    \item \href{#method-DataSpaceConnection-getGroup}{\code{DataSpaceConnection$getGroup()}}
+    \item \href{#method-DataSpaceConnection-getMab}{\code{DataSpaceConnection$getMab()}}
+    \item \href{#method-DataSpaceConnection-filterMabGrid}{\code{DataSpaceConnection$filterMabGrid()}}
+    \item \href{#method-DataSpaceConnection-resetMabGrid}{\code{DataSpaceConnection$resetMabGrid()}}
+    \item \href{#method-DataSpaceConnection-refresh}{\code{DataSpaceConnection$refresh()}}
+    \item \href{#method-DataSpaceConnection-clone}{\code{DataSpaceConnection$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataSpaceConnection-new"></a>}}
-\if{latex}{\out{\hypertarget{method-DataSpaceConnection-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize a \code{DataSpaceConnection} object.
+\if{html}{\out{<a id="method-DataSpaceConnection-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-initialize}{}}}
+\subsection{\code{DataSpaceConnection$new()}}{
+  Initialize a \code{DataSpaceConnection} object.
 See \code{\link{connectDS}}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$new(
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$new(
   login = NULL,
   password = NULL,
   verbose = FALSE,
   onStaging = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{login}}{A character. Optional argument. If there is no netrc file a
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{login}}{A character. Optional argument. If there is no netrc file a
 temporary one can be written by passing login and password of an active
 DataSpace account.}
-
-\item{\code{password}}{A character. Optional. The password for the selected
+      \item{\code{password}}{A character. Optional. The password for the selected
 login.}
-
-\item{\code{verbose}}{A logical. Whether to print the extra details for
+      \item{\code{verbose}}{A logical. Whether to print the extra details for
 troubleshooting.}
-
-\item{\code{onStaging}}{A logical. Whether to connect to the staging server
+      \item{\code{onStaging}}{A logical. Whether to connect to the staging server
 instead of the production server.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A new `DataSpaceConnection` object.
+  }
 }
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new `DataSpaceConnection` object.
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-print"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-print}{}}}
-\subsection{Method \code{print()}}{
-Print the \code{DataSpaceConnection} object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$print()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$print()}}{
+  Print the \code{DataSpaceConnection} object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$print()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-getStudies"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-getStudies}{}}}
-\subsection{Method \code{getStudies()}}{
-Create a `DataSpaceStudies` object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getStudies(availableStudies = self$availableStudies)}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$getStudies()}}{
+  Create a `DataSpaceStudies` object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$getStudies(availableStudies = self$availableStudies)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{availableStudies}}{an `availableStudies` object, or a vector of `study_id` values.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{availableStudies}}{an `availableStudies` object, or a vector of `study_id` values.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-getGroups"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-getGroups}{}}}
-\subsection{Method \code{getGroups()}}{
-Create a `DataSpaceGroups` object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getGroups(availableGroups = self$availableGroups)}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$getGroups()}}{
+  Create a `DataSpaceGroups` object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$getGroups(availableGroups = self$availableGroups)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{availableGroups}}{an `availableGroups` object, or a vector of `group id` values.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{availableGroups}}{an `availableGroups` object, or a vector of `group id` values.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-getMabs"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-getMabs}{}}}
-\subsection{Method \code{getMabs()}}{
-Create a `DataSpaceMabs` object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getMabs(
+\subsection{\code{DataSpaceConnection$getMabs()}}{
+  Create a `DataSpaceMabs` object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$getMabs(
   availableMabs = self$availableMabs,
   includeMixtures = "yes"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{availableMabs}}{an `availableMabs` or
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{availableMabs}}{an `availableMabs` or
 `availableMabMixtures` object, or a vector of `mab id` values. `mab_id` values are
 inferred from `availableMabMixtures` objects.}
-
-\item{\code{includeMixtures}}{Whether or not to include mab mixtures. "yes", "no", or "only"
+      \item{\code{includeMixtures}}{Whether or not to include mab mixtures. "yes", "no", or "only"
 are valid. The default, "yes", will return any available mAb mixtures for any mAb passed here.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-getDonors"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-getDonors}{}}}
-\subsection{Method \code{getDonors()}}{
-Create a `DataSpaceDonors` object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getDonors(availableDonors = self$availableDonors)}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$getDonors()}}{
+  Create a `DataSpaceDonors` object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$getDonors(availableDonors = self$availableDonors)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{availableDonors}}{an `availableDonors` object, or a vector of `donor_id` values.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{availableDonors}}{an `availableDonors` object, or a vector of `donor_id` values.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-getDaash"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-getDaash}{}}}
-\subsection{Method \code{getDaash()}}{
-Create a `DataSpaceDaash` object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getDaash(availableDaash = NULL)}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$getDaash()}}{
+  Create a `DataSpaceDaash` object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$getDaash(availableDaash = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{availableDaash}}{an `availableMabs`, or `availableDonors` object, or a vector of `sequnce_id` values.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{availableDaash}}{an `availableMabs`, or `availableDonors` object, or a vector of `sequnce_id` values.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-downloadPublicationData"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-downloadPublicationData}{}}}
-\subsection{Method \code{downloadPublicationData()}}{
-Download study related publication datasets.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$downloadPublicationData(
+\subsection{\code{DataSpaceConnection$downloadPublicationData()}}{
+  Download study related publication datasets.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$downloadPublicationData(
   availablePublications = NULL,
   downloadDir = tempdir()
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{availablePublications}}{an `availablePublications` object or a vector of `publication_id` values.}
-
-\item{\code{downloadDir}}{A character. Optional, specifies directory to download nonstandard datasets.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{availablePublications}}{an `availablePublications` object or a vector of `publication_id` values.}
+      \item{\code{downloadDir}}{A character. Optional, specifies directory to download nonstandard datasets.
 Default is use to the R session temp directory}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataSpaceConnection-loadLanlMabMetadata"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceConnection-loadLanlMabMetadata}{}}}
+\subsection{\code{DataSpaceConnection$loadLanlMabMetadata()}}{
+  Load any available mAb metadata from LANL.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$loadLanlMabMetadata()}
+    \if{html}{\out{</div>}}
+  }
 }
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-getStudy"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-getStudy}{}}}
-\subsection{Method \code{getStudy()}}{
-Defunct. Use `getStudies`.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getStudy()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$getStudy()}}{
+  Defunct. Use `getStudies`.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$getStudy()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-getGroup"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-getGroup}{}}}
-\subsection{Method \code{getGroup()}}{
-Defunct. Use `getGroups`.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getGroup()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$getGroup()}}{
+  Defunct. Use `getGroups`.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$getGroup()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-getMab"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-getMab}{}}}
-\subsection{Method \code{getMab()}}{
-Defunct. Use `getMabs`.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$getMab()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$getMab()}}{
+  Defunct. Use `getMabs`.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$getMab()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-filterMabGrid"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-filterMabGrid}{}}}
-\subsection{Method \code{filterMabGrid()}}{
-Defunct. Use `availableMabs`.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$filterMabGrid()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$filterMabGrid()}}{
+  Defunct. Use `availableMabs`.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$filterMabGrid()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-resetMabGrid"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-resetMabGrid}{}}}
-\subsection{Method \code{resetMabGrid()}}{
-Defunct. Use `availableMabs`.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$resetMabGrid()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$resetMabGrid()}}{
+  Defunct. Use `availableMabs`.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$resetMabGrid()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-refresh"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-refresh}{}}}
-\subsection{Method \code{refresh()}}{
-Refresh the connection object to update available studies and groups.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$refresh()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$refresh()}}{
+  Refresh the connection object to update available studies and groups.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$refresh()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceConnection-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceConnection-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceConnection$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceConnection$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceConnection$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

@@ -41,158 +41,165 @@ daash$datasets$topCalls
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 }
 \section{Super class}{
-\code{\link[DataSpaceR:DataSpaceConnection]{DataSpaceR::DataSpaceConnection}} -> \code{DataSpaceDaash}
+\code{\link[DataSpaceR:DataSpaceConnection]{DataSpaceConnection}} -> \code{DataSpaceDaash}
 }
 \section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{mabMetadata}}{A data.table of mAbs with metadata found in
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{mabMetadata}}{A data.table of mAbs with metadata found in
 the object.}
 
-\item{\code{donorMetadata}}{A data.table of donors with metadata
+    \item{\code{donorMetadata}}{A data.table of donors with metadata
 found in the object.}
 
-\item{\code{daashMetadata}}{A data.table showing the donor and mAb
+    \item{\code{daashMetadata}}{A data.table showing the donor and mAb
 metadata with CDS sequence_id values for the loaded DAASH dataset.}
 
-\item{\code{availableStructures}}{A data.table showing the mAb
+    \item{\code{availableStructures}}{A data.table showing the mAb
 structures available to download.}
 
-\item{\code{datasets}}{A list of DAASH datastets loaded to the DAASH object.}
+    \item{\code{datasets}}{A list of DAASH datastets loaded to the DAASH object.}
 
-\item{\code{variableDefinitions}}{A data.table of variable definitions.}
-}
-\if{html}{\out{</div>}}
+    \item{\code{variableDefinitions}}{A data.table of variable definitions.}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-DataSpaceDaash-new}{\code{DataSpaceDaash$new()}}
-\item \href{#method-DataSpaceDaash-print}{\code{DataSpaceDaash$print()}}
-\item \href{#method-DataSpaceDaash-getFastaFromSequences}{\code{DataSpaceDaash$getFastaFromSequences()}}
-\item \href{#method-DataSpaceDaash-downloadAntibodyStructures}{\code{DataSpaceDaash$downloadAntibodyStructures()}}
-\item \href{#method-DataSpaceDaash-refresh}{\code{DataSpaceDaash$refresh()}}
-\item \href{#method-DataSpaceDaash-clone}{\code{DataSpaceDaash$clone()}}
+  \itemize{
+    \item \href{#method-DataSpaceDaash-initialize}{\code{DataSpaceDaash$new()}}
+    \item \href{#method-DataSpaceDaash-print}{\code{DataSpaceDaash$print()}}
+    \item \href{#method-DataSpaceDaash-getFastaFromSequences}{\code{DataSpaceDaash$getFastaFromSequences()}}
+    \item \href{#method-DataSpaceDaash-downloadAntibodyStructures}{\code{DataSpaceDaash$downloadAntibodyStructures()}}
+    \item \href{#method-DataSpaceDaash-refresh}{\code{DataSpaceDaash$refresh()}}
+    \item \href{#method-DataSpaceDaash-clone}{\code{DataSpaceDaash$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
+\if{html}{\out{<details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="downloadPublicationData"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-downloadPublicationData'><code>DataSpaceR::DataSpaceConnection$downloadPublicationData()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="filterMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-filterMabGrid'><code>DataSpaceR::DataSpaceConnection$filterMabGrid()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDaash"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDaash'><code>DataSpaceR::DataSpaceConnection$getDaash()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDonors"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDonors'><code>DataSpaceR::DataSpaceConnection$getDonors()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroup"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroup'><code>DataSpaceR::DataSpaceConnection$getGroup()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroups"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroups'><code>DataSpaceR::DataSpaceConnection$getGroups()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMab"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMab'><code>DataSpaceR::DataSpaceConnection$getMab()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMabs"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMabs'><code>DataSpaceR::DataSpaceConnection$getMabs()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudies"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudies'><code>DataSpaceR::DataSpaceConnection$getStudies()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudy"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudy'><code>DataSpaceR::DataSpaceConnection$getStudy()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="resetMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-resetMabGrid'><code>DataSpaceR::DataSpaceConnection$resetMabGrid()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="downloadPublicationData"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-downloadPublicationData'><code>DataSpaceConnection$downloadPublicationData()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="filterMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-filterMabGrid'><code>DataSpaceConnection$filterMabGrid()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDaash"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDaash'><code>DataSpaceConnection$getDaash()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDonors"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDonors'><code>DataSpaceConnection$getDonors()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroup"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroup'><code>DataSpaceConnection$getGroup()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroups"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroups'><code>DataSpaceConnection$getGroups()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMab"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMab'><code>DataSpaceConnection$getMab()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMabs"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMabs'><code>DataSpaceConnection$getMabs()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudies"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudies'><code>DataSpaceConnection$getStudies()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudy"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudy'><code>DataSpaceConnection$getStudy()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="loadLanlMabMetadata"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-loadLanlMabMetadata'><code>DataSpaceConnection$loadLanlMabMetadata()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="resetMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-resetMabGrid'><code>DataSpaceConnection$resetMabGrid()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataSpaceDaash-new"></a>}}
-\if{latex}{\out{\hypertarget{method-DataSpaceDaash-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize \code{DataSpaceMabMetadata} object.
+\if{html}{\out{<a id="method-DataSpaceDaash-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceDaash-initialize}{}}}
+\subsection{\code{DataSpaceDaash$new()}}{
+  Initialize \code{DataSpaceMabMetadata} object.
 See \code{\link{DataSpaceConnection}}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDaash$new(availableDaash)}\if{html}{\out{</div>}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDaash$new(availableDaash)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{availableDaash}}{availableDaash an `availableMabs`, or `availableDonors` object, or a vector of `sequnce_id` values.}
+      \item{\code{config}}{A list.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{availableDaash}}{availableDaash an `availableMabs`, or `availableDonors` object, or a vector of `sequnce_id` values.}
-
-\item{\code{config}}{A list.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDaash-print"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceDaash-print}{}}}
-\subsection{Method \code{print()}}{
-Print the \code{DataSpaceMab} object summary.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDaash$print()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceDaash$print()}}{
+  Print the \code{DataSpaceMab} object summary.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDaash$print()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDaash-getFastaFromSequences"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceDaash-getFastaFromSequences}{}}}
-\subsection{Method \code{getFastaFromSequences()}}{
-Return a fasta file for available daash sequences that have been loaded to the current object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDaash$getFastaFromSequences(
+\subsection{\code{DataSpaceDaash$getFastaFromSequences()}}{
+  Return a fasta file for available daash sequences that have been loaded to the current object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDaash$getFastaFromSequences(
   sequenceType = "nt",
   originalHeaders = FALSE,
   path = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{sequenceType}}{character the type of fasta file to return: nt = nucleotide, aa = amino acid.}
-
-\item{\code{originalHeaders}}{boolean if the original fasta headers should be provided}
-
-\item{\code{path}}{The path where to save the fasta files to. If using the default value, NULL, then a
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{sequenceType}}{character the type of fasta file to return: nt = nucleotide, aa = amino acid.}
+      \item{\code{originalHeaders}}{boolean if the original fasta headers should be provided}
+      \item{\code{path}}{The path where to save the fasta files to. If using the default value, NULL, then a
 fasta file is returned as a character vector.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDaash-downloadAntibodyStructures"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceDaash-downloadAntibodyStructures}{}}}
-\subsection{Method \code{downloadAntibodyStructures()}}{
-Saves all antibody structures associated with the daash object's `availableStuctures` object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDaash$downloadAntibodyStructures(path = tempdir(), mab_id = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{path}}{The directory to export fasta files to.}
-
-\item{\code{mab_id}}{A subset of mab_ids to export. If using the default, NULL, all structures in
+\subsection{\code{DataSpaceDaash$downloadAntibodyStructures()}}{
+  Saves all antibody structures associated with the daash object's `availableStuctures` object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDaash$downloadAntibodyStructures(path = tempdir(), mab_id = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{path}}{The directory to export fasta files to.}
+      \item{\code{mab_id}}{A subset of mab_ids to export. If using the default, NULL, all structures in
 availableStuctures are downloaded.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDaash-refresh"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceDaash-refresh}{}}}
-\subsection{Method \code{refresh()}}{
-Refresh the \code{DataSpaceMabMetadata} object to update datasets.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDaash$refresh()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceDaash$refresh()}}{
+  Refresh the \code{DataSpaceMabMetadata} object to update datasets.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDaash$refresh()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceDaash-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceDaash-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceDaash$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceDaash$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceDaash$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

@@ -1,5 +1,5 @@
 ---
-title: "Accessing DastaSpace DAASH"
+title: "Accessing DataSpace DAASH"
 author:
   - Jason Taylor
 output: rmarkdown::html_vignette

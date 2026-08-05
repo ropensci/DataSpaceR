@@ -35,101 +35,108 @@ groups$datasetDescription$BAMA
 \code{\link{connectDS}} \code{\link{DataSpaceConnection}}
 }
 \section{Super class}{
-\code{\link[DataSpaceR:DataSpaceConnection]{DataSpaceR::DataSpaceConnection}} -> \code{DataSpaceGroups}
+\code{\link[DataSpaceR:DataSpaceConnection]{DataSpaceConnection}} -> \code{DataSpaceGroups}
 }
 \section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{availableDatasets}}{A data.table of datasets available in
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{availableDatasets}}{A data.table of datasets available in
 the object.}
 
-\item{\code{datasets}}{A list of data.table objects containing the
+    \item{\code{datasets}}{A list of data.table objects containing the
 availableDatasets that were loaded.}
 
-\item{\code{variableDefinitions}}{A data.table of variable definitions.}
-}
-\if{html}{\out{</div>}}
+    \item{\code{variableDefinitions}}{A data.table of variable definitions.}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-DataSpaceGroups-new}{\code{DataSpaceGroups$new()}}
-\item \href{#method-DataSpaceGroups-print}{\code{DataSpaceGroups$print()}}
-\item \href{#method-DataSpaceGroups-refresh}{\code{DataSpaceGroups$refresh()}}
-\item \href{#method-DataSpaceGroups-clone}{\code{DataSpaceGroups$clone()}}
+  \itemize{
+    \item \href{#method-DataSpaceGroups-initialize}{\code{DataSpaceGroups$new()}}
+    \item \href{#method-DataSpaceGroups-print}{\code{DataSpaceGroups$print()}}
+    \item \href{#method-DataSpaceGroups-refresh}{\code{DataSpaceGroups$refresh()}}
+    \item \href{#method-DataSpaceGroups-clone}{\code{DataSpaceGroups$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
+\if{html}{\out{<details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="downloadPublicationData"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-downloadPublicationData'><code>DataSpaceR::DataSpaceConnection$downloadPublicationData()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="filterMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-filterMabGrid'><code>DataSpaceR::DataSpaceConnection$filterMabGrid()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDaash"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDaash'><code>DataSpaceR::DataSpaceConnection$getDaash()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDonors"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDonors'><code>DataSpaceR::DataSpaceConnection$getDonors()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroup"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroup'><code>DataSpaceR::DataSpaceConnection$getGroup()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroups"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroups'><code>DataSpaceR::DataSpaceConnection$getGroups()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMab"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMab'><code>DataSpaceR::DataSpaceConnection$getMab()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMabs"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMabs'><code>DataSpaceR::DataSpaceConnection$getMabs()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudies"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudies'><code>DataSpaceR::DataSpaceConnection$getStudies()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudy"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudy'><code>DataSpaceR::DataSpaceConnection$getStudy()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="resetMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-resetMabGrid'><code>DataSpaceR::DataSpaceConnection$resetMabGrid()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="downloadPublicationData"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-downloadPublicationData'><code>DataSpaceConnection$downloadPublicationData()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="filterMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-filterMabGrid'><code>DataSpaceConnection$filterMabGrid()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDaash"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDaash'><code>DataSpaceConnection$getDaash()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getDonors"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getDonors'><code>DataSpaceConnection$getDonors()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroup"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroup'><code>DataSpaceConnection$getGroup()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getGroups"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getGroups'><code>DataSpaceConnection$getGroups()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMab"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMab'><code>DataSpaceConnection$getMab()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getMabs"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getMabs'><code>DataSpaceConnection$getMabs()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudies"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudies'><code>DataSpaceConnection$getStudies()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="getStudy"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-getStudy'><code>DataSpaceConnection$getStudy()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="loadLanlMabMetadata"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-loadLanlMabMetadata'><code>DataSpaceConnection$loadLanlMabMetadata()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="DataSpaceR" data-topic="DataSpaceConnection" data-id="resetMabGrid"><a href='../../DataSpaceR/html/DataSpaceConnection.html#method-DataSpaceConnection-resetMabGrid'><code>DataSpaceConnection$resetMabGrid()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataSpaceGroups-new"></a>}}
-\if{latex}{\out{\hypertarget{method-DataSpaceGroups-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize `DataSpaceGroups` class.
+\if{html}{\out{<a id="method-DataSpaceGroups-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-DataSpaceGroups-initialize}{}}}
+\subsection{\code{DataSpaceGroups$new()}}{
+  Initialize `DataSpaceGroups` class.
 See \code{\link{DataSpaceConnection}}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceGroups$new(groupIds = NULL)}\if{html}{\out{</div>}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceGroups$new(groupIds = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{groupIds}}{A character vecotor of `group_id` values.
+as URL, path and username.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{groupIds}}{A character vecotor of `group_id` values.
-as URL, path and username.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceGroups-print"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceGroups-print}{}}}
-\subsection{Method \code{print()}}{
-Print \code{DataSpaceStudy} class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceGroups$print()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceGroups$print()}}{
+  Print \code{DataSpaceStudy} class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceGroups$print()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceGroups-refresh"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceGroups-refresh}{}}}
-\subsection{Method \code{refresh()}}{
-Refresh loaded integrated datasets, and information of what datasets are available.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceGroups$refresh()}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceGroups$refresh()}}{
+  Refresh loaded integrated datasets, and information of what datasets are available.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceGroups$refresh()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataSpaceGroups-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSpaceGroups-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataSpaceGroups$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{DataSpaceGroups$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DataSpaceGroups$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

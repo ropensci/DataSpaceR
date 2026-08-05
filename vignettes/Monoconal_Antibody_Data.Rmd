@@ -1,6 +1,6 @@
 ---
 title: "Accessing Monoclonal Antibody Data"
-date: "2026-06-22"
+date: "2026-08-03"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Monoclonal Antibody Data}
@@ -47,7 +47,9 @@ pgt121$datasets |>
 And each dataset can be accessed in the same fashion as accessing an item in a named list.
 
 ```r
-pgt121$datasets$NABMAb
+pgt121$
+  datasets$
+  NABMAb
 ```
 
 ## View metadata concerning the mAb object

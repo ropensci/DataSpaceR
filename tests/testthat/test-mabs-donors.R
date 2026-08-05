@@ -23,7 +23,7 @@ test_that("DataSpaceMabs", {
   expect_true(
     nrow(mabyes$mabMetadata) > 0 &
       nrow(mabyes$mabMetadata) == nrow(mabyes$availableMabs) &
-      "availableMabs" %in% class(mabyes$mabMetadata)
+      "availableMabs" %in% attr(mabyes$mabMetadata, "dsr_type")
   )
 
   cap_out <- capture.output(mabyes$print())
@@ -93,6 +93,24 @@ test_that("DataSpaceMabs", {
     names(mixyes$datasets), c("NABMAb", "PKMAb")
   )
 
+  mabyes$loadLanlMabMetadata()
+  mixyes$loadLanlMabMetadata()
+
+  expect_warning(
+    expect_true(
+      nrow(mixyes$lanlMabMetadata) <
+      nrow(con$lanlMabMetadata)
+    ), "Not all object LANL mabs have metadata"
+  )
+
+  expect_equal(
+    lapply(mabyes$lanlMabMetadata, is.list) |>
+      unlist() |>
+      which(x=_) |>
+      length(),
+    0
+  )
+
   mabyes$loadDaash()
 
   expect_equal(
@@ -128,7 +146,7 @@ test_that("DataSpaceDonors", {
   expect_true(
     nrow(don$donorMetadata) > 0 &
       nrow(don$donorMetadata) == nrow(don$availableDonors) &
-      "availableDonors" %in% class(don$donorMetadata)
+      "availableDonors" %in% attr(don$donorMetadata, "dsr_type")
   )
 
   expect_true(
@@ -172,6 +190,12 @@ test_that("DataSpaceDonors", {
 
   expect_true(
     don$datasets$daash$sequences[,.N, mab_id][,any(is.na(mab_id)) & any(!is.na(mab_id))]
+  )
+
+  don$loadLanlMabMetadata()
+
+  expect_equal(
+    nrow(don$lanlMabMetadata), 7
   )
 
   expect_equal(

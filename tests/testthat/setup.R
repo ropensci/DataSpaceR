@@ -3,6 +3,8 @@ onStaging <- identical(tolower(Sys.getenv("DSR_STAGING")), "true")
 baseUrl <- ifelse(onStaging, "https://dataspace-staging.cavd.org", "https://dataspace.cavd.org")
 DSR_TESTING <- as.logical(Sys.getenv("DSR_TESTING"))
 
+message(sprintf("*** Testing on %s ***", baseUrl))
+
 ## build objects for testing column names for standardized assays
 .NABNAMES <- c(
   "participant_id",

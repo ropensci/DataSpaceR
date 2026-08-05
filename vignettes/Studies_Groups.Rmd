@@ -1,0 +1,497 @@
+---
+title: "Accessing Studies and Groups"
+author:
+  - Ju Yeong Kim
+  - Jason Taylor
+date: "2026-08-03"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Accessing Studies and Groups}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.sourceCode{
+    overflow: clip;
+}
+</style>
+
+
+
+## Initiate a connection
+
+A call to connectDS instantiates the connection to DataSpace.
+
+
+``` r
+library(DataSpaceR)
+con <- connectDS()
+con
+#> <DataSpaceConnection>
+#>   URL: https://dataspace.cavd.org
+#>   User: jmtaylor@scharp.org
+#>   Available Studies: 294
+#>     - 77 studies with data
+#>     - 5049 subjects
+#>     - 419550 data points
+#>   Available Groups: 4
+#>   Available Publications: 1910
+#>     - 30 publications with data
+#>   Available Connection objects:
+#>     - availableDonors
+#>     - availableGroups
+#>     - availableMabMixtures
+#>     - availableMabs
+#>     - availablePublications
+#>     - availableStudies
+#>     - availableViruses
+#>     - lanlMabMetadata
+#>     - virusNameMappingTables
+#>   Available Connection methods:
+#>     - downloadPublicationData
+#>     - getDaash
+#>     - getDonors
+#>     - getGroups
+#>     - getMabs
+#>     - getStudies
+#>     - loadLanlMabMetadata
+```
+
+The call to `connectDS` instantiates the connection. Printing the object shows where it's connected and the available studies.
+
+From here, we can choose to preview one of the available objects and/or apply one of the available connection methods. For example, the `con$availableStudies` object contains information about all the available studies in the CAVD DataSpace. Check out the [the reference page](https://docs.ropensci.org/DataSpaceR/reference/DataSpaceConnection.html) DataSpaceConnection for all available fields and methods.
+
+
+``` r
+con$availableStudies
+#> Key: <study_id>
+#>      study_id                            short_name
+#>        <char>                                <char>
+#>   1:    cor01                                  <NA>
+#>   2:   cvd232                          Parks_RV_232
+#>   3:   cvd234          Zolla-Pazner_Mab_test1 Study
+#>   4:   cvd235                          mAbs potency
+#>   5:   cvd236                 neutralization assays
+#>  ---                                               
+#> 290:   vax004                                  <NA>
+#> 291:   vtn097                                  <NA>
+#> 292:   vtn105                                  <NA>
+#> 293:   vtn505 VRC Phase 2 viral load endpoint study
+#> 294:   vtn706                                  <NA>
+#>                                                                                                                                                                                                                                                                                                                                                                            title
+#>                                                                                                                                                                                                                                                                                                                                                                           <char>
+#>   1:                                                                                                         The correlate of risk targeted intervention study (CORTIS):  A randomized, partially-blinded, clinical trial of isoniazid and rifapentine (3HP) therapy to prevent pulmonary tuberculosis in high-risk individuals identified by a transcriptomic correlate of risk
+#>   2:                                                                                                                                                                                                                                                                                   ​Limiting Dose Vaginal SIVmac239 Challenge of RhCMV-SIV vaccinated Indian rhesus macaques.
+#>   3:                                                                                                                                                                                                                                                                                                                                                      Zolla-Pazner_Mab_Test1
+#>   4:                                                                                                                                                                                                                                                                                                                                                          Weiss mAbs potency
+#>   5:                                                                                                                                                                                                                                                                                                                                                       neutralization assays
+#>  ---                                                                                                                                                                                                                                                                                                                                                                            
+#> 290:                                                                                                                                                                                                                      A Phase III trial to determine the efficacy of bivalent AIDSVAX B/B vaccine in adults at risk of sexually transmitted HIV-1 infection in North America
+#> 291:                                                                                                                           A Phase Ib randomized double blind placebo controlled clinical trial to evaluate the safety and immunogenicity of the vaccine regimen ALVAC-HIV (vCP1521) followed by AIDSVAX B/E in healthy, HIV-1 uninfected adult participants in South Africa
+#> 292:                                                                                                                                                                                                A Phase 1b clinical trial to evaluate the safety and immunogenicity of different combinations of DNA-HIV-PT123 and AIDSVAX B/E in healthy, HIV uninfected adult participants
+#> 293: Phase 2b, randomized, placebo-controlled test-of- concept trial to evaluate the safety and efficacy of a multiclade HIV-1 DNA plasmid vaccine followed by a multiclade HIV-1 recombinant adenoviral vector vaccine in HIV-uninfected, adenovirus type 5 neutralizing antibody negative, circumcised men and male-to-female (MTF) transgender persons, who have sex with men
+#> 294:                                                                     A multi-center, randomized, double-blind, placebo-controlled Phase 3 efficacy study of a heterologous prime/boost vaccine regimen of Ad26.Mos4.HIV and adjuvanted Clade C gp140 and mosaic gp140 to prevent HIV-1 infection among men who have sex with men and transgender women who have sex with men
+#>                           type   status                         stage            species start_date
+#>                         <char>   <char>                        <char>             <char>     <Date>
+#>   1:                 Phase III Inactive               Assays complete              Human       <NA>
+#>   2:          Pre-Clinical NHP Inactive               Assays complete     Rhesus macaque 2009-11-24
+#>   3: Antibody Characterization Inactive               Assays complete Non-organism study 2009-02-03
+#>   4: Antibody Characterization Inactive               Assays complete Non-organism study 2008-08-21
+#>   5: Antibody Characterization   Active                   In progress Non-organism study 2009-02-03
+#>  ---                                                                                               
+#> 290:                 Phase III Inactive     Primary analysis complete              Human 1998-06-15
+#> 291:                  Phase Ib   Active            Follow up complete              Human 2013-06-18
+#> 292:                   Phase I Inactive     Primary analysis complete              Human 2014-07-09
+#> 293:                  Phase II Inactive     Primary analysis complete              Human 2009-05-29
+#> 294:                 Phase III Inactive Main study follow-up complete              Human 2019-10-31
+#>                                   strategy network data_availability                        ni_data_availability
+#>                                     <char>  <char>            <char>                                      <char>
+#>   1:                                  <NA>    GHDC              <NA>                                        <NA>
+#>   2:  Vector vaccines (viral or bacterial)    CAVD              <NA>      Microarray Data, Treatment assignments
+#>   3:          Prophylactic neutralizing Ab    CAVD              <NA>                                        <NA>
+#>   4:          Prophylactic neutralizing Ab    CAVD              <NA>                                        <NA>
+#>   5:          Prophylactic neutralizing Ab    CAVD              <NA>                                        <NA>
+#>  ---                                                                                                            
+#> 290:            Protein & peptide vaccines  VaxGen              <NA>                                        <NA>
+#> 291: Combo: DNA, protein & vector vaccines    HVTN    BAMA, ICS, NAB                                        <NA>
+#> 292:         Combo: DNA & protein vaccines    HVTN    BAMA, ICS, NAB                                        <NA>
+#> 293:          Combo: DNA & vector vaccines    HVTN    BAMA, ICS, NAB ADCP, Demographics (Supplemental), Fc Array
+#> 294:      Combo: Protein & vector vaccines    HVTN              <NA>                                        <NA>
+```
+
+The available connection methods can be applied to get data associated with one or more objects (e.g., studies or mAbs).  For example, we can use `con$getStudies` to create a connection to the study `cvd256`. 
+
+
+``` r
+cvd256 <- con$getStudies("cvd256")
+cvd256
+#> <DataSpaceStudies>
+#>   Studies: cvd256
+#>   Available integrated datasets:
+#>     - Binding Ab multiplex assay
+#>     - Demographics
+#>     - Neutralizing antibody
+#>   Available non-integrated datasets:
+#>   Available publication datasets:
+#>   Available Studies objects:
+#>     - availableDatasets
+#>     - datasets
+#>     - studies
+#>     - studyInfo
+#>     - treatmentArm
+#>     - variableDefinitions
+#>   Available Studies methods:
+#>     - loadAvailableDatasets
+#>   Available Connection objects:
+#>     - availableDonors
+#>     - availableGroups
+#>     - availableMabMixtures
+#>     - availableMabs
+#>     - availablePublications
+#>     - availableStudies
+#>     - availableViruses
+#>     - lanlMabMetadata
+#>     - virusNameMappingTables
+#>   Available Connection methods:
+#>     - downloadPublicationData
+#>     - getDaash
+#>     - getDonors
+#>     - getGroups
+#>     - getMabs
+#>     - getStudies
+#>     - loadLanlMabMetadata
+```
+
+Printing the object shows where it's connected, to what study, and the available datasets.
+
+
+``` r
+cvd256$availableDatasets
+#>    study_id     dataset_type assay_identifier                assay_label
+#>      <char>           <char>           <char>                     <char>
+#> 1:   cvd256 Integrated Assay             BAMA Binding Ab multiplex assay
+#> 2:   cvd256 Integrated Assay     Demographics               Demographics
+#> 3:   cvd256 Integrated Assay              NAb      Neutralizing antibody
+cvd256$treatmentArm
+#> Key: <arm_id>
+#>    study_id        arm_id arm_part arm_group arm_name randomization     coded_label last_day
+#>      <char>        <char>   <char>    <char>   <char>        <char>          <char>    <int>
+#> 1:   cvd256 cvd256-NA-A-A       NA         A        A       Vaccine Group A Vaccine      168
+#> 2:   cvd256 cvd256-NA-B-B       NA         B        B       Vaccine Group B Vaccine      168
+#>                                                                                              description
+#>                                                                                                   <char>
+#> 1:     DNA-C 4 mg administered IM at weeks 0, 4, and 8 AND NYVAC-C 10^7pfu/mL administered IM at week 24
+#> 2: DNA-C 4 mg administered IM at weeks 0 and 4 AND NYVAC-C 10^7pfu/mL administered IM at weeks 20 and 24
+```
+
+Available datasets and treatment arm information for the connection can be accessed by `availableDatasets` and `treatmentArm`.
+
+You may also query `availableStudies` and pass its results to the `getStudies` method.
+
+You may also query `availableStudies` (or any of the other `availableXXX` objects) and pass its results to `getStudies` (or any of the other methods). For example, if you want all available BAMA data from studies in rhesus macaques:
+
+
+``` r
+macaqueBama <- con$availableStudies[
+  species == "Rhesus macaque" &  grepl("BAMA", data_availability)
+] |>
+  con$getStudies()
+```
+
+## Loading Assay Datasets
+
+We can load any of the datasets listed in the connection (`availableDatasets`). These are loaded to the study object.
+
+
+``` r
+cvd256$loadAvailableDatasets("NAb")
+dim(cvd256$datasets$NAb)
+#> [1] 1419   33
+colnames(cvd256$datasets$NAb)
+#>  [1] "participant_id"      "participant_visit"   "visit_day"           "assay_identifier"    "summary_level"      
+#>  [6] "specimen_type"       "antigen"             "antigen_type"        "virus"               "virus_type"         
+#> [11] "virus_insert_name"   "clade"               "neutralization_tier" "tier_clade_virus"    "target_cell"        
+#> [16] "initial_dilution"    "titer_ic50"          "titer_ic80"          "response_call"       "nab_lab_source_key" 
+#> [21] "lab_code"            "exp_assayid"         "titer_id50"          "titer_id80"          "nab_response_id50"  
+#> [26] "nab_response_id80"   "slope"               "vaccine_matched"     "study_id"            "virus_full_name"    
+#> [31] "virus_species"       "virus_host_cell"     "virus_backbone"
+```
+
+We may also pass the `availableDatasets` object to load datasets to the studies object.
+
+
+``` r
+cvd256$availableDatasets[assay_identifier %in% c("BAMA", "Demographics")] |>
+  cvd256$loadAvailableDatasets()
+
+cvd256$datasets |>
+  names()
+#> [1] "BAMA"         "Demographics"
+```
+
+We can view detailed variable information for all datasets loaded from the `variableDefinitions` field. 
+
+
+``` r
+cvd256$variableDefinitions
+#> $BAMA
+#>              field_name                                            caption
+#>                  <char>                                             <char>
+#>  1:           visit_day                                          Visit Day
+#>  2:       specimen_type                                      Specimen type
+#>  3:    assay_identifier                                   Assay Identifier
+#>  4:       summary_level                                 Data Summary Level
+#>  5:             antigen                                       Antigen name
+#>  6:        antigen_type                                       Antigen type
+#>  7:             protein                                            Protein
+#>  8:               clade                                      Antigen clade
+#>  9:     vaccine_matched                    Antigen vaccine match indicator
+#> 10:    detection_ligand                                   Detection System
+#> 11:     instrument_code                                    Instrument Code
+#> 12:       response_call                                      Response call
+#> 13:            dilution                                           Dilution
+#> 14:           mfi_delta                            Magnitude (mfi) - Delta
+#> 15:             mfi_raw                              Magnitude (mfi) - Raw
+#> 16:           mfi_blank                            Magnitude (mfi) - Blank
+#> 17: bama_lab_source_key                                    Data provenance
+#> 18:            lab_code                                             Lab ID
+#> 19:         exp_assayid                     Experimental Assay Design Code
+#> 20:    antibody_isotype                                            Isotype
+#> 21:            mfi_bkgd   Magnitude (mfi) - Background subtracted from raw
+#> 22:      mfi_bkgd_blank Magnitude (mfi) - Background subtracted from blank
+#> 23:                 auc              Area under the titration curve (AUTC)
+#>              field_name                                            caption
+#>                                                                                                                                                                                                                                                                                                                                                                                     description
+#>                                                                                                                                                                                                                                                                                                                                                                                          <char>
+#>  1:                                                                                                                                                                                                                                        Target study day defined for a study visit. Study days are relative to Day 0, where Day 0 is typically defined as enrollment and/or first injection.
+#>  2:                                                                                                                                                                                                                                                                                                                                                      The type of specimen used in the assay
+#>  3:                                                                                                                                                                                                                                                                                                                                                                      Name identifying assay
+#>  4:                                                                                                                                                                                                                                                                                                                                                                                        <NA>
+#>  5:                                                                                                                                                                                                                                                                                                           The name of the antigen being tested as reported by the lab in the assay dataset.
+#>  6:                                                                                                                                                                                                                                                                                                                  The standardized term for the type of antigen (e.g. protein) being tested.
+#>  7: The name of the proteins for which a magnitude and response call are calculated.  Depending on how the individual peptide pools are constructed, the protein magnitude may be the sum of the magnitudes fo the constituent peptide pools (for cases where there is no overlap between pools) or the maximum magnitude of the constituent peptide pools (for cases where the pools overlap).
+#>  8:                                                                                                                                                                                                                                       The clade (gene subtype) to which the antigen is most closely aligned. The clade may be a circulating type or a laboratory consensus or global clade.
+#>  9:                                                                                                                                                                                                                                                                                         Indicates if the interactive part of the antigen was designed to match the immunogen in the vaccine
+#> 10:                                                                                                                                                                                                                                                                                                                                                                                        <NA>
+#> 11:                                                                                                                                                                                                                                      The instrument on which the assay was performed. This affects the dynamic range of the readout, and the comparability of magnitude across instruments.
+#> 12:                                                                                                                                                                                                                                                                                                                            Response call calculated using standard criteria across studies.
+#> 13:                                                                                                                                                                                                                                                                                                                                                    Indicates the initial specimen dilution.
+#> 14:                               The difference between the Median Fluorescence Intensity (MFI) of antibody binding to antigen-conjugated beads adjusted to subtract background (Magnitude (mfi) - Background subtracted from raw) and the maximum MFI of antibody-binding to non-conjugated (blank) beads adjusted to subtract background (Magnitude (mfi)-Background subtracted from blank).
+#> 15:                                                                                                                                                                                                                                                                                                              Median Fluorescence Intensity of antibody binding to antigen-conjugated beads.
+#> 16:                                                                                                                                                                                                                                                                                                          Median Fluorescence Intensity of antibody-binding to non-conjugated (blank) beads.
+#> 17:                                                                                                                                                                                                                                                                                                                                      Details regarding the provenance of the assay results.
+#> 18:                                                                                                                                                                                                                                                                                                                                             A code indicating the lab performing the assay.
+#> 19:                                                                                                                                                                                                                                                                                                             Unique ID assigned to the experiment design of the assay for tracking purposes.
+#> 20:                                                                                                                                                                                                                                                                                                                               The binding anitbody isotype that is quantified by the assay.
+#> 21:                                                                                                                                                                                                                                                                             Median Fluorescence Intensity of antibody binding to antigen-conjugated beads, adjusted to subtract background.
+#> 22:                                                                                                                                                                                                                                                                          Median Fluorescence Intensity of antibody-binding to non-conjugated (blank) beads adjusted to subtract background.
+#> 23:                                                                                                                                                                                                                                                                                         The area under the titration curve as calculated for VISC analysis. Method may vary across studies.
+#>                                                                                                                                                                                                                                                                                                                                                                                     description
+#> 
+#> $Demographics
+#>                          field_name                       caption
+#>                              <char>                        <char>
+#>  1:                         species                       Species
+#>  2:                      subspecies                    Subspecies
+#>  3:                      sexatbirth                  Sex at birth
+#>  4:                            race                          Race
+#>  5:                       ethnicity                      Hispanic
+#>  6:              country_enrollment         Country at Enrollment
+#>  7:          circumcised_enrollment     Circumcised at Enrollment
+#>  8:                  bmi_enrollment             BMI at Enrollment
+#>  9:                  agegroup_range       Age Group at Enrollment
+#> 10:             agegroup_enrollment            Age Group (Decade)
+#> 11:                  age_enrollment             Age at Enrollment
+#> 12:                     study_label                    Study Name
+#> 13:                study_start_date           Date of Study Start
+#> 14:            study_first_enr_date   Date First Subject Enrolled
+#> 15:          study_fu_complete_date       Date Follow-up Complete
+#> 16:               study_public_date        Date Study Made Public
+#> 17:                   study_network                       Network
+#> 18:      study_last_vaccination_day Study day of last vaccination
+#> 19:                      study_type                    Study Type
+#> 20:                      study_part                Treatment Part
+#> 21:                     study_group               Treatment Group
+#> 22:                       study_arm                 Treatment Arm
+#> 23:               study_arm_summary             Treatment Summary
+#> 24:           study_arm_coded_label     Treatment Arm Coded Label
+#> 25:             study_randomization            Vaccine or Placebo
+#> 26: study_product_class_combination     Product Class Combination
+#> 27:       study_product_combination           Product Combination
+#> 28:                study_short_name              Study Short Name
+#> 29:             study_grant_pi_name                            PI
+#> 30:                  study_strategy                      Strategy
+#> 31:                  genderidentity               Gender identity
+#> 32:                     studycohort                  Study cohort
+#> 33:                    bmi_category                  BMI Category
+#>                          field_name                       caption
+#>                                                                                                                                                                                                                                                                                                            description
+#>                                                                                                                                                                                                                                                                                                                 <char>
+#>  1:                                                                                                                                                                                                                                                        Subject classification for species using informal taxonomy.
+#>  2:                                                                                                                                                                                                                                                     Subject classification for subspecies using informal taxonomy.
+#>  3:                                                                                                                                                                                                                                     Subject classification by self report for sex/gender. Defined as sex at birth.
+#>  4:                                                                                                                                                                                                                         Subject classification by self-report for race categories as defined by NIH OMB standards.
+#>  5:                                                                                                                                                                                                                    Subject classification by self-report for ethnicity categories as defined by NIH OMB standards.
+#>  6:                                                                                                                                                                                            Subject classification for location by country. Derived from location of clinical site where subject enrolled in study.
+#>  7:                                                                                                                                                                     Subject classification for circumcision status at enrollment. Depending on study, the status is either self-reported or assessed by clinician.
+#>  8:                                                                                                                                                                        Subject Body Mass Index (BMI) at enrollment. BMI is defined as the body mass divided by the square of the body height represented in kg/m2.
+#>  9:                                                                                                                                                                                                                                                       Subject classification for age using pre-defined age ranges.
+#> 10:                                                                                                                                                                                                                                                                                                               <NA>
+#> 11:                                                                                                                                                                     Subject age at enrollment. Depending on study, the value is either a self-reported age at time of enrollment or calculated from date of birth.
+#> 12:                                                                                                                                                                                                                                         Standard label composed of network and the unique ID number for the study.
+#> 13:                                                                                                                                                                                                                           The official study start date assigned by the network (e.g. date of study registration).
+#> 14:                                                                                                                                                                                         The date when the first subject is enrolled (i.e. received first injection) in the study.  For human subject studies only.
+#> 15:                                                                                                                                                                                                                        The date when the last subject completes final study visit. For human subject studies only.
+#> 16:                                                                                                                                                                                                             For CAVD: 90-day closeout is complete.  For HVTN: "Manuscript Published or Not Publishable" milestone.
+#> 17:                                                                                                                                                                                                                                                             The primary network for which the study was conducted.
+#> 18:                                                                                                                                                                                                                                Target study day for the last vaccination to be administered for the treatment arm.
+#> 19:                                                                                                                                                                                               Study classification indicating the type of trial design used in the study (e.g. preclinical, Phase I, or Phase II).
+#> 20: A set of treatment groups and/or cohorts grouped within a study as defined in the schema. Typcially, used to indicate phases of a study such as the main study vs an extension/amendment, or to define cohorts for analysis such as product or regimen comparisons. Parts may or may not be sequentially enrolled.
+#> 21:                                                                                                                              A set of treatment arms grouped within a study as defined in the schema. Typcially, used to indicate the schedule of product administration, assessments, and other study procedures.
+#> 22:                                                                                                                                                           Treatment arm assigned to study subjects which indicates the visit schedule and specific product, doses, and routes to be administered during the study.
+#> 23:                                                                                                                                                                     A brief summary of information about the assigned treatment arm, including the study part, group, vaccinee/placebo, and products administered.
+#> 24:                                                                                                                  A coded description of the product adminstration regimen indicating both product and timing e.g., DDMM to indicate a regimen where 2 DNA prime vaccinations followed by 2 MVA boost vaccinations.
+#> 25:                                                                                                                                                                                                                  Study classification indicating if subjects in the treatment arm will receive vaccine or placebo.
+#> 26:                                                                                                                                                                                                       Classification of product combinations indicating which classes of products where administered in the study.
+#> 27:                                                                                                                                                                                                                  Classification of product combinations indicating which products where administered in the study.
+#> 28:                                                                                                                                                                                                                                                                                                  Study Short Name.
+#> 29:                                                                                                                                                                                                                                                                           Primary investigator name for the study.
+#> 30:                                                                                                                                                                                                                                                                 The primary strategy the study was conducted with.
+#> 31:                                                                                                                                                                                                                             Subject classification by self report of the gender with which the subject identifies.
+#> 32:                                                                                                                                                                                                                       Subject classification indicating a cohort or group of subjects with shared characteristics.
+#> 33:                                                                                                                                                                                      Subject BMI category at enrollment. Underweight: < 18.5; 18.5 – 24.9: Normal Weight; 25.0 – 29.9: Overweight; >= 30.0: Obese.
+#>                                                                                                                                                                                                                                                                                                            description
+```
+
+## Connect to a saved group
+
+A group is a curated collection of participants from filtering of treatments, products, studies, or species, and it is created in [the DataSpace App](https://dataspace.cavd.org/cds/CAVD/app.view).
+
+Using the DataSpace application, you may filter and visualize data and save them for later as a "group" using the application Active Filters dialog. You may also explore those groups in R with `DataSpaceR`
+
+We can browse saved groups via `availableGroups`.
+
+
+``` r
+con$availableGroups
+#> Key: <group_id>
+#>    group_id                              label                     original_label
+#>       <int>                             <char>                             <char>
+#> 1:      220        NYVAC durability comparison                   NYVAC_durability
+#> 2:      228     HVTN 505 case control subjects     HVTN 505 case control subjects
+#> 3:      230 HVTN 505 polyfunctionality vs BAMA HVTN 505 polyfunctionality vs BAMA
+#> 4:      256           CAVD 239 integrated data           CAVD 239 integrated data
+#>                                                                                                                  description
+#>                                                                                                                       <char>
+#> 1:                           Compare durability in 4 NHP studies using NYVAC-C (vP2010)  and NYVAC-KC-gp140 (ZM96) products.
+#> 2:                                                          Participants from HVTN 505 included in the case-control analysis
+#> 3: Compares ICS polyfunctionality (CD8+, Any Env) to BAMA mfi-delta (single Env antigen) in the HVTN 505 case control cohort
+#> 4:       Integrated study data for CAVD 239, including integrated assay data, demographics, and treatment group information.
+#>    created_by shared     n                        studies
+#>        <char> <lgcl> <int>                         <char>
+#> 1:   ehenrich   TRUE    78 cvd281, cvd434, cvd259, cvd277
+#> 2:    drienna   TRUE   189                         vtn505
+#> 3:    drienna   TRUE   170                         vtn505
+#> 4:    drienna   TRUE    38                         cvd239
+```
+
+To fetch data from a saved group, create a connection at the project level with a group ID. For example, we can connect to the "NYVAC durability comparison" group which has group ID 220 by `getGroup`.
+
+
+``` r
+nyvac <- con$getGroups(220)
+nyvac
+#> <DataSpaceGroups>
+#>   Groups: NYVAC durability comparison
+#>   Available integrated datasets:
+#>     - Binding Ab multiplex assay
+#>     - Demographics
+#>     - Enzyme-Linked ImmunoSpot
+#>     - Intracellular Cytokine Staining
+#>     - Neutralizing antibody
+#>   Available Groups objects:
+#>     - datasets
+#>     - donorMetadata
+#>     - mabMetadata
+#>     - mabMix
+#>     - mabMixMetadata
+#>     - variableDefinitions
+#>   Available Connection objects:
+#>     - availableDonors
+#>     - availableGroups
+#>     - availableMabMixtures
+#>     - availableMabs
+#>     - availablePublications
+#>     - availableStudies
+#>     - availableViruses
+#>     - lanlMabMetadata
+#>     - virusNameMappingTables
+#>   Available Connection methods:
+#>     - downloadPublicationData
+#>     - getDaash
+#>     - getDonors
+#>     - getGroups
+#>     - getMabs
+#>     - getStudies
+#>     - loadLanlMabMetadata
+```
+
+Or passing a filtered `availableGroups` object to `getGroup`.
+
+
+``` r
+nyvac <-  con$availableGroups[label %in% c("NYVAC durability comparison")] |>
+  con$getGroups()
+nyvac
+#> <DataSpaceGroups>
+#>   Groups: NYVAC durability comparison
+#>   Available integrated datasets:
+#>     - Binding Ab multiplex assay
+#>     - Demographics
+#>     - Enzyme-Linked ImmunoSpot
+#>     - Intracellular Cytokine Staining
+#>     - Neutralizing antibody
+#>   Available Groups objects:
+#>     - datasets
+#>     - donorMetadata
+#>     - mabMetadata
+#>     - mabMix
+#>     - mabMixMetadata
+#>     - variableDefinitions
+#>   Available Connection objects:
+#>     - availableDonors
+#>     - availableGroups
+#>     - availableMabMixtures
+#>     - availableMabs
+#>     - availablePublications
+#>     - availableStudies
+#>     - availableViruses
+#>     - lanlMabMetadata
+#>     - virusNameMappingTables
+#>   Available Connection methods:
+#>     - downloadPublicationData
+#>     - getDaash
+#>     - getDonors
+#>     - getGroups
+#>     - getMabs
+#>     - getStudies
+#>     - loadLanlMabMetadata
+```
+
+Unlike the studies object, a group object automatically loads any datasets associated with the groups retrieved from DataSpace. 
+
+
+``` r
+nyvac$datasets |>
+  names()
+#> [1] "BAMA"         "Demographics" "ELISPOT"      "ICS"          "NAb"
+```
+
+## About DataSpaceR objects 
+
+The *cvd256* object shown above is an [`R6`](https://cran.r-project.org/package=R6) class, so it behaves like a true object. Functions, that we will call "methods", like `loadAvailableDatasets()`, are members of the object, and are accessed using the `$` semantic.
+
+In DataSpaceR, `get...` methods will return an new object, and `load...` methods will add some data to an existing object. There is also the `download...` verbage used to descibe a method that will download something from DataSpace to your computer. 
+
+Users can connect to DataSpace using the `connectDS()` function described below. This will return a connection object with data and methods. All objects returned from `get...` methods from a connection object inherit the connection object's data and methods as well. This makes data operations across objects faster and more flexible.

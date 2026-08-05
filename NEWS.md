@@ -1,3 +1,9 @@
+# DataSpaceR 1.0.1
+
+* Add back fixed LANL metadata query
+* Improve pkgdown and vignette documentation
+* Improve BCR sequence study query
+
 # DataSpaceR 1.0.0
 
 * Removed mAb grid filtering and view methods in favor of filtering an `availableMabs` object with `data.table` syntax, allowing the `getMabs` method to fetch data using that.

@@ -12,7 +12,7 @@ test_that("DataSpaceDaash", {
   daash <- con$getDaash(con$availableDonors[donor_id == "cds_donor_44",])
 
   cap_output <- capture.output(daash$print())
-  expect_length(cap_output, 39)
+  expect_length(cap_output, 41)
 
   expect_equal(cap_output[1],  "<DataSpaceDaash>")
   expect_equal(cap_output[2],  paste0("  URL: ", baseUrl))
@@ -26,7 +26,7 @@ test_that("DataSpaceDaash", {
   expect_match(cap_output[12], "  MAb structures to download:")
 
   expect_equal(
-    cap_output[14:39],
+    cap_output[14:41],
     c(
       "  Available DAASH objects:",
       "    - availableStructures",
@@ -46,6 +46,7 @@ test_that("DataSpaceDaash", {
       "    - availablePublications",
       "    - availableStudies",
       "    - availableViruses",
+      "    - lanlMabMetadata",
       "    - virusNameMappingTables",
       "  Available Connection methods:",
       "    - downloadPublicationData",
@@ -53,7 +54,8 @@ test_that("DataSpaceDaash", {
       "    - getDonors",
       "    - getGroups",
       "    - getMabs",
-      "    - getStudies"
+      "    - getStudies",
+      "    - loadLanlMabMetadata"
     )
   )
 

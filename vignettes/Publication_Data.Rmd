@@ -3,7 +3,7 @@ title: "Accessing Publication Data"
 author:
   - Helen Miller
   - Jason Taylor
-date: "2026-06-22"
+date: "2026-08-03"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Publication Data}
@@ -36,11 +36,11 @@ con
 #> <DataSpaceConnection>
 #>   URL: https://dataspace.cavd.org
 #>   User: jmtaylor@scharp.org
-#>   Available Studies: 397
-#>     - 79 studies with data
-#>     - 5074 subjects
-#>     - 436354 data points
-#>   Available Groups: 6
+#>   Available Studies: 294
+#>     - 77 studies with data
+#>     - 5049 subjects
+#>     - 419550 data points
+#>   Available Groups: 4
 #>   Available Publications: 1910
 #>     - 30 publications with data
 #>   Available Connection objects:
@@ -51,6 +51,7 @@ con
 #>     - availablePublications
 #>     - availableStudies
 #>     - availableViruses
+#>     - lanlMabMetadata
 #>     - virusNameMappingTables
 #>   Available Connection methods:
 #>     - downloadPublicationData
@@ -59,6 +60,7 @@ con
 #>     - getGroups
 #>     - getMabs
 #>     - getStudies
+#>     - loadLanlMabMetadata
 ```
 
 The `DataSpaceConnection` print method summarizes the publications and publication data. More details about publications can be accessed through `con$availablePublications`.
@@ -336,6 +338,7 @@ rouphael2019_study
 #>     - availablePublications
 #>     - availableStudies
 #>     - availableViruses
+#>     - lanlMabMetadata
 #>     - virusNameMappingTables
 #>   Available Connection methods:
 #>     - downloadPublicationData
@@ -344,6 +347,7 @@ rouphael2019_study
 #>     - getGroups
 #>     - getMabs
 #>     - getStudies
+#>     - loadLanlMabMetadata
 rouphael2019_study$availableDatasets
 #>    study_id     dataset_type assay_identifier                     assay_label
 #>      <char>           <char>           <char>                          <char>

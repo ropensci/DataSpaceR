@@ -19,6 +19,7 @@
 #' @importFrom httr content GET
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils getFromNamespace packageVersion unzip
+#' @importFrom stats na.omit
 NULL
 
 # Global Variables
@@ -30,6 +31,7 @@ utils::globalVariables(
     ".", ".SD", ":=", "allele", "caption", "chain", "d_score", "description", "destination", "donor_code",
     "donor_id", "fieldName", "field_name", "header", "j_score", "mab_id", "mab_name_std",
     "machine", "remote_path", "run_application", "run_information", "score", "sequence_aa",
-    "sequence_id", "sequence_nt", "success", "total_score", "unzipDir", "v_score"
+    "sequence_id", "sequence_nt", "success", "total_score", "unzipDir", "v_score",
+    "ab_contacts", "doi", "id", "issn", "pubmed_id"
   )
 )
