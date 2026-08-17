@@ -142,23 +142,24 @@ DataSpaceStudies <- R6Class(
 
       if(any(availableDatasets$dataset_type == "Non-Integrated Assay")){
 
-        niData <-  
-          availableDatasets[
-            private$.availableDocuments[
-              assay_identifier %in% availableDatasets$assay_identifier &
-                document_type == "Non-Integrated Assay"
-            ] |>
+        niData <-
+          private$.availableDocuments[
+            assay_identifier %in% availableDatasets$assay_identifier & document_type == "Non-Integrated Assay",
+            .SD |>
               downloadDocuments(downloadDir) |>
               unzipDocuments() |>
-              loadDocuments(),
-            on = "assay_identifier"
+              loadDocuments() |>
+              _[,.(datasets, assay_identifier, unzipDir)]
           ]
 
-        appendData        <- niData$datasets
-        names(appendData) <- niData$assay_identifier
+        nsd <- unique(niData$assay_identifier)
+        names(nsd) <- nsd
+        appendData <- lapply(
+          nsd,
+          \(nm) rbindlist(niData[assay_identifier == nm, datasets], fill = T)
+        )
 
         assayData <- append(assayData, appendData)
-
         availableDatasets[niData[,.(assay_identifier, unzipDir)], on = "assay_identifier", unzipDir := i.unzipDir]
 
       } else {
