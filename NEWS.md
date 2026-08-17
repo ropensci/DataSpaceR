@@ -1,3 +1,8 @@
+# DataSpaceR 1.0.2
+
+* Update API request syntax for publication data
+* Fix duplicate non-standard data being generated when queried 
+
 # DataSpaceR 1.0.1
 
 * Add back fixed LANL metadata query
