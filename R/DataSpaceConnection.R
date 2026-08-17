@@ -239,7 +239,7 @@ DataSpaceConnection <- R6Class(
 
       message("Publications have been downloaded to `", downloadDir, "`.")
       if(any(!downloadDocument$success))
-        warning("Not all publication ids successfully downloaded: ", paste(downloadDocument[success == FALSE, publication_id]))
+        warning("Not all publication ids successfully downloaded: ", paste(downloadDocument[success == FALSE, publication_id], collapse = ", "))
 
       return(invisible(downloadDocument$destination))
 
@@ -727,9 +727,9 @@ DataSpaceConnection <- R6Class(
         setDT() |>
         setorder("first_author")
 
-      pubs[,url := paste0(
+      pubs[!is.na(document_id), url := paste0(
         private$.shared$.config$labkeyUrlBase,
-        "/cds/CAVD/getStudyDocument.view?",
+        "/CAVD/cds-getPublicationDocument.view?",
         "&documentId=", document_id,
         "&filename=", gsub("/", "%2F", remote_path),
         "&publicAccess=true"
