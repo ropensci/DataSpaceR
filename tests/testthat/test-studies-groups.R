@@ -64,17 +64,28 @@ test_that("DataSpaceStudies", {
   c514 <- con$availableStudies[study_id == "cvd514"] |>
     con$getStudies()
 
-  expect_true(
-    nrow(c514$availableMabMixtures) == 1 &
+  expect_equal(
+    nrow(c514$availableMabMixtures) == 1,
       nrow(c514$availableMabs) == 1
   )
+
+  stu <- con$availableStudies[study_id %in% c("cvd649", "cvd720", "cvd719")] |>
+    con$getStudies()
+
+  stu$loadAvailableDatasets()
+
+  expect_equal(length(stu$datasets["DEM SUPP"]), 1)
+
+  expect_equal(length(stu$datasets), 3)
 
 })
 
 test_that("DataSpaceGroups", {
 
   expect_true(
-    "NYVAC_durability" %in% con$availableGroups$original_label
+    any(
+      grepl("NYVAC.durability", con$availableGroups$original_label)
+    )
   )
 
   grp <- con$getGroups(con$availableGroups[label %in% c("CAVD 239 integrated data", "NYVAC durability comparison")])
