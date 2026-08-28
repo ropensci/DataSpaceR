@@ -130,14 +130,16 @@ DataSpaceDaash <- R6Class(
     #' @param mab_id A subset of mab_ids to export. If using the default, NULL, all structures in
     #' availableStuctures are downloaded.
     downloadAntibodyStructures = function(path=tempdir(), mab_id=NULL){
+      if(nrow(self$availableStructures) == 0)
+        stop("No antibody stuctures available for this object.")
       structures <- self$availableStructures
       if(!is.null(mab_id))
         structures <- structures[mab_id %in% mab_id,]
       for(i in structures$mab_id){
         out <- paste0(
-          paste(self$daashMetadata[mab_id == i, .(mab_name_std, mab_id, mab_lanl_id)] |> unique(), collapse = "^^^"),
+          paste(self$daashMetadata[mab_id == i, .(mab_name_std, mab_id, mab_lanl_id)] |> unique(), collapse = "__"),
           ".pdb"
-        )
+        ) |> gsub(pattern = "/", replacement = "\\/")
         pdb <- paste0(i, ".pdb")
         message("Saving `", pdb, "` to `", path, "`.") 
         labkey.webdav.get(
@@ -175,7 +177,18 @@ DataSpaceDaash <- R6Class(
     #' @field daashMetadata A data.table showing the donor and mAb
     #' metadata with CDS sequence_id values for the loaded DAASH dataset.
     daashMetadata = function() {
-      private$.shared$.donorMabSequence[sequence_id %in% private$.sequenceIds,] |>
+
+      private$.shared$.donorMabSequence[
+      {
+        if( length(private$.mabIds) !=0 ){
+          mab_id %in% private$.mabIds
+        } else if( length(private$.donorIds) !=0 ) {
+          donor_id %in% private$.donorIds
+        } else {
+          sequence_id %in% private$.sequenceIds
+        }
+      }
+      ] |>
         merge(private$.shared$.mabMetadata,   by = "mab_id",   all.x = T) |>
         merge(private$.shared$.donorMetadata, by = "donor_id", all.x = T)
     },
@@ -214,13 +227,9 @@ DataSpaceDaash <- R6Class(
         if(length(private$.mabIds)      != 0) c("mab_id",      "IN", paste(private$.mabIds,      collapse = ";")) else NULL
       )
 
-      filter <- filter[lapply(filter, \(f) !is.null(f)) |> unlist()]
-
-      filter <- Reduce(
-        \(a,b) rbind(a, makeFilter(b)),
-        filter[2:length(filter)],
-        makeFilter(filter[[1]])
-      )
+      filter <- filter[lapply(filter, \(f) !is.null(f)) |> unlist()] |>
+        lapply(makeFilter) |>
+        do.call(what=rbind)
 
       private$.datasets <- fetchDaash(
         filter,
