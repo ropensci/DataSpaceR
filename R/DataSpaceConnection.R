@@ -843,8 +843,8 @@ DataSpaceConnection <- R6Class(
         colNameOpt = "fieldname",
         method = "GET"
       ) |>
-        setDT()
-      
+        as.list() |>
+        lapply(as.numeric)
     }
   )
 )
