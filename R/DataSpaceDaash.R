@@ -43,19 +43,23 @@ DataSpaceDaash <- R6Class(
     #' @param availableDaash availableDaash an `availableMabs`, or `availableDonors` object, or a vector of `sequnce_id` values.
     #' @param config A list.
     initialize = function(availableDaash) {
-      if( "availableDonors" %in% attr(availableDaash, "dsr_type") ){
-        private$.sequenceIds <- private$.shared$.donorMabSequence[donor_id %in% availableDaash$donor_id, sequence_id]
-        private$.donorIds    <- availableDaash[, unique(donor_id)]
 
-      } else if( "availableMabs" %in% attr(availableDaash, "dsr_type") ){
-        private$.sequenceIds <- private$.shared$.donorMabSequence[mab_id %in% availableDaash$mab_id, sequence_id]
-        private$.mabIds      <- availableDaash[, unique(mab_id)]
-
-      } else if( is.character(availableDaash) && all(grepl("^cds_seq_[0-9]+", availableDaash)) ){
-        private$.sequenceIds <- availableDaash
-
-      } else{
-        stop("Must pass an `availableMabs` or `availableDonors` object, or a character vector of cds sequence ids to get DAASH data from a connection object.")
+      if(is.character(availableDaash) && all(grepl("^cds_seq_[0-9]+", availableDaash))){
+        private$.queryTyp <- "sequence_id"
+        private$.queryIds <- availableDaash
+      } else {
+        switch(
+          ifelse(is.null(attr(availableDaash, "dsr_type")), "stop", attr(availableDaash, "dsr_type")),
+          availableMabs = {
+            private$.queryTyp <- "mab_id"
+            private$.queryIds <- availableDaash[, unique(mab_id)]
+          },
+          availableDonors = {
+            private$.queryTyp <- "donor_id"
+            private$.queryIds <- availableDaash[, unique(donor_id)]
+          },
+          stop("Must pass an `availableMabs` or `availableDonors` object, or a character vector of cds sequence ids to get DAASH data from a connection object.")
+        )
       }
 
       self$refresh()
@@ -180,13 +184,12 @@ DataSpaceDaash <- R6Class(
 
       private$.shared$.donorMabSequence[
       {
-        if( length(private$.mabIds) !=0 ){
-          mab_id %in% private$.mabIds
-        } else if( length(private$.donorIds) !=0 ) {
-          donor_id %in% private$.donorIds
-        } else {
-          sequence_id %in% private$.sequenceIds
-        }
+        switch(
+          private$.queryTyp,
+          mab_id = { mab_id %in% private$.mabIds },
+          donor_id = { donor_id %in% private$.donorIds },
+          { sequence_id %in% private$.sequenceIds }
+        )
       }
       ] |>
         merge(private$.shared$.mabMetadata,   by = "mab_id",   all.x = T) |>
@@ -218,18 +221,12 @@ DataSpaceDaash <- R6Class(
     .datasets = list(),
     .availableStructures = data.table(),
     .variableDefinitions = data.table(),
+    .queryTyp = character(),
+    .queryIds = character(),
     
     .loadDaash = function(){
 
-      filter <- list(
-        if(length(private$.sequenceIds) != 0) c("sequence_id", "IN", paste(private$.sequenceIds, collapse = ";")) else NULL,
-        if(length(private$.donorIds)    != 0) c("donor_id",    "IN", paste(private$.donorIds,    collapse = ";")) else NULL,
-        if(length(private$.mabIds)      != 0) c("mab_id",      "IN", paste(private$.mabIds,      collapse = ";")) else NULL
-      )
-
-      filter <- filter[lapply(filter, \(f) !is.null(f)) |> unlist()] |>
-        lapply(makeFilter) |>
-        do.call(what=rbind)
+      filter <- makeFilter(c(private$.queryTyp, "IN", paste(private$.queryIds, collapse = ";")))
 
       private$.datasets <- fetchDaash(
         filter,
@@ -241,9 +238,9 @@ DataSpaceDaash <- R6Class(
         private$.shared$.config
       )
 
-      private$.sequenceIds <- private$.datasets$sequences$sequence_id |> unique()
-      private$.mabIds      <- private$.datasets$sequences$mab_id      |> unique()
-      private$.donorIds    <- private$.datasets$sequences$donor_id    |> unique()
+      private$.sequenceIds <- private$.datasets$sequences$sequence_id |> na.omit() |> unique()
+      private$.donorIds    <- private$.datasets$sequences$donor_id    |> na.omit() |> unique()
+      private$.mabIds      <- private$.datasets$sequences$mab_id      |> na.omit() |> unique()
 
     },
     
