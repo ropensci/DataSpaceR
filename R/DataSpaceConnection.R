@@ -194,7 +194,7 @@ DataSpaceConnection <- R6Class(
     #' @param availableDonors an `availableDonors` object, or a vector of `donor_id` values.
     getDonors = function(availableDonors = self$availableDonors){
       if(is.character(availableDonors))
-        availableGroups <- self$availableDonors[donor_id %in% availableDonors]
+        availableDonors <- self$availableDonors[donor_id %in% availableDonors]
 
       if(!"availableDonors" %in% attr(self$availableDonors, "dsr_type"))
         stop("Argument must be `character` or `availableDonors`.")

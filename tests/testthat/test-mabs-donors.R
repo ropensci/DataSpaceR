@@ -14,6 +14,8 @@ test_that("DataSpaceMabs", {
     "Argument must be `character`, `availableMabs`, or `availableMabMixtures`."
   )
 
+  mabs <- con$getMabs("cds_mab_28")
+
   mabs <- con$availableMabs[mab_name_std %in% c("VRC01", "PGT121")]
 
   mabyes  <- con$getMabs(mabs)
@@ -35,6 +37,7 @@ test_that("DataSpaceMabs", {
         "Summary"                     ,
         "Available MAb objects"       ,
         "Available MAb methods"       ,
+        "loadDaash()",
         "Available Connection objects",
         "Available Connection methods",
         "8 studies"                   ,
@@ -140,6 +143,8 @@ test_that("DataSpaceDonors", {
     )
   )
 
+  don <- con$getDonors("cds_donor_39")
+
   don <- con$availableDonors[donor_code == "Donor CH505"] |>
     con$getDonors()
 
@@ -157,6 +162,7 @@ test_that("DataSpaceDonors", {
         "Summary"                     ,
         "Available Donors objects"    ,
         "Available Donors methods"    ,
+        "loadDaash()",
         "Available Connection objects",
         "Available Connection methods"
       ) |>
