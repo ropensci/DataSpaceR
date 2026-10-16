@@ -361,9 +361,6 @@ fetchDaash <- function(filter, config){
     unique() |>
     limitFilters("sequence_id")
 
-  if(Sys.getenv("DSR_TESTING") == "TRUE")
-    seqFilters <- seqFilters[1:min(length(seqFilters), 2)]
-
   if(length(seqFilters) > 1)
     message(
       paste0(
@@ -386,9 +383,6 @@ fetchDaash <- function(filter, config){
     rbindlist() |>
     unique() |>
     merge(seqs, by = "sequence_id", allow.cartesian = T)
-
-  if(all(daash$sequences$sequence_id %in% daash$alignments$alignment_id))
-    stop("DAASH sequences not found in alignments. Report this to support@dataspace.cavd.org.")
 
   daash$runInformation <- labkey.selectRows(
     baseUrl = config$labkeyUrlBase,
