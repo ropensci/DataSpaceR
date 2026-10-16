@@ -3,7 +3,7 @@ title: "Introduction to DataSpaceR"
 author:
   - Ju Yeong Kim
   - Jason Taylor
-date: "2026-08-03"
+date: "2026-10-16"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to DataSpaceR}
@@ -91,49 +91,8 @@ DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NA
 
 We can access this metadata in `DataSpaceR` with `availableViruses`:
 
-
-``` r
+```r
 con$availableViruses
-#> Key: <cds_virus_id>
-#>      cds_virus_id          virus                  virus_full_name virus_backbone virus_host_cell virus_plot_label
-#>            <char>         <char>                           <char>         <char>          <char>           <char>
-#>   1:        cds_1   0013095-2.11   0013095-2.11 [SG3Δenv] 293T/17        SG3Δenv         293T/17     0013095-2.11
-#>   2:       cds_10     0984.V2.C2     0984.V2.C2 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
-#>   3:      cds_100 B005018-8_F6.3 B005018-8_F6.3 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
-#>   4:      cds_101 B005582-7_G7.8 B005582-7_G7.8 [SG3Δenv] 293T/17        SG3Δenv         293T/17          B005582
-#>   5:      cds_102         BaL.26         BaL.26 [SG3Δenv] 293T/17        SG3Δenv         293T/17           BaL.26
-#>  ---                                                                                                             
-#> 799:       cds_94      92BR025.9      92BR025.9 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
-#> 800:       cds_95      933.v4.c4      933.v4.c4 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
-#> 801:       cds_97    98-F4_H5_13    98-F4_H5_13 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
-#> 802:       cds_98 A07412M1.vrc12 A07412M1.vrc12 [SG3Δenv] 293T/17        SG3Δenv         293T/17             <NA>
-#> 803:       cds_99      AC10.0.29      AC10.0.29 [SG3Δenv] 293T/17        SG3Δenv         293T/17        AC10.0.29
-#>          virus_type virus_species  clade neutralization_tier
-#>              <char>        <char> <char>              <char>
-#>   1: Env Pseudotype           HIV   <NA>                   2
-#>   2: Env Pseudotype           HIV      C                   3
-#>   3: Env Pseudotype           HIV      C                   2
-#>   4: Env Pseudotype           HIV      C                <NA>
-#>   5: Env Pseudotype           HIV      B                  1B
-#>  ---                                                        
-#> 799: Env Pseudotype           HIV      C                <NA>
-#> 800: Env Pseudotype           HIV      C                   3
-#> 801: Env Pseudotype           HIV      C                   3
-#> 802: Env Pseudotype           HIV      D                   2
-#> 803: Env Pseudotype           HIV      B                   2
-#>                                                                                                                                                           virus_name_other
-#>                                                                                                                                                                     <char>
-#>   1:                                                                                                                                                                  <NA>
-#>   2:                                                                                                                                                            0984.v2.c2
-#>   3:                                                                                                                                                                  <NA>
-#>   4:                                                                                                                                              B005582, B005582-27_G7.8
-#>   5: BaL.26_TM, Bal.26, Bal.26 [SG3<94>~env] 293T/17, Bal.26 [SG3Δenv] 293T, HIV Bal.26, HIV Bal.26[-Luc]293T, HIV Bal.26[SG3<94>~env]293T/17, SG3�~env, SHIV 1157ipd3N4.3
-#>  ---                                                                                                                                                                      
-#> 799:             92BR025.9 [SG3<94>~env] 293T, 92BR025.9 [SG3<94>~env] 293T/17, HIV 92BR025.9, HIV 92BR025.9[SG3<94>~env]293T, HIV 92BR025.9[SG3<94>~env]293T/17, SG3�~env
-#> 800:                                                                                                                                                                  <NA>
-#> 801:                                                                                                                                                           98-F4_H5-13
-#> 802:                                                                                                                                  A07412M1.vrc12---349, A07412M1_VRC12
-#> 803:                                                                    AC10.0.29 [SG3<94>~env] 293T/17, AC10.0.29---451, HIV AC10.0.29, HIV AC10.0.29[SG3<94>~env]293T/17
 ```
 
 ## Accessing Help Files

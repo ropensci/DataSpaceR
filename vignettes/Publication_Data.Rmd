@@ -3,7 +3,7 @@ title: "Accessing Publication Data"
 author:
   - Helen Miller
   - Jason Taylor
-date: "2026-08-03"
+date: "2026-10-16"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Accessing Publication Data}

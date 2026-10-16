@@ -1,3 +1,9 @@
+# DataSpaceR 1.0.3
+
+* Improve DataSpaceMabs and DataSpaceDaash API calls
+* Bug fixes in DataSpaceDonors object and get method
+* Improve antibody structure export names and data query
+
 # DataSpaceR 1.0.2
 
 * Update API request syntax for publication data

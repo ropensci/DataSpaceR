@@ -97,7 +97,7 @@ DataSpace maintains metadata about all viruses used in Neutralizing Antibody (NA
 
 We can access this metadata in `DataSpaceR` with `availableViruses`:
 
-```{r virusMetadata}
+```r
 con$availableViruses
 ```
 
