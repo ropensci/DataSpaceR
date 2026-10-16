@@ -323,7 +323,7 @@ DataSpaceConnection <- R6Class(
       private$.shared$.config
     },
 
-    #' @field availableStudies A data.tabl of available studies.
+    #' @field availableStudies A data.table of available studies.
     availableStudies = function() {
       private$.shared$.availableStudies[study_id %in% private$.studyIds]
     },

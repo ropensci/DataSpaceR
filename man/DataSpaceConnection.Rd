@@ -46,7 +46,7 @@ cd4Mabs <- con$availableMabs[grepl("CD4bs", mab_ab_binding_type)] |>
     \item{\code{config}}{A list. Stores configuration of the connection object such as
 URL, path and username.}
 
-    \item{\code{availableStudies}}{A data.tabl of available studies.}
+    \item{\code{availableStudies}}{A data.table of available studies.}
 
     \item{\code{availableGroups}}{A data.table of available groups.}
 

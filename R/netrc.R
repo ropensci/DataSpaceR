@@ -10,8 +10,8 @@
 #' By default \code{curl} will look for the file in your home directory.
 #'
 #' For setting up more then a single DataSpace login, it is recommended
-#' to update the netrc file manually. See
-#' \href{https://www.labkey.org/Documentation/wiki-page.view?name=netrc}
+#' to update the netrc file manually. See 
+#' \href{https://www.labkey.org/Documentation/wiki-page.view?name=netrc}{here}
 #' for information on how to update and maintain the netrc file.
 #'
 #' @param login A character. Email address used for logging in on DataSpace.
