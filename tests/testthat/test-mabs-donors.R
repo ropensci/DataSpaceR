@@ -4,6 +4,19 @@ con <- connectDS(onStaging = onStaging)
 
 test_that("DataSpaceMabs", {
 
+  allMabs <- con$availableMabs |>
+    con$getMabs()
+
+  expect_true(
+    all(names(allMabs$datasets) %in% c("NABMAb", "PKMAb")) &
+      all(c("NABMAb", "PKMAb") %in% names(allMabs$datasets))
+  )
+
+  expect_true(
+    nrow(allMabs$datasets$NABMAb) > 1000 &
+      nrow(allMabs$datasets$PKMAb) > 1000
+  )
+
   expect_error(
     con$getMabs("mab123", includeMixtures = "only"),
     "No mAbs available"
