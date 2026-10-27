@@ -219,25 +219,24 @@ generateFasta <- function(sequences, seqIds=NULL, sequenceType="nt"){
   return(fasta)
 }
 
-limitFilters <- function(tab, field, limit = 250){
-  sids <- unique(tab[[field]])
-  srts <- seq(1, length(sids), limit)
-  ends <- shift(seq(0, length(sids), limit), fill = length(sids), type="lead")
-  if(length(sids) %% limit == 0) # glitch when the modulus is zero, full filter is produced as last item.
+limitFilters <- function(values, name, limit = 250){
+  srts <- seq(1, length(values), limit)
+  ends <- shift(seq(0, length(values), limit), fill = length(values), type="lead")
+  if(length(values) %% limit == 0) # glitch when the modulus is zero, full filter is produced as last item.
     ends <- unique(ends)
-  Map(\(srt, end){
-    c(field, "IN", paste(sids[srt:end], collapse = ";")) |> makeFilter()
-  }, srts, ends)
+  return(
+    Map(\(srt, end){
+      c(name, "IN", paste(values[srt:end], collapse = ";")) |> makeFilter()
+    }, srts, ends)
+  )
 }
 
-splitSeqFilter <- function(filter){
+splitSeqFilter <- function(seqFilter, limit = 250){
   seqFilters <-
-      data.table(
-        sequence_id = strsplit(
-          gsub("^query.sequence_id~in=", "", filter[grepl("^query.sequence_id~in=", filter)]), "%3B"
-        ) |> unlist()
-      ) |>
-    limitFilters(field = "sequence_id")
+    gsub("^query.sequence_id~in=", "", seqFilter[grepl("^query.sequence_id~in=", seqFilter)]) |> 
+    strsplit("%3B") |>
+    unlist() |>
+    limitFilters("sequence_id")
 
   return(seqFilters)
 }
@@ -358,8 +357,9 @@ fetchDaash <- function(filter, config){
     .(sequence_id, substr(allele, 1, 4))
   ]
 
-  seqFilters <- limitFilters(daash$sequences, "sequence_id")
-  if(Sys.getenv("DSR_TESTING") == "TRUE") seqFilters <- seqFilters[1:min(length(seqFilters), 2)]
+  seqFilters <- daash$sequences$sequence_id |>
+    unique() |>
+    limitFilters("sequence_id")
 
   if(length(seqFilters) > 1)
     message(
@@ -383,9 +383,6 @@ fetchDaash <- function(filter, config){
     rbindlist() |>
     unique() |>
     merge(seqs, by = "sequence_id", allow.cartesian = T)
-
-  if(all(daash$sequences$sequence_id %in% daash$alignments$alignment_id))
-    stop("DAASH sequences not found in alignments. Report this to support@dataspace.cavd.org.")
 
   daash$runInformation <- labkey.selectRows(
     baseUrl = config$labkeyUrlBase,

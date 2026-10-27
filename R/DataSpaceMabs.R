@@ -68,7 +68,7 @@ DataSpaceMabs <- R6Class(
       }
 
       private$.mabIds          <- mabIds
-      private$.mabMixIds       <- mabs[,mab_mix_id]
+      private$.mabMixIds       <- mabs[, unique(mab_mix_id)]
       private$.includeMixtures <- includeMixtures
       private$.donorIds        <- private$.shared$.donorMabSequence[mab_id %in% mabIds, unique(donor_id)]
 
@@ -210,19 +210,25 @@ DataSpaceMabs <- R6Class(
         ] ) != 0
       ) {
 
-        private$.datasets[[assay_identifier]] <- labkey.selectRows(
-          baseUrl = private$.shared$.config$labkeyUrlBase,
-          folderPath = "/CAVD",
-          schemaName = "study",
-          queryName = assay_identifier,
-          colNameOpt = "fieldname",
-          colFilter = makeFilter(
-            c("mab_mix_id", "IN", paste(private$.mabMixIds, collapse=";"))
-          ),
-          method = "GET"
-        ) |>
-          setDT()
+        mabMixFilters <- private$.mabMixIds |>
+          limitFilters("mab_mix_id")
 
+        private$.datasets[[assay_identifier]] <- Map(
+          \(filter){
+            labkey.selectRows(
+              baseUrl = private$.shared$.config$labkeyUrlBase,
+              folderPath = "/CAVD",
+              schemaName = "study",
+              queryName = assay_identifier,
+              colNameOpt = "fieldname",
+              colFilter = filter,
+              method = "GET"
+            ) |>
+              suppressWarnings() |>
+              setDT()
+          }, mabMixFilters
+        ) |>
+          rbindlist()
       }
 
     }

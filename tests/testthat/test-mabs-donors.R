@@ -4,6 +4,19 @@ con <- connectDS(onStaging = onStaging)
 
 test_that("DataSpaceMabs", {
 
+  allMabs <- con$availableMabs |>
+    con$getMabs()
+
+  expect_true(
+    all(names(allMabs$datasets) %in% c("NABMAb", "PKMAb")) &
+      all(c("NABMAb", "PKMAb") %in% names(allMabs$datasets))
+  )
+
+  expect_true(
+    nrow(allMabs$datasets$NABMAb) > 1000 &
+      nrow(allMabs$datasets$PKMAb) > 1000
+  )
+
   expect_error(
     con$getMabs("mab123", includeMixtures = "only"),
     "No mAbs available"
@@ -13,6 +26,8 @@ test_that("DataSpaceMabs", {
     con$getMabs(con$availablePublications, includeMixtures = "only"),
     "Argument must be `character`, `availableMabs`, or `availableMabMixtures`."
   )
+
+  mabs <- con$getMabs("cds_mab_28")
 
   mabs <- con$availableMabs[mab_name_std %in% c("VRC01", "PGT121")]
 
@@ -35,6 +50,7 @@ test_that("DataSpaceMabs", {
         "Summary"                     ,
         "Available MAb objects"       ,
         "Available MAb methods"       ,
+        "loadDaash()",
         "Available Connection objects",
         "Available Connection methods",
         "8 studies"                   ,
@@ -140,6 +156,8 @@ test_that("DataSpaceDonors", {
     )
   )
 
+  don <- con$getDonors("cds_donor_39")
+
   don <- con$availableDonors[donor_code == "Donor CH505"] |>
     con$getDonors()
 
@@ -157,6 +175,7 @@ test_that("DataSpaceDonors", {
         "Summary"                     ,
         "Available Donors objects"    ,
         "Available Donors methods"    ,
+        "loadDaash()",
         "Available Connection objects",
         "Available Connection methods"
       ) |>

@@ -138,4 +138,15 @@ test_that("DataSpaceDaash", {
     length(list.files(dl, "\\.pdb$")) != 0
   )
 
+  daashSeq <- con$getDaash("cds_seq_1")
+  expect_error(
+    daashSeq$downloadAntibodyStructures(dl)
+  )
+
+  daashSeq <- con$getDaash("cds_seq_100")
+  daashSeq$downloadAntibodyStructures(dl)
+  expect_true(
+    any(grepl("cds_mab_410", list.files(dl, "\\.pdb$")))
+  )
+
 })

@@ -194,7 +194,7 @@ DataSpaceConnection <- R6Class(
     #' @param availableDonors an `availableDonors` object, or a vector of `donor_id` values.
     getDonors = function(availableDonors = self$availableDonors){
       if(is.character(availableDonors))
-        availableGroups <- self$availableDonors[donor_id %in% availableDonors]
+        availableDonors <- self$availableDonors[donor_id %in% availableDonors]
 
       if(!"availableDonors" %in% attr(self$availableDonors, "dsr_type"))
         stop("Argument must be `character` or `availableDonors`.")
@@ -323,7 +323,7 @@ DataSpaceConnection <- R6Class(
       private$.shared$.config
     },
 
-    #' @field availableStudies A data.tabl of available studies.
+    #' @field availableStudies A data.table of available studies.
     availableStudies = function() {
       private$.shared$.availableStudies[study_id %in% private$.studyIds]
     },
@@ -843,8 +843,8 @@ DataSpaceConnection <- R6Class(
         colNameOpt = "fieldname",
         method = "GET"
       ) |>
-        setDT()
-      
+        as.list() |>
+        lapply(as.numeric)
     }
   )
 )

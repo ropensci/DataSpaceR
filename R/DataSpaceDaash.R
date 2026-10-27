@@ -43,19 +43,23 @@ DataSpaceDaash <- R6Class(
     #' @param availableDaash availableDaash an `availableMabs`, or `availableDonors` object, or a vector of `sequnce_id` values.
     #' @param config A list.
     initialize = function(availableDaash) {
-      if( "availableDonors" %in% attr(availableDaash, "dsr_type") ){
-        private$.sequenceIds <- private$.shared$.donorMabSequence[donor_id %in% availableDaash$donor_id, sequence_id]
-        private$.donorIds    <- availableDaash[, unique(donor_id)]
 
-      } else if( "availableMabs" %in% attr(availableDaash, "dsr_type") ){
-        private$.sequenceIds <- private$.shared$.donorMabSequence[mab_id %in% availableDaash$mab_id, sequence_id]
-        private$.mabIds      <- availableDaash[, unique(mab_id)]
-
-      } else if( is.character(availableDaash) && all(grepl("^cds_seq_[0-9]+", availableDaash)) ){
-        private$.sequenceIds <- availableDaash
-
-      } else{
-        stop("Must pass an `availableMabs` or `availableDonors` object, or a character vector of cds sequence ids to get DAASH data from a connection object.")
+      if(is.character(availableDaash) && all(grepl("^cds_seq_[0-9]+", availableDaash))){
+        private$.queryTyp <- "sequence_id"
+        private$.queryIds <- availableDaash
+      } else {
+        switch(
+          ifelse(is.null(attr(availableDaash, "dsr_type")), "stop", attr(availableDaash, "dsr_type")),
+          availableMabs = {
+            private$.queryTyp <- "mab_id"
+            private$.queryIds <- availableDaash[, unique(mab_id)]
+          },
+          availableDonors = {
+            private$.queryTyp <- "donor_id"
+            private$.queryIds <- availableDaash[, unique(donor_id)]
+          },
+          stop("Must pass an `availableMabs` or `availableDonors` object, or a character vector of cds sequence ids to get DAASH data from a connection object.")
+        )
       }
 
       self$refresh()
@@ -130,14 +134,16 @@ DataSpaceDaash <- R6Class(
     #' @param mab_id A subset of mab_ids to export. If using the default, NULL, all structures in
     #' availableStuctures are downloaded.
     downloadAntibodyStructures = function(path=tempdir(), mab_id=NULL){
+      if(nrow(self$availableStructures) == 0)
+        stop("No antibody stuctures available for this object.")
       structures <- self$availableStructures
       if(!is.null(mab_id))
         structures <- structures[mab_id %in% mab_id,]
       for(i in structures$mab_id){
         out <- paste0(
-          paste(self$daashMetadata[mab_id == i, .(mab_name_std, mab_id, mab_lanl_id)] |> unique(), collapse = "^^^"),
+          paste(self$daashMetadata[mab_id == i, .(mab_name_std, mab_id, mab_lanl_id)] |> unique(), collapse = "__"),
           ".pdb"
-        )
+        ) |> gsub(pattern = "/", replacement = "\\/")
         pdb <- paste0(i, ".pdb")
         message("Saving `", pdb, "` to `", path, "`.") 
         labkey.webdav.get(
@@ -175,7 +181,17 @@ DataSpaceDaash <- R6Class(
     #' @field daashMetadata A data.table showing the donor and mAb
     #' metadata with CDS sequence_id values for the loaded DAASH dataset.
     daashMetadata = function() {
-      private$.shared$.donorMabSequence[sequence_id %in% private$.sequenceIds,] |>
+
+      private$.shared$.donorMabSequence[
+      {
+        switch(
+          private$.queryTyp,
+          mab_id = { mab_id %in% private$.mabIds },
+          donor_id = { donor_id %in% private$.donorIds },
+          { sequence_id %in% private$.sequenceIds }
+        )
+      }
+      ] |>
         merge(private$.shared$.mabMetadata,   by = "mab_id",   all.x = T) |>
         merge(private$.shared$.donorMetadata, by = "donor_id", all.x = T)
     },
@@ -205,22 +221,12 @@ DataSpaceDaash <- R6Class(
     .datasets = list(),
     .availableStructures = data.table(),
     .variableDefinitions = data.table(),
+    .queryTyp = character(),
+    .queryIds = character(),
     
     .loadDaash = function(){
 
-      filter <- list(
-        if(length(private$.sequenceIds) != 0) c("sequence_id", "IN", paste(private$.sequenceIds, collapse = ";")) else NULL,
-        if(length(private$.donorIds)    != 0) c("donor_id",    "IN", paste(private$.donorIds,    collapse = ";")) else NULL,
-        if(length(private$.mabIds)      != 0) c("mab_id",      "IN", paste(private$.mabIds,      collapse = ";")) else NULL
-      )
-
-      filter <- filter[lapply(filter, \(f) !is.null(f)) |> unlist()]
-
-      filter <- Reduce(
-        \(a,b) rbind(a, makeFilter(b)),
-        filter[2:length(filter)],
-        makeFilter(filter[[1]])
-      )
+      filter <- makeFilter(c(private$.queryTyp, "IN", paste(private$.queryIds, collapse = ";")))
 
       private$.datasets <- fetchDaash(
         filter,
@@ -232,9 +238,9 @@ DataSpaceDaash <- R6Class(
         private$.shared$.config
       )
 
-      private$.sequenceIds <- private$.datasets$sequences$sequence_id |> unique()
-      private$.mabIds      <- private$.datasets$sequences$mab_id      |> unique()
-      private$.donorIds    <- private$.datasets$sequences$donor_id    |> unique()
+      private$.sequenceIds <- private$.datasets$sequences$sequence_id |> na.omit() |> unique()
+      private$.donorIds    <- private$.datasets$sequences$donor_id    |> na.omit() |> unique()
+      private$.mabIds      <- private$.datasets$sequences$mab_id      |> na.omit() |> unique()
 
     },
     
